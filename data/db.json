@@ -3667,7 +3667,7 @@
       "message": "\"Zenith Winter Reel #1 — The Morning Routine\" published. Zenith Organics 1795354361586 has now completed 1/20 deliverables.",
       "type": "published",
       "relatedId": "del-1795354361624",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:32:41.670Z"
     },
     {
@@ -3677,7 +3677,7 @@
       "message": "Vikram Mehta submitted Version 3 for Zenith Organics 1795354361586. Ready for quality check.",
       "type": "submission",
       "relatedId": "del-1795354361624",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:32:41.659Z"
     },
     {
@@ -3688,7 +3688,7 @@
       "message": "Client requested changes on video v2: \"Speed up opening hook cut and boost background ambient music at 0:04.\" [Tags: Hook / Pacing, Music / Sound Design]",
       "type": "client_revision",
       "relatedId": "del-1795354361624",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:32:41.655Z"
     },
     {
@@ -3698,7 +3698,7 @@
       "message": "Priya Sharma (Zenith Organics 1795354361586) revision requested video (v2). Feedback: \"Speed up opening hook cut and boost background ambient music at 0:04.\" [Tags: Hook / Pacing, Music / Sound Design]",
       "type": "client_revision",
       "relatedId": "del-1795354361624",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:32:41.654Z"
     },
     {
@@ -3719,7 +3719,7 @@
       "message": "Vikram Mehta submitted Version 2 for Zenith Organics 1795354361586. Ready for quality check.",
       "type": "submission",
       "relatedId": "del-1795354361624",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:32:41.645Z"
     },
     {
@@ -3729,7 +3729,7 @@
       "message": "Priya Sharma (Zenith Organics 1795354361586) approved script (v1). Feedback: \"Script approved by founder with enthusiasm.\"",
       "type": "client_approval",
       "relatedId": "del-1795354361624",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:32:41.639Z"
     },
     {
@@ -3751,7 +3751,7 @@
       "message": "You were assigned: \"Edit Zenith Launch Reel 01\" for Zenith Organics 1795354361586. Due by 2026-11-28.",
       "type": "assignment",
       "relatedId": "tsk-1795354361600",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:32:41.600Z"
     },
     {
@@ -3762,7 +3762,7 @@
       "message": "You were assigned: \"HTTP Video Edit & Audio Mix Task\" for Apex Athletics. Due by 2026-11-30.",
       "type": "assignment",
       "relatedId": "tsk-1795354361451",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:32:41.451Z"
     },
     {
@@ -3772,7 +3772,7 @@
       "message": "Rohan Rahi (Apex Athletics) approved video (v1). Feedback: \"Final video approved for release.\"",
       "type": "client_approval",
       "relatedId": "del-1795354361373",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:32:41.411Z"
     },
     {
@@ -3793,7 +3793,7 @@
       "message": "Priya Sharma (Apex Athletics) approved script (v1). Feedback: \"Approved verbally by Client A Founder during review call.\"",
       "type": "client_approval",
       "relatedId": "del-1795354361373",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:32:41.401Z"
     },
     {
@@ -3804,7 +3804,7 @@
       "message": "Client requested changes on script v1: \"Please refine tone of voice in line 2 and strengthen call to action.\" [Tags: Brand Tone / Voice, Call-to-Action (CTA)]",
       "type": "client_revision",
       "relatedId": "del-1795354361373",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:32:41.396Z"
     },
     {
@@ -3814,7 +3814,7 @@
       "message": "Arjun Kapoor (Apex Athletics) revision requested script (v1). Feedback: \"Please refine tone of voice in line 2 and strengthen call to action.\" [Tags: Brand Tone / Voice, Call-to-Action (CTA)]",
       "type": "client_revision",
       "relatedId": "del-1795354361373",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:32:41.396Z"
     },
     {
@@ -3835,7 +3835,7 @@
       "message": "\"Real HTTP Pipeline Test Reel\" published. Apex Athletics has now completed 13/34 deliverables.",
       "type": "published",
       "relatedId": "del-1795354361320",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:32:41.363Z"
     },
     {
@@ -3845,7 +3845,7 @@
       "message": "Vikram Mehta submitted Version 3 for Apex Athletics. Ready for quality check.",
       "type": "submission",
       "relatedId": "del-1795354361320",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:32:41.358Z"
     },
     {
@@ -3855,7 +3855,7 @@
       "message": "Apex Athletics requested revisions for \"Real HTTP Pipeline Test Reel\".",
       "type": "client_revision",
       "relatedId": "del-1795354361320",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:32:41.353Z"
     },
     {
@@ -3876,7 +3876,7 @@
       "message": "Vikram Mehta submitted Version 2 for Apex Athletics. Ready for quality check.",
       "type": "submission",
       "relatedId": "del-1795354361320",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:32:41.344Z"
     },
     {
@@ -3886,7 +3886,7 @@
       "message": "Apex Athletics approved \"Real HTTP Pipeline Test Reel\".",
       "type": "client_approval",
       "relatedId": "del-1795354361320",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:32:41.339Z"
     },
     {
@@ -3908,7 +3908,7 @@
       "message": "Task \"HTTP Task Created by Admin\" was reassigned to Kabir Joshi.",
       "type": "assignment",
       "relatedId": "tsk-1795354361285",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:32:41.295Z"
     },
     {
@@ -3919,7 +3919,7 @@
       "message": "You were reassigned \"HTTP Task Created by Admin\" (Apex Athletics) by Priya Sharma.",
       "type": "assignment",
       "relatedId": "tsk-1795354361285",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:32:41.295Z"
     },
     {
@@ -3930,7 +3930,7 @@
       "message": "You were assigned: \"HTTP Task Created by Manager\" for Apex Athletics. Due by 2026-11-29.",
       "type": "assignment",
       "relatedId": "tsk-1795354361290",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:32:41.290Z"
     },
     {
@@ -3941,7 +3941,7 @@
       "message": "You were assigned: \"HTTP Task Created by Admin\" for Apex Athletics. Due by 2026-11-30.",
       "type": "assignment",
       "relatedId": "tsk-1795354361285",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:32:41.285Z"
     },
     {
@@ -3951,7 +3951,7 @@
       "message": "\"Zenith Winter Reel #1 — The Morning Routine\" published. Zenith Organics 1795353705152 has now completed 1/20 deliverables.",
       "type": "published",
       "relatedId": "del-1795353705182",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:21:45.224Z"
     },
     {
@@ -3961,7 +3961,7 @@
       "message": "Vikram Mehta submitted Version 3 for Zenith Organics 1795353705152. Ready for quality check.",
       "type": "submission",
       "relatedId": "del-1795353705182",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:21:45.215Z"
     },
     {
@@ -3972,7 +3972,7 @@
       "message": "Client requested changes on video v2: \"Speed up opening hook cut and boost background ambient music at 0:04.\" [Tags: Hook / Pacing, Music / Sound Design]",
       "type": "client_revision",
       "relatedId": "del-1795353705182",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:21:45.211Z"
     },
     {
@@ -3982,7 +3982,7 @@
       "message": "Priya Sharma (Zenith Organics 1795353705152) revision requested video (v2). Feedback: \"Speed up opening hook cut and boost background ambient music at 0:04.\" [Tags: Hook / Pacing, Music / Sound Design]",
       "type": "client_revision",
       "relatedId": "del-1795353705182",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:21:45.211Z"
     },
     {
@@ -4003,7 +4003,7 @@
       "message": "Vikram Mehta submitted Version 2 for Zenith Organics 1795353705152. Ready for quality check.",
       "type": "submission",
       "relatedId": "del-1795353705182",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:21:45.201Z"
     },
     {
@@ -4013,7 +4013,7 @@
       "message": "Priya Sharma (Zenith Organics 1795353705152) approved script (v1). Feedback: \"Script approved by founder with enthusiasm.\"",
       "type": "client_approval",
       "relatedId": "del-1795353705182",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:21:45.196Z"
     },
     {
@@ -4035,7 +4035,7 @@
       "message": "You were assigned: \"Edit Zenith Launch Reel 01\" for Zenith Organics 1795353705152. Due by 2026-11-28.",
       "type": "assignment",
       "relatedId": "tsk-1795353705163",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:21:45.163Z"
     },
     {
@@ -4046,7 +4046,7 @@
       "message": "You were assigned: \"HTTP Video Edit & Audio Mix Task\" for Apex Athletics. Due by 2026-11-30.",
       "type": "assignment",
       "relatedId": "tsk-1795353705043",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:21:45.043Z"
     },
     {
@@ -4056,7 +4056,7 @@
       "message": "Rohan Rahi (Apex Athletics) approved video (v1). Feedback: \"Final video approved for release.\"",
       "type": "client_approval",
       "relatedId": "del-1795353704980",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:21:45.008Z"
     },
     {
@@ -4077,7 +4077,7 @@
       "message": "Priya Sharma (Apex Athletics) approved script (v1). Feedback: \"Approved verbally by Client A Founder during review call.\"",
       "type": "client_approval",
       "relatedId": "del-1795353704980",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:21:44.999Z"
     },
     {
@@ -4088,7 +4088,7 @@
       "message": "Client requested changes on script v1: \"Please refine tone of voice in line 2 and strengthen call to action.\" [Tags: Brand Tone / Voice, Call-to-Action (CTA)]",
       "type": "client_revision",
       "relatedId": "del-1795353704980",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:21:44.995Z"
     },
     {
@@ -4098,7 +4098,7 @@
       "message": "Arjun Kapoor (Apex Athletics) revision requested script (v1). Feedback: \"Please refine tone of voice in line 2 and strengthen call to action.\" [Tags: Brand Tone / Voice, Call-to-Action (CTA)]",
       "type": "client_revision",
       "relatedId": "del-1795353704980",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:21:44.995Z"
     },
     {
@@ -4119,7 +4119,7 @@
       "message": "\"Real HTTP Pipeline Test Reel\" published. Apex Athletics has now completed 13/34 deliverables.",
       "type": "published",
       "relatedId": "del-1795353704942",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:21:44.973Z"
     },
     {
@@ -4129,7 +4129,7 @@
       "message": "Vikram Mehta submitted Version 3 for Apex Athletics. Ready for quality check.",
       "type": "submission",
       "relatedId": "del-1795353704942",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:21:44.969Z"
     },
     {
@@ -4139,7 +4139,7 @@
       "message": "Apex Athletics requested revisions for \"Real HTTP Pipeline Test Reel\".",
       "type": "client_revision",
       "relatedId": "del-1795353704942",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:21:44.965Z"
     },
     {
@@ -4160,7 +4160,7 @@
       "message": "Vikram Mehta submitted Version 2 for Apex Athletics. Ready for quality check.",
       "type": "submission",
       "relatedId": "del-1795353704942",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:21:44.959Z"
     },
     {
@@ -4170,7 +4170,7 @@
       "message": "Apex Athletics approved \"Real HTTP Pipeline Test Reel\".",
       "type": "client_approval",
       "relatedId": "del-1795353704942",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:21:44.955Z"
     },
     {
@@ -4192,7 +4192,7 @@
       "message": "Task \"HTTP Task Created by Admin\" was reassigned to Kabir Joshi.",
       "type": "assignment",
       "relatedId": "tsk-1795353704914",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:21:44.921Z"
     },
     {
@@ -4203,7 +4203,7 @@
       "message": "You were reassigned \"HTTP Task Created by Admin\" (Apex Athletics) by Priya Sharma.",
       "type": "assignment",
       "relatedId": "tsk-1795353704914",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:21:44.921Z"
     },
     {
@@ -4214,7 +4214,7 @@
       "message": "You were assigned: \"HTTP Task Created by Manager\" for Apex Athletics. Due by 2026-11-29.",
       "type": "assignment",
       "relatedId": "tsk-1795353704918",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:21:44.918Z"
     },
     {
@@ -4225,7 +4225,7 @@
       "message": "You were assigned: \"HTTP Task Created by Admin\" for Apex Athletics. Due by 2026-11-30.",
       "type": "assignment",
       "relatedId": "tsk-1795353704914",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:21:44.914Z"
     },
     {
@@ -4235,7 +4235,7 @@
       "message": "\"Zenith Winter Reel #1 — The Morning Routine\" published. Zenith Organics 1795353667866 has now completed 1/20 deliverables.",
       "type": "published",
       "relatedId": "del-1795353667896",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:21:07.930Z"
     },
     {
@@ -4245,7 +4245,7 @@
       "message": "Vikram Mehta submitted Version 3 for Zenith Organics 1795353667866. Ready for quality check.",
       "type": "submission",
       "relatedId": "del-1795353667896",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:21:07.924Z"
     },
     {
@@ -4256,7 +4256,7 @@
       "message": "Client requested changes on video v2: \"Speed up opening hook cut and boost background ambient music at 0:04.\" [Tags: Hook / Pacing, Music / Sound Design]",
       "type": "client_revision",
       "relatedId": "del-1795353667896",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:21:07.920Z"
     },
     {
@@ -4266,7 +4266,7 @@
       "message": "Priya Sharma (Zenith Organics 1795353667866) revision requested video (v2). Feedback: \"Speed up opening hook cut and boost background ambient music at 0:04.\" [Tags: Hook / Pacing, Music / Sound Design]",
       "type": "client_revision",
       "relatedId": "del-1795353667896",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:21:07.920Z"
     },
     {
@@ -4287,7 +4287,7 @@
       "message": "Vikram Mehta submitted Version 2 for Zenith Organics 1795353667866. Ready for quality check.",
       "type": "submission",
       "relatedId": "del-1795353667896",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:21:07.912Z"
     },
     {
@@ -4297,7 +4297,7 @@
       "message": "Priya Sharma (Zenith Organics 1795353667866) approved script (v1). Feedback: \"Script approved by founder with enthusiasm.\"",
       "type": "client_approval",
       "relatedId": "del-1795353667896",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:21:07.907Z"
     },
     {
@@ -4319,7 +4319,7 @@
       "message": "You were assigned: \"Edit Zenith Launch Reel 01\" for Zenith Organics 1795353667866. Due by 2026-11-28.",
       "type": "assignment",
       "relatedId": "tsk-1795353667877",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:21:07.877Z"
     },
     {
@@ -4329,7 +4329,7 @@
       "message": "\"Zenith Winter Reel #1 — The Morning Routine\" published. Zenith Organics 1795353575098 has now completed 1/20 deliverables.",
       "type": "published",
       "relatedId": "del-1795353575132",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:19:35.169Z"
     },
     {
@@ -4339,7 +4339,7 @@
       "message": "Vikram Mehta submitted Version 3 for Zenith Organics 1795353575098. Ready for quality check.",
       "type": "submission",
       "relatedId": "del-1795353575132",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:19:35.160Z"
     },
     {
@@ -4350,7 +4350,7 @@
       "message": "Client requested changes on video v2: \"Speed up opening hook cut and boost background ambient music at 0:04.\" [Tags: Hook / Pacing, Music / Sound Design]",
       "type": "client_revision",
       "relatedId": "del-1795353575132",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:19:35.156Z"
     },
     {
@@ -4360,7 +4360,7 @@
       "message": "Priya Sharma (Zenith Organics 1795353575098) revision requested video (v2). Feedback: \"Speed up opening hook cut and boost background ambient music at 0:04.\" [Tags: Hook / Pacing, Music / Sound Design]",
       "type": "client_revision",
       "relatedId": "del-1795353575132",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:19:35.156Z"
     },
     {
@@ -4381,7 +4381,7 @@
       "message": "Vikram Mehta submitted Version 2 for Zenith Organics 1795353575098. Ready for quality check.",
       "type": "submission",
       "relatedId": "del-1795353575132",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:19:35.148Z"
     },
     {
@@ -4391,7 +4391,7 @@
       "message": "Priya Sharma (Zenith Organics 1795353575098) approved script (v1). Feedback: \"Script approved by founder with enthusiasm.\"",
       "type": "client_approval",
       "relatedId": "del-1795353575132",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:19:35.144Z"
     },
     {
@@ -4413,7 +4413,7 @@
       "message": "You were assigned: \"Edit Zenith Launch Reel 01\" for Zenith Organics 1795353575098. Due by 2026-11-28.",
       "type": "assignment",
       "relatedId": "tsk-1795353575111",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:19:35.111Z"
     },
     {
@@ -4424,7 +4424,7 @@
       "message": "You were assigned: \"HTTP Video Edit & Audio Mix Task\" for Apex Athletics. Due by 2026-11-30.",
       "type": "assignment",
       "relatedId": "tsk-1795353206288",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:13:26.288Z"
     },
     {
@@ -4434,7 +4434,7 @@
       "message": "Rohan Rahi (Apex Athletics) approved video (v1). Feedback: \"Final video approved for release.\"",
       "type": "client_approval",
       "relatedId": "del-1795353206236",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:13:26.257Z"
     },
     {
@@ -4455,7 +4455,7 @@
       "message": "Priya Sharma (Apex Athletics) approved script (v1). Feedback: \"Approved verbally by Client A Founder during review call.\"",
       "type": "client_approval",
       "relatedId": "del-1795353206236",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:13:26.252Z"
     },
     {
@@ -4466,7 +4466,7 @@
       "message": "Client requested changes on script v1: \"Please refine tone of voice in line 2 and strengthen call to action.\" [Tags: Brand Tone / Voice, Call-to-Action (CTA)]",
       "type": "client_revision",
       "relatedId": "del-1795353206236",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:13:26.248Z"
     },
     {
@@ -4476,7 +4476,7 @@
       "message": "Arjun Kapoor (Apex Athletics) revision requested script (v1). Feedback: \"Please refine tone of voice in line 2 and strengthen call to action.\" [Tags: Brand Tone / Voice, Call-to-Action (CTA)]",
       "type": "client_revision",
       "relatedId": "del-1795353206236",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:13:26.248Z"
     },
     {
@@ -4497,7 +4497,7 @@
       "message": "\"Real HTTP Pipeline Test Reel\" published. Apex Athletics has now completed 13/34 deliverables.",
       "type": "published",
       "relatedId": "del-1795353206206",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:13:26.230Z"
     },
     {
@@ -4507,7 +4507,7 @@
       "message": "Vikram Mehta submitted Version 3 for Apex Athletics. Ready for quality check.",
       "type": "submission",
       "relatedId": "del-1795353206206",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:13:26.227Z"
     },
     {
@@ -4517,7 +4517,7 @@
       "message": "Apex Athletics requested revisions for \"Real HTTP Pipeline Test Reel\".",
       "type": "client_revision",
       "relatedId": "del-1795353206206",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:13:26.225Z"
     },
     {
@@ -4538,7 +4538,7 @@
       "message": "Vikram Mehta submitted Version 2 for Apex Athletics. Ready for quality check.",
       "type": "submission",
       "relatedId": "del-1795353206206",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:13:26.219Z"
     },
     {
@@ -4548,7 +4548,7 @@
       "message": "Apex Athletics approved \"Real HTTP Pipeline Test Reel\".",
       "type": "client_approval",
       "relatedId": "del-1795353206206",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:13:26.216Z"
     },
     {
@@ -4570,7 +4570,7 @@
       "message": "Task \"HTTP Task Created by Admin\" was reassigned to Kabir Joshi.",
       "type": "assignment",
       "relatedId": "tsk-1795353206183",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:13:26.190Z"
     },
     {
@@ -4581,7 +4581,7 @@
       "message": "You were reassigned \"HTTP Task Created by Admin\" (Apex Athletics) by Priya Sharma.",
       "type": "assignment",
       "relatedId": "tsk-1795353206183",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:13:26.190Z"
     },
     {
@@ -4592,7 +4592,7 @@
       "message": "You were assigned: \"HTTP Task Created by Manager\" for Apex Athletics. Due by 2026-11-29.",
       "type": "assignment",
       "relatedId": "tsk-1795353206187",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:13:26.187Z"
     },
     {
@@ -4603,7 +4603,7 @@
       "message": "You were assigned: \"HTTP Task Created by Admin\" for Apex Athletics. Due by 2026-11-30.",
       "type": "assignment",
       "relatedId": "tsk-1795353206183",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:13:26.183Z"
     },
     {
@@ -4614,7 +4614,7 @@
       "message": "You were assigned: \"HTTP Video Edit & Audio Mix Task\" for Apex Athletics. Due by 2026-11-30.",
       "type": "assignment",
       "relatedId": "tsk-1795352796542",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:06:36.542Z"
     },
     {
@@ -4624,7 +4624,7 @@
       "message": "Rohan Rahi (Apex Athletics) approved video (v1). Feedback: \"Final video approved for release.\"",
       "type": "client_approval",
       "relatedId": "del-1795352796491",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:06:36.512Z"
     },
     {
@@ -4645,7 +4645,7 @@
       "message": "Priya Sharma (Apex Athletics) approved script (v1). Feedback: \"Approved verbally by Client A Founder during review call.\"",
       "type": "client_approval",
       "relatedId": "del-1795352796491",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:06:36.507Z"
     },
     {
@@ -4656,7 +4656,7 @@
       "message": "Client requested changes on script v1: \"Please refine tone of voice in line 2 and strengthen call to action.\" [Tags: Brand Tone / Voice, Call-to-Action (CTA)]",
       "type": "client_revision",
       "relatedId": "del-1795352796491",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:06:36.503Z"
     },
     {
@@ -4666,7 +4666,7 @@
       "message": "Arjun Kapoor (Apex Athletics) revision requested script (v1). Feedback: \"Please refine tone of voice in line 2 and strengthen call to action.\" [Tags: Brand Tone / Voice, Call-to-Action (CTA)]",
       "type": "client_revision",
       "relatedId": "del-1795352796491",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:06:36.503Z"
     },
     {
@@ -4687,7 +4687,7 @@
       "message": "\"Real HTTP Pipeline Test Reel\" published. Apex Athletics has now completed 13/34 deliverables.",
       "type": "published",
       "relatedId": "del-1795352796459",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:06:36.485Z"
     },
     {
@@ -4697,7 +4697,7 @@
       "message": "Vikram Mehta submitted Version 3 for Apex Athletics. Ready for quality check.",
       "type": "submission",
       "relatedId": "del-1795352796459",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:06:36.482Z"
     },
     {
@@ -4707,7 +4707,7 @@
       "message": "Apex Athletics requested revisions for \"Real HTTP Pipeline Test Reel\".",
       "type": "client_revision",
       "relatedId": "del-1795352796459",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:06:36.479Z"
     },
     {
@@ -4728,7 +4728,7 @@
       "message": "Vikram Mehta submitted Version 2 for Apex Athletics. Ready for quality check.",
       "type": "submission",
       "relatedId": "del-1795352796459",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:06:36.474Z"
     },
     {
@@ -4738,7 +4738,7 @@
       "message": "Apex Athletics approved \"Real HTTP Pipeline Test Reel\".",
       "type": "client_approval",
       "relatedId": "del-1795352796459",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:06:36.470Z"
     },
     {
@@ -4760,7 +4760,7 @@
       "message": "Task \"HTTP Task Created by Admin\" was reassigned to Kabir Joshi.",
       "type": "assignment",
       "relatedId": "tsk-1795352796433",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:06:36.439Z"
     },
     {
@@ -4771,7 +4771,7 @@
       "message": "You were reassigned \"HTTP Task Created by Admin\" (Apex Athletics) by Priya Sharma.",
       "type": "assignment",
       "relatedId": "tsk-1795352796433",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:06:36.439Z"
     },
     {
@@ -4782,7 +4782,7 @@
       "message": "You were assigned: \"HTTP Task Created by Manager\" for Apex Athletics. Due by 2026-11-29.",
       "type": "assignment",
       "relatedId": "tsk-1795352796436",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:06:36.436Z"
     },
     {
@@ -4793,7 +4793,7 @@
       "message": "You were assigned: \"HTTP Task Created by Admin\" for Apex Athletics. Due by 2026-11-30.",
       "type": "assignment",
       "relatedId": "tsk-1795352796433",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T13:06:36.433Z"
     },
     {
@@ -4803,7 +4803,7 @@
       "message": "Rohan Rahi (Apex Athletics) approved video (v1). Feedback: \"Final video approved for release.\"",
       "type": "client_approval",
       "relatedId": "del-1795351964993",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T12:52:45.013Z"
     },
     {
@@ -4824,7 +4824,7 @@
       "message": "Priya Sharma (Apex Athletics) approved script (v1). Feedback: \"Approved verbally by Client A Founder during review call.\"",
       "type": "client_approval",
       "relatedId": "del-1795351964993",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T12:52:45.007Z"
     },
     {
@@ -4835,7 +4835,7 @@
       "message": "Client requested changes on script v1: \"Please refine tone of voice in line 2 and strengthen call to action.\" [Tags: Brand Tone / Voice, Call-to-Action (CTA)]",
       "type": "client_revision",
       "relatedId": "del-1795351964993",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T12:52:45.005Z"
     },
     {
@@ -4845,7 +4845,7 @@
       "message": "Arjun Kapoor (Apex Athletics) revision requested script (v1). Feedback: \"Please refine tone of voice in line 2 and strengthen call to action.\" [Tags: Brand Tone / Voice, Call-to-Action (CTA)]",
       "type": "client_revision",
       "relatedId": "del-1795351964993",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T12:52:45.005Z"
     },
     {
@@ -4866,7 +4866,7 @@
       "message": "\"Real HTTP Pipeline Test Reel\" published. Apex Athletics has now completed 13/34 deliverables.",
       "type": "published",
       "relatedId": "del-1795351964962",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T12:52:44.987Z"
     },
     {
@@ -4876,7 +4876,7 @@
       "message": "Vikram Mehta submitted Version 3 for Apex Athletics. Ready for quality check.",
       "type": "submission",
       "relatedId": "del-1795351964962",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T12:52:44.984Z"
     },
     {
@@ -4886,7 +4886,7 @@
       "message": "Apex Athletics requested revisions for \"Real HTTP Pipeline Test Reel\".",
       "type": "client_revision",
       "relatedId": "del-1795351964962",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T12:52:44.981Z"
     },
     {
@@ -4907,7 +4907,7 @@
       "message": "Vikram Mehta submitted Version 2 for Apex Athletics. Ready for quality check.",
       "type": "submission",
       "relatedId": "del-1795351964962",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T12:52:44.976Z"
     },
     {
@@ -4917,7 +4917,7 @@
       "message": "Apex Athletics approved \"Real HTTP Pipeline Test Reel\".",
       "type": "client_approval",
       "relatedId": "del-1795351964962",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T12:52:44.973Z"
     },
     {
@@ -4939,7 +4939,7 @@
       "message": "Task \"HTTP Task Created by Admin\" was reassigned to Kabir Joshi.",
       "type": "assignment",
       "relatedId": "tsk-1795351964939",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T12:52:44.946Z"
     },
     {
@@ -4950,7 +4950,7 @@
       "message": "You were reassigned \"HTTP Task Created by Admin\" (Apex Athletics) by Priya Sharma.",
       "type": "assignment",
       "relatedId": "tsk-1795351964939",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T12:52:44.946Z"
     },
     {
@@ -4961,7 +4961,7 @@
       "message": "You were assigned: \"HTTP Task Created by Manager\" for Apex Athletics. Due by 2026-11-29.",
       "type": "assignment",
       "relatedId": "tsk-1795351964943",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T12:52:44.943Z"
     },
     {
@@ -4972,7 +4972,7 @@
       "message": "You were assigned: \"HTTP Task Created by Admin\" for Apex Athletics. Due by 2026-11-30.",
       "type": "assignment",
       "relatedId": "tsk-1795351964939",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T12:52:44.940Z"
     },
     {
@@ -4982,7 +4982,7 @@
       "message": "\"Real HTTP Pipeline Test Reel\" published. Apex Athletics has now completed 13/34 deliverables.",
       "type": "published",
       "relatedId": "del-1795351256676",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T12:40:56.705Z"
     },
     {
@@ -4992,7 +4992,7 @@
       "message": "Vikram Mehta submitted Version 3 for Apex Athletics. Ready for quality check.",
       "type": "submission",
       "relatedId": "del-1795351256676",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T12:40:56.702Z"
     },
     {
@@ -5002,7 +5002,7 @@
       "message": "Apex Athletics requested revisions for \"Real HTTP Pipeline Test Reel\".",
       "type": "client_revision",
       "relatedId": "del-1795351256676",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T12:40:56.699Z"
     },
     {
@@ -5023,7 +5023,7 @@
       "message": "Vikram Mehta submitted Version 2 for Apex Athletics. Ready for quality check.",
       "type": "submission",
       "relatedId": "del-1795351256676",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T12:40:56.693Z"
     },
     {
@@ -5033,7 +5033,7 @@
       "message": "Apex Athletics approved \"Real HTTP Pipeline Test Reel\".",
       "type": "client_approval",
       "relatedId": "del-1795351256676",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T12:40:56.689Z"
     },
     {
@@ -5055,7 +5055,7 @@
       "message": "Task \"HTTP Task Created by Admin\" was reassigned to Kabir Joshi.",
       "type": "assignment",
       "relatedId": "tsk-1795351256646",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T12:40:56.652Z"
     },
     {
@@ -5066,7 +5066,7 @@
       "message": "You were reassigned \"HTTP Task Created by Admin\" (Apex Athletics) by Priya Sharma.",
       "type": "assignment",
       "relatedId": "tsk-1795351256646",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T12:40:56.652Z"
     },
     {
@@ -5077,7 +5077,7 @@
       "message": "You were assigned: \"HTTP Task Created by Manager\" for Apex Athletics. Due by 2026-11-29.",
       "type": "assignment",
       "relatedId": "tsk-1795351256649",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T12:40:56.650Z"
     },
     {
@@ -5088,7 +5088,7 @@
       "message": "You were assigned: \"HTTP Task Created by Admin\" for Apex Athletics. Due by 2026-11-30.",
       "type": "assignment",
       "relatedId": "tsk-1795351256646",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T12:40:56.646Z"
     },
     {
@@ -5099,7 +5099,7 @@
       "message": "Task \"HTTP Task Created by Admin\" was reassigned to Kabir Joshi.",
       "type": "assignment",
       "relatedId": "tsk-1795350812781",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T12:33:32.787Z"
     },
     {
@@ -5110,7 +5110,7 @@
       "message": "You were reassigned \"HTTP Task Created by Admin\" (Apex Athletics) by Priya Sharma.",
       "type": "assignment",
       "relatedId": "tsk-1795350812781",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T12:33:32.787Z"
     },
     {
@@ -5121,7 +5121,7 @@
       "message": "You were assigned: \"HTTP Task Created by Manager\" for Apex Athletics. Due by 2026-11-29.",
       "type": "assignment",
       "relatedId": "tsk-1795350812784",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T12:33:32.784Z"
     },
     {
@@ -5132,7 +5132,7 @@
       "message": "You were assigned: \"HTTP Task Created by Admin\" for Apex Athletics. Due by 2026-11-30.",
       "type": "assignment",
       "relatedId": "tsk-1795350812781",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-22T12:33:32.781Z"
     },
     {
@@ -5142,7 +5142,7 @@
       "message": "Mira Rajput (Lumina Skincare) requested revisions on 7-Day Barrier Repair Transformation (v1).",
       "type": "client_revision",
       "relatedId": "del-201",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-20T18:46:00Z"
     },
     {
@@ -5153,7 +5153,7 @@
       "message": "You have been assigned revision work for Lumina Barrier Repair Reel.",
       "type": "assignment",
       "relatedId": "tsk-3",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-20T19:01:00Z"
     },
     {
@@ -5163,7 +5163,7 @@
       "message": "Apex Reel 13: Thermal Compression is now in Client Video Review queue.",
       "type": "client_approval",
       "relatedId": "del-113",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-21T09:35:00Z"
     },
     {
@@ -5190,6 +5190,19 @@
   ],
   "invitations": [
     {
+      "id": "inv-1795355380355",
+      "email": "zayn@gmail.com",
+      "fullName": "zayn",
+      "username": "zayn",
+      "role": "client",
+      "clientId": "cli-1795354361589",
+      "clientName": "Zenith Organics 1795354361586",
+      "token": "inv_3fbb1fb0073e35b5506e081814461907857a99fa34ac9486",
+      "status": "pending",
+      "expiresAt": "2026-11-29T13:49:40.355Z",
+      "createdAt": "2026-11-22T13:49:40.355Z"
+    },
+    {
       "id": "inv-1",
       "email": "siddharth@nexgenai.co",
       "fullName": "Siddharth Rao",
@@ -5203,6 +5216,28 @@
     }
   ],
   "auditLogs": [
+    {
+      "id": "aud-1795355380355",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Invitation Dispatched",
+      "details": "Sent invitation to zayn (zayn@gmail.com) for role CLIENT (Expires: 7 days)",
+      "targetType": "auth",
+      "targetId": "inv-1795355380355",
+      "timestamp": "2026-11-22T13:49:40.355Z"
+    },
+    {
+      "id": "aud-1795355331680",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rohan Rahi authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-22T13:48:51.680Z"
+    },
     {
       "id": "aud-1795355102511",
       "userId": "usr-client-1",
@@ -8989,6 +9024,15 @@
     }
   ],
   "sessions": [
+    {
+      "id": "sess-1795355331682-6087f2f4",
+      "token": "bcbf00a0e3bdc3afb636f2dce9f808ce88b0773ba2f22a72ce7952d21a66a709",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-22T13:48:51.682Z",
+      "expiresAt": "2026-11-29T13:48:51.682Z"
+    },
     {
       "id": "sess-1795355102513-a62a9e95",
       "token": "4c5364cc71ce460bd1ba62b50f6d1634767a711a7faa6039bcaf1d61d870f630",
