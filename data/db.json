@@ -114,9 +114,95 @@
       "status": "active",
       "phone": "+91 99100 88990",
       "createdAt": "2026-04-01T09:00:00Z"
+    },
+    {
+      "id": "usr-1795354297357",
+      "name": "Malicious Admin",
+      "email": "malicious@hacker.com",
+      "username": "malicious",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "status": "active",
+      "createdAt": "2026-11-22T13:31:37.357Z"
     }
   ],
   "clients": [
+    {
+      "id": "cli-1795354361589",
+      "name": "Zenith Organics 1795354361586",
+      "company": "Zenith Organics Pvt Ltd",
+      "email": "contact_1795354361586@zenithorganics.com",
+      "phone": "+91 22 9876 5432",
+      "logoUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=128&q=80",
+      "servicePackage": "Full Marketing",
+      "contractStartDate": "2026-11-01",
+      "contractEndDate": "2027-10-31",
+      "monthlyRetainer": 200000,
+      "currency": "INR",
+      "monthlyCommitment": {
+        "reels": 10,
+        "longVideos": 2,
+        "graphics": 5,
+        "carousels": 3,
+        "customTargetNote": ""
+      },
+      "status": "active",
+      "primaryContactName": "Zenith Organics 1795354361586",
+      "notes": "New flagship organic wellness brand",
+      "createdAt": "2026-11-22T13:32:41.589Z"
+    },
+    {
+      "id": "cli-1795354361203",
+      "name": "Test Client Manager 1795354361200",
+      "company": "Test Client Manager 1795354361200",
+      "email": "mgr_created_1795354361200@test.com",
+      "phone": "",
+      "logoUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=128&q=80",
+      "servicePackage": "Full Marketing",
+      "contractStartDate": "2026-11-22",
+      "contractEndDate": "2027-11-22",
+      "monthlyRetainer": 220000,
+      "currency": "INR",
+      "monthlyCommitment": {
+        "reels": 15,
+        "longVideos": 2,
+        "graphics": 6,
+        "carousels": 4,
+        "customTargetNote": ""
+      },
+      "status": "archived",
+      "primaryContactName": "Test Client Manager 1795354361200",
+      "notes": "Updated by Manager",
+      "createdAt": "2026-11-22T13:32:41.203Z",
+      "archivedAt": "2026-11-22T13:32:41.221Z",
+      "archivedByUserId": "usr-manager"
+    },
+    {
+      "id": "cli-1795354361198",
+      "name": "Test Client Admin 1795354361194",
+      "company": "Test Client Admin 1795354361194",
+      "email": "admin_created_1795354361194@test.com",
+      "phone": "",
+      "logoUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=128&q=80",
+      "servicePackage": "Full Marketing",
+      "contractStartDate": "2026-11-22",
+      "contractEndDate": "2027-11-22",
+      "monthlyRetainer": 200000,
+      "currency": "INR",
+      "monthlyCommitment": {
+        "reels": 15,
+        "longVideos": 2,
+        "graphics": 6,
+        "carousels": 4,
+        "customTargetNote": ""
+      },
+      "status": "archived",
+      "primaryContactName": "Test Client Admin 1795354361194",
+      "notes": "Updated by Admin",
+      "createdAt": "2026-11-22T13:32:41.198Z",
+      "archivedAt": "2026-11-22T13:32:41.216Z",
+      "archivedByUserId": "usr-admin"
+    },
     {
       "id": "cli-1795353705154",
       "name": "Zenith Organics 1795353705152",
@@ -762,6 +848,68 @@
   ],
   "projects": [
     {
+      "id": "prj-1795354361595-qv1c",
+      "clientId": "cli-1795354361589",
+      "clientName": "Zenith Organics 1795354361586",
+      "title": "Zenith Winter Launch Campaign 1795354361586",
+      "description": "High converting organic wellness social campaign",
+      "objective": "Achieve 300% ROAS on Reels",
+      "startDate": "2026-11-20",
+      "targetEndDate": "2026-12-31",
+      "priority": "high",
+      "status": "active",
+      "assignedEmployees": [
+        "emp-1"
+      ],
+      "budget": 150000,
+      "currency": "INR",
+      "progress": 0,
+      "totalDeliverablesTarget": 10,
+      "completedDeliverablesCount": 0,
+      "createdAt": "2026-11-22T13:32:41.595Z"
+    },
+    {
+      "id": "prj-1795354361433-f5ra",
+      "clientId": "cli-2",
+      "clientName": "Lumina Skincare",
+      "title": "Manager HTTP Campaign",
+      "description": "",
+      "objective": "",
+      "startDate": "2026-11-22",
+      "targetEndDate": "2026-12-22",
+      "priority": "high",
+      "status": "active",
+      "assignedEmployees": [],
+      "budget": 90000,
+      "currency": "INR",
+      "progress": 0,
+      "totalDeliverablesTarget": 10,
+      "completedDeliverablesCount": 0,
+      "createdAt": "2026-11-22T13:32:41.433Z"
+    },
+    {
+      "id": "prj-1795354361428-iqzt",
+      "clientId": "cli-1",
+      "clientName": "Apex Athletics",
+      "title": "HTTP Production Campaign",
+      "description": "End-to-end creative deliverables",
+      "objective": "",
+      "startDate": "2026-11-22",
+      "targetEndDate": "2026-12-22",
+      "priority": "urgent",
+      "status": "active",
+      "assignedEmployees": [
+        "emp-1",
+        "emp-2"
+      ],
+      "budget": 180000,
+      "currency": "INR",
+      "progress": 0,
+      "totalDeliverablesTarget": 12,
+      "completedDeliverablesCount": 0,
+      "createdAt": "2026-11-22T13:32:41.428Z"
+    },
+    {
       "id": "prj-1795353705159-3syx",
       "clientId": "cli-1795353705154",
       "clientName": "Zenith Organics 1795353705152",
@@ -1044,6 +1192,155 @@
     }
   ],
   "deliverables": [
+    {
+      "id": "del-1795354361624",
+      "clientId": "cli-1795354361589",
+      "clientName": "Zenith Organics 1795354361586",
+      "projectId": "prj-1795354361595-qv1c",
+      "projectTitle": "Zenith Winter Launch Campaign 1795354361586",
+      "title": "Zenith Winter Reel #1 — The Morning Routine",
+      "type": "reel",
+      "targetMonth": "2026-11",
+      "stage": "publishing_or_delivery",
+      "currentVersion": 3,
+      "scriptText": "HOOK: Stop using synthetic supplements. Here is why cold-pressed organic wins.",
+      "scriptApproved": true,
+      "videoApproved": false,
+      "thumbnailUrl": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=400&q=80",
+      "assignedEmployeeId": "emp-1",
+      "assignedEmployeeName": "Vikram Mehta",
+      "deadline": "2026-11-29",
+      "status": "published",
+      "isCountedTowardsCommitment": true,
+      "versions": [
+        {
+          "version": 1,
+          "scriptText": "",
+          "submittedAt": "2026-11-22T13:32:41.624Z",
+          "submittedByUserId": "usr-admin",
+          "submittedByUserName": "Rohan Rahi",
+          "notes": "Initial creative draft v1"
+        },
+        {
+          "version": 2,
+          "mediaUrl": "https://cdn.rahicreativemedia.com/zenith/v1_rough_cut.mp4",
+          "scriptText": "HOOK: Stop using synthetic supplements. Here is why cold-pressed organic wins.",
+          "thumbnailUrl": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=400&q=80",
+          "submittedAt": "2026-11-22T13:32:41.645Z",
+          "submittedByUserId": "usr-emp-1",
+          "submittedByUserName": "Vikram Mehta",
+          "notes": "Uploaded version 2",
+          "feedback": "Speed up opening hook cut and boost background ambient music at 0:04."
+        },
+        {
+          "version": 3,
+          "mediaUrl": "https://cdn.rahicreativemedia.com/zenith/v2_revised_master.mp4",
+          "scriptText": "HOOK: Stop using synthetic supplements. Here is why cold-pressed organic wins.",
+          "thumbnailUrl": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=400&q=80",
+          "submittedAt": "2026-11-22T13:32:41.659Z",
+          "submittedByUserId": "usr-emp-1",
+          "submittedByUserName": "Vikram Mehta",
+          "notes": "Uploaded version 3"
+        }
+      ],
+      "createdAt": "2026-11-22T13:32:41.624Z",
+      "scriptApprovedAt": "2026-11-22T13:32:41.639Z",
+      "mediaUrl": "https://cdn.rahicreativemedia.com/zenith/v2_revised_master.mp4",
+      "publishedAt": "2026-11-22T13:32:41.670Z"
+    },
+    {
+      "id": "del-1795354361373",
+      "clientId": "cli-1",
+      "clientName": "Apex Athletics",
+      "projectId": "proj-1",
+      "projectTitle": "General Campaign",
+      "title": "Phase 6 Live HTTP Approval Reel",
+      "type": "reel",
+      "targetMonth": "2026-03",
+      "stage": "scheduling",
+      "currentVersion": 1,
+      "scriptText": "Live HTTP Script: Accelerate your brand narrative with RAHI Creative Media.",
+      "scriptApproved": true,
+      "videoApproved": true,
+      "thumbnailUrl": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=400&q=80",
+      "assignedEmployeeId": "emp-1",
+      "assignedEmployeeName": "Vikram Mehta",
+      "deadline": "2026-03-31",
+      "status": "approved",
+      "isCountedTowardsCommitment": false,
+      "versions": [
+        {
+          "version": 1,
+          "scriptText": "",
+          "submittedAt": "2026-11-22T13:32:41.373Z",
+          "submittedByUserId": "usr-admin",
+          "submittedByUserName": "Rohan Rahi",
+          "notes": "Initial creative draft v1",
+          "feedback": "Please refine tone of voice in line 2 and strengthen call to action."
+        }
+      ],
+      "createdAt": "2026-11-22T13:32:41.373Z",
+      "scriptApprovedAt": "2026-11-22T13:32:41.401Z",
+      "mediaUrl": "https://cdn.test.com/phase6_video_cut.mp4",
+      "videoApprovedAt": "2026-11-22T13:32:41.411Z"
+    },
+    {
+      "id": "del-1795354361320",
+      "clientId": "cli-1",
+      "clientName": "Apex Athletics",
+      "projectId": "proj-gen",
+      "projectTitle": "General Campaign",
+      "title": "Real HTTP Pipeline Test Reel",
+      "type": "reel",
+      "targetMonth": "2026-11",
+      "stage": "publishing_or_delivery",
+      "currentVersion": 3,
+      "scriptText": "Initial hook draft v1",
+      "scriptApproved": true,
+      "videoApproved": false,
+      "thumbnailUrl": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=400&q=80",
+      "assignedEmployeeId": "emp-1",
+      "assignedEmployeeName": "Vikram Mehta",
+      "deadline": "2026-11-30",
+      "status": "cancelled",
+      "isCountedTowardsCommitment": false,
+      "versions": [
+        {
+          "version": 1,
+          "scriptText": "Initial hook draft v1",
+          "submittedAt": "2026-11-22T13:32:41.320Z",
+          "submittedByUserId": "usr-admin",
+          "submittedByUserName": "Rohan Rahi",
+          "notes": "Initial creative draft v1"
+        },
+        {
+          "version": 2,
+          "mediaUrl": "https://cdn.test.com/rough_cut_v2.mp4",
+          "scriptText": "Initial hook draft v1",
+          "thumbnailUrl": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=400&q=80",
+          "submittedAt": "2026-11-22T13:32:41.344Z",
+          "submittedByUserId": "usr-emp-1",
+          "submittedByUserName": "Vikram Mehta",
+          "notes": "Rough cut with color grade and audio mix"
+        },
+        {
+          "version": 3,
+          "mediaUrl": "https://cdn.test.com/revised_master_v3.mp4",
+          "scriptText": "Initial hook draft v1",
+          "thumbnailUrl": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=400&q=80",
+          "submittedAt": "2026-11-22T13:32:41.358Z",
+          "submittedByUserId": "usr-emp-1",
+          "submittedByUserName": "Vikram Mehta",
+          "notes": "Trimmed outro and updated soundtrack"
+        }
+      ],
+      "createdAt": "2026-11-22T13:32:41.320Z",
+      "scriptApprovedAt": "2026-11-22T13:32:41.339Z",
+      "mediaUrl": "https://cdn.test.com/revised_master_v3.mp4",
+      "publishedAt": "2026-11-22T13:32:41.363Z",
+      "cancelledAt": "2026-11-22T13:32:41.368Z",
+      "cancellationReason": "Campaign postponed by client"
+    },
     {
       "id": "del-1795353705182",
       "clientId": "cli-1795353705154",
@@ -2069,6 +2366,105 @@
   ],
   "tasks": [
     {
+      "id": "tsk-1795354361600",
+      "title": "Edit Zenith Launch Reel 01",
+      "clientId": "cli-1795354361589",
+      "clientName": "Zenith Organics 1795354361586",
+      "projectId": "prj-1795354361595-qv1c",
+      "projectTitle": "Zenith Winter Launch Campaign 1795354361586",
+      "description": "Dynamic pacing with motion typography overlays",
+      "assignedEmployeeId": "emp-1",
+      "assignedEmployeeName": "Vikram Mehta",
+      "assignedEmployeeDepartment": "Video Editing",
+      "assignedEmployeeIds": [
+        "emp-1"
+      ],
+      "priority": "high",
+      "startDate": "2026-11-22",
+      "deadline": "2026-11-28",
+      "estimatedHours": 6.5,
+      "status": "completed",
+      "referenceFiles": [],
+      "requiredOutput": "Standard creative asset meeting agency guidelines.",
+      "submissions": [],
+      "comments": [],
+      "createdAt": "2026-11-22T13:32:41.600Z",
+      "completedAt": "2026-11-22T13:32:41.619Z"
+    },
+    {
+      "id": "tsk-1795354361451",
+      "title": "HTTP Video Edit & Audio Mix Task",
+      "clientId": "cli-1",
+      "clientName": "Apex Athletics",
+      "projectId": "prj-1795354361428-iqzt",
+      "projectTitle": "HTTP Production Campaign",
+      "description": "",
+      "assignedEmployeeId": "emp-1",
+      "assignedEmployeeName": "Vikram Mehta",
+      "assignedEmployeeDepartment": "Video Editing",
+      "assignedEmployeeIds": [
+        "emp-1"
+      ],
+      "priority": "urgent",
+      "startDate": "2026-11-22",
+      "deadline": "2026-11-30",
+      "estimatedHours": 6,
+      "status": "under_review",
+      "referenceFiles": [],
+      "requiredOutput": "Standard creative asset meeting agency guidelines.",
+      "submissions": [],
+      "comments": [],
+      "createdAt": "2026-11-22T13:32:41.451Z"
+    },
+    {
+      "id": "tsk-1795354361290",
+      "title": "HTTP Task Created by Manager",
+      "clientId": "cli-1",
+      "clientName": "Apex Athletics",
+      "projectId": "proj-gen",
+      "projectTitle": "General Project",
+      "description": "",
+      "assignedEmployeeId": "emp-2",
+      "assignedEmployeeName": "Ananya Sen",
+      "assignedEmployeeDepartment": "Scriptwriting",
+      "assignedEmployeeIds": [
+        "emp-2"
+      ],
+      "priority": "urgent",
+      "startDate": "2026-11-22",
+      "deadline": "2026-11-29",
+      "status": "todo",
+      "referenceFiles": [],
+      "requiredOutput": "Standard creative asset meeting agency guidelines.",
+      "submissions": [],
+      "comments": [],
+      "createdAt": "2026-11-22T13:32:41.290Z"
+    },
+    {
+      "id": "tsk-1795354361285",
+      "title": "HTTP Task Created by Admin",
+      "clientId": "cli-1",
+      "clientName": "Apex Athletics",
+      "projectId": "proj-gen",
+      "projectTitle": "General Project",
+      "description": "",
+      "assignedEmployeeId": "emp-3",
+      "assignedEmployeeName": "Kabir Joshi",
+      "assignedEmployeeDepartment": "Graphic Design",
+      "assignedEmployeeIds": [
+        "emp-1"
+      ],
+      "priority": "urgent",
+      "startDate": "2026-11-22",
+      "deadline": "2026-11-30",
+      "status": "todo",
+      "referenceFiles": [],
+      "requiredOutput": "Standard creative asset meeting agency guidelines.",
+      "submissions": [],
+      "comments": [],
+      "createdAt": "2026-11-22T13:32:41.285Z"
+    },
+    {
       "id": "tsk-1795353705163",
       "title": "Edit Zenith Launch Reel 01",
       "clientId": "cli-1795353705154",
@@ -2620,6 +3016,127 @@
   ],
   "approvals": [
     {
+      "id": "appr-1795354361654-abcg",
+      "clientId": "cli-1795354361589",
+      "clientName": "Zenith Organics 1795354361586",
+      "deliverableId": "del-1795354361624",
+      "deliverableTitle": "Zenith Winter Reel #1 — The Morning Routine",
+      "type": "video",
+      "version": 2,
+      "status": "revision_requested",
+      "action": "video_revision",
+      "feedback": "Speed up opening hook cut and boost background ambient music at 0:04.",
+      "categories": [
+        "Hook / Pacing",
+        "Music / Sound Design"
+      ],
+      "decisionDate": "2026-11-22T13:32:41.654Z",
+      "decidedByUserId": "usr-manager",
+      "decidedByUserName": "Priya Sharma",
+      "recordedByAdminOrManager": true
+    },
+    {
+      "id": "appr-1795354361639-iyg5",
+      "clientId": "cli-1795354361589",
+      "clientName": "Zenith Organics 1795354361586",
+      "deliverableId": "del-1795354361624",
+      "deliverableTitle": "Zenith Winter Reel #1 — The Morning Routine",
+      "type": "script",
+      "version": 1,
+      "status": "approved",
+      "action": "script_approved",
+      "feedback": "Script approved by founder with enthusiasm.",
+      "categories": [],
+      "decisionDate": "2026-11-22T13:32:41.639Z",
+      "decidedByUserId": "usr-manager",
+      "decidedByUserName": "Priya Sharma",
+      "recordedByAdminOrManager": true
+    },
+    {
+      "id": "appr-1795354361411-wpq2",
+      "clientId": "cli-1",
+      "clientName": "Apex Athletics",
+      "deliverableId": "del-1795354361373",
+      "deliverableTitle": "Phase 6 Live HTTP Approval Reel",
+      "type": "video",
+      "version": 1,
+      "status": "approved",
+      "action": "video_approved",
+      "feedback": "Final video approved for release.",
+      "categories": [],
+      "decisionDate": "2026-11-22T13:32:41.411Z",
+      "decidedByUserId": "usr-admin",
+      "decidedByUserName": "Rohan Rahi",
+      "recordedByAdminOrManager": true
+    },
+    {
+      "id": "appr-1795354361401-gep1",
+      "clientId": "cli-1",
+      "clientName": "Apex Athletics",
+      "deliverableId": "del-1795354361373",
+      "deliverableTitle": "Phase 6 Live HTTP Approval Reel",
+      "type": "script",
+      "version": 1,
+      "status": "approved",
+      "action": "script_approved",
+      "feedback": "Approved verbally by Client A Founder during review call.",
+      "categories": [],
+      "decisionDate": "2026-11-22T13:32:41.401Z",
+      "decidedByUserId": "usr-manager",
+      "decidedByUserName": "Priya Sharma",
+      "recordedByAdminOrManager": true
+    },
+    {
+      "id": "appr-1795354361396-ru2i",
+      "clientId": "cli-1",
+      "clientName": "Apex Athletics",
+      "deliverableId": "del-1795354361373",
+      "deliverableTitle": "Phase 6 Live HTTP Approval Reel",
+      "type": "script",
+      "version": 1,
+      "status": "revision_requested",
+      "action": "script_revision",
+      "feedback": "Please refine tone of voice in line 2 and strengthen call to action.",
+      "categories": [
+        "Brand Tone / Voice",
+        "Call-to-Action (CTA)"
+      ],
+      "decisionDate": "2026-11-22T13:32:41.396Z",
+      "decidedByUserId": "usr-client-1",
+      "decidedByUserName": "Arjun Kapoor",
+      "recordedByAdminOrManager": false
+    },
+    {
+      "id": "appr-1795354361353",
+      "clientId": "cli-1",
+      "clientName": "Apex Athletics",
+      "deliverableId": "del-1795354361320",
+      "deliverableTitle": "Real HTTP Pipeline Test Reel",
+      "type": "video",
+      "version": 2,
+      "status": "revision_requested",
+      "action": "video_revision",
+      "feedback": "Please change music track and trim final 3 seconds",
+      "decisionDate": "2026-11-22T13:32:41.353Z",
+      "decidedByUserId": "usr-client-1",
+      "decidedByUserName": "Arjun Kapoor"
+    },
+    {
+      "id": "appr-1795354361339",
+      "clientId": "cli-1",
+      "clientName": "Apex Athletics",
+      "deliverableId": "del-1795354361320",
+      "deliverableTitle": "Real HTTP Pipeline Test Reel",
+      "type": "script",
+      "version": 1,
+      "status": "approved",
+      "action": "script_approved",
+      "feedback": "Great hook! Script approved.",
+      "decisionDate": "2026-11-22T13:32:41.339Z",
+      "decidedByUserId": "usr-client-1",
+      "decidedByUserName": "Arjun Kapoor"
+    },
+    {
       "id": "appr-1795353705211-ugcc",
       "clientId": "cli-1795353705154",
       "clientName": "Zenith Organics 1795353705152",
@@ -3143,6 +3660,290 @@
     }
   ],
   "notifications": [
+    {
+      "id": "notif-1795354361670",
+      "targetRole": "all_admin",
+      "title": "Deliverable Published & Counted",
+      "message": "\"Zenith Winter Reel #1 — The Morning Routine\" published. Zenith Organics 1795354361586 has now completed 1/20 deliverables.",
+      "type": "published",
+      "relatedId": "del-1795354361624",
+      "read": false,
+      "createdAt": "2026-11-22T13:32:41.670Z"
+    },
+    {
+      "id": "notif-1795354361659",
+      "targetRole": "all_admin",
+      "title": "Version 3 Uploaded for \"Zenith Winter Reel #1 — The Morning Routine\"",
+      "message": "Vikram Mehta submitted Version 3 for Zenith Organics 1795354361586. Ready for quality check.",
+      "type": "submission",
+      "relatedId": "del-1795354361624",
+      "read": false,
+      "createdAt": "2026-11-22T13:32:41.659Z"
+    },
+    {
+      "id": "notif-1795354361655-u17g-emp",
+      "targetRole": "employee",
+      "recipientUserId": "usr-emp-1",
+      "title": "Revision Requested on Zenith Winter Reel #1 — The Morning Routine",
+      "message": "Client requested changes on video v2: \"Speed up opening hook cut and boost background ambient music at 0:04.\" [Tags: Hook / Pacing, Music / Sound Design]",
+      "type": "client_revision",
+      "relatedId": "del-1795354361624",
+      "read": false,
+      "createdAt": "2026-11-22T13:32:41.655Z"
+    },
+    {
+      "id": "notif-1795354361654-r15q",
+      "targetRole": "all_admin",
+      "title": "Client Revision Requested: Zenith Winter Reel #1 — The Morning Routine",
+      "message": "Priya Sharma (Zenith Organics 1795354361586) revision requested video (v2). Feedback: \"Speed up opening hook cut and boost background ambient music at 0:04.\" [Tags: Hook / Pacing, Music / Sound Design]",
+      "type": "client_revision",
+      "relatedId": "del-1795354361624",
+      "read": false,
+      "createdAt": "2026-11-22T13:32:41.654Z"
+    },
+    {
+      "id": "notif-1795354361650",
+      "targetRole": "client",
+      "recipientClientId": "cli-1795354361589",
+      "title": "New Video Ready for Approval",
+      "message": "\"Zenith Winter Reel #1 — The Morning Routine\" is ready for your review in the Client Portal.",
+      "type": "client_approval",
+      "relatedId": "del-1795354361624",
+      "read": false,
+      "createdAt": "2026-11-22T13:32:41.650Z"
+    },
+    {
+      "id": "notif-1795354361645",
+      "targetRole": "all_admin",
+      "title": "Version 2 Uploaded for \"Zenith Winter Reel #1 — The Morning Routine\"",
+      "message": "Vikram Mehta submitted Version 2 for Zenith Organics 1795354361586. Ready for quality check.",
+      "type": "submission",
+      "relatedId": "del-1795354361624",
+      "read": false,
+      "createdAt": "2026-11-22T13:32:41.645Z"
+    },
+    {
+      "id": "notif-1795354361639-gha5",
+      "targetRole": "all_admin",
+      "title": "Client Approved: Zenith Winter Reel #1 — The Morning Routine",
+      "message": "Priya Sharma (Zenith Organics 1795354361586) approved script (v1). Feedback: \"Script approved by founder with enthusiasm.\"",
+      "type": "client_approval",
+      "relatedId": "del-1795354361624",
+      "read": false,
+      "createdAt": "2026-11-22T13:32:41.639Z"
+    },
+    {
+      "id": "notif-1795354361634",
+      "targetRole": "client",
+      "recipientClientId": "cli-1795354361589",
+      "title": "New Script Ready for Approval",
+      "message": "\"Zenith Winter Reel #1 — The Morning Routine\" is ready for your review in the Client Portal.",
+      "type": "client_approval",
+      "relatedId": "del-1795354361624",
+      "read": false,
+      "createdAt": "2026-11-22T13:32:41.634Z"
+    },
+    {
+      "id": "notif-1795354361600",
+      "targetRole": "employee",
+      "recipientUserId": "usr-emp-1",
+      "title": "New Task Assigned",
+      "message": "You were assigned: \"Edit Zenith Launch Reel 01\" for Zenith Organics 1795354361586. Due by 2026-11-28.",
+      "type": "assignment",
+      "relatedId": "tsk-1795354361600",
+      "read": false,
+      "createdAt": "2026-11-22T13:32:41.600Z"
+    },
+    {
+      "id": "notif-1795354361451",
+      "targetRole": "employee",
+      "recipientUserId": "usr-emp-1",
+      "title": "New Task Assigned",
+      "message": "You were assigned: \"HTTP Video Edit & Audio Mix Task\" for Apex Athletics. Due by 2026-11-30.",
+      "type": "assignment",
+      "relatedId": "tsk-1795354361451",
+      "read": false,
+      "createdAt": "2026-11-22T13:32:41.451Z"
+    },
+    {
+      "id": "notif-1795354361411-7yua",
+      "targetRole": "all_admin",
+      "title": "Client Approved: Phase 6 Live HTTP Approval Reel",
+      "message": "Rohan Rahi (Apex Athletics) approved video (v1). Feedback: \"Final video approved for release.\"",
+      "type": "client_approval",
+      "relatedId": "del-1795354361373",
+      "read": false,
+      "createdAt": "2026-11-22T13:32:41.411Z"
+    },
+    {
+      "id": "notif-1795354361406",
+      "targetRole": "client",
+      "recipientClientId": "cli-1",
+      "title": "New Video Ready for Approval",
+      "message": "\"Phase 6 Live HTTP Approval Reel\" is ready for your review in the Client Portal.",
+      "type": "client_approval",
+      "relatedId": "del-1795354361373",
+      "read": false,
+      "createdAt": "2026-11-22T13:32:41.406Z"
+    },
+    {
+      "id": "notif-1795354361401-lbmq",
+      "targetRole": "all_admin",
+      "title": "Client Approved: Phase 6 Live HTTP Approval Reel",
+      "message": "Priya Sharma (Apex Athletics) approved script (v1). Feedback: \"Approved verbally by Client A Founder during review call.\"",
+      "type": "client_approval",
+      "relatedId": "del-1795354361373",
+      "read": false,
+      "createdAt": "2026-11-22T13:32:41.401Z"
+    },
+    {
+      "id": "notif-1795354361396-hibn-emp",
+      "targetRole": "employee",
+      "recipientUserId": "usr-emp-1",
+      "title": "Revision Requested on Phase 6 Live HTTP Approval Reel",
+      "message": "Client requested changes on script v1: \"Please refine tone of voice in line 2 and strengthen call to action.\" [Tags: Brand Tone / Voice, Call-to-Action (CTA)]",
+      "type": "client_revision",
+      "relatedId": "del-1795354361373",
+      "read": false,
+      "createdAt": "2026-11-22T13:32:41.396Z"
+    },
+    {
+      "id": "notif-1795354361396-tnan",
+      "targetRole": "all_admin",
+      "title": "Client Revision Requested: Phase 6 Live HTTP Approval Reel",
+      "message": "Arjun Kapoor (Apex Athletics) revision requested script (v1). Feedback: \"Please refine tone of voice in line 2 and strengthen call to action.\" [Tags: Brand Tone / Voice, Call-to-Action (CTA)]",
+      "type": "client_revision",
+      "relatedId": "del-1795354361373",
+      "read": false,
+      "createdAt": "2026-11-22T13:32:41.396Z"
+    },
+    {
+      "id": "notif-1795354361379",
+      "targetRole": "client",
+      "recipientClientId": "cli-1",
+      "title": "New Script Ready for Approval",
+      "message": "\"Phase 6 Live HTTP Approval Reel\" is ready for your review in the Client Portal.",
+      "type": "client_approval",
+      "relatedId": "del-1795354361373",
+      "read": false,
+      "createdAt": "2026-11-22T13:32:41.379Z"
+    },
+    {
+      "id": "notif-1795354361363",
+      "targetRole": "all_admin",
+      "title": "Deliverable Published & Counted",
+      "message": "\"Real HTTP Pipeline Test Reel\" published. Apex Athletics has now completed 13/34 deliverables.",
+      "type": "published",
+      "relatedId": "del-1795354361320",
+      "read": false,
+      "createdAt": "2026-11-22T13:32:41.363Z"
+    },
+    {
+      "id": "notif-1795354361358",
+      "targetRole": "all_admin",
+      "title": "Version 3 Uploaded for \"Real HTTP Pipeline Test Reel\"",
+      "message": "Vikram Mehta submitted Version 3 for Apex Athletics. Ready for quality check.",
+      "type": "submission",
+      "relatedId": "del-1795354361320",
+      "read": false,
+      "createdAt": "2026-11-22T13:32:41.358Z"
+    },
+    {
+      "id": "notif-1795354361353",
+      "targetRole": "all_admin",
+      "title": "Client Requested Revision on Video",
+      "message": "Apex Athletics requested revisions for \"Real HTTP Pipeline Test Reel\".",
+      "type": "client_revision",
+      "relatedId": "del-1795354361320",
+      "read": false,
+      "createdAt": "2026-11-22T13:32:41.353Z"
+    },
+    {
+      "id": "notif-1795354361349",
+      "targetRole": "client",
+      "recipientClientId": "cli-1",
+      "title": "New Video Ready for Approval",
+      "message": "\"Real HTTP Pipeline Test Reel\" is ready for your review in the Client Portal.",
+      "type": "client_approval",
+      "relatedId": "del-1795354361320",
+      "read": false,
+      "createdAt": "2026-11-22T13:32:41.349Z"
+    },
+    {
+      "id": "notif-1795354361344",
+      "targetRole": "all_admin",
+      "title": "Version 2 Uploaded for \"Real HTTP Pipeline Test Reel\"",
+      "message": "Vikram Mehta submitted Version 2 for Apex Athletics. Ready for quality check.",
+      "type": "submission",
+      "relatedId": "del-1795354361320",
+      "read": false,
+      "createdAt": "2026-11-22T13:32:41.344Z"
+    },
+    {
+      "id": "notif-1795354361339",
+      "targetRole": "all_admin",
+      "title": "Client Approved Script",
+      "message": "Apex Athletics approved \"Real HTTP Pipeline Test Reel\".",
+      "type": "client_approval",
+      "relatedId": "del-1795354361320",
+      "read": false,
+      "createdAt": "2026-11-22T13:32:41.339Z"
+    },
+    {
+      "id": "notif-1795354361330",
+      "targetRole": "client",
+      "recipientClientId": "cli-1",
+      "title": "New Script Ready for Approval",
+      "message": "\"Real HTTP Pipeline Test Reel\" is ready for your review in the Client Portal.",
+      "type": "client_approval",
+      "relatedId": "del-1795354361320",
+      "read": false,
+      "createdAt": "2026-11-22T13:32:41.330Z"
+    },
+    {
+      "id": "notif-1795354361295-old",
+      "targetRole": "employee",
+      "recipientUserId": "usr-emp-1",
+      "title": "Task Reassigned",
+      "message": "Task \"HTTP Task Created by Admin\" was reassigned to Kabir Joshi.",
+      "type": "assignment",
+      "relatedId": "tsk-1795354361285",
+      "read": false,
+      "createdAt": "2026-11-22T13:32:41.295Z"
+    },
+    {
+      "id": "notif-1795354361295-new",
+      "targetRole": "employee",
+      "recipientUserId": "usr-emp-3",
+      "title": "Task Reassigned to You",
+      "message": "You were reassigned \"HTTP Task Created by Admin\" (Apex Athletics) by Priya Sharma.",
+      "type": "assignment",
+      "relatedId": "tsk-1795354361285",
+      "read": false,
+      "createdAt": "2026-11-22T13:32:41.295Z"
+    },
+    {
+      "id": "notif-1795354361290",
+      "targetRole": "employee",
+      "recipientUserId": "usr-emp-2",
+      "title": "New Task Assigned",
+      "message": "You were assigned: \"HTTP Task Created by Manager\" for Apex Athletics. Due by 2026-11-29.",
+      "type": "assignment",
+      "relatedId": "tsk-1795354361290",
+      "read": false,
+      "createdAt": "2026-11-22T13:32:41.290Z"
+    },
+    {
+      "id": "notif-1795354361285",
+      "targetRole": "employee",
+      "recipientUserId": "usr-emp-1",
+      "title": "New Task Assigned",
+      "message": "You were assigned: \"HTTP Task Created by Admin\" for Apex Athletics. Due by 2026-11-30.",
+      "type": "assignment",
+      "relatedId": "tsk-1795354361285",
+      "read": false,
+      "createdAt": "2026-11-22T13:32:41.285Z"
+    },
     {
       "id": "notif-1795353705224",
       "targetRole": "all_admin",
@@ -4402,6 +5203,875 @@
     }
   ],
   "auditLogs": [
+    {
+      "id": "aud-1795354361913",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Account Status Changed",
+      "details": "Mira Rajput's account status set to ACTIVE",
+      "targetType": "auth",
+      "targetId": "usr-client-2",
+      "timestamp": "2026-11-22T13:32:41.913Z"
+    },
+    {
+      "id": "aud-1795354361902",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Account Status Changed",
+      "details": "Mira Rajput's account status set to INACTIVE",
+      "targetType": "auth",
+      "targetId": "usr-client-2",
+      "timestamp": "2026-11-22T13:32:41.902Z"
+    },
+    {
+      "id": "aud-1795354361887",
+      "userId": "usr-client-2",
+      "userName": "Mira Rajput",
+      "userRole": "client",
+      "action": "User Authentication",
+      "details": "Mira Rajput authenticated into CLIENT PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-client-2",
+      "timestamp": "2026-11-22T13:32:41.887Z"
+    },
+    {
+      "id": "aud-1795354361879",
+      "userId": "usr-client-1",
+      "userName": "Arjun Kapoor",
+      "userRole": "client",
+      "action": "User Authentication",
+      "details": "Arjun Kapoor authenticated into CLIENT PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-client-1",
+      "timestamp": "2026-11-22T13:32:41.879Z"
+    },
+    {
+      "id": "aud-1795354361869",
+      "userId": "usr-emp-1",
+      "userName": "Vikram Mehta",
+      "userRole": "employee",
+      "action": "User Authentication",
+      "details": "Vikram Mehta authenticated into EMPLOYEE PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-emp-1",
+      "timestamp": "2026-11-22T13:32:41.869Z"
+    },
+    {
+      "id": "aud-1795354361860",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "User Authentication",
+      "details": "Priya Sharma authenticated into MANAGER PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-manager",
+      "timestamp": "2026-11-22T13:32:41.860Z"
+    },
+    {
+      "id": "aud-1795354361850",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rohan Rahi authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-22T13:32:41.850Z"
+    },
+    {
+      "id": "aud-1795354361717",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Account Status Changed",
+      "details": "Mira Rajput's account status set to ACTIVE",
+      "targetType": "auth",
+      "targetId": "usr-client-2",
+      "timestamp": "2026-11-22T13:32:41.717Z"
+    },
+    {
+      "id": "aud-1795354361708",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Account Status Changed",
+      "details": "Mira Rajput's account status set to INACTIVE",
+      "targetType": "auth",
+      "targetId": "usr-client-2",
+      "timestamp": "2026-11-22T13:32:41.708Z"
+    },
+    {
+      "id": "aud-1795354361686-pddn",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Payment Recorded",
+      "details": "Rohan Rahi recorded payment of INR 200000 for Zenith Organics 1795354361586",
+      "targetType": "client",
+      "targetId": "cli-1795354361589",
+      "timestamp": "2026-11-22T13:32:41.686Z"
+    },
+    {
+      "id": "aud-1795354361679-im3c",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Invoice Created",
+      "details": "Rohan Rahi created invoice INV-2026-0007 for Zenith Organics 1795354361586 (INR 200000)",
+      "targetType": "client",
+      "targetId": "cli-1795354361589",
+      "timestamp": "2026-11-22T13:32:41.679Z"
+    },
+    {
+      "id": "aud-1795354361670",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Workflow Stage Advanced",
+      "details": "Moved \"Zenith Winter Reel #1 — The Morning Routine\" from \"scheduling\" to \"publishing_or_delivery\" (Status: published)",
+      "targetType": "deliverable",
+      "targetId": "del-1795354361624",
+      "timestamp": "2026-11-22T13:32:41.670Z"
+    },
+    {
+      "id": "aud-1795354361664",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Workflow Stage Advanced",
+      "details": "Moved \"Zenith Winter Reel #1 — The Morning Routine\" from \"internal_video_review\" to \"scheduling\" (Status: scheduled)",
+      "targetType": "deliverable",
+      "targetId": "del-1795354361624",
+      "timestamp": "2026-11-22T13:32:41.664Z"
+    },
+    {
+      "id": "aud-1795354361659",
+      "userId": "usr-emp-1",
+      "userName": "Vikram Mehta",
+      "userRole": "employee",
+      "action": "Deliverable Version Uploaded",
+      "details": "Uploaded version 3 for deliverable \"Zenith Winter Reel #1 — The Morning Routine\"",
+      "targetType": "deliverable",
+      "targetId": "del-1795354361624",
+      "timestamp": "2026-11-22T13:32:41.659Z"
+    },
+    {
+      "id": "aud-1795354361655-iu5u",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Client Revision Requested",
+      "details": "Priya Sharma (Admin/Manager Oversight) revision requested video v2 for \"Zenith Winter Reel #1 — The Morning Routine\". Categories: Hook / Pacing, Music / Sound Design. Feedback: \"Speed up opening hook cut and boost background ambient music at 0:04.\"",
+      "targetType": "approval",
+      "targetId": "appr-1795354361654-abcg",
+      "timestamp": "2026-11-22T13:32:41.655Z"
+    },
+    {
+      "id": "aud-1795354361650",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Workflow Stage Advanced",
+      "details": "Moved \"Zenith Winter Reel #1 — The Morning Routine\" from \"video_editing\" to \"client_video_approval\" (Status: client_review)",
+      "targetType": "deliverable",
+      "targetId": "del-1795354361624",
+      "timestamp": "2026-11-22T13:32:41.650Z"
+    },
+    {
+      "id": "aud-1795354361645",
+      "userId": "usr-emp-1",
+      "userName": "Vikram Mehta",
+      "userRole": "employee",
+      "action": "Deliverable Version Uploaded",
+      "details": "Uploaded version 2 for deliverable \"Zenith Winter Reel #1 — The Morning Routine\"",
+      "targetType": "deliverable",
+      "targetId": "del-1795354361624",
+      "timestamp": "2026-11-22T13:32:41.645Z"
+    },
+    {
+      "id": "aud-1795354361639-q92f",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Client Approved",
+      "details": "Priya Sharma (Admin/Manager Oversight) approved script v1 for \"Zenith Winter Reel #1 — The Morning Routine\". Categories: None. Feedback: \"Script approved by founder with enthusiasm.\"",
+      "targetType": "approval",
+      "targetId": "appr-1795354361639-iyg5",
+      "timestamp": "2026-11-22T13:32:41.639Z"
+    },
+    {
+      "id": "aud-1795354361634",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Workflow Stage Advanced",
+      "details": "Moved \"Zenith Winter Reel #1 — The Morning Routine\" from \"internal_script_review\" to \"client_script_approval\" (Status: client_review)",
+      "targetType": "deliverable",
+      "targetId": "del-1795354361624",
+      "timestamp": "2026-11-22T13:32:41.634Z"
+    },
+    {
+      "id": "aud-1795354361629",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Workflow Stage Advanced",
+      "details": "Moved \"Zenith Winter Reel #1 — The Morning Routine\" from \"content_planning\" to \"internal_script_review\" (Status: in_progress)",
+      "targetType": "deliverable",
+      "targetId": "del-1795354361624",
+      "timestamp": "2026-11-22T13:32:41.629Z"
+    },
+    {
+      "id": "aud-1795354361624",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Deliverable Created",
+      "details": "Created deliverable \"Zenith Winter Reel #1 — The Morning Routine\" for Zenith Organics 1795354361586",
+      "targetType": "deliverable",
+      "targetId": "del-1795354361624",
+      "timestamp": "2026-11-22T13:32:41.624Z"
+    },
+    {
+      "id": "aud-1795354361600",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Task Assigned",
+      "details": "Assigned task \"Edit Zenith Launch Reel 01\" to Vikram Mehta (HIGH priority). [Assigned despite high capacity]",
+      "targetType": "task",
+      "targetId": "tsk-1795354361600",
+      "timestamp": "2026-11-22T13:32:41.600Z"
+    },
+    {
+      "id": "aud-1795354361595-b93f",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Project Created",
+      "details": "Priya Sharma created project \"Zenith Winter Launch Campaign 1795354361586\" for client Zenith Organics 1795354361586 (Budget: INR 150000)",
+      "targetType": "project",
+      "targetId": "prj-1795354361595-qv1c",
+      "timestamp": "2026-11-22T13:32:41.595Z"
+    },
+    {
+      "id": "aud-1795354361589",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Client Created",
+      "details": "Added new client \"Zenith Organics 1795354361586\" with package Full Marketing (200000 INR/mo)",
+      "targetType": "client",
+      "targetId": "cli-1795354361589",
+      "timestamp": "2026-11-22T13:32:41.589Z"
+    },
+    {
+      "id": "aud-1795354361582",
+      "userId": "usr-client-2",
+      "userName": "Mira Rajput",
+      "userRole": "client",
+      "action": "User Authentication",
+      "details": "Mira Rajput authenticated into CLIENT PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-client-2",
+      "timestamp": "2026-11-22T13:32:41.582Z"
+    },
+    {
+      "id": "aud-1795354361574",
+      "userId": "usr-client-1",
+      "userName": "Arjun Kapoor",
+      "userRole": "client",
+      "action": "User Authentication",
+      "details": "Arjun Kapoor authenticated into CLIENT PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-client-1",
+      "timestamp": "2026-11-22T13:32:41.574Z"
+    },
+    {
+      "id": "aud-1795354361565",
+      "userId": "usr-emp-1",
+      "userName": "Vikram Mehta",
+      "userRole": "employee",
+      "action": "User Authentication",
+      "details": "Vikram Mehta authenticated into EMPLOYEE PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-emp-1",
+      "timestamp": "2026-11-22T13:32:41.565Z"
+    },
+    {
+      "id": "aud-1795354361556",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "User Authentication",
+      "details": "Priya Sharma authenticated into MANAGER PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-manager",
+      "timestamp": "2026-11-22T13:32:41.556Z"
+    },
+    {
+      "id": "aud-1795354361548",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rohan Rahi authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-22T13:32:41.548Z"
+    },
+    {
+      "id": "aud-1795354361451",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Task Assigned",
+      "details": "Assigned task \"HTTP Video Edit & Audio Mix Task\" to Vikram Mehta (URGENT priority). [Assigned despite high capacity]",
+      "targetType": "task",
+      "targetId": "tsk-1795354361451",
+      "timestamp": "2026-11-22T13:32:41.451Z"
+    },
+    {
+      "id": "aud-1795354361443-r61b",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Project Restored",
+      "details": "Rohan Rahi restored archived project \"HTTP Production Campaign\"",
+      "targetType": "project",
+      "targetId": "prj-1795354361428-iqzt",
+      "timestamp": "2026-11-22T13:32:41.443Z"
+    },
+    {
+      "id": "aud-1795354361438-v4zb",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Project Archived",
+      "details": "Priya Sharma archived project \"HTTP Production Campaign\"",
+      "targetType": "project",
+      "targetId": "prj-1795354361428-iqzt",
+      "timestamp": "2026-11-22T13:32:41.438Z"
+    },
+    {
+      "id": "aud-1795354361433-xtrf",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Project Created",
+      "details": "Priya Sharma created project \"Manager HTTP Campaign\" for client Lumina Skincare (Budget: INR 90000)",
+      "targetType": "project",
+      "targetId": "prj-1795354361433-f5ra",
+      "timestamp": "2026-11-22T13:32:41.433Z"
+    },
+    {
+      "id": "aud-1795354361428-me19",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Project Created",
+      "details": "Rohan Rahi created project \"HTTP Production Campaign\" for client Apex Athletics (Budget: INR 180000)",
+      "targetType": "project",
+      "targetId": "prj-1795354361428-iqzt",
+      "timestamp": "2026-11-22T13:32:41.428Z"
+    },
+    {
+      "id": "aud-1795354361411-11le",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Client Approved",
+      "details": "Rohan Rahi (Admin/Manager Oversight) approved video v1 for \"Phase 6 Live HTTP Approval Reel\". Categories: None. Feedback: \"Final video approved for release.\"",
+      "targetType": "approval",
+      "targetId": "appr-1795354361411-wpq2",
+      "timestamp": "2026-11-22T13:32:41.411Z"
+    },
+    {
+      "id": "aud-1795354361406",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Workflow Stage Advanced",
+      "details": "Moved \"Phase 6 Live HTTP Approval Reel\" from \"video_editing\" to \"client_video_approval\" (Status: client_review)",
+      "targetType": "deliverable",
+      "targetId": "del-1795354361373",
+      "timestamp": "2026-11-22T13:32:41.406Z"
+    },
+    {
+      "id": "aud-1795354361401-3ffi",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Client Approved",
+      "details": "Priya Sharma (Admin/Manager Oversight) approved script v1 for \"Phase 6 Live HTTP Approval Reel\". Categories: None. Feedback: \"Approved verbally by Client A Founder during review call.\"",
+      "targetType": "approval",
+      "targetId": "appr-1795354361401-gep1",
+      "timestamp": "2026-11-22T13:32:41.401Z"
+    },
+    {
+      "id": "aud-1795354361396-p9cv",
+      "userId": "usr-client-1",
+      "userName": "Arjun Kapoor",
+      "userRole": "client",
+      "action": "Client Revision Requested",
+      "details": "Arjun Kapoor revision requested script v1 for \"Phase 6 Live HTTP Approval Reel\". Categories: Brand Tone / Voice, Call-to-Action (CTA). Feedback: \"Please refine tone of voice in line 2 and strengthen call to action.\"",
+      "targetType": "approval",
+      "targetId": "appr-1795354361396-ru2i",
+      "timestamp": "2026-11-22T13:32:41.396Z"
+    },
+    {
+      "id": "aud-1795354361379",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Workflow Stage Advanced",
+      "details": "Moved \"Phase 6 Live HTTP Approval Reel\" from \"content_planning\" to \"client_script_approval\" (Status: client_review)",
+      "targetType": "deliverable",
+      "targetId": "del-1795354361373",
+      "timestamp": "2026-11-22T13:32:41.379Z"
+    },
+    {
+      "id": "aud-1795354361373",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Deliverable Created",
+      "details": "Created deliverable \"Phase 6 Live HTTP Approval Reel\" for Apex Athletics",
+      "targetType": "deliverable",
+      "targetId": "del-1795354361373",
+      "timestamp": "2026-11-22T13:32:41.373Z"
+    },
+    {
+      "id": "aud-1795354361368",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Deliverable Cancelled",
+      "details": "Cancelled deliverable \"Real HTTP Pipeline Test Reel\". Reason: Campaign postponed by client",
+      "targetType": "deliverable",
+      "targetId": "del-1795354361320",
+      "timestamp": "2026-11-22T13:32:41.368Z"
+    },
+    {
+      "id": "aud-1795354361363",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Workflow Stage Advanced",
+      "details": "Moved \"Real HTTP Pipeline Test Reel\" from \"internal_video_review\" to \"publishing_or_delivery\" (Status: published)",
+      "targetType": "deliverable",
+      "targetId": "del-1795354361320",
+      "timestamp": "2026-11-22T13:32:41.363Z"
+    },
+    {
+      "id": "aud-1795354361358",
+      "userId": "usr-emp-1",
+      "userName": "Vikram Mehta",
+      "userRole": "employee",
+      "action": "Deliverable Version Uploaded",
+      "details": "Uploaded version 3 for deliverable \"Real HTTP Pipeline Test Reel\"",
+      "targetType": "deliverable",
+      "targetId": "del-1795354361320",
+      "timestamp": "2026-11-22T13:32:41.358Z"
+    },
+    {
+      "id": "aud-1795354361353",
+      "userId": "usr-client-1",
+      "userName": "Arjun Kapoor",
+      "userRole": "client",
+      "action": "Client Revision Requested",
+      "details": "Arjun Kapoor decided revision for video of \"Real HTTP Pipeline Test Reel\". Feedback: Please change music track and trim final 3 seconds",
+      "targetType": "deliverable",
+      "targetId": "del-1795354361320",
+      "timestamp": "2026-11-22T13:32:41.353Z"
+    },
+    {
+      "id": "aud-1795354361349",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Workflow Stage Advanced",
+      "details": "Moved \"Real HTTP Pipeline Test Reel\" from \"video_editing\" to \"client_video_approval\" (Status: client_review)",
+      "targetType": "deliverable",
+      "targetId": "del-1795354361320",
+      "timestamp": "2026-11-22T13:32:41.349Z"
+    },
+    {
+      "id": "aud-1795354361344",
+      "userId": "usr-emp-1",
+      "userName": "Vikram Mehta",
+      "userRole": "employee",
+      "action": "Deliverable Version Uploaded",
+      "details": "Uploaded version 2 for deliverable \"Real HTTP Pipeline Test Reel\"",
+      "targetType": "deliverable",
+      "targetId": "del-1795354361320",
+      "timestamp": "2026-11-22T13:32:41.344Z"
+    },
+    {
+      "id": "aud-1795354361339",
+      "userId": "usr-client-1",
+      "userName": "Arjun Kapoor",
+      "userRole": "client",
+      "action": "Client Approved Asset",
+      "details": "Arjun Kapoor decided approve for script of \"Real HTTP Pipeline Test Reel\". Feedback: Great hook! Script approved.",
+      "targetType": "deliverable",
+      "targetId": "del-1795354361320",
+      "timestamp": "2026-11-22T13:32:41.339Z"
+    },
+    {
+      "id": "aud-1795354361330",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Workflow Stage Advanced",
+      "details": "Moved \"Real HTTP Pipeline Test Reel\" from \"internal_script_review\" to \"client_script_approval\" (Status: client_review)",
+      "targetType": "deliverable",
+      "targetId": "del-1795354361320",
+      "timestamp": "2026-11-22T13:32:41.330Z"
+    },
+    {
+      "id": "aud-1795354361325",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Workflow Stage Advanced",
+      "details": "Moved \"Real HTTP Pipeline Test Reel\" from \"content_planning\" to \"internal_script_review\" (Status: internal_review)",
+      "targetType": "deliverable",
+      "targetId": "del-1795354361320",
+      "timestamp": "2026-11-22T13:32:41.325Z"
+    },
+    {
+      "id": "aud-1795354361320",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Deliverable Created",
+      "details": "Created deliverable \"Real HTTP Pipeline Test Reel\" for Apex Athletics",
+      "targetType": "deliverable",
+      "targetId": "del-1795354361320",
+      "timestamp": "2026-11-22T13:32:41.320Z"
+    },
+    {
+      "id": "aud-1795354361295",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Task Reassigned",
+      "details": "Reassigned task \"HTTP Task Created by Admin\" from Vikram Mehta to Kabir Joshi",
+      "targetType": "task",
+      "targetId": "tsk-1795354361285",
+      "timestamp": "2026-11-22T13:32:41.295Z"
+    },
+    {
+      "id": "aud-1795354361290",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Task Assigned",
+      "details": "Assigned task \"HTTP Task Created by Manager\" to Ananya Sen (URGENT priority). [Assigned despite high capacity]",
+      "targetType": "task",
+      "targetId": "tsk-1795354361290",
+      "timestamp": "2026-11-22T13:32:41.290Z"
+    },
+    {
+      "id": "aud-1795354361285",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Task Assigned",
+      "details": "Assigned task \"HTTP Task Created by Admin\" to Vikram Mehta (HIGH priority). [Assigned despite high capacity]",
+      "targetType": "task",
+      "targetId": "tsk-1795354361285",
+      "timestamp": "2026-11-22T13:32:41.285Z"
+    },
+    {
+      "id": "aud-1795354361221",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Client Archived",
+      "details": "Archived client \"Test Client Manager 1795354361200\" (cli-1795354361203). Historical projects, tasks, deliverables, and approvals permanently preserved.",
+      "targetType": "client",
+      "targetId": "cli-1795354361203",
+      "timestamp": "2026-11-22T13:32:41.221Z"
+    },
+    {
+      "id": "aud-1795354361216",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Client Archived",
+      "details": "Archived client \"Test Client Admin 1795354361194\" (cli-1795354361198). Historical projects, tasks, deliverables, and approvals permanently preserved.",
+      "targetType": "client",
+      "targetId": "cli-1795354361198",
+      "timestamp": "2026-11-22T13:32:41.216Z"
+    },
+    {
+      "id": "aud-1795354361212",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Client Updated",
+      "details": "Updated client \"Test Client Manager 1795354361200\" (Status: active, Retainer: 220000 INR/mo)",
+      "targetType": "client",
+      "targetId": "cli-1795354361203",
+      "timestamp": "2026-11-22T13:32:41.212Z"
+    },
+    {
+      "id": "aud-1795354361207",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Client Updated",
+      "details": "Updated client \"Test Client Admin 1795354361194\" (Status: active, Retainer: 200000 INR/mo)",
+      "targetType": "client",
+      "targetId": "cli-1795354361198",
+      "timestamp": "2026-11-22T13:32:41.207Z"
+    },
+    {
+      "id": "aud-1795354361203",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Client Created",
+      "details": "Added new client \"Test Client Manager 1795354361200\" with package Full Marketing (220000 INR/mo)",
+      "targetType": "client",
+      "targetId": "cli-1795354361203",
+      "timestamp": "2026-11-22T13:32:41.203Z"
+    },
+    {
+      "id": "aud-1795354361198",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Client Created",
+      "details": "Added new client \"Test Client Admin 1795354361194\" with package Full Marketing (200000 INR/mo)",
+      "targetType": "client",
+      "targetId": "cli-1795354361198",
+      "timestamp": "2026-11-22T13:32:41.198Z"
+    },
+    {
+      "id": "aud-1795354361180",
+      "userId": "usr-client-2",
+      "userName": "Mira Rajput",
+      "userRole": "client",
+      "action": "User Authentication",
+      "details": "Mira Rajput authenticated into CLIENT PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-client-2",
+      "timestamp": "2026-11-22T13:32:41.180Z"
+    },
+    {
+      "id": "aud-1795354361173",
+      "userId": "usr-client-1",
+      "userName": "Arjun Kapoor",
+      "userRole": "client",
+      "action": "User Authentication",
+      "details": "Arjun Kapoor authenticated into CLIENT PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-client-1",
+      "timestamp": "2026-11-22T13:32:41.173Z"
+    },
+    {
+      "id": "aud-1795354361165",
+      "userId": "usr-emp-1",
+      "userName": "Vikram Mehta",
+      "userRole": "employee",
+      "action": "User Authentication",
+      "details": "Vikram Mehta authenticated into EMPLOYEE PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-emp-1",
+      "timestamp": "2026-11-22T13:32:41.165Z"
+    },
+    {
+      "id": "aud-1795354361156",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "User Authentication",
+      "details": "Priya Sharma authenticated into MANAGER PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-manager",
+      "timestamp": "2026-11-22T13:32:41.156Z"
+    },
+    {
+      "id": "aud-1795354361148",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rohan Rahi authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-22T13:32:41.148Z"
+    },
+    {
+      "id": "aud-1795354354271",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Account Status Changed",
+      "details": "Mira Rajput's account status set to ACTIVE",
+      "targetType": "auth",
+      "targetId": "usr-client-2",
+      "timestamp": "2026-11-22T13:32:34.271Z"
+    },
+    {
+      "id": "aud-1795354354260",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Account Status Changed",
+      "details": "Mira Rajput's account status set to INACTIVE",
+      "targetType": "auth",
+      "targetId": "usr-client-2",
+      "timestamp": "2026-11-22T13:32:34.260Z"
+    },
+    {
+      "id": "aud-1795354354244",
+      "userId": "usr-client-2",
+      "userName": "Mira Rajput",
+      "userRole": "client",
+      "action": "User Authentication",
+      "details": "Mira Rajput authenticated into CLIENT PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-client-2",
+      "timestamp": "2026-11-22T13:32:34.244Z"
+    },
+    {
+      "id": "aud-1795354354236",
+      "userId": "usr-client-1",
+      "userName": "Arjun Kapoor",
+      "userRole": "client",
+      "action": "User Authentication",
+      "details": "Arjun Kapoor authenticated into CLIENT PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-client-1",
+      "timestamp": "2026-11-22T13:32:34.236Z"
+    },
+    {
+      "id": "aud-1795354354229",
+      "userId": "usr-emp-1",
+      "userName": "Vikram Mehta",
+      "userRole": "employee",
+      "action": "User Authentication",
+      "details": "Vikram Mehta authenticated into EMPLOYEE PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-emp-1",
+      "timestamp": "2026-11-22T13:32:34.229Z"
+    },
+    {
+      "id": "aud-1795354354218",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "User Authentication",
+      "details": "Priya Sharma authenticated into MANAGER PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-manager",
+      "timestamp": "2026-11-22T13:32:34.218Z"
+    },
+    {
+      "id": "aud-1795354354207",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rohan Rahi authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-22T13:32:34.207Z"
+    },
+    {
+      "id": "aud-1795354297357",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Account Created",
+      "details": "Created ADMIN account for Malicious Admin (malicious@hacker.com)",
+      "targetType": "auth",
+      "targetId": "usr-1795354297357",
+      "timestamp": "2026-11-22T13:31:37.357Z"
+    },
+    {
+      "id": "aud-1795354297338",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Account Status Changed",
+      "details": "Mira Rajput's account status set to ACTIVE",
+      "targetType": "auth",
+      "targetId": "usr-client-2",
+      "timestamp": "2026-11-22T13:31:37.338Z"
+    },
+    {
+      "id": "aud-1795354297329",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Account Status Changed",
+      "details": "Mira Rajput's account status set to INACTIVE",
+      "targetType": "auth",
+      "targetId": "usr-client-2",
+      "timestamp": "2026-11-22T13:31:37.329Z"
+    },
+    {
+      "id": "aud-1795354297313",
+      "userId": "usr-client-2",
+      "userName": "Mira Rajput",
+      "userRole": "client",
+      "action": "User Authentication",
+      "details": "Mira Rajput authenticated into CLIENT PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-client-2",
+      "timestamp": "2026-11-22T13:31:37.313Z"
+    },
+    {
+      "id": "aud-1795354297306",
+      "userId": "usr-client-1",
+      "userName": "Arjun Kapoor",
+      "userRole": "client",
+      "action": "User Authentication",
+      "details": "Arjun Kapoor authenticated into CLIENT PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-client-1",
+      "timestamp": "2026-11-22T13:31:37.306Z"
+    },
+    {
+      "id": "aud-1795354297298",
+      "userId": "usr-emp-1",
+      "userName": "Vikram Mehta",
+      "userRole": "employee",
+      "action": "User Authentication",
+      "details": "Vikram Mehta authenticated into EMPLOYEE PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-emp-1",
+      "timestamp": "2026-11-22T13:31:37.298Z"
+    },
+    {
+      "id": "aud-1795354297289",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "User Authentication",
+      "details": "Priya Sharma authenticated into MANAGER PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-manager",
+      "timestamp": "2026-11-22T13:31:37.289Z"
+    },
+    {
+      "id": "aud-1795354297279",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rohan Rahi authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-22T13:31:37.279Z"
+    },
     {
       "id": "aud-1795353705263",
       "userId": "usr-admin",
@@ -7298,6 +8968,241 @@
   ],
   "sessions": [
     {
+      "id": "sess-1795354361889-3b35e2aa",
+      "token": "079676939b76b0d46baaf95505d73272f2591b3084dd93dbbe280f5b82db4483",
+      "userId": "usr-client-2",
+      "role": "client",
+      "permissionGroup": "CLIENT_ACCESS",
+      "clientId": "cli-2",
+      "createdAt": "2026-11-22T13:32:41.889Z",
+      "expiresAt": "2026-11-29T13:32:41.889Z"
+    },
+    {
+      "id": "sess-1795354361881-284ba853",
+      "token": "a303362c6db0bc8759ed4bfc2363f8d63a1afd496117d91936df43ea2de107a6",
+      "userId": "usr-client-1",
+      "role": "client",
+      "permissionGroup": "CLIENT_ACCESS",
+      "clientId": "cli-1",
+      "createdAt": "2026-11-22T13:32:41.881Z",
+      "expiresAt": "2026-11-29T13:32:41.881Z"
+    },
+    {
+      "id": "sess-1795354361872-489182f8",
+      "token": "e24f7c698971746285065ebdde18090f86d2003b72dac55965335b444db6dadf",
+      "userId": "usr-emp-1",
+      "role": "employee",
+      "permissionGroup": "EMPLOYEE_ACCESS",
+      "createdAt": "2026-11-22T13:32:41.872Z",
+      "expiresAt": "2026-11-29T13:32:41.872Z"
+    },
+    {
+      "id": "sess-1795354361862-7453abe9",
+      "token": "c140854587877f70fa3c9f272678cae3c6ecd81dcb7a6d8f88959dd028b2dc7f",
+      "userId": "usr-manager",
+      "role": "manager",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-22T13:32:41.862Z",
+      "expiresAt": "2026-11-29T13:32:41.862Z"
+    },
+    {
+      "id": "sess-1795354361853-438f919f",
+      "token": "dc591d0b09958fb28868e3b5fec2744cfd994e3618d2e33155244cab09dd3351",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-22T13:32:41.853Z",
+      "expiresAt": "2026-11-29T13:32:41.853Z"
+    },
+    {
+      "id": "sess-1795354361584-01cfacbd",
+      "token": "0cf22f96656ea2b90f019794d45a0c934bbe18ab0c3b8c75d1b2ab886279589a",
+      "userId": "usr-client-2",
+      "role": "client",
+      "permissionGroup": "CLIENT_ACCESS",
+      "clientId": "cli-2",
+      "createdAt": "2026-11-22T13:32:41.584Z",
+      "expiresAt": "2026-11-29T13:32:41.584Z"
+    },
+    {
+      "id": "sess-1795354361576-2f2f5685",
+      "token": "241eba8ad59779691e974d135d2ad831af9fc55108787f316b48dd66b5975daf",
+      "userId": "usr-client-1",
+      "role": "client",
+      "permissionGroup": "CLIENT_ACCESS",
+      "clientId": "cli-1",
+      "createdAt": "2026-11-22T13:32:41.576Z",
+      "expiresAt": "2026-11-29T13:32:41.576Z"
+    },
+    {
+      "id": "sess-1795354361567-f8f68655",
+      "token": "eff641726ffaef55f17b20d83f121750e9de6771827fd38d5a6e2b3062b3186e",
+      "userId": "usr-emp-1",
+      "role": "employee",
+      "permissionGroup": "EMPLOYEE_ACCESS",
+      "createdAt": "2026-11-22T13:32:41.567Z",
+      "expiresAt": "2026-11-29T13:32:41.567Z"
+    },
+    {
+      "id": "sess-1795354361559-516fa326",
+      "token": "11b178f450c6c80749c93e67acd95f5ad6c2acd879398b126b846508f2bce07b",
+      "userId": "usr-manager",
+      "role": "manager",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-22T13:32:41.559Z",
+      "expiresAt": "2026-11-29T13:32:41.559Z"
+    },
+    {
+      "id": "sess-1795354361551-11e9a6ab",
+      "token": "7ca8ea0df8ef8e588811799be707e3219a3db87bda20126ec5b311110b831713",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-22T13:32:41.551Z",
+      "expiresAt": "2026-11-29T13:32:41.551Z"
+    },
+    {
+      "id": "sess-1795354361182-b0f3dcb5",
+      "token": "bfd7b99907434ecd42f39e0d8627833d69f36552501f45c31b47601922c30afb",
+      "userId": "usr-client-2",
+      "role": "client",
+      "permissionGroup": "CLIENT_ACCESS",
+      "clientId": "cli-2",
+      "createdAt": "2026-11-22T13:32:41.182Z",
+      "expiresAt": "2026-11-29T13:32:41.182Z"
+    },
+    {
+      "id": "sess-1795354361174-e71d5634",
+      "token": "aeec25c4e2922be5d10fb97b3e6a948a91ae547c3ad33ae15be389c99c3e2cc1",
+      "userId": "usr-client-1",
+      "role": "client",
+      "permissionGroup": "CLIENT_ACCESS",
+      "clientId": "cli-1",
+      "createdAt": "2026-11-22T13:32:41.174Z",
+      "expiresAt": "2026-11-29T13:32:41.174Z"
+    },
+    {
+      "id": "sess-1795354361166-ed8dfe59",
+      "token": "2cb758a42b14399f2ee83aad8d97cfe9c861fdff76763b225ebcc5c8ae947187",
+      "userId": "usr-emp-1",
+      "role": "employee",
+      "permissionGroup": "EMPLOYEE_ACCESS",
+      "createdAt": "2026-11-22T13:32:41.166Z",
+      "expiresAt": "2026-11-29T13:32:41.166Z"
+    },
+    {
+      "id": "sess-1795354361158-0a436a94",
+      "token": "244fb1dc2a533249c7f89dbc7da0264869a0ec142c1ad2a9a9e347e022e37165",
+      "userId": "usr-manager",
+      "role": "manager",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-22T13:32:41.158Z",
+      "expiresAt": "2026-11-29T13:32:41.158Z"
+    },
+    {
+      "id": "sess-1795354361150-773a05ec",
+      "token": "017cbdbc97fa902fbd0a75f5cd01c99a80b7b7327ceb2f6440b6ca4fe1553b2a",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-22T13:32:41.150Z",
+      "expiresAt": "2026-11-29T13:32:41.150Z"
+    },
+    {
+      "id": "sess-1795354354246-9415b9f6",
+      "token": "d2c7ee5ba382b98c3f709ccf7d624ea375e7662180bbb5e8dc94f06b74c21640",
+      "userId": "usr-client-2",
+      "role": "client",
+      "permissionGroup": "CLIENT_ACCESS",
+      "clientId": "cli-2",
+      "createdAt": "2026-11-22T13:32:34.246Z",
+      "expiresAt": "2026-11-29T13:32:34.246Z"
+    },
+    {
+      "id": "sess-1795354354238-fb4fbd72",
+      "token": "d8674c1f5d9db305597e92cd8f1af4df4ee5a930abebebb51c4f97be1cc04e71",
+      "userId": "usr-client-1",
+      "role": "client",
+      "permissionGroup": "CLIENT_ACCESS",
+      "clientId": "cli-1",
+      "createdAt": "2026-11-22T13:32:34.238Z",
+      "expiresAt": "2026-11-29T13:32:34.238Z"
+    },
+    {
+      "id": "sess-1795354354230-b4e71000",
+      "token": "b3eabb5b2db77c69553db3cb12fd74623e5b7e2abffa8d9c90f7af7a407eb19f",
+      "userId": "usr-emp-1",
+      "role": "employee",
+      "permissionGroup": "EMPLOYEE_ACCESS",
+      "createdAt": "2026-11-22T13:32:34.230Z",
+      "expiresAt": "2026-11-29T13:32:34.230Z"
+    },
+    {
+      "id": "sess-1795354354220-56d9b6b3",
+      "token": "080a6b7936f0a72bc048c81c5f4fbaa8b008ea625fc8b85ace68624322b5f9fc",
+      "userId": "usr-manager",
+      "role": "manager",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-22T13:32:34.220Z",
+      "expiresAt": "2026-11-29T13:32:34.220Z"
+    },
+    {
+      "id": "sess-1795354354209-48eaf2b5",
+      "token": "aa9868c374548ab26616be52a619ba4bd2a06f019609750148bd965ad1e6ee38",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-22T13:32:34.209Z",
+      "expiresAt": "2026-11-29T13:32:34.209Z"
+    },
+    {
+      "id": "sess-1795354297315-f32a12b4",
+      "token": "4eaab30dd4007efa398ae3d47845df883c2caec8da127adf87e4c38f97aaa9a0",
+      "userId": "usr-client-2",
+      "role": "client",
+      "permissionGroup": "CLIENT_ACCESS",
+      "clientId": "cli-2",
+      "createdAt": "2026-11-22T13:31:37.315Z",
+      "expiresAt": "2026-11-29T13:31:37.315Z"
+    },
+    {
+      "id": "sess-1795354297308-066e2107",
+      "token": "f891664b9b5bcb55943d66e6d8fde816301489e168d13e45a7d757dec5f884a2",
+      "userId": "usr-client-1",
+      "role": "client",
+      "permissionGroup": "CLIENT_ACCESS",
+      "clientId": "cli-1",
+      "createdAt": "2026-11-22T13:31:37.308Z",
+      "expiresAt": "2026-11-29T13:31:37.308Z"
+    },
+    {
+      "id": "sess-1795354297300-2658e318",
+      "token": "8e804a6fad99ea3f90860b7180fb89b707ba018e637c2f7a40ef413e81db7e92",
+      "userId": "usr-emp-1",
+      "role": "employee",
+      "permissionGroup": "EMPLOYEE_ACCESS",
+      "createdAt": "2026-11-22T13:31:37.300Z",
+      "expiresAt": "2026-11-29T13:31:37.300Z"
+    },
+    {
+      "id": "sess-1795354297291-553c2edf",
+      "token": "7a4f2a9ada4567c2b408e3ddcb1438b066ee2ed3e5ca76f86d730f78dc3693e7",
+      "userId": "usr-manager",
+      "role": "manager",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-22T13:31:37.291Z",
+      "expiresAt": "2026-11-29T13:31:37.291Z"
+    },
+    {
+      "id": "sess-1795354297281-ff4b2a6c",
+      "token": "79ae1067197d1fe2db8f9c8395a912b811fe3e2bbd9f41c280561f1d93494033",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-22T13:31:37.281Z",
+      "expiresAt": "2026-11-29T13:31:37.281Z"
+    },
+    {
       "id": "sess-1795353705150-70ff2f64",
       "token": "2c61b9db45f866e7a53bdd7174e9a903c7b799eb46c717d79f40a1d72a14472a",
       "userId": "usr-client-2",
@@ -7826,6 +9731,28 @@
   ],
   "invoices": [
     {
+      "id": "inv-1795354361679-o8n5",
+      "invoiceNumber": "INV-2026-0007",
+      "clientId": "cli-1795354361589",
+      "clientName": "Zenith Organics 1795354361586",
+      "issueDate": "2026-11-22",
+      "dueDate": "2026-12-15",
+      "amount": 200000,
+      "currency": "INR",
+      "status": "paid",
+      "paidAmount": 200000,
+      "items": [
+        {
+          "description": "Monthly Creative Content Retainer — November 2026",
+          "quantity": 1,
+          "unitPrice": 200000,
+          "total": 200000
+        }
+      ],
+      "notes": "Payment terms: Net 15 days",
+      "createdAt": "2026-11-22T13:32:41.679Z"
+    },
+    {
       "id": "inv-1795353705232-38k6",
       "invoiceNumber": "INV-2026-0006",
       "clientId": "cli-1795353705154",
@@ -7960,6 +9887,19 @@
   ],
   "payments": [
     {
+      "id": "pay-1795354361686-wfrr",
+      "invoiceId": "inv-1795354361679-o8n5",
+      "clientId": "cli-1795354361589",
+      "clientName": "Zenith Organics 1795354361586",
+      "amount": 200000,
+      "currency": "INR",
+      "paymentDate": "2026-11-22",
+      "paymentMethod": "Bank Wire / NEFT",
+      "transactionReference": "TXN-1795354361686",
+      "notes": "Full payment received in corporate account",
+      "createdAt": "2026-11-22T13:32:41.686Z"
+    },
+    {
       "id": "pay-1795353705237-6elq",
       "invoiceId": "inv-1795353705232-38k6",
       "clientId": "cli-1795353705154",
@@ -8049,5 +9989,123 @@
       "createdAt": "2026-11-02T09:00:00Z"
     }
   ],
-  "passwordResets": []
+  "passwordResets": [],
+  "rateLimits": [
+    {
+      "key": "login:failed:brute_target_1795354297368@rahicreative.com",
+      "timestamps": [
+        1795354297371,
+        1795354297376,
+        1795354297381,
+        1795354297386,
+        1795354297390
+      ],
+      "updatedAt": "2026-11-22T13:31:37.390Z"
+    },
+    {
+      "key": "reset_password:reset_rate_1795354297395@target.com",
+      "timestamps": [
+        1795354297397,
+        1795354297402,
+        1795354297405
+      ],
+      "updatedAt": "2026-11-22T13:31:37.405Z"
+    },
+    {
+      "key": "invite_accept:fake_tok_1795354297410",
+      "timestamps": [
+        1795354297412,
+        1795354297415,
+        1795354297419,
+        1795354297424,
+        1795354297427
+      ],
+      "updatedAt": "2026-11-22T13:31:37.427Z"
+    },
+    {
+      "key": "login:failed:brute_target_1795354354299@rahicreative.com",
+      "timestamps": [
+        1795354354303,
+        1795354354309,
+        1795354354315,
+        1795354354320,
+        1795354354325
+      ],
+      "updatedAt": "2026-11-22T13:32:34.325Z"
+    },
+    {
+      "key": "reset_password:reset_rate_1795354354330@target.com",
+      "timestamps": [
+        1795354354334,
+        1795354354340,
+        1795354354343
+      ],
+      "updatedAt": "2026-11-22T13:32:34.343Z"
+    },
+    {
+      "key": "invite_accept:fake_tok_1795354354348",
+      "timestamps": [
+        1795354354352,
+        1795354354357,
+        1795354354362,
+        1795354354367,
+        1795354354372
+      ],
+      "updatedAt": "2026-11-22T13:32:34.372Z"
+    },
+    {
+      "key": "reset_password:nonexistent_attacker_probe@target.com",
+      "timestamps": [
+        1795354361723
+      ],
+      "updatedAt": "2026-11-22T13:32:41.723Z"
+    },
+    {
+      "key": "reset_password:ratelimit_1795354361586@test.com",
+      "timestamps": [
+        1795354361730,
+        1795354361736,
+        1795354361742
+      ],
+      "updatedAt": "2026-11-22T13:32:41.742Z"
+    },
+    {
+      "key": "invite_accept:fake_token",
+      "timestamps": [
+        1795354361751
+      ],
+      "updatedAt": "2026-11-22T13:32:41.751Z"
+    },
+    {
+      "key": "login:failed:brute_target_1795354361943@rahicreative.com",
+      "timestamps": [
+        1795354361948,
+        1795354361954,
+        1795354361959,
+        1795354361965,
+        1795354361970
+      ],
+      "updatedAt": "2026-11-22T13:32:41.970Z"
+    },
+    {
+      "key": "reset_password:reset_rate_1795354361977@target.com",
+      "timestamps": [
+        1795354361980,
+        1795354361986,
+        1795354361992
+      ],
+      "updatedAt": "2026-11-22T13:32:41.992Z"
+    },
+    {
+      "key": "invite_accept:fake_tok_1795354361998",
+      "timestamps": [
+        1795354362002,
+        1795354362007,
+        1795354362012,
+        1795354362017,
+        1795354362023
+      ],
+      "updatedAt": "2026-11-22T13:32:42.023Z"
+    }
+  ]
 }

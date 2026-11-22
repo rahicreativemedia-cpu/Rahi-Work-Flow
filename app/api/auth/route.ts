@@ -4,26 +4,8 @@ import { getDB, saveDB } from '@/lib/db';
 import { User, Invitation, AuditLog, PasswordResetToken } from '@/lib/types';
 import { hasFullAdminAccess } from '@/lib/permissions';
 import { hashPassword, verifyPassword } from '@/lib/crypto';
-import { createSession, formatSessionSetCookie, formatSessionClearCookie } from '@/lib/session';
-
-// In-memory rate limiting map for password reset requests: email -> timestamp[]
-const passwordResetAttempts = new Map<string, number[]>();
-
-function isRateLimited(email: string): boolean {
-  const now = Date.now();
-  const windowMs = 15 * 60 * 1000; // 15 minutes
-  const maxAttempts = 3;
-
-  const attempts = (passwordResetAttempts.get(email) || []).filter(
-    (t) => now - t < windowMs
-  );
-  if (attempts.length >= maxAttempts) {
-    return true;
-  }
-  attempts.push(now);
-  passwordResetAttempts.set(email, attempts);
-  return false;
-}
+import { createSession, formatSessionSetCookie, formatSessionClearCookie, getAuthenticatedUser } from '@/lib/session';
+import { checkRateLimit, clearRateLimit, isRateLimitLocked, RATE_LIMIT_CONFIGS, getClientIp } from '@/lib/ratelimit';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -71,19 +53,35 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { action, callerUserId } = body;
+    const { action } = body;
     const db = getDB();
 
-    const caller = db.users.find((u) => u.id === callerUserId);
+    // Authenticate caller strictly via cryptographic session (HttpOnly cookie or Bearer token)
+    // Never trust client-provided callerUserId from request body
+    const auth = getAuthenticatedUser(request);
+    const caller = auth.user;
 
     // 1. Direct login / credentials verification
     if (action === 'login') {
       const { email, userId, password } = body;
+      const cleanEmail = (email || '').toLowerCase().trim();
+      const rateLimitKey = `login:failed:${cleanEmail || userId || 'anon'}`;
+
+      // Check brute-force lockout (5 failed attempts per 15 minutes)
+      const lockCheck = isRateLimitLocked(rateLimitKey, RATE_LIMIT_CONFIGS.loginFailed);
+      if (lockCheck.locked) {
+        return NextResponse.json(
+          { error: `Too many failed login attempts. Please try again in ${lockCheck.retryAfterSeconds} seconds.` },
+          { status: 429 }
+        );
+      }
+
       const user = userId
         ? db.users.find((u) => u.id === userId)
-        : db.users.find((u) => u.email.toLowerCase() === (email || '').toLowerCase().trim());
+        : db.users.find((u) => u.email.toLowerCase() === cleanEmail);
 
       if (!user) {
+        checkRateLimit(rateLimitKey, RATE_LIMIT_CONFIGS.loginFailed);
         return NextResponse.json(
           { error: 'Invalid credentials or user not registered' },
           { status: 401 }
@@ -102,12 +100,16 @@ export async function POST(request: Request) {
       if (user.passwordHash && password) {
         const isValid = verifyPassword(password, user.passwordHash);
         if (!isValid) {
+          checkRateLimit(rateLimitKey, RATE_LIMIT_CONFIGS.loginFailed);
           return NextResponse.json(
             { error: 'Invalid email or password' },
             { status: 401 }
           );
         }
       }
+
+      // Successful login resets any previous failed attempts
+      clearRateLimit(rateLimitKey);
 
       // Record successful login in immutable audit log
       db.auditLogs.unshift({
@@ -209,6 +211,15 @@ export async function POST(request: Request) {
       const { token, password } = body;
       if (!token) {
         return NextResponse.json({ error: 'Missing invitation token' }, { status: 400 });
+      }
+
+      // Brute-force token guessing defense (5 attempts per 15 minutes)
+      const invRate = checkRateLimit(`invite_accept:${token}`, RATE_LIMIT_CONFIGS.invitationAccept);
+      if (!invRate.allowed) {
+        return NextResponse.json(
+          { error: 'Too many invitation acceptance attempts. Please try again in 15 minutes.' },
+          { status: 429 }
+        );
       }
 
       // Password policy: Minimum 12 characters
@@ -460,7 +471,8 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Email address is required' }, { status: 400 });
       }
 
-      if (isRateLimited(cleanEmail)) {
+      const resetRate = checkRateLimit(`reset_password:${cleanEmail}`, RATE_LIMIT_CONFIGS.passwordReset);
+      if (!resetRate.allowed) {
         return NextResponse.json(
           { error: 'Too many password reset attempts. Please try again in 15 minutes.' },
           { status: 429 }
