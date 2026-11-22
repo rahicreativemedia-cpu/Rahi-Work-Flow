@@ -248,7 +248,8 @@ export default function FlowdeskApp() {
     deliverableId: string,
     approvalType: 'script' | 'video',
     decision: 'approve' | 'revision',
-    feedback: string
+    feedback: string,
+    categories?: string[]
   ) => {
     try {
       const res = await fetch('/api/approvals', {
@@ -260,6 +261,7 @@ export default function FlowdeskApp() {
           approvalType,
           decision,
           feedback,
+          categories,
         }),
       });
       if (res.ok) {

@@ -807,6 +807,185 @@ async function runRealHttpSecurityTests() {
   assert(adminCancelData.deliverable.cancellationReason === 'Campaign postponed by client', 'Cancellation reason preserved');
 
   // -------------------------------------------------------------
+  // SECTION 10: PHASE 6 CLIENT REVIEW & APPROVAL CENTER HTTP TESTS
+  // -------------------------------------------------------------
+  console.log(`\n${colors.bold}--- Section 10: Phase 6 Client Review, Feedback & Approval Center HTTP Security ---${colors.reset}`);
+
+  // Create a dedicated Stage 4 deliverable for Client A (Apex Athletics, cli-1)
+  const p6CreateRes = await fetch(`${BASE_URL}/api/deliverables`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: adminSession.cookieHeader },
+    body: JSON.stringify({
+      action: 'create',
+      clientId: 'cli-1',
+      projectId: 'proj-1',
+      title: 'Phase 6 Live HTTP Approval Reel',
+      type: 'reel',
+      targetMonth: '2026-03',
+      deadline: '2026-03-31',
+      assignedEmployeeId: 'emp-1',
+    }),
+  });
+  const p6CreateData = await p6CreateRes.json();
+  assert(p6CreateRes.status === 200, 'Admin creates Phase 6 test deliverable via HTTP POST');
+  const p6DelId = p6CreateData.deliverable.id;
+
+  // Advance deliverable to Stage 4 (client_script_approval)
+  await fetch(`${BASE_URL}/api/deliverables`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: managerSession.cookieHeader },
+    body: JSON.stringify({
+      action: 'update_stage',
+      deliverableId: p6DelId,
+      stage: 'client_script_approval',
+      status: 'client_review',
+      scriptText: 'Live HTTP Script: Accelerate your brand narrative with RAHI Creative Media.',
+    }),
+  });
+
+  // 1. Employee attempt to submit client approval over HTTP -> 403 Forbidden
+  const empApproveAttempt = await fetch(`${BASE_URL}/api/approvals`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: employeeSession.cookieHeader },
+    body: JSON.stringify({
+      deliverableId: p6DelId,
+      approvalType: 'script',
+      decision: 'approve',
+      feedback: 'Employee trying to approve',
+    }),
+  });
+  const empApproveAttemptData = await empApproveAttempt.json();
+  assert(empApproveAttempt.status === 403, 'Employee attempting client approval rejected with 403 Forbidden over HTTP');
+  assert(
+    empApproveAttemptData.error.includes('Employees cannot submit client approvals'),
+    'HTTP response explicitly states employees cannot submit client approvals'
+  );
+
+  // 2. Client B attempt to approve Client A deliverable over HTTP -> 403 Forbidden
+  const clientBCrossApprove = await fetch(`${BASE_URL}/api/approvals`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: clientBSession.cookieHeader },
+    body: JSON.stringify({
+      deliverableId: p6DelId,
+      approvalType: 'script',
+      decision: 'approve',
+      feedback: 'Client B rogue approval attempt',
+    }),
+  });
+  const clientBCrossData = await clientBCrossApprove.json();
+  assert(clientBCrossApprove.status === 403, 'Client B cross-client approval attempt rejected with 403 Forbidden over HTTP');
+  assert(
+    clientBCrossData.error.includes('Cross-client approval actions are strictly blocked'),
+    'Cross-client isolation enforced over HTTP'
+  );
+
+  // 3. Mandatory feedback enforcement over HTTP
+  const emptyFeedbackHttp = await fetch(`${BASE_URL}/api/approvals`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: clientASession.cookieHeader },
+    body: JSON.stringify({
+      deliverableId: p6DelId,
+      approvalType: 'script',
+      decision: 'revision',
+      feedback: '   ',
+    }),
+  });
+  const emptyFeedbackHttpData = await emptyFeedbackHttp.json();
+  assert(emptyFeedbackHttp.status === 400, 'Empty feedback on revision request rejected with status 400 over HTTP');
+  assert(
+    emptyFeedbackHttpData.error.includes('Feedback explanation is mandatory'),
+    'HTTP error enforces mandatory feedback explanation'
+  );
+
+  // 4. Client A submits script revision request with structured category tags over HTTP
+  const clientARevisionHttp = await fetch(`${BASE_URL}/api/approvals`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: clientASession.cookieHeader },
+    body: JSON.stringify({
+      deliverableId: p6DelId,
+      approvalType: 'script',
+      decision: 'revision',
+      feedback: 'Please refine tone of voice in line 2 and strengthen call to action.',
+      categories: ['Brand Tone / Voice', 'Call-to-Action (CTA)'],
+    }),
+  });
+  const clientARevisionData = await clientARevisionHttp.json();
+  assert(clientARevisionHttp.status === 200, 'Client A submits revision request with tags via HTTP POST');
+  assert(clientARevisionData.deliverable.stage === 'revisions', 'Deliverable routed to Stage 8 (revisions) over HTTP');
+  assert(clientARevisionData.deliverable.status === 'revision_requested', 'Deliverable status set to revision_requested');
+  assert(clientARevisionData.approval.categories.length === 2, 'Structured category tags saved in approval record');
+  assert(clientARevisionData.approval.categories.includes('Brand Tone / Voice'), 'Brand Tone / Voice tag verified');
+
+  // 5. Manager records client approval oversight over HTTP (Full Administrative Access Parity)
+  const mgrOversightHttp = await fetch(`${BASE_URL}/api/approvals`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: managerSession.cookieHeader },
+    body: JSON.stringify({
+      deliverableId: p6DelId,
+      approvalType: 'script',
+      decision: 'approve',
+      feedback: 'Approved verbally by Client A Founder during review call.',
+    }),
+  });
+  const mgrOversightData = await mgrOversightHttp.json();
+  assert(mgrOversightHttp.status === 200, 'Manager can record client approval oversight via HTTP POST');
+  assert(mgrOversightData.approval.recordedByAdminOrManager === true, 'Approval marked recordedByAdminOrManager=true over HTTP');
+  assert(mgrOversightData.deliverable.scriptApproved === true, 'deliverable.scriptApproved updated to true over HTTP');
+  assert(mgrOversightData.deliverable.stage === 'video_editing', 'Deliverable advanced to Stage 5 (video_editing) over HTTP');
+
+  // 6. Admin records video approval oversight over HTTP (Equal to Manager)
+  // First advance to Stage 7 (client_video_approval)
+  await fetch(`${BASE_URL}/api/deliverables`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: adminSession.cookieHeader },
+    body: JSON.stringify({
+      action: 'update_stage',
+      deliverableId: p6DelId,
+      stage: 'client_video_approval',
+      status: 'client_review',
+      mediaUrl: 'https://cdn.test.com/phase6_video_cut.mp4',
+    }),
+  });
+
+  const adminVideoApproveHttp = await fetch(`${BASE_URL}/api/approvals`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: adminSession.cookieHeader },
+    body: JSON.stringify({
+      deliverableId: p6DelId,
+      approvalType: 'video',
+      decision: 'approve',
+      feedback: 'Final video approved for release.',
+    }),
+  });
+  const adminVideoApproveData = await adminVideoApproveHttp.json();
+  assert(adminVideoApproveHttp.status === 200, 'Admin can record video approval oversight via HTTP POST');
+  assert(adminVideoApproveData.approval.recordedByAdminOrManager === true, 'Admin approval marked recordedByAdminOrManager=true');
+  assert(adminVideoApproveData.deliverable.videoApproved === true, 'deliverable.videoApproved set to true over HTTP');
+  assert(adminVideoApproveData.deliverable.stage === 'scheduling', 'Deliverable advanced to Stage 9 (scheduling) over HTTP');
+
+  // 7. Client A queries GET /api/approvals over HTTP -> strict isolation
+  const clientAGetHttp = await fetch(`${BASE_URL}/api/approvals`, {
+    headers: { Cookie: clientASession.cookieHeader },
+  });
+  const clientAGetData = await clientAGetHttp.json();
+  assert(clientAGetHttp.status === 200, 'Client A queries GET /api/approvals over HTTP');
+  assert(
+    clientAGetData.approvals.every((a) => a.clientId === 'cli-1'),
+    'Client A approvals query returns ONLY cli-1 records (Cross-Client Data Leak Impossible!)'
+  );
+
+  // 8. Admin queries GET /api/approvals with query filters over HTTP
+  const adminGetFilteredHttp = await fetch(`${BASE_URL}/api/approvals?status=approved`, {
+    headers: { Cookie: adminSession.cookieHeader },
+  });
+  const adminGetFilteredData = await adminGetFilteredHttp.json();
+  assert(adminGetFilteredHttp.status === 200, 'Admin queries filtered approvals over HTTP');
+  assert(
+    adminGetFilteredData.approvals.every((a) => a.status === 'approved'),
+    'Filtered approvals query strictly returns status=approved'
+  );
+
+  // -------------------------------------------------------------
   // SUMMARY
   // -------------------------------------------------------------
   console.log(`\n${colors.bold}${colors.blue}================================================================${colors.reset}`);

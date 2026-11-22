@@ -37,7 +37,8 @@ interface DeliverableDetailsModalProps {
     deliverableId: string,
     type: 'script' | 'video',
     decision: 'approve' | 'revision',
-    feedback: string
+    feedback: string,
+    categories?: string[]
   ) => void;
   onCancelDeliverable?: (deliverableId: string, reason: string) => void;
   onUploadVersion?: (
@@ -62,6 +63,7 @@ export function DeliverableDetailsModal({
 }: DeliverableDetailsModalProps) {
   const [activeTab, setActiveTab] = useState<'workflow' | 'script' | 'media' | 'versions'>('workflow');
   const [feedbackText, setFeedbackText] = useState('');
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [cancelReason, setCancelReason] = useState('');
   const [showCancelPrompt, setShowCancelPrompt] = useState(false);
 
@@ -383,7 +385,54 @@ export function DeliverableDetailsModal({
                     Review the content in the Script or Video tabs above, then submit your sign-off or revision request.
                   </p>
 
-                  <div className="space-y-2">
+                  <div className="space-y-3">
+                    {/* Structured Revision Category Chips */}
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-700 mb-1.5">
+                        Revision Category Tags (Select relevant areas):
+                      </label>
+                      <div className="flex flex-wrap gap-1.5">
+                        {(deliverable.stage === 'client_script_approval'
+                          ? [
+                              'Hook / Angle',
+                              'Brand Tone / Voice',
+                              'Call-to-Action (CTA)',
+                              'Product Details / Accuracy',
+                              'Pacing / Timing',
+                              'Grammar / Copy',
+                            ]
+                          : [
+                              'Visual Cuts / Pacing',
+                              'Voiceover / Audio Mix',
+                              'Captions & Subtitles',
+                              'Color Grading / Style',
+                              'Thumbnail / Cover',
+                              'Aspect Ratio / Formatting',
+                            ]
+                        ).map((cat) => {
+                          const isSelected = selectedCategories.includes(cat);
+                          return (
+                            <button
+                              key={cat}
+                              type="button"
+                              onClick={() => {
+                                setSelectedCategories((prev) =>
+                                  isSelected ? prev.filter((c) => c !== cat) : [...prev, cat]
+                                );
+                              }}
+                              className={`text-[10px] px-2 py-1 rounded-md font-medium transition-all ${
+                                isSelected
+                                  ? 'bg-purple-600 text-white shadow-xs'
+                                  : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
+                              }`}
+                            >
+                              {cat}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
                     <textarea
                       value={feedbackText}
                       onChange={(e) => setFeedbackText(e.target.value)}
@@ -401,7 +450,7 @@ export function DeliverableDetailsModal({
                           }
                           const type =
                             deliverable.stage === 'client_script_approval' ? 'script' : 'video';
-                          onClientDecision?.(deliverable.id, type, 'revision', feedbackText);
+                          onClientDecision?.(deliverable.id, type, 'revision', feedbackText, selectedCategories);
                           onClose();
                         }}
                         className="px-3.5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors"
@@ -417,7 +466,8 @@ export function DeliverableDetailsModal({
                             deliverable.id,
                             type,
                             'approve',
-                            feedbackText || 'Approved without changes'
+                            feedbackText || 'Approved without changes',
+                            selectedCategories
                           );
                           onClose();
                         }}

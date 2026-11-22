@@ -308,9 +308,11 @@ export interface ClientApprovalRecord {
   status: 'approved' | 'revision_requested';
   action: 'script_approved' | 'script_revision' | 'video_approved' | 'video_revision';
   feedback: string;
+  categories?: string[];
   decisionDate: string;
   decidedByUserId: string;
   decidedByUserName: string;
+  recordedByAdminOrManager?: boolean;
 }
 
 export interface NotificationItem {
