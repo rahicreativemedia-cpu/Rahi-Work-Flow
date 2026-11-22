@@ -625,6 +625,188 @@ async function runRealHttpSecurityTests() {
   assert(clientGetTasks.status === 403, 'Client GET /api/tasks is strictly rejected with 403 Forbidden');
 
   // -------------------------------------------------------------
+  // [9] PHASE 5: 10-STAGE PIPELINE & MULTI-VERSION HTTP TESTS
+  // -------------------------------------------------------------
+  console.log(`\n${colors.bold}[9] PHASE 5: 10-STAGE PIPELINE & MULTI-VERSION HTTP VERIFICATION${colors.reset}`);
+
+  // 1. Admin creates deliverable via HTTP POST at Stage 1
+  const adminCreateDelRes = await fetch(`${BASE_URL}/api/deliverables`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: adminSession.cookieHeader },
+    body: JSON.stringify({
+      action: 'create',
+      title: 'Real HTTP Pipeline Test Reel',
+      clientId: 'cli-1',
+      type: 'reel',
+      targetMonth: '2026-11',
+      assignedEmployeeId: 'emp-1',
+      deadline: '2026-11-30',
+      scriptText: 'Initial hook draft v1',
+    }),
+  });
+  const adminCreateDelData = await adminCreateDelRes.json();
+  assert(adminCreateDelRes.status === 200, 'Admin can create deliverable at Stage 1 via HTTP POST');
+  assert(adminCreateDelData.deliverable.stage === 'content_planning', 'Deliverable starts at Stage 1 (content_planning)');
+  assert(adminCreateDelData.deliverable.currentVersion === 1, 'Deliverable starts at Version 1');
+  assert(adminCreateDelData.deliverable.isCountedTowardsCommitment === false, 'Stage 1 deliverable isCountedTowardsCommitment = false');
+
+  const testDelId = adminCreateDelData.deliverable.id;
+
+  // 2. Manager advances deliverable from Stage 1 -> Stage 2 -> Stage 3 (Parity Verified!)
+  const mgrAdvanceRes = await fetch(`${BASE_URL}/api/deliverables`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: managerSession.cookieHeader },
+    body: JSON.stringify({
+      action: 'update_stage',
+      deliverableId: testDelId,
+      stage: 'internal_script_review',
+      status: 'internal_review',
+    }),
+  });
+  const mgrAdvanceData = await mgrAdvanceRes.json();
+  assert(mgrAdvanceRes.status === 200, 'Manager can advance deliverable stage via HTTP POST (Parity Verified!)');
+  assert(mgrAdvanceData.deliverable.stage === 'internal_script_review', 'Deliverable advanced to Stage 3 (internal_script_review)');
+
+  // 3. Admin advances deliverable to Stage 4 (client_script_approval)
+  const adminToStage4Res = await fetch(`${BASE_URL}/api/deliverables`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: adminSession.cookieHeader },
+    body: JSON.stringify({
+      action: 'update_stage',
+      deliverableId: testDelId,
+      stage: 'client_script_approval',
+    }),
+  });
+  assert(adminToStage4Res.status === 200, 'Admin advances deliverable to Stage 4 (client_script_approval)');
+
+  // 4. Cross-Client Block: Client B attempts to decide on Client A deliverable
+  const clientBCrossAppr = await fetch(`${BASE_URL}/api/deliverables`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: clientBSession.cookieHeader },
+    body: JSON.stringify({
+      action: 'client_approval',
+      deliverableId: testDelId,
+      type: 'script',
+      decision: 'approve',
+    }),
+  });
+  assert(
+    clientBCrossAppr.status === 403,
+    'Cross-client approval action: Client B attempting to approve Client A deliverable is strictly rejected with 403 Forbidden',
+    `Status: ${clientBCrossAppr.status}`
+  );
+
+  // 5. Client A approves script -> advances to Stage 5 (video_editing)
+  const clientAApprScript = await fetch(`${BASE_URL}/api/deliverables`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: clientASession.cookieHeader },
+    body: JSON.stringify({
+      action: 'client_approval',
+      deliverableId: testDelId,
+      type: 'script',
+      decision: 'approve',
+      feedback: 'Great hook! Script approved.',
+    }),
+  });
+  const clientAApprScriptData = await clientAApprScript.json();
+  assert(clientAApprScript.status === 200, 'Client A approves own script via HTTP POST');
+  assert(clientAApprScriptData.deliverable.scriptApproved === true, 'Deliverable scriptApproved set to true');
+  assert(clientAApprScriptData.deliverable.stage === 'video_editing', 'Script approval automatically advances deliverable to Stage 5 (video_editing)');
+
+  // 6. Employee uploads Version 2 (Rough Cut Media)
+  const empUploadVerRes = await fetch(`${BASE_URL}/api/deliverables`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: employeeSession.cookieHeader },
+    body: JSON.stringify({
+      action: 'upload_version',
+      deliverableId: testDelId,
+      mediaUrl: 'https://cdn.test.com/rough_cut_v2.mp4',
+      notes: 'Rough cut with color grade and audio mix',
+    }),
+  });
+  const empUploadVerData = await empUploadVerRes.json();
+  assert(empUploadVerRes.status === 200, 'Assigned Employee uploads Version 2 via HTTP POST');
+  assert(empUploadVerData.deliverable.currentVersion === 2, 'Deliverable currentVersion incremented to 2');
+  assert(empUploadVerData.deliverable.versions.length === 2, 'Deliverable versions array contains exactly 2 records');
+
+  // 7. Manager advances deliverable to Stage 7 (client_video_approval)
+  const mgrToStage7 = await fetch(`${BASE_URL}/api/deliverables`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: managerSession.cookieHeader },
+    body: JSON.stringify({
+      action: 'update_stage',
+      deliverableId: testDelId,
+      stage: 'client_video_approval',
+    }),
+  });
+  assert(mgrToStage7.status === 200, 'Manager advances deliverable to Stage 7 (client_video_approval) (Parity Verified!)');
+
+  // 8. Client A requests revision on video -> routes to Stage 8 (revisions)
+  const clientARevVideo = await fetch(`${BASE_URL}/api/deliverables`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: clientASession.cookieHeader },
+    body: JSON.stringify({
+      action: 'client_approval',
+      deliverableId: testDelId,
+      type: 'video',
+      decision: 'revision',
+      feedback: 'Please change music track and trim final 3 seconds',
+    }),
+  });
+  const clientARevVideoData = await clientARevVideo.json();
+  assert(clientARevVideo.status === 200, 'Client A requests revision via HTTP POST');
+  assert(clientARevVideoData.deliverable.stage === 'revisions', 'Client revision request routes deliverable to Stage 8 (revisions)');
+  assert(clientARevVideoData.deliverable.status === 'revision_requested', 'Deliverable status set to revision_requested');
+
+  // 9. Employee uploads Version 3 (Revised Master Cut) -> auto routes to internal review
+  const empUploadVer3 = await fetch(`${BASE_URL}/api/deliverables`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: employeeSession.cookieHeader },
+    body: JSON.stringify({
+      action: 'upload_version',
+      deliverableId: testDelId,
+      mediaUrl: 'https://cdn.test.com/revised_master_v3.mp4',
+      notes: 'Trimmed outro and updated soundtrack',
+    }),
+  });
+  const empUploadVer3Data = await empUploadVer3.json();
+  assert(empUploadVer3.status === 200, 'Employee uploads Version 3 via HTTP POST');
+  assert(empUploadVer3Data.deliverable.currentVersion === 3, 'Deliverable currentVersion incremented to 3');
+  assert(empUploadVer3Data.deliverable.stage === 'internal_video_review', 'Revisions upload automatically re-enters internal review');
+
+  // 10. Manager finalizes deliverable at Stage 10 (Publishing & Final Delivery)
+  const mgrDeliverRes = await fetch(`${BASE_URL}/api/deliverables`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: managerSession.cookieHeader },
+    body: JSON.stringify({
+      action: 'update_stage',
+      deliverableId: testDelId,
+      stage: 'publishing_or_delivery',
+      status: 'published',
+    }),
+  });
+  const mgrDeliverData = await mgrDeliverRes.json();
+  assert(mgrDeliverRes.status === 200, 'Manager publishes deliverable at Stage 10 via HTTP POST (Parity Verified!)');
+  assert(mgrDeliverData.deliverable.stage === 'publishing_or_delivery', 'Deliverable at Stage 10 (publishing_or_delivery)');
+  assert(mgrDeliverData.deliverable.isCountedTowardsCommitment === true, 'STAGE 10 COMMITMENT RULE VERIFIED: isCountedTowardsCommitment = true');
+
+  // 11. Admin soft-cancels another deliverable with reason
+  const adminCancelRes = await fetch(`${BASE_URL}/api/deliverables`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: adminSession.cookieHeader },
+    body: JSON.stringify({
+      action: 'cancel',
+      deliverableId: testDelId,
+      reason: 'Campaign postponed by client',
+    }),
+  });
+  const adminCancelData = await adminCancelRes.json();
+  assert(adminCancelRes.status === 200, 'Admin can cancel deliverable via HTTP POST');
+  assert(adminCancelData.deliverable.status === 'cancelled', 'Cancelled deliverable status = "cancelled"');
+  assert(adminCancelData.deliverable.isCountedTowardsCommitment === false, 'Cancelled deliverable strictly isCountedTowardsCommitment = false');
+  assert(adminCancelData.deliverable.cancellationReason === 'Campaign postponed by client', 'Cancellation reason preserved');
+
+  // -------------------------------------------------------------
   // SUMMARY
   // -------------------------------------------------------------
   console.log(`\n${colors.bold}${colors.blue}================================================================${colors.reset}`);

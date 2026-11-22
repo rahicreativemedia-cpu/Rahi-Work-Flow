@@ -3,7 +3,9 @@ import { getDB, saveDB } from '@/lib/db';
 import {
   Deliverable,
   CreativeWorkflowStage,
+  DeliverableVersion,
   NotificationItem,
+  ClientApprovalRecord,
   AuditLog,
 } from '@/lib/types';
 import { hasFullAdminAccess } from '@/lib/permissions';
@@ -32,16 +34,25 @@ export async function GET(request: Request) {
     const clientDeliverables = db.deliverables.filter(
       (d) => d.clientId === user.clientId
     );
-    return NextResponse.json({ deliverables: clientDeliverables });
+    return NextResponse.json({
+      success: true,
+      deliverables: clientDeliverables,
+    });
   }
 
   // 3. Admin & Manager Parity: Full access to all deliverables across the company
   if (hasFullAdminAccess(user)) {
     if (clientId) {
       const clientDeliverables = db.deliverables.filter((d) => d.clientId === clientId);
-      return NextResponse.json({ deliverables: clientDeliverables });
+      return NextResponse.json({
+        success: true,
+        deliverables: clientDeliverables,
+      });
     }
-    return NextResponse.json({ deliverables: db.deliverables });
+    return NextResponse.json({
+      success: true,
+      deliverables: db.deliverables,
+    });
   }
 
   // 4. Employee Boundary Enforcement:
@@ -51,7 +62,7 @@ export async function GET(request: Request) {
     const assignedClientIds = new Set<string>();
 
     db.projects.forEach((p) => {
-      if (p.assignedEmployees?.includes(user.id) || p.assignedEmployees?.includes(empId)) {
+      if (p.assignedEmployees?.includes(user.id) || (empId && p.assignedEmployees?.includes(empId))) {
         assignedClientIds.add(p.clientId);
       }
     });
@@ -67,9 +78,15 @@ export async function GET(request: Request) {
     });
 
     const safeDeliverables = db.deliverables.filter(
-      (d) => d.assignedEmployeeId === empId || d.assignedEmployeeId === user.id || assignedClientIds.has(d.clientId)
+      (d) =>
+        d.assignedEmployeeId === empId ||
+        d.assignedEmployeeId === user.id ||
+        assignedClientIds.has(d.clientId)
     );
-    return NextResponse.json({ deliverables: safeDeliverables });
+    return NextResponse.json({
+      success: true,
+      deliverables: safeDeliverables,
+    });
   }
 
   return NextResponse.json({ error: 'Forbidden: Insufficient privileges' }, { status: 403 });
@@ -82,17 +99,22 @@ export async function POST(request: Request) {
     const auth = getAuthenticatedUser(request, callerUserId);
 
     if (!auth.user) {
-      return NextResponse.json({ error: auth.error || 'Unauthorized: Authentication required' }, { status: auth.status || 401 });
+      return NextResponse.json(
+        { error: auth.error || 'Unauthorized: Authentication required' },
+        { status: auth.status || 401 }
+      );
     }
 
     const caller = auth.user;
     const db = getDB();
 
-    // 1. Create a new deliverable (Admin & Manager)
+    // -------------------------------------------------------------
+    // ACTION 1: CREATE DELIVERABLE (Admin & Manager Equal Parity)
+    // -------------------------------------------------------------
     if (!action || action === 'create') {
       if (!hasFullAdminAccess(caller)) {
         return NextResponse.json(
-          { error: 'Unauthorized: Admin or Manager permission required' },
+          { error: 'Forbidden: Admin or Manager permission required' },
           { status: 403 }
         );
       }
@@ -110,6 +132,13 @@ export async function POST(request: Request) {
         thumbnailUrl,
       } = body;
 
+      if (!title || !clientId) {
+        return NextResponse.json(
+          { error: 'Title and Client are required' },
+          { status: 400 }
+        );
+      }
+
       const client = db.clients.find((c) => c.id === clientId);
       const project = db.projects.find((p) => p.id === projectId);
       const employee = db.employees.find((e) => e.id === assignedEmployeeId);
@@ -118,9 +147,9 @@ export async function POST(request: Request) {
         id: `del-${Date.now()}`,
         clientId,
         clientName: client ? client.name : 'Unknown Client',
-        projectId,
+        projectId: projectId || (project ? project.id : 'proj-gen'),
         projectTitle: project ? project.title : 'General Campaign',
-        title,
+        title: title.trim(),
         type: type || 'reel',
         targetMonth: targetMonth || new Date().toISOString().substring(0, 7),
         stage: 'content_planning', // Starts at Stage 1
@@ -129,18 +158,26 @@ export async function POST(request: Request) {
         scriptApproved: false,
         videoApproved: false,
         mediaUrl,
-        thumbnailUrl: thumbnailUrl || 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=400&q=80',
+        thumbnailUrl:
+          thumbnailUrl ||
+          'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=400&q=80',
         assignedEmployeeId: assignedEmployeeId || '',
         assignedEmployeeName: employee ? employee.name : 'Unassigned',
-        deadline: deadline || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        deadline:
+          deadline ||
+          new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
         status: 'in_progress',
         isCountedTowardsCommitment: false, // Never counted until published in stage 10!
         versions: [
           {
             version: 1,
-            scriptText,
+            scriptText: scriptText || '',
             mediaUrl,
+            thumbnailUrl,
             submittedAt: new Date().toISOString(),
+            submittedByUserId: caller.id,
+            submittedByUserName: caller.name,
+            notes: 'Initial creative draft v1',
           },
         ],
         createdAt: new Date().toISOString(),
@@ -150,9 +187,9 @@ export async function POST(request: Request) {
 
       db.auditLogs.unshift({
         id: `aud-${Date.now()}`,
-        userId: caller?.id || 'sys',
-        userName: caller?.name || 'Administrator',
-        userRole: caller?.role || 'admin',
+        userId: caller.id,
+        userName: caller.name,
+        userRole: caller.role,
         action: 'Deliverable Created',
         details: `Created deliverable "${newDel.title}" for ${newDel.clientName}`,
         targetType: 'deliverable',
@@ -164,10 +201,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, deliverable: newDel });
     }
 
-    // 2. Advance / Update Workflow Stage (Admin & Manager)
-    if (action === 'update_stage') {
+    // -------------------------------------------------------------
+    // ACTION 2: ADVANCE / UPDATE STAGE (Admin & Manager Equal Parity)
+    // -------------------------------------------------------------
+    if (action === 'update_stage' || action === 'advance_stage') {
       if (!hasFullAdminAccess(caller)) {
-        return NextResponse.json({ error: 'Unauthorized: Admin or Manager permission required' }, { status: 403 });
+        return NextResponse.json(
+          { error: 'Forbidden: Admin or Manager permission required' },
+          { status: 403 }
+        );
       }
 
       const { deliverableId, stage, status, scriptText, mediaUrl, scheduledPublishDate } = body;
@@ -176,11 +218,12 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Deliverable not found' }, { status: 404 });
       }
 
+      const previousStage = del.stage;
       del.stage = stage as CreativeWorkflowStage;
       if (status) del.status = status;
-      if (scriptText) del.scriptText = scriptText;
-      if (mediaUrl) del.mediaUrl = mediaUrl;
-      if (scheduledPublishDate) del.scheduledPublishDate = scheduledPublishDate;
+      if (scriptText !== undefined) del.scriptText = scriptText;
+      if (mediaUrl !== undefined) del.mediaUrl = mediaUrl;
+      if (scheduledPublishDate !== undefined) del.scheduledPublishDate = scheduledPublishDate;
 
       // When moving to client approval stages, trigger client notification
       if (stage === 'client_script_approval' || stage === 'client_video_approval') {
@@ -242,11 +285,11 @@ export async function POST(request: Request) {
 
       db.auditLogs.unshift({
         id: `aud-${Date.now()}`,
-        userId: caller?.id || 'sys',
-        userName: caller?.name || 'Administrator',
-        userRole: caller?.role || 'admin',
+        userId: caller.id,
+        userName: caller.name,
+        userRole: caller.role,
         action: 'Workflow Stage Advanced',
-        details: `Moved "${del.title}" to stage "${stage}" (Status: ${del.status})`,
+        details: `Moved "${del.title}" from "${previousStage}" to "${stage}" (Status: ${del.status})`,
         targetType: 'deliverable',
         targetId: del.id,
         timestamp: new Date().toISOString(),
@@ -256,10 +299,263 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, deliverable: del });
     }
 
-    // 3. Mark Deliverable as Cancelled (preserves history, does NOT increment completed)
+    // -------------------------------------------------------------
+    // ACTION 3: UPLOAD NEW VERSION (Admin, Manager, or Assigned Employee)
+    // -------------------------------------------------------------
+    if (action === 'upload_version') {
+      const { deliverableId, mediaUrl, scriptText, notes, thumbnailUrl } = body;
+      const del = db.deliverables.find((d) => d.id === deliverableId);
+      if (!del) {
+        return NextResponse.json({ error: 'Deliverable not found' }, { status: 404 });
+      }
+
+      const isAssigned =
+        del.assignedEmployeeId === caller.id ||
+        del.assignedEmployeeId === caller.employeeId;
+
+      if (!isAssigned && !hasFullAdminAccess(caller)) {
+        return NextResponse.json(
+          { error: 'Forbidden: You can only upload versions for deliverables assigned to you' },
+          { status: 403 }
+        );
+      }
+
+      const nextVersion = (del.currentVersion || del.versions.length || 0) + 1;
+      del.currentVersion = nextVersion;
+      if (mediaUrl) del.mediaUrl = mediaUrl;
+      if (scriptText) del.scriptText = scriptText;
+      if (thumbnailUrl) del.thumbnailUrl = thumbnailUrl;
+
+      const newVersionRecord: DeliverableVersion = {
+        version: nextVersion,
+        mediaUrl: mediaUrl || del.mediaUrl,
+        scriptText: scriptText || del.scriptText,
+        thumbnailUrl: thumbnailUrl || del.thumbnailUrl,
+        submittedAt: new Date().toISOString(),
+        submittedByUserId: caller.id,
+        submittedByUserName: caller.name,
+        notes: notes || `Uploaded version ${nextVersion}`,
+      };
+
+      del.versions.push(newVersionRecord);
+
+      // If currently in revisions stage, advance automatically to internal review
+      if (del.stage === 'revisions') {
+        if (mediaUrl) {
+          del.stage = 'internal_video_review';
+          del.status = 'internal_review';
+        } else if (scriptText) {
+          del.stage = 'internal_script_review';
+          del.status = 'internal_review';
+        }
+      }
+
+      // Notify Admin and Manager
+      db.notifications.unshift({
+        id: `notif-${Date.now()}`,
+        targetRole: 'all_admin',
+        title: `Version ${nextVersion} Uploaded for "${del.title}"`,
+        message: `${caller.name} submitted Version ${nextVersion} for ${del.clientName}. Ready for quality check.`,
+        type: 'submission',
+        relatedId: del.id,
+        read: false,
+        createdAt: new Date().toISOString(),
+      });
+
+      // Audit Log
+      db.auditLogs.unshift({
+        id: `aud-${Date.now()}`,
+        userId: caller.id,
+        userName: caller.name,
+        userRole: caller.role,
+        action: 'Deliverable Version Uploaded',
+        details: `Uploaded version ${nextVersion} for deliverable "${del.title}"`,
+        targetType: 'deliverable',
+        targetId: del.id,
+        timestamp: new Date().toISOString(),
+      });
+
+      saveDB(db);
+      return NextResponse.json({
+        success: true,
+        deliverable: del,
+        version: newVersionRecord,
+      });
+    }
+
+    // -------------------------------------------------------------
+    // ACTION 4: UPDATE SCRIPT DRAFT (Admin, Manager, or Assigned Employee)
+    // -------------------------------------------------------------
+    if (action === 'update_script') {
+      const { deliverableId, scriptText } = body;
+      const del = db.deliverables.find((d) => d.id === deliverableId);
+      if (!del) {
+        return NextResponse.json({ error: 'Deliverable not found' }, { status: 404 });
+      }
+
+      const isAssigned =
+        del.assignedEmployeeId === caller.id ||
+        del.assignedEmployeeId === caller.employeeId;
+
+      if (!isAssigned && !hasFullAdminAccess(caller)) {
+        return NextResponse.json(
+          { error: 'Forbidden: You can only edit scripts for your assigned deliverables' },
+          { status: 403 }
+        );
+      }
+
+      del.scriptText = scriptText || '';
+      saveDB(db);
+      return NextResponse.json({ success: true, deliverable: del });
+    }
+
+    // -------------------------------------------------------------
+    // ACTION 5: UPDATE MEDIA ASSET (Admin, Manager, or Assigned Employee)
+    // -------------------------------------------------------------
+    if (action === 'update_media') {
+      const { deliverableId, mediaUrl, thumbnailUrl } = body;
+      const del = db.deliverables.find((d) => d.id === deliverableId);
+      if (!del) {
+        return NextResponse.json({ error: 'Deliverable not found' }, { status: 404 });
+      }
+
+      const isAssigned =
+        del.assignedEmployeeId === caller.id ||
+        del.assignedEmployeeId === caller.employeeId;
+
+      if (!isAssigned && !hasFullAdminAccess(caller)) {
+        return NextResponse.json(
+          { error: 'Forbidden: You can only update media for your assigned deliverables' },
+          { status: 403 }
+        );
+      }
+
+      if (mediaUrl) del.mediaUrl = mediaUrl;
+      if (thumbnailUrl) del.thumbnailUrl = thumbnailUrl;
+      saveDB(db);
+      return NextResponse.json({ success: true, deliverable: del });
+    }
+
+    // -------------------------------------------------------------
+    // ACTION 6: CLIENT APPROVAL / REVISION DECISION
+    // -------------------------------------------------------------
+    if (action === 'client_approval') {
+      const { deliverableId, type, decision, feedback } = body;
+      const del = db.deliverables.find((d) => d.id === deliverableId);
+      if (!del) {
+        return NextResponse.json({ error: 'Deliverable not found' }, { status: 404 });
+      }
+
+      // Check tenant isolation: Client can only decide on own org deliverables
+      if (caller.role === 'client' && del.clientId !== caller.clientId) {
+        return NextResponse.json(
+          { error: 'Forbidden: Cross-client approval decisions are blocked' },
+          { status: 403 }
+        );
+      }
+
+      if (caller.role === 'employee') {
+        return NextResponse.json(
+          { error: 'Forbidden: Employees cannot submit client approval decisions' },
+          { status: 403 }
+        );
+      }
+
+      const isApprove = decision === 'approve';
+      const isScript = type === 'script';
+
+      if (isScript) {
+        if (isApprove) {
+          del.scriptApproved = true;
+          del.scriptApprovedAt = new Date().toISOString();
+          del.stage = 'video_editing'; // Advance to Stage 5
+          del.status = 'in_progress';
+        } else {
+          del.stage = 'revisions'; // Route to Stage 8
+          del.status = 'revision_requested';
+        }
+      } else {
+        // Video approval
+        if (isApprove) {
+          del.videoApproved = true;
+          del.videoApprovedAt = new Date().toISOString();
+          del.stage = 'scheduling'; // Advance to Stage 9
+          del.status = 'approved';
+        } else {
+          del.stage = 'revisions'; // Route to Stage 8
+          del.status = 'revision_requested';
+        }
+      }
+
+      // Record in approvals collection
+      const approvalRecord: ClientApprovalRecord = {
+        id: `appr-${Date.now()}`,
+        clientId: del.clientId,
+        clientName: del.clientName,
+        deliverableId: del.id,
+        deliverableTitle: del.title,
+        type: isScript ? 'script' : 'video',
+        version: del.currentVersion,
+        status: isApprove ? 'approved' : 'revision_requested',
+        action: isScript
+          ? isApprove
+            ? 'script_approved'
+            : 'script_revision'
+          : isApprove
+          ? 'video_approved'
+          : 'video_revision',
+        feedback: feedback || (isApprove ? 'Approved' : 'Revision requested'),
+        decisionDate: new Date().toISOString(),
+        decidedByUserId: caller.id,
+        decidedByUserName: caller.name,
+      };
+
+      db.approvals.unshift(approvalRecord);
+
+      // Notify Admin and Manager
+      db.notifications.unshift({
+        id: `notif-${Date.now()}`,
+        targetRole: 'all_admin',
+        title: isApprove
+          ? `Client Approved ${isScript ? 'Script' : 'Video'}`
+          : `Client Requested Revision on ${isScript ? 'Script' : 'Video'}`,
+        message: `${del.clientName} ${isApprove ? 'approved' : 'requested revisions for'} "${del.title}".`,
+        type: isApprove ? 'client_approval' : 'client_revision',
+        relatedId: del.id,
+        read: false,
+        createdAt: new Date().toISOString(),
+      });
+
+      // Audit Log
+      db.auditLogs.unshift({
+        id: `aud-${Date.now()}`,
+        userId: caller.id,
+        userName: caller.name,
+        userRole: caller.role,
+        action: isApprove ? 'Client Approved Asset' : 'Client Revision Requested',
+        details: `${caller.name} decided ${decision} for ${type} of "${del.title}". Feedback: ${approvalRecord.feedback}`,
+        targetType: 'deliverable',
+        targetId: del.id,
+        timestamp: new Date().toISOString(),
+      });
+
+      saveDB(db);
+      return NextResponse.json({
+        success: true,
+        deliverable: del,
+        approval: approvalRecord,
+      });
+    }
+
+    // -------------------------------------------------------------
+    // ACTION 7: CANCEL DELIVERABLE (Admin & Manager Equal Parity)
+    // -------------------------------------------------------------
     if (action === 'cancel') {
       if (!hasFullAdminAccess(caller)) {
-        return NextResponse.json({ error: 'Unauthorized: Admin or Manager permission required' }, { status: 403 });
+        return NextResponse.json(
+          { error: 'Forbidden: Admin or Manager permission required' },
+          { status: 403 }
+        );
       }
 
       const { deliverableId, reason } = body;
@@ -275,9 +571,9 @@ export async function POST(request: Request) {
 
       db.auditLogs.unshift({
         id: `aud-${Date.now()}`,
-        userId: caller?.id || 'sys',
-        userName: caller?.name || 'Administrator',
-        userRole: caller?.role || 'admin',
+        userId: caller.id,
+        userName: caller.name,
+        userRole: caller.role,
         action: 'Deliverable Cancelled',
         details: `Cancelled deliverable "${del.title}". Reason: ${del.cancellationReason}`,
         targetType: 'deliverable',
@@ -289,8 +585,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, deliverable: del });
     }
 
-    return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid action specified' }, { status: 400 });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message || 'Deliverable action failed' }, { status: 500 });
+    return NextResponse.json(
+      { error: error.message || 'Deliverable operation failed' },
+      { status: 500 }
+    );
   }
 }

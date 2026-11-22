@@ -641,9 +641,9 @@ assert(
 );
 
 assert(
-  statsWithStage10Cancel.cancelled === 1,
+  statsWithStage10Cancel.cancelled === apexStatsOriginal.cancelled + 1,
   'Cancelled deliverable in Stage 10 is preserved in cancelled deliverable count',
-  'Cancelled count: 1'
+  `Cancelled count: ${statsWithStage10Cancel.cancelled}`
 );
 
 // Verify script approvals strictly excluded

@@ -260,6 +260,9 @@ export interface DeliverableVersion {
   thumbnailUrl?: string;
   submittedAt: string;
   notes?: string;
+  submittedByUserId?: string;
+  submittedByUserName?: string;
+  feedback?: string;
 }
 
 export interface Deliverable {

@@ -291,6 +291,90 @@ export default function FlowdeskApp() {
     }
   };
 
+  // Upload New Deliverable Version
+  const handleUploadDeliverableVersion = async (
+    deliverableId: string,
+    versionData: { mediaUrl?: string; scriptText?: string; notes?: string }
+  ) => {
+    try {
+      const res = await fetch('/api/deliverables', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'upload_version',
+          callerUserId: currentUser?.id || 'sys',
+          deliverableId,
+          ...versionData,
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        await refreshData();
+        if (selectedDeliverable && selectedDeliverable.id === deliverableId) {
+          setSelectedDeliverable(data.deliverable);
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // Update Deliverable Script Draft
+  const handleUpdateDeliverableScript = async (
+    deliverableId: string,
+    scriptText: string
+  ) => {
+    try {
+      const res = await fetch('/api/deliverables', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'update_script',
+          callerUserId: currentUser?.id || 'sys',
+          deliverableId,
+          scriptText,
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        await refreshData();
+        if (selectedDeliverable && selectedDeliverable.id === deliverableId) {
+          setSelectedDeliverable(data.deliverable);
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // Update Deliverable Media Asset Link
+  const handleUpdateDeliverableMedia = async (
+    deliverableId: string,
+    mediaUrl: string
+  ) => {
+    try {
+      const res = await fetch('/api/deliverables', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'update_media',
+          callerUserId: currentUser?.id || 'sys',
+          deliverableId,
+          mediaUrl,
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        await refreshData();
+        if (selectedDeliverable && selectedDeliverable.id === deliverableId) {
+          setSelectedDeliverable(data.deliverable);
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   // Task Status Update
   const handleUpdateTaskStatus = async (taskId: string, status: TaskStatus) => {
     try {
@@ -995,6 +1079,9 @@ export default function FlowdeskApp() {
           onUpdateStage={handleAdvanceStage}
           onClientDecision={handleClientDecision}
           onCancelDeliverable={handleCancelDeliverable}
+          onUploadVersion={handleUploadDeliverableVersion}
+          onUpdateScript={handleUpdateDeliverableScript}
+          onUpdateMedia={handleUpdateDeliverableMedia}
         />
       )}
 

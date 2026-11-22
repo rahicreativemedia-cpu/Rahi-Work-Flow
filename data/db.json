@@ -118,6 +118,58 @@
   ],
   "clients": [
     {
+      "id": "cli-1795351256582",
+      "name": "Test Client Manager 1795351256580",
+      "company": "Test Client Manager 1795351256580",
+      "email": "mgr_created_1795351256580@test.com",
+      "phone": "",
+      "logoUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=128&q=80",
+      "servicePackage": "Full Marketing",
+      "contractStartDate": "2026-11-22",
+      "contractEndDate": "2027-11-22",
+      "monthlyRetainer": 220000,
+      "currency": "INR",
+      "monthlyCommitment": {
+        "reels": 15,
+        "longVideos": 2,
+        "graphics": 6,
+        "carousels": 4,
+        "customTargetNote": ""
+      },
+      "status": "archived",
+      "primaryContactName": "Test Client Manager 1795351256580",
+      "notes": "Updated by Manager",
+      "createdAt": "2026-11-22T12:40:56.582Z",
+      "archivedAt": "2026-11-22T12:40:56.594Z",
+      "archivedByUserId": "usr-manager"
+    },
+    {
+      "id": "cli-1795351256579",
+      "name": "Test Client Admin 1795351256577",
+      "company": "Test Client Admin 1795351256577",
+      "email": "admin_created_1795351256577@test.com",
+      "phone": "",
+      "logoUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=128&q=80",
+      "servicePackage": "Full Marketing",
+      "contractStartDate": "2026-11-22",
+      "contractEndDate": "2027-11-22",
+      "monthlyRetainer": 200000,
+      "currency": "INR",
+      "monthlyCommitment": {
+        "reels": 15,
+        "longVideos": 2,
+        "graphics": 6,
+        "carousels": 4,
+        "customTargetNote": ""
+      },
+      "status": "archived",
+      "primaryContactName": "Test Client Admin 1795351256577",
+      "notes": "Updated by Admin",
+      "createdAt": "2026-11-22T12:40:56.579Z",
+      "archivedAt": "2026-11-22T12:40:56.589Z",
+      "archivedByUserId": "usr-admin"
+    },
+    {
       "id": "cli-1795350812713",
       "name": "Test Client Manager 1795350812711",
       "company": "Test Client Manager 1795350812711",
@@ -485,6 +537,63 @@
     }
   ],
   "deliverables": [
+    {
+      "id": "del-1795351256676",
+      "clientId": "cli-1",
+      "clientName": "Apex Athletics",
+      "projectId": "proj-gen",
+      "projectTitle": "General Campaign",
+      "title": "Real HTTP Pipeline Test Reel",
+      "type": "reel",
+      "targetMonth": "2026-11",
+      "stage": "publishing_or_delivery",
+      "currentVersion": 3,
+      "scriptText": "Initial hook draft v1",
+      "scriptApproved": true,
+      "videoApproved": false,
+      "thumbnailUrl": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=400&q=80",
+      "assignedEmployeeId": "emp-1",
+      "assignedEmployeeName": "Vikram Mehta",
+      "deadline": "2026-11-30",
+      "status": "cancelled",
+      "isCountedTowardsCommitment": false,
+      "versions": [
+        {
+          "version": 1,
+          "scriptText": "Initial hook draft v1",
+          "submittedAt": "2026-11-22T12:40:56.676Z",
+          "submittedByUserId": "usr-admin",
+          "submittedByUserName": "Rohan Rahi",
+          "notes": "Initial creative draft v1"
+        },
+        {
+          "version": 2,
+          "mediaUrl": "https://cdn.test.com/rough_cut_v2.mp4",
+          "scriptText": "Initial hook draft v1",
+          "thumbnailUrl": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=400&q=80",
+          "submittedAt": "2026-11-22T12:40:56.693Z",
+          "submittedByUserId": "usr-emp-1",
+          "submittedByUserName": "Vikram Mehta",
+          "notes": "Rough cut with color grade and audio mix"
+        },
+        {
+          "version": 3,
+          "mediaUrl": "https://cdn.test.com/revised_master_v3.mp4",
+          "scriptText": "Initial hook draft v1",
+          "thumbnailUrl": "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=400&q=80",
+          "submittedAt": "2026-11-22T12:40:56.702Z",
+          "submittedByUserId": "usr-emp-1",
+          "submittedByUserName": "Vikram Mehta",
+          "notes": "Trimmed outro and updated soundtrack"
+        }
+      ],
+      "createdAt": "2026-11-22T12:40:56.676Z",
+      "scriptApprovedAt": "2026-11-22T12:40:56.689Z",
+      "mediaUrl": "https://cdn.test.com/revised_master_v3.mp4",
+      "publishedAt": "2026-11-22T12:40:56.705Z",
+      "cancelledAt": "2026-11-22T12:40:56.708Z",
+      "cancellationReason": "Campaign postponed by client"
+    },
     {
       "id": "del-101",
       "clientId": "cli-1",
@@ -913,6 +1022,48 @@
   ],
   "tasks": [
     {
+      "id": "tsk-1795351256649",
+      "title": "HTTP Task Created by Manager",
+      "clientId": "cli-1",
+      "clientName": "Apex Athletics",
+      "projectId": "proj-gen",
+      "projectTitle": "General Project",
+      "description": "",
+      "assignedEmployeeId": "emp-2",
+      "assignedEmployeeName": "Ananya Sen",
+      "assignedEmployeeDepartment": "Scriptwriting",
+      "priority": "urgent",
+      "startDate": "2026-11-22",
+      "deadline": "2026-11-29",
+      "status": "todo",
+      "referenceFiles": [],
+      "requiredOutput": "Standard creative asset meeting agency guidelines.",
+      "submissions": [],
+      "comments": [],
+      "createdAt": "2026-11-22T12:40:56.650Z"
+    },
+    {
+      "id": "tsk-1795351256646",
+      "title": "HTTP Task Created by Admin",
+      "clientId": "cli-1",
+      "clientName": "Apex Athletics",
+      "projectId": "proj-gen",
+      "projectTitle": "General Project",
+      "description": "",
+      "assignedEmployeeId": "emp-3",
+      "assignedEmployeeName": "Kabir Joshi",
+      "assignedEmployeeDepartment": "Graphic Design",
+      "priority": "urgent",
+      "startDate": "2026-11-22",
+      "deadline": "2026-11-30",
+      "status": "todo",
+      "referenceFiles": [],
+      "requiredOutput": "Standard creative asset meeting agency guidelines.",
+      "submissions": [],
+      "comments": [],
+      "createdAt": "2026-11-22T12:40:56.646Z"
+    },
+    {
       "id": "tsk-1795350812784",
       "title": "HTTP Task Created by Manager",
       "clientId": "cli-1",
@@ -1083,6 +1234,36 @@
   ],
   "approvals": [
     {
+      "id": "appr-1795351256699",
+      "clientId": "cli-1",
+      "clientName": "Apex Athletics",
+      "deliverableId": "del-1795351256676",
+      "deliverableTitle": "Real HTTP Pipeline Test Reel",
+      "type": "video",
+      "version": 2,
+      "status": "revision_requested",
+      "action": "video_revision",
+      "feedback": "Please change music track and trim final 3 seconds",
+      "decisionDate": "2026-11-22T12:40:56.699Z",
+      "decidedByUserId": "usr-client-1",
+      "decidedByUserName": "Arjun Kapoor"
+    },
+    {
+      "id": "appr-1795351256689",
+      "clientId": "cli-1",
+      "clientName": "Apex Athletics",
+      "deliverableId": "del-1795351256676",
+      "deliverableTitle": "Real HTTP Pipeline Test Reel",
+      "type": "script",
+      "version": 1,
+      "status": "approved",
+      "action": "script_approved",
+      "feedback": "Great hook! Script approved.",
+      "decisionDate": "2026-11-22T12:40:56.689Z",
+      "decidedByUserId": "usr-client-1",
+      "decidedByUserName": "Arjun Kapoor"
+    },
+    {
       "id": "appr-1",
       "clientId": "cli-1",
       "clientName": "Apex Athletics",
@@ -1129,6 +1310,122 @@
     }
   ],
   "notifications": [
+    {
+      "id": "notif-1795351256705",
+      "targetRole": "all_admin",
+      "title": "Deliverable Published & Counted",
+      "message": "\"Real HTTP Pipeline Test Reel\" published. Apex Athletics has now completed 13/34 deliverables.",
+      "type": "published",
+      "relatedId": "del-1795351256676",
+      "read": false,
+      "createdAt": "2026-11-22T12:40:56.705Z"
+    },
+    {
+      "id": "notif-1795351256702",
+      "targetRole": "all_admin",
+      "title": "Version 3 Uploaded for \"Real HTTP Pipeline Test Reel\"",
+      "message": "Vikram Mehta submitted Version 3 for Apex Athletics. Ready for quality check.",
+      "type": "submission",
+      "relatedId": "del-1795351256676",
+      "read": false,
+      "createdAt": "2026-11-22T12:40:56.702Z"
+    },
+    {
+      "id": "notif-1795351256699",
+      "targetRole": "all_admin",
+      "title": "Client Requested Revision on Video",
+      "message": "Apex Athletics requested revisions for \"Real HTTP Pipeline Test Reel\".",
+      "type": "client_revision",
+      "relatedId": "del-1795351256676",
+      "read": false,
+      "createdAt": "2026-11-22T12:40:56.699Z"
+    },
+    {
+      "id": "notif-1795351256696",
+      "targetRole": "client",
+      "recipientClientId": "cli-1",
+      "title": "New Video Ready for Approval",
+      "message": "\"Real HTTP Pipeline Test Reel\" is ready for your review in the Client Portal.",
+      "type": "client_approval",
+      "relatedId": "del-1795351256676",
+      "read": false,
+      "createdAt": "2026-11-22T12:40:56.696Z"
+    },
+    {
+      "id": "notif-1795351256693",
+      "targetRole": "all_admin",
+      "title": "Version 2 Uploaded for \"Real HTTP Pipeline Test Reel\"",
+      "message": "Vikram Mehta submitted Version 2 for Apex Athletics. Ready for quality check.",
+      "type": "submission",
+      "relatedId": "del-1795351256676",
+      "read": false,
+      "createdAt": "2026-11-22T12:40:56.693Z"
+    },
+    {
+      "id": "notif-1795351256689",
+      "targetRole": "all_admin",
+      "title": "Client Approved Script",
+      "message": "Apex Athletics approved \"Real HTTP Pipeline Test Reel\".",
+      "type": "client_approval",
+      "relatedId": "del-1795351256676",
+      "read": false,
+      "createdAt": "2026-11-22T12:40:56.689Z"
+    },
+    {
+      "id": "notif-1795351256683",
+      "targetRole": "client",
+      "recipientClientId": "cli-1",
+      "title": "New Script Ready for Approval",
+      "message": "\"Real HTTP Pipeline Test Reel\" is ready for your review in the Client Portal.",
+      "type": "client_approval",
+      "relatedId": "del-1795351256676",
+      "read": false,
+      "createdAt": "2026-11-22T12:40:56.683Z"
+    },
+    {
+      "id": "notif-1795351256652-old",
+      "targetRole": "employee",
+      "recipientUserId": "usr-emp-1",
+      "title": "Task Reassigned",
+      "message": "Task \"HTTP Task Created by Admin\" was reassigned to Kabir Joshi.",
+      "type": "assignment",
+      "relatedId": "tsk-1795351256646",
+      "read": false,
+      "createdAt": "2026-11-22T12:40:56.652Z"
+    },
+    {
+      "id": "notif-1795351256652-new",
+      "targetRole": "employee",
+      "recipientUserId": "usr-emp-3",
+      "title": "Task Reassigned to You",
+      "message": "You were reassigned \"HTTP Task Created by Admin\" (Apex Athletics) by Priya Sharma.",
+      "type": "assignment",
+      "relatedId": "tsk-1795351256646",
+      "read": false,
+      "createdAt": "2026-11-22T12:40:56.652Z"
+    },
+    {
+      "id": "notif-1795351256650",
+      "targetRole": "employee",
+      "recipientUserId": "usr-emp-2",
+      "title": "New Task Assigned",
+      "message": "You were assigned: \"HTTP Task Created by Manager\" for Apex Athletics. Due by 2026-11-29.",
+      "type": "assignment",
+      "relatedId": "tsk-1795351256649",
+      "read": false,
+      "createdAt": "2026-11-22T12:40:56.650Z"
+    },
+    {
+      "id": "notif-1795351256646",
+      "targetRole": "employee",
+      "recipientUserId": "usr-emp-1",
+      "title": "New Task Assigned",
+      "message": "You were assigned: \"HTTP Task Created by Admin\" for Apex Athletics. Due by 2026-11-30.",
+      "type": "assignment",
+      "relatedId": "tsk-1795351256646",
+      "read": false,
+      "createdAt": "2026-11-22T12:40:56.646Z"
+    },
     {
       "id": "notif-1795350812787-old",
       "targetRole": "employee",
@@ -1241,6 +1538,270 @@
     }
   ],
   "auditLogs": [
+    {
+      "id": "aud-1795351256708",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Deliverable Cancelled",
+      "details": "Cancelled deliverable \"Real HTTP Pipeline Test Reel\". Reason: Campaign postponed by client",
+      "targetType": "deliverable",
+      "targetId": "del-1795351256676",
+      "timestamp": "2026-11-22T12:40:56.708Z"
+    },
+    {
+      "id": "aud-1795351256705",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Workflow Stage Advanced",
+      "details": "Moved \"Real HTTP Pipeline Test Reel\" from \"internal_video_review\" to \"publishing_or_delivery\" (Status: published)",
+      "targetType": "deliverable",
+      "targetId": "del-1795351256676",
+      "timestamp": "2026-11-22T12:40:56.705Z"
+    },
+    {
+      "id": "aud-1795351256702",
+      "userId": "usr-emp-1",
+      "userName": "Vikram Mehta",
+      "userRole": "employee",
+      "action": "Deliverable Version Uploaded",
+      "details": "Uploaded version 3 for deliverable \"Real HTTP Pipeline Test Reel\"",
+      "targetType": "deliverable",
+      "targetId": "del-1795351256676",
+      "timestamp": "2026-11-22T12:40:56.702Z"
+    },
+    {
+      "id": "aud-1795351256699",
+      "userId": "usr-client-1",
+      "userName": "Arjun Kapoor",
+      "userRole": "client",
+      "action": "Client Revision Requested",
+      "details": "Arjun Kapoor decided revision for video of \"Real HTTP Pipeline Test Reel\". Feedback: Please change music track and trim final 3 seconds",
+      "targetType": "deliverable",
+      "targetId": "del-1795351256676",
+      "timestamp": "2026-11-22T12:40:56.699Z"
+    },
+    {
+      "id": "aud-1795351256696",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Workflow Stage Advanced",
+      "details": "Moved \"Real HTTP Pipeline Test Reel\" from \"video_editing\" to \"client_video_approval\" (Status: client_review)",
+      "targetType": "deliverable",
+      "targetId": "del-1795351256676",
+      "timestamp": "2026-11-22T12:40:56.696Z"
+    },
+    {
+      "id": "aud-1795351256693",
+      "userId": "usr-emp-1",
+      "userName": "Vikram Mehta",
+      "userRole": "employee",
+      "action": "Deliverable Version Uploaded",
+      "details": "Uploaded version 2 for deliverable \"Real HTTP Pipeline Test Reel\"",
+      "targetType": "deliverable",
+      "targetId": "del-1795351256676",
+      "timestamp": "2026-11-22T12:40:56.693Z"
+    },
+    {
+      "id": "aud-1795351256689",
+      "userId": "usr-client-1",
+      "userName": "Arjun Kapoor",
+      "userRole": "client",
+      "action": "Client Approved Asset",
+      "details": "Arjun Kapoor decided approve for script of \"Real HTTP Pipeline Test Reel\". Feedback: Great hook! Script approved.",
+      "targetType": "deliverable",
+      "targetId": "del-1795351256676",
+      "timestamp": "2026-11-22T12:40:56.689Z"
+    },
+    {
+      "id": "aud-1795351256683",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Workflow Stage Advanced",
+      "details": "Moved \"Real HTTP Pipeline Test Reel\" from \"internal_script_review\" to \"client_script_approval\" (Status: client_review)",
+      "targetType": "deliverable",
+      "targetId": "del-1795351256676",
+      "timestamp": "2026-11-22T12:40:56.683Z"
+    },
+    {
+      "id": "aud-1795351256680",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Workflow Stage Advanced",
+      "details": "Moved \"Real HTTP Pipeline Test Reel\" from \"content_planning\" to \"internal_script_review\" (Status: internal_review)",
+      "targetType": "deliverable",
+      "targetId": "del-1795351256676",
+      "timestamp": "2026-11-22T12:40:56.680Z"
+    },
+    {
+      "id": "aud-1795351256676",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Deliverable Created",
+      "details": "Created deliverable \"Real HTTP Pipeline Test Reel\" for Apex Athletics",
+      "targetType": "deliverable",
+      "targetId": "del-1795351256676",
+      "timestamp": "2026-11-22T12:40:56.676Z"
+    },
+    {
+      "id": "aud-1795351256652",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Task Reassigned",
+      "details": "Reassigned task \"HTTP Task Created by Admin\" from Vikram Mehta to Kabir Joshi",
+      "targetType": "task",
+      "targetId": "tsk-1795351256646",
+      "timestamp": "2026-11-22T12:40:56.652Z"
+    },
+    {
+      "id": "aud-1795351256650",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Task Assigned",
+      "details": "Assigned task \"HTTP Task Created by Manager\" to Ananya Sen (URGENT priority).",
+      "targetType": "task",
+      "targetId": "tsk-1795351256649",
+      "timestamp": "2026-11-22T12:40:56.650Z"
+    },
+    {
+      "id": "aud-1795351256646",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Task Assigned",
+      "details": "Assigned task \"HTTP Task Created by Admin\" to Vikram Mehta (HIGH priority).",
+      "targetType": "task",
+      "targetId": "tsk-1795351256646",
+      "timestamp": "2026-11-22T12:40:56.646Z"
+    },
+    {
+      "id": "aud-1795351256594",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Client Archived",
+      "details": "Archived client \"Test Client Manager 1795351256580\" (cli-1795351256582). Historical projects, tasks, deliverables, and approvals permanently preserved.",
+      "targetType": "client",
+      "targetId": "cli-1795351256582",
+      "timestamp": "2026-11-22T12:40:56.594Z"
+    },
+    {
+      "id": "aud-1795351256589",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Client Archived",
+      "details": "Archived client \"Test Client Admin 1795351256577\" (cli-1795351256579). Historical projects, tasks, deliverables, and approvals permanently preserved.",
+      "targetType": "client",
+      "targetId": "cli-1795351256579",
+      "timestamp": "2026-11-22T12:40:56.589Z"
+    },
+    {
+      "id": "aud-1795351256588",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Client Updated",
+      "details": "Updated client \"Test Client Manager 1795351256580\" (Status: active, Retainer: 220000 INR/mo)",
+      "targetType": "client",
+      "targetId": "cli-1795351256582",
+      "timestamp": "2026-11-22T12:40:56.588Z"
+    },
+    {
+      "id": "aud-1795351256585",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Client Updated",
+      "details": "Updated client \"Test Client Admin 1795351256577\" (Status: active, Retainer: 200000 INR/mo)",
+      "targetType": "client",
+      "targetId": "cli-1795351256579",
+      "timestamp": "2026-11-22T12:40:56.585Z"
+    },
+    {
+      "id": "aud-1795351256582",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Client Created",
+      "details": "Added new client \"Test Client Manager 1795351256580\" with package Full Marketing (220000 INR/mo)",
+      "targetType": "client",
+      "targetId": "cli-1795351256582",
+      "timestamp": "2026-11-22T12:40:56.582Z"
+    },
+    {
+      "id": "aud-1795351256579",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Client Created",
+      "details": "Added new client \"Test Client Admin 1795351256577\" with package Full Marketing (200000 INR/mo)",
+      "targetType": "client",
+      "targetId": "cli-1795351256579",
+      "timestamp": "2026-11-22T12:40:56.579Z"
+    },
+    {
+      "id": "aud-1795351256567",
+      "userId": "usr-client-2",
+      "userName": "Mira Rajput",
+      "userRole": "client",
+      "action": "User Authentication",
+      "details": "Mira Rajput authenticated into CLIENT PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-client-2",
+      "timestamp": "2026-11-22T12:40:56.567Z"
+    },
+    {
+      "id": "aud-1795351256563",
+      "userId": "usr-client-1",
+      "userName": "Arjun Kapoor",
+      "userRole": "client",
+      "action": "User Authentication",
+      "details": "Arjun Kapoor authenticated into CLIENT PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-client-1",
+      "timestamp": "2026-11-22T12:40:56.563Z"
+    },
+    {
+      "id": "aud-1795351256560",
+      "userId": "usr-emp-1",
+      "userName": "Vikram Mehta",
+      "userRole": "employee",
+      "action": "User Authentication",
+      "details": "Vikram Mehta authenticated into EMPLOYEE PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-emp-1",
+      "timestamp": "2026-11-22T12:40:56.560Z"
+    },
+    {
+      "id": "aud-1795351256556",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "User Authentication",
+      "details": "Priya Sharma authenticated into MANAGER PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-manager",
+      "timestamp": "2026-11-22T12:40:56.556Z"
+    },
+    {
+      "id": "aud-1795351256551",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rohan Rahi authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-22T12:40:56.552Z"
+    },
     {
       "id": "aud-1795350812787",
       "userId": "usr-manager",
@@ -1672,6 +2233,53 @@
     }
   ],
   "sessions": [
+    {
+      "id": "sess-1795351256567-0e4e00c3",
+      "token": "7468f3d9356b2da56f087cf148d380cb112a60fa67f9db1b222f7d30d4476409",
+      "userId": "usr-client-2",
+      "role": "client",
+      "permissionGroup": "CLIENT_ACCESS",
+      "clientId": "cli-2",
+      "createdAt": "2026-11-22T12:40:56.567Z",
+      "expiresAt": "2026-11-29T12:40:56.567Z"
+    },
+    {
+      "id": "sess-1795351256564-ffae2ff9",
+      "token": "11a1e35c439df9f74e6ac91cd6bfc8da51bac7cd7b34b478374723084c8686c5",
+      "userId": "usr-client-1",
+      "role": "client",
+      "permissionGroup": "CLIENT_ACCESS",
+      "clientId": "cli-1",
+      "createdAt": "2026-11-22T12:40:56.564Z",
+      "expiresAt": "2026-11-29T12:40:56.564Z"
+    },
+    {
+      "id": "sess-1795351256560-5018a1f7",
+      "token": "cbfedec64d0b0590b8e0090cc12ded7d783d18db8f96aeb30e5a7946d4ed433c",
+      "userId": "usr-emp-1",
+      "role": "employee",
+      "permissionGroup": "EMPLOYEE_ACCESS",
+      "createdAt": "2026-11-22T12:40:56.560Z",
+      "expiresAt": "2026-11-29T12:40:56.560Z"
+    },
+    {
+      "id": "sess-1795351256556-9e6b7e23",
+      "token": "2c92fde2559a662ad0c8a61b733db612ba4c3d30456b1af7be1bc134baa64152",
+      "userId": "usr-manager",
+      "role": "manager",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-22T12:40:56.556Z",
+      "expiresAt": "2026-11-29T12:40:56.556Z"
+    },
+    {
+      "id": "sess-1795351256552-bc37ea8d",
+      "token": "3e522f539f75805cf5454b31bd5a13e84ece90c2ad05b4ba8d70fbc21033e103",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-22T12:40:56.552Z",
+      "expiresAt": "2026-11-29T12:40:56.552Z"
+    },
     {
       "id": "sess-1795350812697-3f49d8da",
       "token": "c3a8c54573bf12e3ce5d48fa34e9f0a48c58c4412254cdb29e76a3b76a51791a",
