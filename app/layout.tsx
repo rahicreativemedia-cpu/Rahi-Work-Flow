@@ -4,6 +4,10 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "RAHI Flowdesk | Creative Agency Management Platform",
   description: "Enterprise four-portal creative agency management system by RAHI Creative Media",
+  icons: {
+    icon: "/rahi-logo.png",
+    apple: "/rahi-logo.png",
+  },
 };
 
 export default function RootLayout({

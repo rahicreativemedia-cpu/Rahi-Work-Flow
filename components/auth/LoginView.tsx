@@ -89,10 +89,14 @@ export function LoginView({
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         {/* Brand Header */}
         <div className="text-center">
-          <div className="w-12 h-12 rounded-xl bg-blue-600 text-white font-black text-lg flex items-center justify-center mx-auto shadow-md">
-            RF
+          <div className="w-20 h-20 flex items-center justify-center mx-auto mb-1">
+            <img
+              src="/rahi-logo.png"
+              alt="RAHI Creative Media"
+              className="w-16 h-auto max-h-16 object-contain drop-shadow-sm"
+            />
           </div>
-          <h2 className="mt-4 text-2xl font-black tracking-tight text-slate-900 uppercase">
+          <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-900 uppercase">
             RAHI FLOWDESK
           </h2>
           <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">

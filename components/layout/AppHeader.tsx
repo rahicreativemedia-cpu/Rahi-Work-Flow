@@ -59,8 +59,8 @@ export function AppHeader({
         )}
 
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-black text-xs tracking-tighter shadow-xs">
-            RF
+          <div className="w-9 h-9 rounded-lg bg-white border border-slate-200/80 p-1 flex items-center justify-center shadow-xs shrink-0">
+            <img src="/rahi-logo.png" alt="RAHI Flowdesk" className="w-7 h-auto max-h-7 object-contain" />
           </div>
           <div>
             <div className="flex items-center gap-2">

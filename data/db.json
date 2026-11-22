@@ -5204,6 +5204,28 @@
   ],
   "auditLogs": [
     {
+      "id": "aud-1795355102511",
+      "userId": "usr-client-1",
+      "userName": "Arjun Kapoor",
+      "userRole": "client",
+      "action": "User Authentication",
+      "details": "Arjun Kapoor authenticated into CLIENT PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-client-1",
+      "timestamp": "2026-11-22T13:45:02.511Z"
+    },
+    {
+      "id": "aud-1795355071666",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rohan Rahi authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-22T13:44:31.666Z"
+    },
+    {
       "id": "aud-1795354361913",
       "userId": "usr-admin",
       "userName": "Rohan Rahi",
@@ -8968,6 +8990,25 @@
   ],
   "sessions": [
     {
+      "id": "sess-1795355102513-a62a9e95",
+      "token": "4c5364cc71ce460bd1ba62b50f6d1634767a711a7faa6039bcaf1d61d870f630",
+      "userId": "usr-client-1",
+      "role": "client",
+      "permissionGroup": "CLIENT_ACCESS",
+      "clientId": "cli-1",
+      "createdAt": "2026-11-22T13:45:02.513Z",
+      "expiresAt": "2026-11-29T13:45:02.513Z"
+    },
+    {
+      "id": "sess-1795355071669-6e27cdbd",
+      "token": "92ec375ae185ed84223eb1ab30acde689ef4644fd08bd229230ed5b892763e6d",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-22T13:44:31.669Z",
+      "expiresAt": "2026-11-29T13:44:31.669Z"
+    },
+    {
       "id": "sess-1795354361889-3b35e2aa",
       "token": "079676939b76b0d46baaf95505d73272f2591b3084dd93dbbe280f5b82db4483",
       "userId": "usr-client-2",
@@ -10106,6 +10147,14 @@
         1795354362023
       ],
       "updatedAt": "2026-11-22T13:32:42.023Z"
+    },
+    {
+      "key": "login:failed:admin@rahicreative.co",
+      "timestamps": [
+        1795355029173,
+        1795355030183
+      ],
+      "updatedAt": "2026-11-22T13:43:50.183Z"
     }
   ]
 }

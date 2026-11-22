@@ -141,8 +141,8 @@ export function Sidebar({
       <div className="p-5 border-b border-slate-800">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center font-black text-white text-xs tracking-tight shadow-sm shrink-0">
-              RF
+            <div className="w-9 h-9 rounded-lg bg-white p-1 flex items-center justify-center shadow-sm shrink-0">
+              <img src="/rahi-logo.png" alt="RAHI Flowdesk" className="w-7 h-auto max-h-7 object-contain" />
             </div>
             <div>
               <h1 className="text-sm font-black text-white tracking-wider uppercase">
