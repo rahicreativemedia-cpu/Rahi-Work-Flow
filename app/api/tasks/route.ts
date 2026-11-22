@@ -93,9 +93,11 @@ export async function POST(request: Request) {
         deliverableId,
         description,
         assignedEmployeeId,
+        assignedEmployeeIds,
         priority,
         startDate,
         deadline,
+        estimatedHours,
         requiredOutput,
         referenceFiles,
       } = body;
@@ -108,6 +110,23 @@ export async function POST(request: Request) {
       }
 
       const client = db.clients.find((c) => c.id === clientId);
+      if (!client) {
+        return NextResponse.json(
+          { error: 'Invalid client reference: Task must reference a valid client' },
+          { status: 400 }
+        );
+      }
+
+      if (projectId) {
+        const project = db.projects.find((p) => p.id === projectId);
+        if (!project) {
+          return NextResponse.json(
+            { error: 'Invalid project reference: Task must reference a valid project' },
+            { status: 400 }
+          );
+        }
+      }
+
       const project = db.projects.find((p) => p.id === projectId);
       const employee = db.employees.find((e) => e.id === assignedEmployeeId);
 
@@ -125,6 +144,10 @@ export async function POST(request: Request) {
         ? `Warning: ${employee?.name || 'Assignee'} currently has ${activeTasksCount} active tasks (max capacity is ${maxTasks}).`
         : undefined;
 
+      const finalEmployeeIds = Array.isArray(assignedEmployeeIds) && assignedEmployeeIds.length > 0
+        ? assignedEmployeeIds
+        : [assignedEmployeeId];
+
       const newTask: Task = {
         id: `tsk-${Date.now()}`,
         title: title.trim(),
@@ -137,11 +160,13 @@ export async function POST(request: Request) {
         assignedEmployeeId,
         assignedEmployeeName: employee ? employee.name : 'Unassigned',
         assignedEmployeeDepartment: employee ? employee.department : 'Video Editing',
+        assignedEmployeeIds: finalEmployeeIds,
         priority: (priority as Priority) || 'medium',
         startDate: startDate || new Date().toISOString().split('T')[0],
         deadline:
           deadline ||
           new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        estimatedHours: estimatedHours !== undefined && estimatedHours !== null ? Number(estimatedHours) : undefined,
         status: 'todo',
         referenceFiles: referenceFiles || [],
         requiredOutput: requiredOutput || 'Standard creative asset meeting agency guidelines.',

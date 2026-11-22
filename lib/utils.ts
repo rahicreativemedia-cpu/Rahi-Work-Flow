@@ -274,12 +274,20 @@ export function getTaskStatusBadge(status: TaskStatus) {
       return { label: 'To Do', bg: 'bg-sky-50 text-sky-700 border-sky-200' };
     case 'in_progress':
       return { label: 'In Progress', bg: 'bg-blue-50 text-blue-700 border-blue-200' };
+    case 'under_review':
     case 'in_review':
-      return { label: 'Internal Review', bg: 'bg-purple-50 text-purple-700 border-purple-200' };
+      return { label: 'Under Review', bg: 'bg-purple-50 text-purple-700 border-purple-200' };
+    case 'revision_required':
     case 'revision':
-      return { label: 'Revision', bg: 'bg-pink-50 text-pink-700 border-pink-200' };
+      return { label: 'Revision Required', bg: 'bg-pink-50 text-pink-700 border-pink-200' };
+    case 'approved':
+      return { label: 'Approved', bg: 'bg-teal-50 text-teal-700 border-teal-200' };
     case 'completed':
       return { label: 'Completed', bg: 'bg-emerald-50 text-emerald-700 border-emerald-200' };
+    case 'cancelled':
+      return { label: 'Cancelled', bg: 'bg-slate-200 text-slate-600 border-slate-300' };
+    default:
+      return { label: 'To Do', bg: 'bg-sky-50 text-sky-700 border-sky-200' };
   }
 }
 

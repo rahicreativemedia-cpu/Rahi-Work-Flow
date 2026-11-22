@@ -986,6 +986,174 @@ async function runRealHttpSecurityTests() {
   );
 
   // -------------------------------------------------------------
+  // SECTION 11: PHASE 6 PROJECTS & TASK MANAGEMENT + FINANCE HTTP TESTS
+  // -------------------------------------------------------------
+  console.log(`\n${colors.bold}--- Section 11: Projects, Tasks & Multi-Currency Finance HTTP Security ---${colors.reset}`);
+
+  // 1. Rejection of project creation with invalid client ID (Foreign Key Validation)
+  const invalidClientProjRes = await fetch(`${BASE_URL}/api/projects`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: adminSession.cookieHeader },
+    body: JSON.stringify({
+      clientId: 'cli-non-existent-999',
+      title: 'Invalid Foreign Key Project',
+    }),
+  });
+  const invalidClientProjData = await invalidClientProjRes.json();
+  assert(invalidClientProjRes.status === 400, 'Project creation with invalid client ID rejected with 400 over HTTP');
+  assert(
+    invalidClientProjData.error.includes('Invalid client reference'),
+    'HTTP error correctly specifies invalid client reference'
+  );
+
+  // 2. Employee forbidden from creating projects
+  const empProjCreateRes = await fetch(`${BASE_URL}/api/projects`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: employeeSession.cookieHeader },
+    body: JSON.stringify({
+      clientId: 'cli-1',
+      title: 'Employee Unauthorized Project',
+    }),
+  });
+  assert(empProjCreateRes.status === 403, 'Employee attempting to create project rejected with 403 Forbidden over HTTP');
+
+  // 3. Admin creates Project via HTTP POST
+  const adminProjRes = await fetch(`${BASE_URL}/api/projects`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: adminSession.cookieHeader },
+    body: JSON.stringify({
+      clientId: 'cli-1',
+      title: 'HTTP Production Campaign',
+      description: 'End-to-end creative deliverables',
+      priority: 'urgent',
+      status: 'planning',
+      assignedEmployees: ['emp-1', 'emp-2'],
+      budget: 180000,
+      currency: 'INR',
+      totalDeliverablesTarget: 12,
+    }),
+  });
+  const adminProjData = await adminProjRes.json();
+  assert(adminProjRes.status === 201, 'Admin creates project via HTTP POST with 201 Created');
+  const p6HttpProjId = adminProjData.project.id;
+  assert(adminProjData.project.budget === 180000, 'Project budget (180,000 INR) saved over HTTP');
+
+  // 4. Manager creates Project via HTTP POST (Parity Verified!)
+  const mgrProjRes = await fetch(`${BASE_URL}/api/projects`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: managerSession.cookieHeader },
+    body: JSON.stringify({
+      clientId: 'cli-2',
+      title: 'Manager HTTP Campaign',
+      priority: 'high',
+      status: 'active',
+      budget: 90000,
+      currency: 'INR',
+    }),
+  });
+  assert(mgrProjRes.status === 201, 'Manager creates project via HTTP POST with 201 Created (Parity Verified!)');
+
+  // 5. Manager soft-archives project via HTTP PUT (action: 'archive')
+  const mgrArchiveRes = await fetch(`${BASE_URL}/api/projects`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', Cookie: managerSession.cookieHeader },
+    body: JSON.stringify({
+      action: 'archive',
+      id: p6HttpProjId,
+    }),
+  });
+  const mgrArchiveData = await mgrArchiveRes.json();
+  assert(mgrArchiveRes.status === 200, 'Manager can archive project via HTTP PUT');
+  assert(mgrArchiveData.project.status === 'archived', 'Project status transitioned to "archived" over HTTP');
+  assert(typeof mgrArchiveData.project.archivedAt === 'string', 'archivedAt timestamp set');
+
+  // 6. Admin restores project via HTTP PUT (action: 'restore')
+  const adminRestoreRes = await fetch(`${BASE_URL}/api/projects`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', Cookie: adminSession.cookieHeader },
+    body: JSON.stringify({
+      action: 'restore',
+      id: p6HttpProjId,
+    }),
+  });
+  const adminRestoreData = await adminRestoreRes.json();
+  assert(adminRestoreRes.status === 200, 'Admin can restore project via HTTP PUT');
+  assert(adminRestoreData.project.status === 'active', 'Project status restored to "active" over HTTP');
+
+  // 7. Rejection of task creation with invalid project ID
+  const invalidTaskProjRes = await fetch(`${BASE_URL}/api/tasks`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: adminSession.cookieHeader },
+    body: JSON.stringify({
+      action: 'create',
+      title: 'Task with Bogus Project',
+      clientId: 'cli-1',
+      projectId: 'prj-bogus-999',
+      assignedEmployeeId: 'emp-1',
+    }),
+  });
+  const invalidTaskProjData = await invalidTaskProjRes.json();
+  assert(invalidTaskProjRes.status === 400, 'Task creation with invalid project reference rejected with 400 over HTTP');
+  assert(
+    invalidTaskProjData.error.includes('Invalid project reference'),
+    'HTTP error correctly specifies invalid project reference'
+  );
+
+  // 8. Admin creates Task under Project with estimated hours via HTTP POST
+  const adminTaskRes = await fetch(`${BASE_URL}/api/tasks`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: adminSession.cookieHeader },
+    body: JSON.stringify({
+      action: 'create',
+      title: 'HTTP Video Edit & Audio Mix Task',
+      clientId: 'cli-1',
+      projectId: p6HttpProjId,
+      assignedEmployeeId: 'emp-1',
+      priority: 'urgent',
+      estimatedHours: 6,
+      deadline: '2026-11-30',
+    }),
+  });
+  const adminTaskData = await adminTaskRes.json();
+  assert(adminTaskRes.status === 200, 'Admin creates task under project via HTTP POST');
+  const p6TaskId = adminTaskData.task.id;
+  assert(adminTaskData.task.estimatedHours === 6, 'Estimated hours (6h) saved over HTTP');
+
+  // 9. Manager updates Task status via HTTP POST (action: 'update_status')
+  const mgrTaskStatusRes = await fetch(`${BASE_URL}/api/tasks`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: managerSession.cookieHeader },
+    body: JSON.stringify({
+      action: 'update_status',
+      taskId: p6TaskId,
+      status: 'under_review',
+    }),
+  });
+  const mgrTaskStatusData = await mgrTaskStatusRes.json();
+  assert(mgrTaskStatusRes.status === 200, 'Manager updates task status via HTTP POST');
+  assert(mgrTaskStatusData.task.status === 'under_review', 'Task status updated to under_review over HTTP');
+
+  // 10. Finance API HTTP Security & Multi-Currency Verification
+  const adminFinanceRes = await fetch(`${BASE_URL}/api/finance`, {
+    headers: { Cookie: adminSession.cookieHeader },
+  });
+  const adminFinanceData = await adminFinanceRes.json();
+  assert(adminFinanceRes.status === 200, 'Admin receives 200 OK for GET /api/finance over HTTP');
+  assert(adminFinanceData.summary !== undefined, 'Finance summary returned');
+  assert(adminFinanceData.summary.revenueByCurrency !== undefined, 'Multi-currency breakdown returned (Currencies separated!)');
+  assert(adminFinanceData.invoices.length >= 3, 'Invoices list returned to Admin');
+
+  const empFinanceRes = await fetch(`${BASE_URL}/api/finance`, {
+    headers: { Cookie: employeeSession.cookieHeader },
+  });
+  assert(empFinanceRes.status === 403, 'Employee is strictly blocked from GET /api/finance with 403 Forbidden');
+
+  const clientFinanceRes = await fetch(`${BASE_URL}/api/finance`, {
+    headers: { Cookie: clientASession.cookieHeader },
+  });
+  assert(clientFinanceRes.status === 403, 'Client is strictly blocked from GET /api/finance with 403 Forbidden');
+
+  // -------------------------------------------------------------
   // SUMMARY
   // -------------------------------------------------------------
   console.log(`\n${colors.bold}${colors.blue}================================================================${colors.reset}`);

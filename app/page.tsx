@@ -30,6 +30,8 @@ import { DeliverableTracker } from '@/components/workflow/DeliverableTracker';
 import { DeliverableDetailsModal } from '@/components/workflow/DeliverableDetailsModal';
 import { CreateDeliverableModal } from '@/components/workflow/CreateDeliverableModal';
 import { ClientApprovalPanel } from '@/components/approvals/ClientApprovalPanel';
+import { ProjectsAndTasksCenter } from '@/components/projects/ProjectsAndTasksCenter';
+import { CreateProjectModal } from '@/components/projects/CreateProjectModal';
 import { TaskList } from '@/components/tasks/TaskList';
 import { TaskDetailsModal } from '@/components/tasks/TaskDetailsModal';
 import { CreateTaskModal } from '@/components/tasks/CreateTaskModal';
@@ -78,6 +80,9 @@ export default function FlowdeskApp() {
   const [taskForSubmitWork, setTaskForSubmitWork] = useState<Task | null>(null);
   const [isCreateClientOpen, setIsCreateClientOpen] = useState(false);
   const [clientToEdit, setClientToEdit] = useState<Client | null>(null);
+  const [isCreateProjectOpen, setIsCreateProjectOpen] = useState(false);
+  const [projectToEdit, setProjectToEdit] = useState<Project | null>(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
   const [isCreateEmployeeOpen, setIsCreateEmployeeOpen] = useState(false);
   const [employeeToEdit, setEmployeeToEdit] = useState<Employee | null>(null);
@@ -482,6 +487,67 @@ export default function FlowdeskApp() {
     }
   };
 
+  // Save Project (Admin & Manager Equal Access)
+  const handleSaveProject = async (projectData: any) => {
+    try {
+      const method = projectData.id ? 'PUT' : 'POST';
+      const res = await fetch('/api/projects', {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          callerUserId: currentUser?.id || 'sys',
+          ...projectData,
+        }),
+      });
+      if (res.ok) {
+        await refreshData();
+        setProjectToEdit(null);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // Archive Project (Admin & Manager Equal Access)
+  const handleArchiveProject = async (projectId: string) => {
+    try {
+      const res = await fetch('/api/projects', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'archive',
+          callerUserId: currentUser?.id || 'sys',
+          id: projectId,
+        }),
+      });
+      if (res.ok) {
+        await refreshData();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // Restore Project (Admin & Manager Equal Access)
+  const handleRestoreProject = async (projectId: string) => {
+    try {
+      const res = await fetch('/api/projects', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'restore',
+          callerUserId: currentUser?.id || 'sys',
+          id: projectId,
+        }),
+      });
+      if (res.ok) {
+        await refreshData();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   // Create Employee (Admin & Manager Equal Access)
   const handleSaveEmployee = async (employeeData: any) => {
     try {
@@ -842,11 +908,27 @@ export default function FlowdeskApp() {
                   />
                 )}
                 {activeTab === 'projects_tasks' && (
-                  <TaskList
+                  <ProjectsAndTasksCenter
+                    projects={projects}
                     tasks={tasks}
+                    clients={clients}
+                    employees={employees}
                     currentUser={currentUser}
+                    onSelectProject={(p) => setSelectedProject(p)}
                     onSelectTask={(t) => setSelectedTask(t)}
+                    onCreateProject={() => {
+                      setProjectToEdit(null);
+                      setIsCreateProjectOpen(true);
+                    }}
+                    onEditProject={(p) => {
+                      setProjectToEdit(p);
+                      setIsCreateProjectOpen(true);
+                    }}
+                    onArchiveProject={handleArchiveProject}
+                    onRestoreProject={handleRestoreProject}
                     onCreateTask={() => setIsCreateTaskOpen(true)}
+                    onUpdateTaskStatus={handleUpdateTaskStatus}
+                    onSubmitWork={(t) => setTaskForSubmitWork(t)}
                   />
                 )}
                 {activeTab === 'approvals' && (
@@ -958,11 +1040,27 @@ export default function FlowdeskApp() {
                   />
                 )}
                 {activeTab === 'projects_tasks' && (
-                  <TaskList
+                  <ProjectsAndTasksCenter
+                    projects={projects}
                     tasks={tasks}
+                    clients={clients}
+                    employees={employees}
                     currentUser={currentUser}
+                    onSelectProject={(p) => setSelectedProject(p)}
                     onSelectTask={(t) => setSelectedTask(t)}
+                    onCreateProject={() => {
+                      setProjectToEdit(null);
+                      setIsCreateProjectOpen(true);
+                    }}
+                    onEditProject={(p) => {
+                      setProjectToEdit(p);
+                      setIsCreateProjectOpen(true);
+                    }}
+                    onArchiveProject={handleArchiveProject}
+                    onRestoreProject={handleRestoreProject}
                     onCreateTask={() => setIsCreateTaskOpen(true)}
+                    onUpdateTaskStatus={handleUpdateTaskStatus}
+                    onSubmitWork={(t) => setTaskForSubmitWork(t)}
                   />
                 )}
                 {activeTab === 'approvals' && (
@@ -1021,6 +1119,18 @@ export default function FlowdeskApp() {
                     mode={activeTab as any}
                     onSelectTask={(t) => setSelectedTask(t)}
                     onSelectDeliverable={(d) => setSelectedDeliverable(d)}
+                    onSubmitWork={(t) => setTaskForSubmitWork(t)}
+                  />
+                )}
+                {activeTab === 'projects_tasks' && (
+                  <ProjectsAndTasksCenter
+                    projects={projects}
+                    tasks={tasks}
+                    clients={clients}
+                    employees={employees}
+                    currentUser={currentUser}
+                    onSelectProject={(p) => setSelectedProject(p)}
+                    onSelectTask={(t) => setSelectedTask(t)}
                     onSubmitWork={(t) => setTaskForSubmitWork(t)}
                   />
                 )}
@@ -1123,6 +1233,22 @@ export default function FlowdeskApp() {
           }}
           onSubmit={handleSaveClient}
           clientToEdit={clientToEdit}
+        />
+      )}
+
+      {isCreateProjectOpen && (
+        <CreateProjectModal
+          isOpen={isCreateProjectOpen}
+          onClose={() => {
+            setIsCreateProjectOpen(false);
+            setProjectToEdit(null);
+          }}
+          clients={clients}
+          employees={employees}
+          users={users}
+          currentUser={currentUser}
+          projectToEdit={projectToEdit}
+          onSaveProject={handleSaveProject}
         />
       )}
 

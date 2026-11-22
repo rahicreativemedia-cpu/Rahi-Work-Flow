@@ -102,6 +102,7 @@ export function Sidebar({
     if (role === 'employee') {
       return [
         { id: 'my_tasks', label: 'My Assigned Tasks', icon: CheckSquare },
+        { id: 'projects_tasks', label: 'Projects & Kanban Board', icon: FolderOpen },
         { id: 'submit_work', label: 'Submit Completed Work', icon: UploadCloud },
         { id: 'feedback_revisions', label: 'Revisions & Feedback', icon: MessageSquareWarning },
         { id: 'my_deliverables', label: 'Assigned Deliverables', icon: Layers },

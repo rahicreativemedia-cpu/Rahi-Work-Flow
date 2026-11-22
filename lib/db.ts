@@ -17,7 +17,13 @@ export function getDB(): AppState {
       return initialData;
     }
     const raw = fs.readFileSync(DB_FILE, 'utf-8');
-    return JSON.parse(raw) as AppState;
+    const parsed = JSON.parse(raw) as AppState;
+    parsed.invoices = parsed.invoices || [];
+    parsed.payments = parsed.payments || [];
+    parsed.expenses = parsed.expenses || [];
+    parsed.sessions = parsed.sessions || [];
+    parsed.passwordResets = parsed.passwordResets || [];
+    return parsed;
   } catch (error) {
     console.error('Failed to read database, falling back to seed:', error);
     return initialData;

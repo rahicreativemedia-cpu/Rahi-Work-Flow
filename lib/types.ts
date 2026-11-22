@@ -24,9 +24,24 @@ export type TaskStatus =
   | 'backlog'
   | 'todo'
   | 'in_progress'
+  | 'under_review'
   | 'in_review'
+  | 'revision_required'
   | 'revision'
-  | 'completed';
+  | 'approved'
+  | 'completed'
+  | 'cancelled';
+
+export type ProjectStatus =
+  | 'planning'
+  | 'not_started'
+  | 'active'
+  | 'in_progress'
+  | 'review'
+  | 'on_hold'
+  | 'completed'
+  | 'cancelled'
+  | 'archived';
 
 export type CreativeWorkflowStage =
   | 'content_planning'
@@ -196,13 +211,22 @@ export interface Project {
   clientName: string;
   title: string;
   description: string;
+  objective?: string;
   startDate: string;
-  targetEndDate: string;
-  status: 'planning' | 'in_progress' | 'review' | 'completed' | 'on_hold';
+  targetEndDate: string; // deadline
+  priority?: Priority;
+  status: ProjectStatus;
   assignedEmployees: string[]; // employee user ids or employee ids
+  projectManagerId?: string;
+  projectManagerName?: string;
+  budget?: number;
+  currency?: string;
+  progress?: number; // 0-100%
   totalDeliverablesTarget: number;
   completedDeliverablesCount: number;
   createdAt: string;
+  archivedAt?: string;
+  archivedByUserId?: string;
 }
 
 export interface TaskSubmission {
@@ -238,9 +262,11 @@ export interface Task {
   assignedEmployeeId: string;
   assignedEmployeeName: string;
   assignedEmployeeDepartment: Department;
+  assignedEmployeeIds?: string[];
   priority: Priority;
   startDate: string;
   deadline: string;
+  estimatedHours?: number;
   status: TaskStatus;
   referenceFiles: { name: string; url: string; size: string }[];
   requiredOutput: string;
@@ -386,6 +412,48 @@ export interface AuditLog {
   timestamp: string;
 }
 
+export interface Invoice {
+  id: string;
+  invoiceNumber: string;
+  clientId: string;
+  clientName: string;
+  issueDate: string;
+  dueDate: string;
+  amount: number;
+  currency: 'INR' | 'USD' | 'AED' | 'EUR' | 'GBP';
+  status: 'draft' | 'sent' | 'partially_paid' | 'paid' | 'overdue' | 'cancelled';
+  paidAmount: number;
+  items: { description: string; quantity: number; unitPrice: number; total: number }[];
+  notes?: string;
+  createdAt: string;
+}
+
+export interface PaymentRecord {
+  id: string;
+  invoiceId?: string;
+  clientId: string;
+  clientName: string;
+  amount: number;
+  currency: 'INR' | 'USD' | 'AED' | 'EUR' | 'GBP';
+  paymentDate: string;
+  paymentMethod: 'bank_transfer' | 'upi' | 'credit_card' | 'stripe' | 'wire' | 'cash';
+  transactionReference: string;
+  notes?: string;
+  createdAt: string;
+}
+
+export interface ExpenseRecord {
+  id: string;
+  title: string;
+  category: 'software' | 'production' | 'freelancer' | 'travel' | 'equipment' | 'marketing' | 'office' | 'other';
+  amount: number;
+  currency: 'INR' | 'USD' | 'AED' | 'EUR' | 'GBP';
+  date: string;
+  recordedByUserId: string;
+  notes?: string;
+  createdAt: string;
+}
+
 export interface AppState {
   users: User[];
   clients: Client[];
@@ -399,4 +467,7 @@ export interface AppState {
   auditLogs: AuditLog[];
   passwordResets?: PasswordResetToken[];
   sessions?: UserSession[];
+  invoices?: Invoice[];
+  payments?: PaymentRecord[];
+  expenses?: ExpenseRecord[];
 }
