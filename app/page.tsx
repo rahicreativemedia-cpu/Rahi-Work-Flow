@@ -42,12 +42,15 @@ import { AuditLogsView } from '@/components/admin/AuditLogsView';
 import { ReportsView } from '@/components/reports/ReportsView';
 import { ClientCalendarAndAssets } from '@/components/client/ClientCalendarAndAssets';
 import { EmployeeWorkViews } from '@/components/employee/EmployeeWorkViews';
+import { LoginView } from '@/components/auth/LoginView';
+import { InviteAcceptModal } from '@/components/auth/InviteAcceptModal';
+import { ResetPasswordModal } from '@/components/auth/ResetPasswordModal';
 import { hasFullAdminAccess } from '@/lib/permissions';
 
 export default function FlowdeskApp() {
   // Master State initialized with rich seed data
   const [users, setUsers] = useState<User[]>(initialData.users);
-  const [currentUser, setCurrentUser] = useState<User>(initialData.users[0]); // Defaults to Rohan Rahi (Boss/Admin)
+  const [currentUser, setCurrentUser] = useState<User | null>(initialData.users[0]); // Defaults to Rohan Rahi (Boss/Admin)
   const [clients, setClients] = useState<Client[]>(initialData.clients);
   const [employees, setEmployees] = useState<Employee[]>(initialData.employees);
   const [projects, setProjects] = useState<Project[]>(initialData.projects);
@@ -63,6 +66,11 @@ export default function FlowdeskApp() {
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Auth modal states
+  const [isInviteAcceptOpen, setIsInviteAcceptOpen] = useState(false);
+  const [inviteTokenToClaim, setInviteTokenToClaim] = useState('');
+  const [isResetPasswordOpen, setIsResetPasswordOpen] = useState(false);
+
   // Modal dialog states
   const [selectedDeliverable, setSelectedDeliverable] = useState<Deliverable | null>(null);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
@@ -76,6 +84,7 @@ export default function FlowdeskApp() {
 
   // Fetch live sync from API on initial load
   const refreshData = async () => {
+    if (!currentUser) return;
     try {
       const [authRes, clientRes, empRes, projRes, taskRes, delRes, apprRes, notifRes, audRes] =
         await Promise.all([
@@ -133,8 +142,37 @@ export default function FlowdeskApp() {
   };
 
   useEffect(() => {
-    refreshData();
-  }, [currentUser.id]);
+    if (currentUser) {
+      refreshData();
+    }
+  }, [currentUser?.id]);
+
+  // Check URL query parameters for invitation token (?invite=...)
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const token = params.get('invite');
+      if (token) {
+        setInviteTokenToClaim(token);
+        setIsInviteAcceptOpen(true);
+      }
+    }
+  }, []);
+
+  const handleLogin = (user: User) => {
+    setCurrentUser(user);
+    if (user.role === 'admin' || user.role === 'manager') {
+      setActiveTab('overview');
+    } else if (user.role === 'employee') {
+      setActiveTab('my_tasks');
+    } else if (user.role === 'client') {
+      setActiveTab('client_dashboard');
+    }
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+  };
 
   // Handle switching persona / portal
   const handleSwitchUser = (newUser: User) => {
@@ -189,7 +227,7 @@ export default function FlowdeskApp() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'update_stage',
-          callerUserId: currentUser.id,
+          callerUserId: currentUser?.id || 'sys',
           deliverableId,
           stage,
           ...extra,
@@ -215,7 +253,7 @@ export default function FlowdeskApp() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          callerUserId: currentUser.id,
+          callerUserId: currentUser?.id || 'sys',
           deliverableId,
           approvalType,
           decision,
@@ -238,7 +276,7 @@ export default function FlowdeskApp() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'cancel',
-          callerUserId: currentUser.id,
+          callerUserId: currentUser?.id || 'sys',
           deliverableId,
           reason,
         }),
@@ -259,7 +297,7 @@ export default function FlowdeskApp() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'update_status',
-          callerUserId: currentUser.id,
+          callerUserId: currentUser?.id || 'sys',
           taskId,
           status,
         }),
@@ -280,7 +318,7 @@ export default function FlowdeskApp() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'comment',
-          callerUserId: currentUser.id,
+          callerUserId: currentUser?.id || 'sys',
           taskId,
           text,
         }),
@@ -301,7 +339,7 @@ export default function FlowdeskApp() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'submit_work',
-          callerUserId: currentUser.id,
+          callerUserId: currentUser?.id || 'sys',
           ...submissionData,
         }),
       });
@@ -322,7 +360,7 @@ export default function FlowdeskApp() {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          callerUserId: currentUser.id,
+          callerUserId: currentUser?.id || 'sys',
           ...clientData,
         }),
       });
@@ -343,7 +381,7 @@ export default function FlowdeskApp() {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          callerUserId: currentUser.id,
+          callerUserId: currentUser?.id || 'sys',
           ...employeeData,
         }),
       });
@@ -364,7 +402,7 @@ export default function FlowdeskApp() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'create',
-          callerUserId: currentUser.id,
+          callerUserId: currentUser?.id || 'sys',
           ...taskData,
         }),
       });
@@ -384,7 +422,7 @@ export default function FlowdeskApp() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'create',
-          callerUserId: currentUser.id,
+          callerUserId: currentUser?.id || 'sys',
           ...deliverableData,
         }),
       });
@@ -404,7 +442,7 @@ export default function FlowdeskApp() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'invite',
-          callerUserId: currentUser.id,
+          callerUserId: currentUser?.id || 'sys',
           ...invData,
         }),
       });
@@ -425,7 +463,7 @@ export default function FlowdeskApp() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'create_user',
-          callerUserId: currentUser.id,
+          callerUserId: currentUser?.id || 'sys',
           ...userData,
         }),
       });
@@ -446,7 +484,7 @@ export default function FlowdeskApp() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'toggle_status',
-          callerUserId: currentUser.id,
+          callerUserId: currentUser?.id || 'sys',
           targetUserId,
         }),
       });
@@ -468,7 +506,7 @@ export default function FlowdeskApp() {
           action: id ? 'mark_read' : undefined,
           notifId: id,
           markAllRead: !id,
-          userId: currentUser.id,
+          userId: currentUser?.id || '',
         }),
       });
       refreshData();
@@ -476,6 +514,32 @@ export default function FlowdeskApp() {
       console.error(e);
     }
   };
+
+  if (!currentUser) {
+    return (
+      <>
+        <LoginView
+          allUsers={users}
+          onLogin={handleLogin}
+          onOpenInviteModal={() => {
+            setInviteTokenToClaim('');
+            setIsInviteAcceptOpen(true);
+          }}
+          onOpenResetPasswordModal={() => setIsResetPasswordOpen(true)}
+        />
+        <InviteAcceptModal
+          isOpen={isInviteAcceptOpen}
+          onClose={() => setIsInviteAcceptOpen(false)}
+          token={inviteTokenToClaim}
+          onSuccess={handleLogin}
+        />
+        <ResetPasswordModal
+          isOpen={isResetPasswordOpen}
+          onClose={() => setIsResetPasswordOpen(false)}
+        />
+      </>
+    );
+  }
 
   const activePortalRole = currentUser.role;
   const currentClient = clients.find((c) => c.id === currentUser.clientId) || clients[0];
@@ -520,6 +584,7 @@ export default function FlowdeskApp() {
           onResetDB={handleResetDB}
           activePortal={activePortalRole}
           onToggleMobileMenu={() => setIsMobileMenuOpen((prev) => !prev)}
+          onLogout={handleLogout}
         />
 
         {/* Scrollable Main Content Area */}
@@ -900,6 +965,19 @@ export default function FlowdeskApp() {
           onCreate={handleCreateDeliverable}
         />
       )}
+
+      {/* Global Auth Modals */}
+      <InviteAcceptModal
+        isOpen={isInviteAcceptOpen}
+        onClose={() => setIsInviteAcceptOpen(false)}
+        token={inviteTokenToClaim}
+        onSuccess={handleLogin}
+      />
+
+      <ResetPasswordModal
+        isOpen={isResetPasswordOpen}
+        onClose={() => setIsResetPasswordOpen(false)}
+      />
 
       {/* Slide-over Notifications Drawer */}
       <NotificationsDrawer

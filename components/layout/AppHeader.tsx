@@ -6,6 +6,7 @@ import {
   ChevronDown,
   Layers,
   Menu,
+  LogOut,
 } from 'lucide-react';
 import { User } from '@/lib/types';
 import { hasFullAdminAccess } from '@/lib/permissions';
@@ -19,6 +20,7 @@ interface AppHeaderProps {
   onResetDB: () => void;
   activePortal: 'admin' | 'manager' | 'employee' | 'client';
   onToggleMobileMenu?: () => void;
+  onLogout?: () => void;
 }
 
 export function AppHeader({
@@ -30,6 +32,7 @@ export function AppHeader({
   onResetDB,
   activePortal,
   onToggleMobileMenu,
+  onLogout,
 }: AppHeaderProps) {
   const portalLabels = {
     admin: { name: 'ADMIN PORTAL', color: 'bg-indigo-600 text-white' },
@@ -197,6 +200,16 @@ export function AppHeader({
                 : currentUser.clientName}
             </div>
           </div>
+
+          {onLogout && (
+            <button
+              onClick={onLogout}
+              title="Sign Out to Login Screen"
+              className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors border border-transparent hover:border-rose-100 ml-1"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
+          )}
         </div>
       </div>
     </header>
