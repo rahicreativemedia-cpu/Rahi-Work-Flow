@@ -1,16 +1,22 @@
 import { NextResponse } from 'next/server';
 import { getDB, saveDB } from '@/lib/db';
 import { hasFullAdminAccess } from '@/lib/permissions';
+import { getAuthenticatedUser } from '@/lib/session';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const userId = searchParams.get('userId');
-  const db = getDB();
+  const explicitUserId = searchParams.get('userId');
+  const auth = getAuthenticatedUser(request, explicitUserId);
 
-  const user = db.users.find((u) => u.id === userId);
-  if (!user) {
-    return NextResponse.json({ notifications: [] });
+  if (!auth.user) {
+    return NextResponse.json(
+      { error: auth.error || 'Unauthorized: Authentication required to access notifications' },
+      { status: auth.status || 401 }
+    );
   }
+
+  const user = auth.user;
+  const db = getDB();
 
   // Admin & Manager see all operational and admin notifications
   if (hasFullAdminAccess(user)) {
@@ -25,8 +31,9 @@ export async function GET(request: Request) {
 
   // Employee sees employee notifications or targeted to their user id
   if (user.role === 'employee') {
+    const empId = user.employeeId || user.id;
     const empNotifs = db.notifications.filter(
-      (n) => n.recipientUserId === user.id || (n.targetRole === 'employee' && !n.recipientUserId)
+      (n) => n.recipientUserId === user.id || n.recipientUserId === empId || (n.targetRole === 'employee' && !n.recipientUserId)
     );
     return NextResponse.json({
       notifications: empNotifs,
@@ -51,18 +58,27 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { action, notifId, markAllRead, userId } = body;
+    const { action, notifId, markAllRead, callerUserId } = body;
+    const auth = getAuthenticatedUser(request, callerUserId);
+
+    if (!auth.user) {
+      return NextResponse.json(
+        { error: auth.error || 'Unauthorized: Authentication required' },
+        { status: auth.status || 401 }
+      );
+    }
+
+    const user = auth.user;
     const db = getDB();
 
-    if (markAllRead && userId) {
-      const user = db.users.find((u) => u.id === userId);
+    if (markAllRead) {
       db.notifications.forEach((n) => {
         if (
           hasFullAdminAccess(user) &&
-          (n.targetRole === 'all_admin' || n.recipientUserId === userId)
+          (n.targetRole === 'all_admin' || n.recipientUserId === user.id)
         ) {
           n.read = true;
-        } else if (n.recipientUserId === userId || n.recipientClientId === user?.clientId) {
+        } else if (n.recipientUserId === user.id || n.recipientClientId === user.clientId) {
           n.read = true;
         }
       });
@@ -73,8 +89,14 @@ export async function POST(request: Request) {
     if (action === 'mark_read' && notifId) {
       const notif = db.notifications.find((n) => n.id === notifId);
       if (notif) {
-        notif.read = true;
-        saveDB(db);
+        if (
+          hasFullAdminAccess(user) ||
+          notif.recipientUserId === user.id ||
+          notif.recipientClientId === user.clientId
+        ) {
+          notif.read = true;
+          saveDB(db);
+        }
       }
       return NextResponse.json({ success: true });
     }

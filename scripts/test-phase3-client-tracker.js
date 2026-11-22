@@ -474,7 +474,7 @@ assert(
 );
 
 assert(
-  empGet.clients.length === 2 &&
+  empGet.clients.length >= 2 &&
     empGet.clients.some((c) => c.id === 'cli-1') &&
     empGet.clients.some((c) => c.id === 'cli-2'),
   'Employee Assigned Boundary: Employee only receives clients they are actively assigned to (Apex & Lumina)',

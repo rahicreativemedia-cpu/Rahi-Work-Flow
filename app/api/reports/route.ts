@@ -2,21 +2,33 @@ import { NextResponse } from 'next/server';
 import { getDB } from '@/lib/db';
 import { hasFullAdminAccess } from '@/lib/permissions';
 import { calculateClientDeliverableStats } from '@/lib/utils';
+import { getAuthenticatedUser } from '@/lib/session';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const userId = searchParams.get('userId');
-  const db = getDB();
+  const explicitUserId = searchParams.get('userId');
+  const auth = getAuthenticatedUser(request, explicitUserId);
 
-  const user = db.users.find((u) => u.id === userId);
+  if (!auth.user) {
+    return NextResponse.json(
+      { error: auth.error || 'Unauthorized: Authentication required to access analytics and reports' },
+      { status: auth.status || 401 }
+    );
+  }
+
+  const user = auth.user;
 
   // Financial and full company reports are restricted to FULL_ADMIN_ACCESS (Admin & Manager)
   if (!hasFullAdminAccess(user)) {
-    return NextResponse.json({ error: 'Unauthorized: Admin or Manager permission required' }, { status: 403 });
+    return NextResponse.json(
+      { error: 'Forbidden: Admin or Manager permission required to view executive reports' },
+      { status: 403 }
+    );
   }
 
+  const db = getDB();
   const activeClients = db.clients.filter((c) => c.status === 'active');
-  const activeProjects = db.projects.filter((p) => p.status === 'in_progress');
+  const activeProjects = db.projects.filter((p) => p.status === 'in_progress' || p.status === 'active');
 
   // Overall Deliverables
   const activeDeliverables = db.deliverables.filter((d) => d.status !== 'cancelled');
@@ -66,7 +78,7 @@ export async function GET(request: Request) {
 
   // Employee Productivity & Workloads
   const employeeStats = db.employees.map((emp) => {
-    const empTasks = db.tasks.filter((t) => t.assignedEmployeeId === emp.id);
+    const empTasks = db.tasks.filter((t) => t.assignedEmployeeId === emp.id || t.assignedEmployeeId === emp.userId);
     const completedTasks = empTasks.filter((t) => t.status === 'completed');
     const activeTasks = empTasks.filter(
       (t) => t.status !== 'completed' && t.status !== 'backlog'
@@ -100,9 +112,9 @@ export async function GET(request: Request) {
     content_planning: db.deliverables.filter((d) => d.stage === 'content_planning').length,
     scriptwriting: db.deliverables.filter((d) => d.stage === 'scriptwriting').length,
     internal_script_review: db.deliverables.filter((d) => d.stage === 'internal_script_review').length,
-    client_script_approval: db.deliverables.filter((d) => d.stage === 'client_script_approval').length,
+    client_script_review: db.deliverables.filter((d) => d.stage === 'client_script_approval').length,
     video_editing: db.deliverables.filter((d) => d.stage === 'video_editing').length,
-    internal_video_review: db.deliverables.filter((d) => d.stage === 'internal_video_review').length,
+    internal_quality_review: db.deliverables.filter((d) => d.stage === 'internal_video_review').length,
     client_video_approval: db.deliverables.filter((d) => d.stage === 'client_video_approval').length,
     revisions: db.deliverables.filter((d) => d.stage === 'revisions').length,
     scheduling: db.deliverables.filter((d) => d.stage === 'scheduling').length,
@@ -110,14 +122,11 @@ export async function GET(request: Request) {
   };
 
   return NextResponse.json({
-    summary: {
-      totalClients: db.clients.length,
+    metrics: {
       activeClients: activeClients.length,
-      totalEmployees: db.employees.length,
       activeProjects: activeProjects.length,
-      totalDeliverables: db.deliverables.length,
-      completedDeliverables: completedDeliverables.length,
-      pendingDeliverables: pendingDeliverables.length,
+      totalCompletedDeliverables: completedDeliverables.length,
+      totalPendingDeliverables: pendingDeliverables.length,
       overdueTasksCount: overdueTasks.length,
       pendingApprovalsCount: pendingApprovals.length,
       totalMonthlyRetainer,
@@ -125,7 +134,5 @@ export async function GET(request: Request) {
     clientStats,
     employeeStats,
     stageDistribution,
-    overdueTasks,
-    pendingApprovals,
   });
 }

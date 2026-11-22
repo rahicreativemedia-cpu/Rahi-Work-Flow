@@ -95,14 +95,22 @@ export function getAuthenticatedUser(
     return { user, isCryptographicSession: true };
   }
 
-  // 3. Fallback for development / backwards compatibility
+  // 3. Fallback for development / backwards compatibility ONLY
+  // In production mode (or whenever ALLOW_INSECURE_DEV_AUTH !== 'true'), unauthenticated candidateUserId is strictly rejected!
+  const isStrictProduction = process.env.NODE_ENV === 'production' && process.env.ALLOW_INSECURE_DEV_AUTH !== 'true';
+
   const headerUserId = request.headers.get('x-user-id');
   const url = new URL(request.url);
   const queryUserId = url.searchParams.get('userId');
   const candidateUserId = explicitUserId || headerUserId || queryUserId;
 
-  if (!candidateUserId) {
-    return { user: null, isCryptographicSession: false, error: 'Authentication required', status: 401 };
+  if (isStrictProduction || !candidateUserId) {
+    return {
+      user: null,
+      isCryptographicSession: false,
+      error: 'Authentication required: Valid active session cookie or Bearer token is required',
+      status: 401,
+    };
   }
 
   const user = db.users.find((u) => u.id === candidateUserId);
