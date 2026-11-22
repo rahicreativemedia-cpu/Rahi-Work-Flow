@@ -8,6 +8,7 @@ import {
 import { Modal } from '../common/Modal';
 import { Badge } from '../common/Badge';
 import { hasFullAdminAccess } from '@/lib/permissions';
+import { formatDateTime } from '@/lib/utils';
 import {
   CheckCircle2,
   Clock,
@@ -110,6 +111,22 @@ export function DeliverableDetailsModal({
             )}
           </div>
         </div>
+
+        {/* Cancelled Notice Banner */}
+        {deliverable.status === 'cancelled' && (
+          <div className="p-3.5 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-900 flex items-start gap-2.5">
+            <Ban className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+            <div>
+              <strong className="font-bold">Deliverable Cancelled (Preserved in Audit Log):</strong>{' '}
+              {deliverable.cancellationReason || 'No reason provided.'}
+              {deliverable.cancelledAt && (
+                <div className="text-[11px] text-rose-700 mt-0.5">
+                  Cancelled on: {formatDateTime(deliverable.cancelledAt)}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Tab Switcher */}
         <div className="flex border-b border-slate-200 gap-6 text-xs font-semibold text-slate-500">

@@ -81,6 +81,7 @@ export default function FlowdeskApp() {
   const [isCreateEmployeeOpen, setIsCreateEmployeeOpen] = useState(false);
   const [employeeToEdit, setEmployeeToEdit] = useState<Employee | null>(null);
   const [isCreateDeliverableOpen, setIsCreateDeliverableOpen] = useState(false);
+  const [trackerClientId, setTrackerClientId] = useState<string>('all');
 
   // Fetch live sync from API on initial load
   const refreshData = async () => {
@@ -373,6 +374,27 @@ export default function FlowdeskApp() {
     }
   };
 
+  // Toggle Client Status (Admin & Manager Equal Access)
+  const handleToggleClientStatus = async (client: Client) => {
+    const newStatus = client.status === 'active' ? 'inactive' : 'active';
+    try {
+      const res = await fetch('/api/clients', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          callerUserId: currentUser?.id || 'sys',
+          id: client.id,
+          status: newStatus,
+        }),
+      });
+      if (res.ok) {
+        await refreshData();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   // Create Employee (Admin & Manager Equal Access)
   const handleSaveEmployee = async (employeeData: any) => {
     try {
@@ -624,6 +646,8 @@ export default function FlowdeskApp() {
                     clients={clients}
                     deliverables={deliverables}
                     currentUser={currentUser}
+                    selectedClientId={trackerClientId}
+                    onClientFilterChange={setTrackerClientId}
                     onSelectDeliverable={(d) => setSelectedDeliverable(d)}
                     onNewDeliverable={() => setIsCreateDeliverableOpen(true)}
                   />
@@ -641,7 +665,11 @@ export default function FlowdeskApp() {
                       setClientToEdit(c);
                       setIsCreateClientOpen(true);
                     }}
-                    onSelectClientDeliverables={() => setActiveTab('deliverable_tracker')}
+                    onSelectClientDeliverables={(c) => {
+                      setTrackerClientId(c.id);
+                      setActiveTab('deliverable_tracker');
+                    }}
+                    onToggleStatus={handleToggleClientStatus}
                   />
                 )}
                 {activeTab === 'employees' && (
@@ -733,6 +761,8 @@ export default function FlowdeskApp() {
                     clients={clients}
                     deliverables={deliverables}
                     currentUser={currentUser}
+                    selectedClientId={trackerClientId}
+                    onClientFilterChange={setTrackerClientId}
                     onSelectDeliverable={(d) => setSelectedDeliverable(d)}
                     onNewDeliverable={() => setIsCreateDeliverableOpen(true)}
                   />
@@ -750,7 +780,11 @@ export default function FlowdeskApp() {
                       setClientToEdit(c);
                       setIsCreateClientOpen(true);
                     }}
-                    onSelectClientDeliverables={() => setActiveTab('deliverable_tracker')}
+                    onSelectClientDeliverables={(c) => {
+                      setTrackerClientId(c.id);
+                      setActiveTab('deliverable_tracker');
+                    }}
+                    onToggleStatus={handleToggleClientStatus}
                   />
                 )}
                 {activeTab === 'employees' && (

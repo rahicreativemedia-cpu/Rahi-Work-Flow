@@ -62,8 +62,19 @@ export function formatDateTime(dateString: string | undefined): string {
   }
 }
 
+export interface PacingMetrics {
+  monthProgressionPct: number;
+  daysElapsed: number;
+  totalDaysInMonth: number;
+  expectedDeliverables: number;
+  pacingDelta: number;
+  pacingStatus: 'ahead' | 'on_track' | 'behind' | 'critical' | 'completed' | 'upcoming';
+  pacingLabel: string;
+  pacingBadgeClass: string;
+}
+
 /**
- * Calculates deliverable counts for a client:
+ * Calculates deliverable counts and pacing for a client:
  * CRITICAL RULE: Deliverables count toward monthly commitment ONLY when
  * they reach 'publishing_or_delivery' and are marked as 'published' or 'delivered'.
  * Cancelled deliverables are preserved in activity history and NOT counted.
@@ -71,7 +82,7 @@ export function formatDateTime(dateString: string | undefined): string {
 export function calculateClientDeliverableStats(
   client: Client,
   deliverables: Deliverable[],
-  targetMonth?: string
+  targetMonth: string = '2026-11'
 ) {
   const clientDeliverables = deliverables.filter((d) => {
     const matchClient = d.clientId === client.id;
@@ -83,7 +94,7 @@ export function calculateClientDeliverableStats(
   const activeDeliverables = clientDeliverables.filter((d) => d.status !== 'cancelled');
   const cancelledDeliverables = clientDeliverables.filter((d) => d.status === 'cancelled');
 
-  // Only true completions
+  // Only true completions: Stage 10 AND status published or delivered
   const completedDeliverables = activeDeliverables.filter(
     (d) =>
       d.stage === 'publishing_or_delivery' &&
@@ -112,6 +123,83 @@ export function calculateClientDeliverableStats(
       ? Math.min(100, Math.round((completedCount / totalMonthlyCommitment) * 100))
       : 0;
 
+  // Pacing Calculation
+  const currentMonthStr = TODAY_STRING.substring(0, 7); // '2026-11'
+  const currentDayNum = parseInt(TODAY_STRING.substring(8, 10), 10); // 22
+
+  // Determine total days in target month
+  const [yearStr, monthStr] = targetMonth.split('-');
+  const year = parseInt(yearStr, 10) || 2026;
+  const month = parseInt(monthStr, 10) || 11;
+  const totalDaysInMonth = new Date(year, month, 0).getDate(); // 30 for Nov
+
+  let daysElapsed = 0;
+  let monthProgressionPct = 0;
+
+  if (targetMonth === currentMonthStr) {
+    daysElapsed = Math.min(currentDayNum, totalDaysInMonth);
+    monthProgressionPct = Math.round((daysElapsed / totalDaysInMonth) * 100);
+  } else if (targetMonth < currentMonthStr) {
+    daysElapsed = totalDaysInMonth;
+    monthProgressionPct = 100;
+  } else {
+    daysElapsed = 0;
+    monthProgressionPct = 0;
+  }
+
+  const expectedDeliverables = Math.round(totalMonthlyCommitment * (monthProgressionPct / 100));
+  const pacingDelta = completedCount - expectedDeliverables;
+
+  let pacingStatus: PacingMetrics['pacingStatus'] = 'on_track';
+  let pacingLabel = 'On Track';
+  let pacingBadgeClass = 'bg-blue-50 text-blue-700 border-blue-200';
+
+  if (monthProgressionPct === 0) {
+    pacingStatus = 'upcoming';
+    pacingLabel = 'Upcoming Month';
+    pacingBadgeClass = 'bg-slate-100 text-slate-600 border-slate-200';
+  } else if (monthProgressionPct === 100) {
+    if (completedCount >= totalMonthlyCommitment) {
+      pacingStatus = 'completed';
+      pacingLabel = 'Target Met (100%)';
+      pacingBadgeClass = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+    } else {
+      pacingStatus = 'critical';
+      pacingLabel = `Target Shortfall (-${remainingCount})`;
+      pacingBadgeClass = 'bg-rose-50 text-rose-700 border-rose-200';
+    }
+  } else {
+    // Active current month
+    if (completionPercentage >= monthProgressionPct + 5) {
+      pacingStatus = 'ahead';
+      pacingLabel = `Ahead of Pace (+${pacingDelta})`;
+      pacingBadgeClass = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+    } else if (completionPercentage >= monthProgressionPct - 10) {
+      pacingStatus = 'on_track';
+      pacingLabel = `On Track (${completedCount}/${expectedDeliverables} exp)`;
+      pacingBadgeClass = 'bg-blue-50 text-blue-700 border-blue-200';
+    } else if (completionPercentage >= monthProgressionPct - 25) {
+      pacingStatus = 'behind';
+      pacingLabel = `Behind Pace (${pacingDelta})`;
+      pacingBadgeClass = 'bg-amber-50 text-amber-700 border-amber-200';
+    } else {
+      pacingStatus = 'critical';
+      pacingLabel = `Critical Lag (${pacingDelta} deliverables)`;
+      pacingBadgeClass = 'bg-rose-50 text-rose-700 border-rose-200';
+    }
+  }
+
+  const pacing: PacingMetrics = {
+    monthProgressionPct,
+    daysElapsed,
+    totalDaysInMonth,
+    expectedDeliverables,
+    pacingDelta,
+    pacingStatus,
+    pacingLabel,
+    pacingBadgeClass,
+  };
+
   return {
     totalCommitment: totalMonthlyCommitment,
     completed: completedCount,
@@ -122,6 +210,7 @@ export function calculateClientDeliverableStats(
     deliverables: clientDeliverables,
     completedItems: completedDeliverables,
     inProgressItems: inProgressDeliverables,
+    pacing,
   };
 }
 

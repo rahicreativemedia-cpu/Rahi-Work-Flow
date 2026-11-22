@@ -16,12 +16,12 @@ export async function GET(request: Request) {
     return NextResponse.json({ clients: client });
   }
 
-  // Admin and Manager see all clients
+  // Admin and Manager see all clients with complete financial and target data
   if (hasFullAdminAccess(user)) {
     return NextResponse.json({ clients: db.clients });
   }
 
-  // Employee can see active client names for reference
+  // Employee can see client directory and targets, but financial retainers are strictly hidden
   if (user && user.role === 'employee') {
     const safeClients = db.clients.map((c) => ({
       id: c.id,
@@ -30,11 +30,25 @@ export async function GET(request: Request) {
       logoUrl: c.logoUrl,
       servicePackage: c.servicePackage,
       status: c.status,
+      primaryContactName: c.primaryContactName,
+      contractStartDate: c.contractStartDate,
+      contractEndDate: c.contractEndDate,
+      monthlyCommitment: c.monthlyCommitment,
+      createdAt: c.createdAt,
     }));
     return NextResponse.json({ clients: safeClients });
   }
 
-  return NextResponse.json({ clients: db.clients });
+  // Unauthenticated or unrecognized callers: sanitized public directory only
+  const safeClients = db.clients.map((c) => ({
+    id: c.id,
+    name: c.name,
+    company: c.company,
+    logoUrl: c.logoUrl,
+    servicePackage: c.servicePackage,
+    status: c.status,
+  }));
+  return NextResponse.json({ clients: safeClients });
 }
 
 export async function POST(request: Request) {
@@ -64,13 +78,13 @@ export async function POST(request: Request) {
       monthlyRetainer: Number(clientData.monthlyRetainer) || 150000,
       currency: clientData.currency || 'INR',
       monthlyCommitment: {
-        reels: Number(clientData.reels) || 15,
-        longVideos: Number(clientData.longVideos) || 2,
-        graphics: Number(clientData.graphics) || 6,
-        carousels: Number(clientData.carousels) || 4,
-        customTargetNote: clientData.customTargetNote || '',
+        reels: Number(clientData.reels ?? clientData.monthlyCommitment?.reels ?? 15),
+        longVideos: Number(clientData.longVideos ?? clientData.monthlyCommitment?.longVideos ?? 2),
+        graphics: Number(clientData.graphics ?? clientData.monthlyCommitment?.graphics ?? 6),
+        carousels: Number(clientData.carousels ?? clientData.monthlyCommitment?.carousels ?? 4),
+        customTargetNote: clientData.customTargetNote ?? clientData.monthlyCommitment?.customTargetNote ?? '',
       },
-      status: 'active',
+      status: clientData.status || 'active',
       primaryContactName: clientData.primaryContactName || clientData.name,
       notes: clientData.notes || '',
       createdAt: new Date().toISOString(),
@@ -85,7 +99,7 @@ export async function POST(request: Request) {
       userName: caller?.name || 'Administrator',
       userRole: caller?.role || 'admin',
       action: 'Client Added',
-      details: `Added new client "${newClient.name}" with package ${newClient.servicePackage}`,
+      details: `Added new client "${newClient.name}" with package ${newClient.servicePackage} (${newClient.monthlyRetainer} ${newClient.currency}/mo)`,
       targetType: 'client',
       targetId: newClient.id,
       timestamp: new Date().toISOString(),
@@ -116,13 +130,30 @@ export async function PUT(request: Request) {
     }
 
     const existing = db.clients[index];
+    const newMonthlyCommitment = {
+      reels: updates.reels !== undefined ? Number(updates.reels) : (updates.monthlyCommitment?.reels ?? existing.monthlyCommitment.reels),
+      longVideos: updates.longVideos !== undefined ? Number(updates.longVideos) : (updates.monthlyCommitment?.longVideos ?? existing.monthlyCommitment.longVideos),
+      graphics: updates.graphics !== undefined ? Number(updates.graphics) : (updates.monthlyCommitment?.graphics ?? existing.monthlyCommitment.graphics),
+      carousels: updates.carousels !== undefined ? Number(updates.carousels) : (updates.monthlyCommitment?.carousels ?? existing.monthlyCommitment.carousels),
+      customTargetNote: updates.customTargetNote !== undefined ? updates.customTargetNote : (updates.monthlyCommitment?.customTargetNote ?? existing.monthlyCommitment.customTargetNote),
+    };
+
     const updated: Client = {
       ...existing,
-      ...updates,
-      monthlyCommitment: {
-        ...existing.monthlyCommitment,
-        ...(updates.monthlyCommitment || {}),
-      },
+      name: updates.name !== undefined ? updates.name : existing.name,
+      company: updates.company !== undefined ? updates.company : existing.company,
+      email: updates.email !== undefined ? updates.email : existing.email,
+      phone: updates.phone !== undefined ? updates.phone : existing.phone,
+      logoUrl: updates.logoUrl !== undefined ? updates.logoUrl : existing.logoUrl,
+      servicePackage: updates.servicePackage !== undefined ? updates.servicePackage : existing.servicePackage,
+      contractStartDate: updates.contractStartDate !== undefined ? updates.contractStartDate : existing.contractStartDate,
+      contractEndDate: updates.contractEndDate !== undefined ? updates.contractEndDate : existing.contractEndDate,
+      monthlyRetainer: updates.monthlyRetainer !== undefined ? Number(updates.monthlyRetainer) : existing.monthlyRetainer,
+      currency: updates.currency !== undefined ? updates.currency : existing.currency,
+      status: updates.status !== undefined ? updates.status : existing.status,
+      primaryContactName: updates.primaryContactName !== undefined ? updates.primaryContactName : existing.primaryContactName,
+      notes: updates.notes !== undefined ? updates.notes : existing.notes,
+      monthlyCommitment: newMonthlyCommitment,
     };
 
     db.clients[index] = updated;
@@ -133,7 +164,7 @@ export async function PUT(request: Request) {
       userName: caller?.name || 'Administrator',
       userRole: caller?.role || 'admin',
       action: 'Client Updated',
-      details: `Updated client "${updated.name}" details and targets`,
+      details: `Updated client "${updated.name}" (Status: ${updated.status}, Retainer: ${updated.monthlyRetainer} ${updated.currency}/mo)`,
       targetType: 'client',
       targetId: updated.id,
       timestamp: new Date().toISOString(),

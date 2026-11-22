@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Client, ServicePackage } from '@/lib/types';
 import { TODAY_STRING } from '@/lib/utils';
 import { Modal } from '../common/Modal';
@@ -16,30 +16,61 @@ export function CreateClientModal({
   onSubmit,
   clientToEdit,
 }: CreateClientModalProps) {
-  const [name, setName] = useState(clientToEdit?.name || '');
-  const [company, setCompany] = useState(clientToEdit?.company || '');
-  const [email, setEmail] = useState(clientToEdit?.email || '');
-  const [phone, setPhone] = useState(clientToEdit?.phone || '');
-  const [primaryContactName, setPrimaryContactName] = useState(clientToEdit?.primaryContactName || '');
-  const [logoUrl, setLogoUrl] = useState(clientToEdit?.logoUrl || '');
-  const [servicePackage, setServicePackage] = useState<ServicePackage>(
-    clientToEdit?.servicePackage || 'Full Marketing'
-  );
-  const [monthlyRetainer, setMonthlyRetainer] = useState(clientToEdit?.monthlyRetainer || 200000);
-  const [currency, setCurrency] = useState(clientToEdit?.currency || 'INR');
-  const [contractStartDate, setContractStartDate] = useState(
-    clientToEdit?.contractStartDate || TODAY_STRING
-  );
-  const [contractEndDate, setContractEndDate] = useState(
-    clientToEdit?.contractEndDate || '2027-11-22'
-  );
-  const [reels, setReels] = useState(clientToEdit?.monthlyCommitment?.reels || 16);
-  const [longVideos, setLongVideos] = useState(clientToEdit?.monthlyCommitment?.longVideos || 2);
-  const [graphics, setGraphics] = useState(clientToEdit?.monthlyCommitment?.graphics || 6);
-  const [carousels, setCarousels] = useState(clientToEdit?.monthlyCommitment?.carousels || 4);
-  const [customTargetNote, setCustomTargetNote] = useState(
-    clientToEdit?.monthlyCommitment?.customTargetNote || ''
-  );
+  const [name, setName] = useState('');
+  const [company, setCompany] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [primaryContactName, setPrimaryContactName] = useState('');
+  const [logoUrl, setLogoUrl] = useState('');
+  const [servicePackage, setServicePackage] = useState<ServicePackage>('Full Marketing');
+  const [monthlyRetainer, setMonthlyRetainer] = useState(200000);
+  const [currency, setCurrency] = useState('INR');
+  const [contractStartDate, setContractStartDate] = useState(TODAY_STRING);
+  const [contractEndDate, setContractEndDate] = useState('2027-11-22');
+  const [reels, setReels] = useState(16);
+  const [longVideos, setLongVideos] = useState(2);
+  const [graphics, setGraphics] = useState(6);
+  const [carousels, setCarousels] = useState(4);
+  const [customTargetNote, setCustomTargetNote] = useState('');
+
+  // Sync state when clientToEdit or isOpen changes
+  useEffect(() => {
+    if (clientToEdit) {
+      setName(clientToEdit.name || '');
+      setCompany(clientToEdit.company || '');
+      setEmail(clientToEdit.email || '');
+      setPhone(clientToEdit.phone || '');
+      setPrimaryContactName(clientToEdit.primaryContactName || '');
+      setLogoUrl(clientToEdit.logoUrl || '');
+      setServicePackage(clientToEdit.servicePackage || 'Full Marketing');
+      setMonthlyRetainer(clientToEdit.monthlyRetainer ?? 200000);
+      setCurrency(clientToEdit.currency || 'INR');
+      setContractStartDate(clientToEdit.contractStartDate || TODAY_STRING);
+      setContractEndDate(clientToEdit.contractEndDate || '2027-11-22');
+      setReels(clientToEdit.monthlyCommitment?.reels ?? 16);
+      setLongVideos(clientToEdit.monthlyCommitment?.longVideos ?? 2);
+      setGraphics(clientToEdit.monthlyCommitment?.graphics ?? 6);
+      setCarousels(clientToEdit.monthlyCommitment?.carousels ?? 4);
+      setCustomTargetNote(clientToEdit.monthlyCommitment?.customTargetNote || '');
+    } else {
+      setName('');
+      setCompany('');
+      setEmail('');
+      setPhone('');
+      setPrimaryContactName('');
+      setLogoUrl('');
+      setServicePackage('Full Marketing');
+      setMonthlyRetainer(200000);
+      setCurrency('INR');
+      setContractStartDate(TODAY_STRING);
+      setContractEndDate('2027-11-22');
+      setReels(16);
+      setLongVideos(2);
+      setGraphics(6);
+      setCarousels(4);
+      setCustomTargetNote('');
+    }
+  }, [clientToEdit, isOpen]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
