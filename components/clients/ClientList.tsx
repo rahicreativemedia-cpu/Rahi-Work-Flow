@@ -199,19 +199,19 @@ export function ClientList({
                     {/* Specific Deliverable Targets Breakdown */}
                     <div className="flex flex-wrap gap-1.5 pt-1 border-t border-blue-100/60 text-[10px]">
                       <span className="px-1.5 py-0.5 bg-white rounded border border-blue-200 text-slate-700 font-medium">
-                        {client.monthlyCommitment.reels} Reels
+                        {client.monthlyCommitment?.reels ?? 0} Reels
                       </span>
                       <span className="px-1.5 py-0.5 bg-white rounded border border-blue-200 text-slate-700 font-medium">
-                        {client.monthlyCommitment.longVideos} Long Videos
+                        {client.monthlyCommitment?.longVideos ?? 0} Long Videos
                       </span>
                       <span className="px-1.5 py-0.5 bg-white rounded border border-blue-200 text-slate-700 font-medium">
-                        {client.monthlyCommitment.graphics} Graphics
+                        {client.monthlyCommitment?.graphics ?? 0} Graphics
                       </span>
                       <span className="px-1.5 py-0.5 bg-white rounded border border-blue-200 text-slate-700 font-medium">
-                        {client.monthlyCommitment.carousels} Carousels
+                        {client.monthlyCommitment?.carousels ?? 0} Carousels
                       </span>
                     </div>
-                    {client.monthlyCommitment.customTargetNote && (
+                    {client.monthlyCommitment?.customTargetNote && (
                       <p className="text-[10px] text-slate-500 italic mt-1 truncate">
                         Note: {client.monthlyCommitment.customTargetNote}
                       </p>

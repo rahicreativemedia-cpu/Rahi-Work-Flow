@@ -78,18 +78,29 @@ export interface PacingMetrics {
  * CRITICAL RULE: Deliverables count toward monthly commitment ONLY when
  * they reach 'publishing_or_delivery' and are marked as 'published' or 'delivered'.
  * Cancelled deliverables are preserved in activity history and NOT counted.
+ *
+ * Explicit Milestone Rounding Policy:
+ * Standard half-up integer rounding (Math.round) is applied to expected deliverables.
+ * Zero-target clients evaluate to expected = 0 with 'No Target Configured'.
+ * Deliverable ID deduplication guarantees no deliverable is counted more than once.
  */
 export function calculateClientDeliverableStats(
   client: Client,
   deliverables: Deliverable[],
   targetMonth: string = '2026-11'
 ) {
-  const clientDeliverables = deliverables.filter((d) => {
-    const matchClient = d.clientId === client.id;
-    if (!matchClient) return false;
-    if (targetMonth) return d.targetMonth === targetMonth;
-    return true;
-  });
+  // Deduplicate deliverables by ID to strictly prevent any duplicate counting
+  const seenDeliverableIds = new Set<string>();
+  const clientDeliverables: Deliverable[] = [];
+
+  for (const d of deliverables) {
+    if (d.clientId === client.id && (!targetMonth || d.targetMonth === targetMonth)) {
+      if (!seenDeliverableIds.has(d.id)) {
+        seenDeliverableIds.add(d.id);
+        clientDeliverables.push(d);
+      }
+    }
+  }
 
   const activeDeliverables = clientDeliverables.filter((d) => d.status !== 'cancelled');
   const cancelledDeliverables = clientDeliverables.filter((d) => d.status === 'cancelled');
@@ -110,10 +121,10 @@ export function calculateClientDeliverableStats(
   );
 
   const totalMonthlyCommitment =
-    client.monthlyCommitment.reels +
-    client.monthlyCommitment.longVideos +
-    client.monthlyCommitment.graphics +
-    client.monthlyCommitment.carousels;
+    (client.monthlyCommitment?.reels || 0) +
+    (client.monthlyCommitment?.longVideos || 0) +
+    (client.monthlyCommitment?.graphics || 0) +
+    (client.monthlyCommitment?.carousels || 0);
 
   const completedCount = completedDeliverables.length;
   const inProgressCount = inProgressDeliverables.length;
@@ -127,11 +138,11 @@ export function calculateClientDeliverableStats(
   const currentMonthStr = TODAY_STRING.substring(0, 7); // '2026-11'
   const currentDayNum = parseInt(TODAY_STRING.substring(8, 10), 10); // 22
 
-  // Determine total days in target month
+  // Determine total days in target month (handles leap years accurately via standard Date API)
   const [yearStr, monthStr] = targetMonth.split('-');
   const year = parseInt(yearStr, 10) || 2026;
   const month = parseInt(monthStr, 10) || 11;
-  const totalDaysInMonth = new Date(year, month, 0).getDate(); // 30 for Nov
+  const totalDaysInMonth = new Date(year, month, 0).getDate();
 
   let daysElapsed = 0;
   let monthProgressionPct = 0;
@@ -147,6 +158,34 @@ export function calculateClientDeliverableStats(
     monthProgressionPct = 0;
   }
 
+  // Handle Zero-Target Edge Case
+  if (totalMonthlyCommitment === 0) {
+    const pacing: PacingMetrics = {
+      monthProgressionPct,
+      daysElapsed,
+      totalDaysInMonth,
+      expectedDeliverables: 0,
+      pacingDelta: 0,
+      pacingStatus: 'on_track',
+      pacingLabel: 'No Target Configured',
+      pacingBadgeClass: 'bg-slate-100 text-slate-600 border-slate-200',
+    };
+
+    return {
+      totalCommitment: 0,
+      completed: completedCount,
+      inProgress: inProgressCount,
+      remaining: 0,
+      cancelled: cancelledDeliverables.length,
+      completionPercentage: 0,
+      deliverables: clientDeliverables,
+      completedItems: completedDeliverables,
+      inProgressItems: inProgressDeliverables,
+      pacing,
+    };
+  }
+
+  // Standard Half-Up Integer Rounding for expected milestone target
   const expectedDeliverables = Math.round(totalMonthlyCommitment * (monthProgressionPct / 100));
   const pacingDelta = completedCount - expectedDeliverables;
 

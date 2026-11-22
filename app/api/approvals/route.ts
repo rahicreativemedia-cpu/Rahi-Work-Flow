@@ -5,16 +5,42 @@ import { hasFullAdminAccess } from '@/lib/permissions';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
+  const userId = searchParams.get('userId');
   const deliverableId = searchParams.get('deliverableId');
-  const clientId = searchParams.get('clientId');
   const db = getDB();
 
+  if (!userId) {
+    return NextResponse.json(
+      { error: 'Unauthorized: Authentication required to access approvals' },
+      { status: 401 }
+    );
+  }
+
+  const user = db.users.find((u) => u.id === userId);
+  if (!user || user.status === 'inactive') {
+    return NextResponse.json(
+      { error: 'Unauthorized: Valid active session required' },
+      { status: 401 }
+    );
+  }
+
   let approvals = db.approvals;
+  // If Client, strictly isolate to their own organization approvals
+  if (user.role === 'client') {
+    approvals = approvals.filter((a) => a.clientId === user.clientId);
+  } else if (!hasFullAdminAccess(user)) {
+    // Employees only see approvals for their assigned deliverables
+    const empId = user.employeeId || user.id;
+    const assignedDeliverableIds = new Set(
+      db.deliverables
+        .filter((d) => d.assignedEmployeeId === empId || d.assignedEmployeeId === user.id)
+        .map((d) => d.id)
+    );
+    approvals = approvals.filter((a) => assignedDeliverableIds.has(a.deliverableId));
+  }
+
   if (deliverableId) {
     approvals = approvals.filter((a) => a.deliverableId === deliverableId);
-  }
-  if (clientId) {
-    approvals = approvals.filter((a) => a.clientId === clientId);
   }
 
   return NextResponse.json({ approvals });
@@ -31,19 +57,32 @@ export async function POST(request: Request) {
       feedback,
     } = body;
 
+    if (!callerUserId) {
+      return NextResponse.json(
+        { error: 'Unauthorized: Authentication required' },
+        { status: 401 }
+      );
+    }
+
     const db = getDB();
     const caller = db.users.find((u) => u.id === callerUserId);
-    const deliverable = db.deliverables.find((d) => d.id === deliverableId);
+    if (!caller || caller.status === 'inactive') {
+      return NextResponse.json(
+        { error: 'Unauthorized: Valid active session required' },
+        { status: 401 }
+      );
+    }
 
+    const deliverable = db.deliverables.find((d) => d.id === deliverableId);
     if (!deliverable) {
       return NextResponse.json({ error: 'Deliverable not found' }, { status: 404 });
     }
 
     // Verify permission: Must be client owning the deliverable, or Admin/Manager acting
-    const isClientOwner = caller?.role === 'client' && caller?.clientId === deliverable.clientId;
+    const isClientOwner = caller.role === 'client' && caller.clientId === deliverable.clientId;
     if (!isClientOwner && !hasFullAdminAccess(caller)) {
       return NextResponse.json(
-        { error: 'Unauthorized: Only the assigned client (or administrator) can approve deliverables' },
+        { error: 'Forbidden: Cross-client approval actions are strictly blocked' },
         { status: 403 }
       );
     }

@@ -14,24 +14,69 @@ export async function GET(request: Request) {
   const clientId = searchParams.get('clientId');
   const db = getDB();
 
-  const user = db.users.find((u) => u.id === userId);
+  // 1. Strict Authentication Enforcement: Unauthenticated requests are rejected with 401
+  if (!userId) {
+    return NextResponse.json(
+      { error: 'Unauthorized: Authentication required to access deliverables' },
+      { status: 401 }
+    );
+  }
 
-  // If Client, strictly return only this client's deliverables
-  if (user && user.role === 'client') {
+  const user = db.users.find((u) => u.id === userId);
+  if (!user || user.status === 'inactive') {
+    return NextResponse.json(
+      { error: 'Unauthorized: Valid active session required' },
+      { status: 401 }
+    );
+  }
+
+  // 2. Client Role Isolation: Client can ONLY access their own organization deliverables.
+  // Any query parameter attempting to request another client's deliverables is strictly ignored.
+  if (user.role === 'client') {
     const clientDeliverables = db.deliverables.filter(
       (d) => d.clientId === user.clientId
     );
     return NextResponse.json({ deliverables: clientDeliverables });
   }
 
-  // If filtered by specific clientId
-  if (clientId) {
-    const clientDeliverables = db.deliverables.filter((d) => d.clientId === clientId);
-    return NextResponse.json({ deliverables: clientDeliverables });
+  // 3. Admin & Manager Parity: Full access to all deliverables across the company
+  if (hasFullAdminAccess(user)) {
+    if (clientId) {
+      const clientDeliverables = db.deliverables.filter((d) => d.clientId === clientId);
+      return NextResponse.json({ deliverables: clientDeliverables });
+    }
+    return NextResponse.json({ deliverables: db.deliverables });
   }
 
-  // Admin, Manager, and Employee (for assigned context)
-  return NextResponse.json({ deliverables: db.deliverables });
+  // 4. Employee Boundary Enforcement:
+  // Employee only accesses deliverables assigned to them or their assigned client projects.
+  if (user.role === 'employee') {
+    const empId = user.employeeId || user.id;
+    const assignedClientIds = new Set<string>();
+
+    db.projects.forEach((p) => {
+      if (p.assignedEmployees?.includes(user.id) || p.assignedEmployees?.includes(empId)) {
+        assignedClientIds.add(p.clientId);
+      }
+    });
+    db.tasks.forEach((t) => {
+      if (t.assignedEmployeeId === empId || t.assignedEmployeeId === user.id) {
+        assignedClientIds.add(t.clientId);
+      }
+    });
+    db.deliverables.forEach((d) => {
+      if (d.assignedEmployeeId === empId || d.assignedEmployeeId === user.id) {
+        assignedClientIds.add(d.clientId);
+      }
+    });
+
+    const safeDeliverables = db.deliverables.filter(
+      (d) => d.assignedEmployeeId === empId || d.assignedEmployeeId === user.id || assignedClientIds.has(d.clientId)
+    );
+    return NextResponse.json({ deliverables: safeDeliverables });
+  }
+
+  return NextResponse.json({ error: 'Forbidden: Insufficient privileges' }, { status: 403 });
 }
 
 export async function POST(request: Request) {
@@ -40,7 +85,14 @@ export async function POST(request: Request) {
     const { action, callerUserId } = body;
     const db = getDB();
 
+    if (!callerUserId) {
+      return NextResponse.json({ error: 'Unauthorized: Authentication required' }, { status: 401 });
+    }
+
     const caller = db.users.find((u) => u.id === callerUserId);
+    if (!caller || caller.status === 'inactive') {
+      return NextResponse.json({ error: 'Unauthorized: Valid active session required' }, { status: 401 });
+    }
 
     // 1. Create a new deliverable (Admin & Manager)
     if (!action || action === 'create') {

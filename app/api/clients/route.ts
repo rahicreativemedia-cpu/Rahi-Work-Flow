@@ -8,47 +8,81 @@ export async function GET(request: Request) {
   const userId = searchParams.get('userId');
   const db = getDB();
 
-  const user = db.users.find((u) => u.id === userId);
+  // 1. Strict Authentication Enforcement: Unauthenticated requests are rejected with 401
+  if (!userId) {
+    return NextResponse.json(
+      { error: 'Unauthorized: Authentication required to access client directory' },
+      { status: 401 }
+    );
+  }
 
-  // If client user, strictly isolate to their own client data
-  if (user && user.role === 'client') {
+  const user = db.users.find((u) => u.id === userId);
+  if (!user || user.status === 'inactive') {
+    return NextResponse.json(
+      { error: 'Unauthorized: Valid active session required' },
+      { status: 401 }
+    );
+  }
+
+  // 2. Client Role Isolation: Client can ONLY access their own organization data.
+  // Query parameters attempting to access another organization are strictly ignored.
+  if (user.role === 'client') {
     const client = db.clients.filter((c) => c.id === user.clientId);
     return NextResponse.json({ clients: client });
   }
 
-  // Admin and Manager see all clients with complete financial and target data
+  // 3. Admin & Manager Parity: Full access to all client profiles including financial retainers
   if (hasFullAdminAccess(user)) {
     return NextResponse.json({ clients: db.clients });
   }
 
-  // Employee can see client directory and targets, but financial retainers are strictly hidden
-  if (user && user.role === 'employee') {
-    const safeClients = db.clients.map((c) => ({
-      id: c.id,
-      name: c.name,
-      company: c.company,
-      logoUrl: c.logoUrl,
-      servicePackage: c.servicePackage,
-      status: c.status,
-      primaryContactName: c.primaryContactName,
-      contractStartDate: c.contractStartDate,
-      contractEndDate: c.contractEndDate,
-      monthlyCommitment: c.monthlyCommitment,
-      createdAt: c.createdAt,
-    }));
-    return NextResponse.json({ clients: safeClients });
+  // 4. Employee Boundary Enforcement:
+  // Employees only access clients they are assigned to (via projects, tasks, or deliverables).
+  // All financial retainers and currencies are strictly hidden.
+  if (user.role === 'employee') {
+    const empId = user.employeeId || user.id;
+    const assignedClientIds = new Set<string>();
+
+    db.projects.forEach((p) => {
+      if (p.assignedEmployees?.includes(user.id) || p.assignedEmployees?.includes(empId)) {
+        assignedClientIds.add(p.clientId);
+      }
+    });
+    db.tasks.forEach((t) => {
+      if (t.assignedEmployeeId === empId || t.assignedEmployeeId === user.id) {
+        assignedClientIds.add(t.clientId);
+      }
+    });
+    db.deliverables.forEach((d) => {
+      if (d.assignedEmployeeId === empId || d.assignedEmployeeId === user.id) {
+        assignedClientIds.add(d.clientId);
+      }
+    });
+
+    const assignedClients = db.clients
+      .filter((c) => assignedClientIds.has(c.id))
+      .map((c) => ({
+        id: c.id,
+        name: c.name,
+        company: c.company,
+        logoUrl: c.logoUrl,
+        servicePackage: c.servicePackage,
+        status: c.status,
+        primaryContactName: c.primaryContactName,
+        contractStartDate: c.contractStartDate,
+        contractEndDate: c.contractEndDate,
+        monthlyCommitment: c.monthlyCommitment,
+        createdAt: c.createdAt,
+        // STRICT SECURITY: monthlyRetainer and currency are excluded
+      }));
+
+    return NextResponse.json({ clients: assignedClients });
   }
 
-  // Unauthenticated or unrecognized callers: sanitized public directory only
-  const safeClients = db.clients.map((c) => ({
-    id: c.id,
-    name: c.name,
-    company: c.company,
-    logoUrl: c.logoUrl,
-    servicePackage: c.servicePackage,
-    status: c.status,
-  }));
-  return NextResponse.json({ clients: safeClients });
+  return NextResponse.json(
+    { error: 'Forbidden: Insufficient privileges' },
+    { status: 403 }
+  );
 }
 
 export async function POST(request: Request) {
@@ -57,11 +91,34 @@ export async function POST(request: Request) {
     const { callerUserId, ...clientData } = body;
     const db = getDB();
 
+    // 1. Strict Authentication Check
+    if (!callerUserId) {
+      return NextResponse.json(
+        { error: 'Unauthorized: Authentication required' },
+        { status: 401 }
+      );
+    }
+
     const caller = db.users.find((u) => u.id === callerUserId);
+    if (!caller || caller.status === 'inactive') {
+      return NextResponse.json(
+        { error: 'Unauthorized: Active authenticated session required' },
+        { status: 401 }
+      );
+    }
+
+    // 2. Strict Authorization Check: Only Admin and Manager (FULL_ADMIN_ACCESS) can create clients
     if (!hasFullAdminAccess(caller)) {
       return NextResponse.json(
-        { error: 'Unauthorized: Admin or Manager permission required to manage clients' },
+        { error: 'Forbidden: Admin or Manager permission required to create clients' },
         { status: 403 }
+      );
+    }
+
+    if (!clientData.name || !clientData.email) {
+      return NextResponse.json(
+        { error: 'Client name and email are required' },
+        { status: 400 }
       );
     }
 
@@ -95,10 +152,10 @@ export async function POST(request: Request) {
     // Audit log
     const audit: AuditLog = {
       id: `aud-${Date.now()}`,
-      userId: caller?.id || 'sys',
-      userName: caller?.name || 'Administrator',
-      userRole: caller?.role || 'admin',
-      action: 'Client Added',
+      userId: caller.id,
+      userName: caller.name,
+      userRole: caller.role,
+      action: 'Client Created',
       details: `Added new client "${newClient.name}" with package ${newClient.servicePackage} (${newClient.monthlyRetainer} ${newClient.currency}/mo)`,
       targetType: 'client',
       targetId: newClient.id,
@@ -119,9 +176,28 @@ export async function PUT(request: Request) {
     const { callerUserId, id, ...updates } = body;
     const db = getDB();
 
+    // 1. Strict Authentication Check
+    if (!callerUserId) {
+      return NextResponse.json(
+        { error: 'Unauthorized: Authentication required' },
+        { status: 401 }
+      );
+    }
+
     const caller = db.users.find((u) => u.id === callerUserId);
+    if (!caller || caller.status === 'inactive') {
+      return NextResponse.json(
+        { error: 'Unauthorized: Active authenticated session required' },
+        { status: 401 }
+      );
+    }
+
+    // 2. Strict Authorization Check: Only Admin and Manager (FULL_ADMIN_ACCESS) can update clients
     if (!hasFullAdminAccess(caller)) {
-      return NextResponse.json({ error: 'Unauthorized: Admin or Manager permission required' }, { status: 403 });
+      return NextResponse.json(
+        { error: 'Forbidden: Admin or Manager permission required to update clients' },
+        { status: 403 }
+      );
     }
 
     const index = db.clients.findIndex((c) => c.id === id);
@@ -160,9 +236,9 @@ export async function PUT(request: Request) {
 
     db.auditLogs.unshift({
       id: `aud-${Date.now()}`,
-      userId: caller?.id || 'sys',
-      userName: caller?.name || 'Administrator',
-      userRole: caller?.role || 'admin',
+      userId: caller.id,
+      userName: caller.name,
+      userRole: caller.role,
       action: 'Client Updated',
       details: `Updated client "${updated.name}" (Status: ${updated.status}, Retainer: ${updated.monthlyRetainer} ${updated.currency}/mo)`,
       targetType: 'client',
@@ -174,5 +250,77 @@ export async function PUT(request: Request) {
     return NextResponse.json({ success: true, client: updated });
   } catch (error: any) {
     return NextResponse.json({ error: error.message || 'Failed to update client' }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const idFromQuery = searchParams.get('id');
+    const callerUserIdFromQuery = searchParams.get('callerUserId');
+
+    let clientId = idFromQuery;
+    let callerUserId = callerUserIdFromQuery;
+
+    // Support payload from body as well if present
+    try {
+      const body = await request.json();
+      if (body.id) clientId = body.id;
+      if (body.callerUserId) callerUserId = body.callerUserId;
+    } catch {
+      // Body was empty or query param used
+    }
+
+    if (!callerUserId) {
+      return NextResponse.json(
+        { error: 'Unauthorized: Authentication required' },
+        { status: 401 }
+      );
+    }
+
+    const db = getDB();
+    const caller = db.users.find((u) => u.id === callerUserId);
+    if (!caller || caller.status === 'inactive') {
+      return NextResponse.json(
+        { error: 'Unauthorized: Active authenticated session required' },
+        { status: 401 }
+      );
+    }
+
+    if (!hasFullAdminAccess(caller)) {
+      return NextResponse.json(
+        { error: 'Forbidden: Admin or Manager permission required to delete clients' },
+        { status: 403 }
+      );
+    }
+
+    if (!clientId) {
+      return NextResponse.json({ error: 'Client ID is required' }, { status: 400 });
+    }
+
+    const index = db.clients.findIndex((c) => c.id === clientId);
+    if (index === -1) {
+      return NextResponse.json({ error: 'Client not found' }, { status: 404 });
+    }
+
+    const removedClient = db.clients[index];
+    db.clients.splice(index, 1);
+
+    db.auditLogs.unshift({
+      id: `aud-${Date.now()}`,
+      userId: caller.id,
+      userName: caller.name,
+      userRole: caller.role,
+      action: 'Client Deleted',
+      details: `Deleted client "${removedClient.name}" (${removedClient.id})`,
+      targetType: 'client',
+      targetId: removedClient.id,
+      timestamp: new Date().toISOString(),
+    });
+
+    saveDB(db);
+    return NextResponse.json({ success: true, message: 'Client deleted successfully' });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message || 'Failed to delete client' }, { status: 500 });
   }
 }

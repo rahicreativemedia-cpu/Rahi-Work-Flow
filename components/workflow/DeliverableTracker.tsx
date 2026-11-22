@@ -248,13 +248,13 @@ export function DeliverableTracker({
                   </div>
 
                   <div className="grid grid-cols-2 gap-1.5 pt-1 text-[11px] text-slate-600">
-                    <span>• Reels: <strong>{client.monthlyCommitment.reels}</strong></span>
-                    <span>• Long Videos: <strong>{client.monthlyCommitment.longVideos}</strong></span>
-                    <span>• Graphics: <strong>{client.monthlyCommitment.graphics}</strong></span>
-                    <span>• Carousels: <strong>{client.monthlyCommitment.carousels}</strong></span>
+                    <span>• Reels: <strong>{client.monthlyCommitment?.reels ?? 0}</strong></span>
+                    <span>• Long Videos: <strong>{client.monthlyCommitment?.longVideos ?? 0}</strong></span>
+                    <span>• Graphics: <strong>{client.monthlyCommitment?.graphics ?? 0}</strong></span>
+                    <span>• Carousels: <strong>{client.monthlyCommitment?.carousels ?? 0}</strong></span>
                   </div>
 
-                  {client.monthlyCommitment.customTargetNote && (
+                  {client.monthlyCommitment?.customTargetNote && (
                     <p className="text-[10px] text-slate-500 italic mt-1 border-t border-slate-200/50 pt-1">
                       Note: {client.monthlyCommitment.customTargetNote}
                     </p>
