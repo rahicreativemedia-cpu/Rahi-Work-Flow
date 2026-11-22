@@ -4,6 +4,7 @@ import { getDB, saveDB } from '@/lib/db';
 import { User, Invitation, AuditLog, PasswordResetToken } from '@/lib/types';
 import { hasFullAdminAccess } from '@/lib/permissions';
 import { hashPassword, verifyPassword } from '@/lib/crypto';
+import { createSession, formatSessionSetCookie, formatSessionClearCookie } from '@/lib/session';
 
 // In-memory rate limiting map for password reset requests: email -> timestamp[]
 const passwordResetAttempts = new Map<string, number[]>();
@@ -123,8 +124,22 @@ export async function POST(request: Request) {
 
       saveDB(db);
 
+      const session = createSession(user);
       const { passwordHash: _, ...safeUser } = user as any;
-      return NextResponse.json({ success: true, user: safeUser });
+      const response = NextResponse.json({
+        success: true,
+        sessionToken: session.token,
+        user: safeUser,
+      });
+      response.headers.set('Set-Cookie', formatSessionSetCookie(session.token));
+      return response;
+    }
+
+    // 1b. Logout & Clear Session Cookie
+    if (action === 'logout') {
+      const response = NextResponse.json({ success: true, message: 'Logged out successfully' });
+      response.headers.set('Set-Cookie', formatSessionClearCookie());
+      return response;
     }
 
     // 2. Send Invitation (Admin & Manager have EQUAL capability)

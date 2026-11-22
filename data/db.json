@@ -118,6 +118,58 @@
   ],
   "clients": [
     {
+      "id": "cli-1795350086044",
+      "name": "Test Client Manager 1795350086041",
+      "company": "Test Client Manager 1795350086041",
+      "email": "mgr_created_1795350086041@test.com",
+      "phone": "",
+      "logoUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=128&q=80",
+      "servicePackage": "Full Marketing",
+      "contractStartDate": "2026-11-22",
+      "contractEndDate": "2027-11-22",
+      "monthlyRetainer": 220000,
+      "currency": "INR",
+      "monthlyCommitment": {
+        "reels": 15,
+        "longVideos": 2,
+        "graphics": 6,
+        "carousels": 4,
+        "customTargetNote": ""
+      },
+      "status": "archived",
+      "primaryContactName": "Test Client Manager 1795350086041",
+      "notes": "Updated by Manager",
+      "createdAt": "2026-11-22T12:21:26.044Z",
+      "archivedAt": "2026-11-22T12:21:26.058Z",
+      "archivedByUserId": "usr-manager"
+    },
+    {
+      "id": "cli-1795350086041",
+      "name": "Test Client Admin 1795350086040",
+      "company": "Test Client Admin 1795350086040",
+      "email": "admin_created_1795350086040@test.com",
+      "phone": "",
+      "logoUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=128&q=80",
+      "servicePackage": "Full Marketing",
+      "contractStartDate": "2026-11-22",
+      "contractEndDate": "2027-11-22",
+      "monthlyRetainer": 200000,
+      "currency": "INR",
+      "monthlyCommitment": {
+        "reels": 15,
+        "longVideos": 2,
+        "graphics": 6,
+        "carousels": 4,
+        "customTargetNote": ""
+      },
+      "status": "archived",
+      "primaryContactName": "Test Client Admin 1795350086040",
+      "notes": "Updated by Admin",
+      "createdAt": "2026-11-22T12:21:26.041Z",
+      "archivedAt": "2026-11-22T12:21:26.052Z",
+      "archivedByUserId": "usr-admin"
+    },
+    {
       "id": "cli-1",
       "name": "Apex Athletics",
       "company": "Apex Performance Apparel & Fitness Ltd.",
@@ -204,7 +256,12 @@
       "currentActiveTasks": 3,
       "joinedDate": "2026-02-01",
       "performanceScore": 97,
-      "skills": ["Premiere Pro", "After Effects", "Sound Design", "Color Grading"]
+      "skills": [
+        "Premiere Pro",
+        "After Effects",
+        "Sound Design",
+        "Color Grading"
+      ]
     },
     {
       "id": "emp-2",
@@ -219,7 +276,12 @@
       "currentActiveTasks": 4,
       "joinedDate": "2026-02-10",
       "performanceScore": 95,
-      "skills": ["Direct Response Copy", "Storyboarding", "Viral Hooks", "SEO Scripts"]
+      "skills": [
+        "Direct Response Copy",
+        "Storyboarding",
+        "Viral Hooks",
+        "SEO Scripts"
+      ]
     },
     {
       "id": "emp-3",
@@ -234,7 +296,12 @@
       "currentActiveTasks": 2,
       "joinedDate": "2026-02-15",
       "performanceScore": 94,
-      "skills": ["Figma", "Illustrator", "Motion Graphics", "Thumbnails"]
+      "skills": [
+        "Figma",
+        "Illustrator",
+        "Motion Graphics",
+        "Thumbnails"
+      ]
     },
     {
       "id": "emp-4",
@@ -249,7 +316,12 @@
       "currentActiveTasks": 3,
       "joinedDate": "2026-03-01",
       "performanceScore": 98,
-      "skills": ["Calendar Management", "Meta Business Suite", "Analytics", "Copywriting"]
+      "skills": [
+        "Calendar Management",
+        "Meta Business Suite",
+        "Analytics",
+        "Copywriting"
+      ]
     }
   ],
   "projects": [
@@ -262,7 +334,12 @@
       "startDate": "2026-11-01",
       "targetEndDate": "2026-11-30",
       "status": "in_progress",
-      "assignedEmployees": ["emp-1", "emp-2", "emp-3", "emp-4"],
+      "assignedEmployees": [
+        "emp-1",
+        "emp-2",
+        "emp-3",
+        "emp-4"
+      ],
       "totalDeliverablesTarget": 20,
       "completedDeliverablesCount": 12,
       "createdAt": "2026-11-01T08:00:00Z"
@@ -276,7 +353,10 @@
       "startDate": "2026-11-01",
       "targetEndDate": "2026-11-30",
       "status": "in_progress",
-      "assignedEmployees": ["emp-1", "emp-2"],
+      "assignedEmployees": [
+        "emp-1",
+        "emp-2"
+      ],
       "totalDeliverablesTarget": 16,
       "completedDeliverablesCount": 9,
       "createdAt": "2026-11-01T08:30:00Z"
@@ -290,7 +370,11 @@
       "startDate": "2026-11-01",
       "targetEndDate": "2026-11-30",
       "status": "in_progress",
-      "assignedEmployees": ["emp-2", "emp-3", "emp-4"],
+      "assignedEmployees": [
+        "emp-2",
+        "emp-3",
+        "emp-4"
+      ],
       "totalDeliverablesTarget": 12,
       "completedDeliverablesCount": 7,
       "createdAt": "2026-11-01T09:00:00Z"
@@ -741,7 +825,11 @@
       "deadline": "2026-11-23",
       "status": "in_review",
       "referenceFiles": [
-        { "name": "Apex_Brand_Guidelines_v3.pdf", "url": "#", "size": "4.2 MB" }
+        {
+          "name": "Apex_Brand_Guidelines_v3.pdf",
+          "url": "#",
+          "size": "4.2 MB"
+        }
       ],
       "requiredOutput": "9:16 vertical 4K MP4 (H.264), under 45 seconds, burned-in subtitles with active word highlight.",
       "submissions": [
@@ -964,6 +1052,138 @@
   ],
   "auditLogs": [
     {
+      "id": "aud-1795350086058",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Client Archived",
+      "details": "Archived client \"Test Client Manager 1795350086041\" (cli-1795350086044). Historical projects, tasks, deliverables, and approvals permanently preserved.",
+      "targetType": "client",
+      "targetId": "cli-1795350086044",
+      "timestamp": "2026-11-22T12:21:26.058Z"
+    },
+    {
+      "id": "aud-1795350086052",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Client Archived",
+      "details": "Archived client \"Test Client Admin 1795350086040\" (cli-1795350086041). Historical projects, tasks, deliverables, and approvals permanently preserved.",
+      "targetType": "client",
+      "targetId": "cli-1795350086041",
+      "timestamp": "2026-11-22T12:21:26.052Z"
+    },
+    {
+      "id": "aud-1795350086050",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Client Updated",
+      "details": "Updated client \"Test Client Manager 1795350086041\" (Status: active, Retainer: 220000 INR/mo)",
+      "targetType": "client",
+      "targetId": "cli-1795350086044",
+      "timestamp": "2026-11-22T12:21:26.050Z"
+    },
+    {
+      "id": "aud-1795350086047",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Client Updated",
+      "details": "Updated client \"Test Client Admin 1795350086040\" (Status: active, Retainer: 200000 INR/mo)",
+      "targetType": "client",
+      "targetId": "cli-1795350086041",
+      "timestamp": "2026-11-22T12:21:26.047Z"
+    },
+    {
+      "id": "aud-1795350086044",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Client Created",
+      "details": "Added new client \"Test Client Manager 1795350086041\" with package Full Marketing (220000 INR/mo)",
+      "targetType": "client",
+      "targetId": "cli-1795350086044",
+      "timestamp": "2026-11-22T12:21:26.044Z"
+    },
+    {
+      "id": "aud-1795350086041",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Client Created",
+      "details": "Added new client \"Test Client Admin 1795350086040\" with package Full Marketing (200000 INR/mo)",
+      "targetType": "client",
+      "targetId": "cli-1795350086041",
+      "timestamp": "2026-11-22T12:21:26.041Z"
+    },
+    {
+      "id": "aud-1795350086029",
+      "userId": "usr-client-2",
+      "userName": "Mira Rajput",
+      "userRole": "client",
+      "action": "User Authentication",
+      "details": "Mira Rajput authenticated into CLIENT PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-client-2",
+      "timestamp": "2026-11-22T12:21:26.029Z"
+    },
+    {
+      "id": "aud-1795350086025",
+      "userId": "usr-client-1",
+      "userName": "Arjun Kapoor",
+      "userRole": "client",
+      "action": "User Authentication",
+      "details": "Arjun Kapoor authenticated into CLIENT PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-client-1",
+      "timestamp": "2026-11-22T12:21:26.025Z"
+    },
+    {
+      "id": "aud-1795350086022",
+      "userId": "usr-emp-1",
+      "userName": "Vikram Mehta",
+      "userRole": "employee",
+      "action": "User Authentication",
+      "details": "Vikram Mehta authenticated into EMPLOYEE PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-emp-1",
+      "timestamp": "2026-11-22T12:21:26.022Z"
+    },
+    {
+      "id": "aud-1795350086019",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "User Authentication",
+      "details": "Priya Sharma authenticated into MANAGER PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-manager",
+      "timestamp": "2026-11-22T12:21:26.019Z"
+    },
+    {
+      "id": "aud-1795350086016",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rohan Rahi authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-22T12:21:26.016Z"
+    },
+    {
+      "id": "aud-1795350021067",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rohan Rahi authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-22T12:20:21.067Z"
+    },
+    {
       "id": "aud-1",
       "userId": "usr-admin",
       "userName": "Rohan Rahi",
@@ -984,6 +1204,64 @@
       "targetType": "deliverable",
       "targetId": "del-113",
       "timestamp": "2026-11-21T09:35:00Z"
+    }
+  ],
+  "sessions": [
+    {
+      "id": "sess-1795350086029-250ab33d",
+      "token": "e2ba16234243e591a859815d9d6c81d2e729ce56cce2150dc9158c04965628b4",
+      "userId": "usr-client-2",
+      "role": "client",
+      "permissionGroup": "CLIENT_ACCESS",
+      "clientId": "cli-2",
+      "createdAt": "2026-11-22T12:21:26.029Z",
+      "expiresAt": "2026-11-29T12:21:26.029Z"
+    },
+    {
+      "id": "sess-1795350086026-fe0eb2e0",
+      "token": "ba805b7480180467f0e24567242b192688a687c6bc9128a1e552f47274ac9fe9",
+      "userId": "usr-client-1",
+      "role": "client",
+      "permissionGroup": "CLIENT_ACCESS",
+      "clientId": "cli-1",
+      "createdAt": "2026-11-22T12:21:26.026Z",
+      "expiresAt": "2026-11-29T12:21:26.026Z"
+    },
+    {
+      "id": "sess-1795350086022-b5b502b3",
+      "token": "c643698feb5dcfad84b7f73c60b1327de2e98c82b1daabeb4ca3c39b25afd3b5",
+      "userId": "usr-emp-1",
+      "role": "employee",
+      "permissionGroup": "EMPLOYEE_ACCESS",
+      "createdAt": "2026-11-22T12:21:26.022Z",
+      "expiresAt": "2026-11-29T12:21:26.022Z"
+    },
+    {
+      "id": "sess-1795350086019-5ad856b5",
+      "token": "61873bf469855db4c692a907b225b69606dd146cd64536b6563c4349a309dbf4",
+      "userId": "usr-manager",
+      "role": "manager",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-22T12:21:26.019Z",
+      "expiresAt": "2026-11-29T12:21:26.019Z"
+    },
+    {
+      "id": "sess-1795350086016-9d1d1737",
+      "token": "acfad332cb381ac80db94c0c2cda10bd2e70cff2371693d2792d5ba545238490",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-22T12:21:26.016Z",
+      "expiresAt": "2026-11-29T12:21:26.016Z"
+    },
+    {
+      "id": "sess-1795350021069-d4d9d74d",
+      "token": "fbb75735aae35365ef7275b8422328099f01458548613585a69c0f0a93bdbb3b",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-22T12:20:21.069Z",
+      "expiresAt": "2026-11-29T12:20:21.069Z"
     }
   ]
 }

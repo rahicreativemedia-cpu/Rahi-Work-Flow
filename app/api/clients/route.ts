@@ -2,27 +2,23 @@ import { NextResponse } from 'next/server';
 import { getDB, saveDB } from '@/lib/db';
 import { Client, AuditLog } from '@/lib/types';
 import { hasFullAdminAccess } from '@/lib/permissions';
+import { getAuthenticatedUser } from '@/lib/session';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const userId = searchParams.get('userId');
+  const explicitUserId = searchParams.get('userId');
+  const auth = getAuthenticatedUser(request, explicitUserId);
+
+  // 1. Strict Authentication Enforcement: Unauthenticated requests rejected with 401
+  if (!auth.user) {
+    return NextResponse.json(
+      { error: auth.error || 'Unauthorized: Authentication required to access client directory' },
+      { status: auth.status || 401 }
+    );
+  }
+
+  const user = auth.user;
   const db = getDB();
-
-  // 1. Strict Authentication Enforcement: Unauthenticated requests are rejected with 401
-  if (!userId) {
-    return NextResponse.json(
-      { error: 'Unauthorized: Authentication required to access client directory' },
-      { status: 401 }
-    );
-  }
-
-  const user = db.users.find((u) => u.id === userId);
-  if (!user || user.status === 'inactive') {
-    return NextResponse.json(
-      { error: 'Unauthorized: Valid active session required' },
-      { status: 401 }
-    );
-  }
 
   // 2. Client Role Isolation: Client can ONLY access their own organization data.
   // Query parameters attempting to access another organization are strictly ignored.
@@ -37,7 +33,7 @@ export async function GET(request: Request) {
   }
 
   // 4. Employee Boundary Enforcement:
-  // Employees only access clients they are assigned to (via projects, tasks, or deliverables).
+  // Employees only access clients they are actively assigned to (via projects, tasks, or deliverables).
   // All financial retainers and currencies are strictly hidden.
   if (user.role === 'employee') {
     const empId = user.employeeId || user.id;
@@ -89,25 +85,18 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { callerUserId, ...clientData } = body;
-    const db = getDB();
+    const auth = getAuthenticatedUser(request, callerUserId);
 
-    // 1. Strict Authentication Check
-    if (!callerUserId) {
+    if (!auth.user) {
       return NextResponse.json(
-        { error: 'Unauthorized: Authentication required' },
-        { status: 401 }
+        { error: auth.error || 'Unauthorized: Authentication required' },
+        { status: auth.status || 401 }
       );
     }
 
-    const caller = db.users.find((u) => u.id === callerUserId);
-    if (!caller || caller.status === 'inactive') {
-      return NextResponse.json(
-        { error: 'Unauthorized: Active authenticated session required' },
-        { status: 401 }
-      );
-    }
+    const caller = auth.user;
 
-    // 2. Strict Authorization Check: Only Admin and Manager (FULL_ADMIN_ACCESS) can create clients
+    // Strict Authorization Check: Only Admin and Manager (FULL_ADMIN_ACCESS) can create clients
     if (!hasFullAdminAccess(caller)) {
       return NextResponse.json(
         { error: 'Forbidden: Admin or Manager permission required to create clients' },
@@ -122,6 +111,7 @@ export async function POST(request: Request) {
       );
     }
 
+    const db = getDB();
     const newClient: Client = {
       id: `cli-${Date.now()}`,
       name: clientData.name,
@@ -174,25 +164,18 @@ export async function PUT(request: Request) {
   try {
     const body = await request.json();
     const { callerUserId, id, ...updates } = body;
-    const db = getDB();
+    const auth = getAuthenticatedUser(request, callerUserId);
 
-    // 1. Strict Authentication Check
-    if (!callerUserId) {
+    if (!auth.user) {
       return NextResponse.json(
-        { error: 'Unauthorized: Authentication required' },
-        { status: 401 }
+        { error: auth.error || 'Unauthorized: Authentication required' },
+        { status: auth.status || 401 }
       );
     }
 
-    const caller = db.users.find((u) => u.id === callerUserId);
-    if (!caller || caller.status === 'inactive') {
-      return NextResponse.json(
-        { error: 'Unauthorized: Active authenticated session required' },
-        { status: 401 }
-      );
-    }
+    const caller = auth.user;
 
-    // 2. Strict Authorization Check: Only Admin and Manager (FULL_ADMIN_ACCESS) can update clients
+    // Strict Authorization Check: Only Admin and Manager (FULL_ADMIN_ACCESS) can update clients
     if (!hasFullAdminAccess(caller)) {
       return NextResponse.json(
         { error: 'Forbidden: Admin or Manager permission required to update clients' },
@@ -200,6 +183,7 @@ export async function PUT(request: Request) {
       );
     }
 
+    const db = getDB();
     const index = db.clients.findIndex((c) => c.id === id);
     if (index === -1) {
       return NextResponse.json({ error: 'Client not found' }, { status: 404 });
@@ -253,6 +237,10 @@ export async function PUT(request: Request) {
   }
 }
 
+/**
+ * CLIENT DELETION SAFETY: SOFT DELETION / ARCHIVAL
+ * Preserves all projects, tasks, deliverables, approvals, and financial history.
+ */
 export async function DELETE(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -260,36 +248,30 @@ export async function DELETE(request: Request) {
     const callerUserIdFromQuery = searchParams.get('callerUserId');
 
     let clientId = idFromQuery;
-    let callerUserId = callerUserIdFromQuery;
+    let explicitUserId = callerUserIdFromQuery;
 
-    // Support payload from body as well if present
     try {
       const body = await request.json();
       if (body.id) clientId = body.id;
-      if (body.callerUserId) callerUserId = body.callerUserId;
+      if (body.callerUserId) explicitUserId = body.callerUserId;
     } catch {
       // Body was empty or query param used
     }
 
-    if (!callerUserId) {
+    const auth = getAuthenticatedUser(request, explicitUserId);
+    if (!auth.user) {
       return NextResponse.json(
-        { error: 'Unauthorized: Authentication required' },
-        { status: 401 }
+        { error: auth.error || 'Unauthorized: Authentication required' },
+        { status: auth.status || 401 }
       );
     }
 
-    const db = getDB();
-    const caller = db.users.find((u) => u.id === callerUserId);
-    if (!caller || caller.status === 'inactive') {
-      return NextResponse.json(
-        { error: 'Unauthorized: Active authenticated session required' },
-        { status: 401 }
-      );
-    }
+    const caller = auth.user;
 
+    // Strict Authorization Check: Only Admin and Manager (FULL_ADMIN_ACCESS) can delete/archive clients
     if (!hasFullAdminAccess(caller)) {
       return NextResponse.json(
-        { error: 'Forbidden: Admin or Manager permission required to delete clients' },
+        { error: 'Forbidden: Admin or Manager permission required to delete/archive clients' },
         { status: 403 }
       );
     }
@@ -298,29 +280,39 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: 'Client ID is required' }, { status: 400 });
     }
 
+    const db = getDB();
     const index = db.clients.findIndex((c) => c.id === clientId);
     if (index === -1) {
       return NextResponse.json({ error: 'Client not found' }, { status: 404 });
     }
 
-    const removedClient = db.clients[index];
-    db.clients.splice(index, 1);
+    const client = db.clients[index];
+
+    // SOFT DELETION / ARCHIVAL IMPLEMENTATION
+    // Client is marked as 'archived' rather than spliced, permanently preserving historical records
+    client.status = 'archived';
+    client.archivedAt = new Date().toISOString();
+    client.archivedByUserId = caller.id;
 
     db.auditLogs.unshift({
       id: `aud-${Date.now()}`,
       userId: caller.id,
       userName: caller.name,
       userRole: caller.role,
-      action: 'Client Deleted',
-      details: `Deleted client "${removedClient.name}" (${removedClient.id})`,
+      action: 'Client Archived',
+      details: `Archived client "${client.name}" (${client.id}). Historical projects, tasks, deliverables, and approvals permanently preserved.`,
       targetType: 'client',
-      targetId: removedClient.id,
+      targetId: client.id,
       timestamp: new Date().toISOString(),
     });
 
     saveDB(db);
-    return NextResponse.json({ success: true, message: 'Client deleted successfully' });
+    return NextResponse.json({
+      success: true,
+      message: 'Client successfully archived. Historical projects, deliverables, and approvals preserved.',
+      client,
+    });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message || 'Failed to delete client' }, { status: 500 });
+    return NextResponse.json({ error: error.message || 'Failed to archive client' }, { status: 500 });
   }
 }

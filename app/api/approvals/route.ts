@@ -2,27 +2,23 @@ import { NextResponse } from 'next/server';
 import { getDB, saveDB } from '@/lib/db';
 import { ClientApprovalRecord, NotificationItem, AuditLog } from '@/lib/types';
 import { hasFullAdminAccess } from '@/lib/permissions';
+import { getAuthenticatedUser } from '@/lib/session';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const userId = searchParams.get('userId');
+  const explicitUserId = searchParams.get('userId');
   const deliverableId = searchParams.get('deliverableId');
+  const auth = getAuthenticatedUser(request, explicitUserId);
+
+  if (!auth.user) {
+    return NextResponse.json(
+      { error: auth.error || 'Unauthorized: Authentication required to access approvals' },
+      { status: auth.status || 401 }
+    );
+  }
+
+  const user = auth.user;
   const db = getDB();
-
-  if (!userId) {
-    return NextResponse.json(
-      { error: 'Unauthorized: Authentication required to access approvals' },
-      { status: 401 }
-    );
-  }
-
-  const user = db.users.find((u) => u.id === userId);
-  if (!user || user.status === 'inactive') {
-    return NextResponse.json(
-      { error: 'Unauthorized: Valid active session required' },
-      { status: 401 }
-    );
-  }
 
   let approvals = db.approvals;
   // If Client, strictly isolate to their own organization approvals
@@ -57,21 +53,16 @@ export async function POST(request: Request) {
       feedback,
     } = body;
 
-    if (!callerUserId) {
+    const auth = getAuthenticatedUser(request, callerUserId);
+    if (!auth.user) {
       return NextResponse.json(
-        { error: 'Unauthorized: Authentication required' },
-        { status: 401 }
+        { error: auth.error || 'Unauthorized: Authentication required' },
+        { status: auth.status || 401 }
       );
     }
 
+    const caller = auth.user;
     const db = getDB();
-    const caller = db.users.find((u) => u.id === callerUserId);
-    if (!caller || caller.status === 'inactive') {
-      return NextResponse.json(
-        { error: 'Unauthorized: Valid active session required' },
-        { status: 401 }
-      );
-    }
 
     const deliverable = db.deliverables.find((d) => d.id === deliverableId);
     if (!deliverable) {

@@ -7,28 +7,24 @@ import {
   AuditLog,
 } from '@/lib/types';
 import { hasFullAdminAccess } from '@/lib/permissions';
+import { getAuthenticatedUser } from '@/lib/session';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const userId = searchParams.get('userId');
+  const explicitUserId = searchParams.get('userId');
   const clientId = searchParams.get('clientId');
-  const db = getDB();
+  const auth = getAuthenticatedUser(request, explicitUserId);
 
   // 1. Strict Authentication Enforcement: Unauthenticated requests are rejected with 401
-  if (!userId) {
+  if (!auth.user) {
     return NextResponse.json(
-      { error: 'Unauthorized: Authentication required to access deliverables' },
-      { status: 401 }
+      { error: auth.error || 'Unauthorized: Authentication required to access deliverables' },
+      { status: auth.status || 401 }
     );
   }
 
-  const user = db.users.find((u) => u.id === userId);
-  if (!user || user.status === 'inactive') {
-    return NextResponse.json(
-      { error: 'Unauthorized: Valid active session required' },
-      { status: 401 }
-    );
-  }
+  const user = auth.user;
+  const db = getDB();
 
   // 2. Client Role Isolation: Client can ONLY access their own organization deliverables.
   // Any query parameter attempting to request another client's deliverables is strictly ignored.
@@ -83,16 +79,14 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { action, callerUserId } = body;
+    const auth = getAuthenticatedUser(request, callerUserId);
+
+    if (!auth.user) {
+      return NextResponse.json({ error: auth.error || 'Unauthorized: Authentication required' }, { status: auth.status || 401 });
+    }
+
+    const caller = auth.user;
     const db = getDB();
-
-    if (!callerUserId) {
-      return NextResponse.json({ error: 'Unauthorized: Authentication required' }, { status: 401 });
-    }
-
-    const caller = db.users.find((u) => u.id === callerUserId);
-    if (!caller || caller.status === 'inactive') {
-      return NextResponse.json({ error: 'Unauthorized: Valid active session required' }, { status: 401 });
-    }
 
     // 1. Create a new deliverable (Admin & Manager)
     if (!action || action === 'create') {

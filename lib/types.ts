@@ -163,7 +163,9 @@ export interface Client {
   monthlyRetainer: number;
   currency: string;
   monthlyCommitment: ClientMonthlyCommitment;
-  status: 'active' | 'inactive';
+  status: 'active' | 'inactive' | 'archived';
+  archivedAt?: string;
+  archivedByUserId?: string;
   primaryContactName: string;
   notes?: string;
   createdAt: string;
@@ -351,6 +353,17 @@ export interface PasswordResetToken {
   createdAt: string;
 }
 
+export interface UserSession {
+  id: string;
+  token: string;
+  userId: string;
+  role: UserRole;
+  permissionGroup: PermissionGroup;
+  clientId?: string;
+  createdAt: string;
+  expiresAt: string;
+}
+
 export interface AuditLog {
   id: string;
   userId: string;
@@ -375,4 +388,5 @@ export interface AppState {
   invitations: Invitation[];
   auditLogs: AuditLog[];
   passwordResets?: PasswordResetToken[];
+  sessions?: UserSession[];
 }
