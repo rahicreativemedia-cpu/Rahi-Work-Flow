@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Client, Project, Employee, Priority, Deliverable } from '@/lib/types';
-import { TODAY_STRING } from '@/lib/utils';
+import { TODAY_STRING, getWorkloadCapacityInfo } from '@/lib/utils';
 import { Modal } from '../common/Modal';
+import { AlertTriangle, UserCheck } from 'lucide-react';
 
 interface CreateTaskModalProps {
   isOpen: boolean;
@@ -36,6 +37,14 @@ export function CreateTaskModal({
   const filteredProjects = projects.filter((p) => !clientId || p.clientId === clientId);
   const filteredDeliverables = deliverables.filter((d) => !clientId || d.clientId === clientId);
 
+  const selectedEmployee = employees.find((e) => e.id === assignedEmployeeId);
+  const selectedCapInfo = selectedEmployee
+    ? getWorkloadCapacityInfo(
+        selectedEmployee.currentActiveTasks,
+        selectedEmployee.maxConcurrentTasks
+      )
+    : null;
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !clientId || !assignedEmployeeId) {
@@ -44,7 +53,7 @@ export function CreateTaskModal({
     }
 
     onCreateTask({
-      title,
+      title: title.trim(),
       clientId,
       projectId: projectId || filteredProjects[0]?.id || '',
       deliverableId: deliverableId || undefined,
@@ -64,7 +73,7 @@ export function CreateTaskModal({
       isOpen={isOpen}
       onClose={onClose}
       title="Create & Assign New Task"
-      description="Assign creative work, video editing, graphic design, or copywriting."
+      description="Assign creative work, video editing, graphic design, or copywriting with capacity checks."
       maxWidth="xl"
     >
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -85,7 +94,11 @@ export function CreateTaskModal({
             <label className="block text-xs font-bold text-slate-700 mb-1">Client *</label>
             <select
               value={clientId}
-              onChange={(e) => setClientId(e.target.value)}
+              onChange={(e) => {
+                setClientId(e.target.value);
+                const nextProjects = projects.filter((p) => p.clientId === e.target.value);
+                setProjectId(nextProjects[0]?.id || '');
+              }}
               className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-medium"
             >
               {clients.map((c) => (
@@ -115,18 +128,21 @@ export function CreateTaskModal({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label className="block text-xs font-bold text-slate-700 mb-1">
-              Assign to Employee *
+              Assign to Creative Specialist *
             </label>
             <select
               value={assignedEmployeeId}
               onChange={(e) => setAssignedEmployeeId(e.target.value)}
               className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-medium"
             >
-              {employees.map((emp) => (
-                <option key={emp.id} value={emp.id}>
-                  {emp.name} ({emp.department})
-                </option>
-              ))}
+              {employees.map((emp) => {
+                const cap = getWorkloadCapacityInfo(emp.currentActiveTasks, emp.maxConcurrentTasks);
+                return (
+                  <option key={emp.id} value={emp.id}>
+                    {emp.name} ({emp.department}) — {emp.currentActiveTasks}/{emp.maxConcurrentTasks} ({cap.label})
+                  </option>
+                );
+              })}
             </select>
           </div>
 
@@ -144,6 +160,16 @@ export function CreateTaskModal({
             </select>
           </div>
         </div>
+
+        {/* Overloaded Warning Banner */}
+        {selectedCapInfo?.isOverloaded && (
+          <div className="p-3 bg-rose-50 border border-rose-200 rounded-lg flex items-start gap-2.5 text-xs text-rose-800">
+            <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+            <div>
+              <strong className="font-bold">Capacity Alert:</strong> {selectedEmployee?.name} is currently at maximum capacity ({selectedEmployee?.currentActiveTasks}/{selectedEmployee?.maxConcurrentTasks} tasks). Assigning this task will overload their queue.
+            </div>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
@@ -177,50 +203,54 @@ export function CreateTaskModal({
             onChange={(e) => setDeliverableId(e.target.value)}
             className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-medium"
           >
-            <option value="">None (Independent task)</option>
-            {filteredDeliverables.map((del) => (
-              <option key={del.id} value={del.id}>
-                {del.title} ({del.stage})
+            <option value="">None (Independent Operational Task)</option>
+            {filteredDeliverables.map((d) => (
+              <option key={d.id} value={d.id}>
+                {d.title} (Stage {d.stage} • {d.clientName})
               </option>
             ))}
           </select>
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1">Description & Creative Brief</label>
+          <label className="block text-xs font-bold text-slate-700 mb-1">
+            Instructions & Creative Brief
+          </label>
           <textarea
+            rows={3}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="Detailed instructions, raw footage drives, pacing notes..."
+            placeholder="Provide shooting direction, pacing requirements, hook details, sound notes..."
             className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
-            rows={3}
           />
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1">Required Output Specs</label>
+          <label className="block text-xs font-bold text-slate-700 mb-1">
+            Required Creative Output
+          </label>
           <input
             type="text"
             value={requiredOutput}
             onChange={(e) => setRequiredOutput(e.target.value)}
-            placeholder="e.g. 1080x1920 MP4 60fps with subtitles"
+            placeholder="e.g. 1080x1920 9:16 MP4 under 30 seconds with subtitles"
             className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
           />
         </div>
 
-        <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+        <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-xs font-medium text-slate-600 hover:text-slate-900"
+            className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow-xs"
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg shadow-xs"
           >
-            Create Task
+            Assign Task
           </button>
         </div>
       </form>

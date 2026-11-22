@@ -3,6 +3,7 @@ export type UserRole = 'admin' | 'manager' | 'employee' | 'client';
 export type PermissionGroup = 'FULL_ADMIN_ACCESS' | 'EMPLOYEE_ACCESS' | 'CLIENT_ACCESS';
 
 export type Department =
+  | 'Video Production'
   | 'Video Editing'
   | 'Graphic Design'
   | 'Scriptwriting'
@@ -185,6 +186,8 @@ export interface Employee {
   joinedDate: string;
   performanceScore: number; // percentage e.g. 98
   skills: string[];
+  deactivatedAt?: string;
+  deactivatedByUserId?: string;
 }
 
 export interface Project {
@@ -246,6 +249,8 @@ export interface Task {
   feedbackNotes?: string;
   createdAt: string;
   completedAt?: string;
+  cancelledAt?: string;
+  cancelledByUserId?: string;
 }
 
 export interface DeliverableVersion {

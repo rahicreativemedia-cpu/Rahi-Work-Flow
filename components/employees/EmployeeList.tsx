@@ -1,15 +1,28 @@
 import React, { useState } from 'react';
 import { Employee, Department, User } from '@/lib/types';
 import { hasFullAdminAccess } from '@/lib/permissions';
+import { getWorkloadCapacityInfo } from '@/lib/utils';
 import { SearchFilterBar } from '../common/SearchFilterBar';
 import { Badge } from '../common/Badge';
-import { Users, Plus, Award, CheckCircle2, AlertCircle, Briefcase, Mail, Phone } from 'lucide-react';
+import {
+  Users,
+  Plus,
+  Award,
+  CheckCircle2,
+  AlertCircle,
+  Briefcase,
+  Mail,
+  Phone,
+  UserX,
+  UserCheck,
+} from 'lucide-react';
 
 interface EmployeeListProps {
   employees: Employee[];
   currentUser: User;
   onCreateEmployee: () => void;
   onEditEmployee?: (employee: Employee) => void;
+  onDeactivateEmployee?: (employee: Employee) => void;
 }
 
 export function EmployeeList({
@@ -17,9 +30,11 @@ export function EmployeeList({
   currentUser,
   onCreateEmployee,
   onEditEmployee,
+  onDeactivateEmployee,
 }: EmployeeListProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [deptFilter, setDeptFilter] = useState('all');
+  const [capacityFilter, setCapacityFilter] = useState('all');
 
   const canAdmin = hasFullAdminAccess(currentUser);
 
@@ -31,6 +46,12 @@ export function EmployeeList({
       }
     }
     if (deptFilter !== 'all' && emp.department !== deptFilter) return false;
+
+    if (capacityFilter !== 'all') {
+      const capInfo = getWorkloadCapacityInfo(emp.currentActiveTasks, emp.maxConcurrentTasks);
+      if (capInfo.status !== capacityFilter) return false;
+    }
+
     return true;
   });
 
@@ -46,13 +67,27 @@ export function EmployeeList({
             value: deptFilter,
             options: [
               { label: 'All Departments', value: 'all' },
+              { label: 'Video Production', value: 'Video Production' },
               { label: 'Video Editing', value: 'Video Editing' },
               { label: 'Graphic Design', value: 'Graphic Design' },
               { label: 'Scriptwriting', value: 'Scriptwriting' },
               { label: 'Social Media', value: 'Social Media' },
               { label: 'Content Planning', value: 'Content Planning' },
+              { label: 'Operations', value: 'Operations' },
             ],
             onChange: setDeptFilter,
+          },
+          {
+            label: 'Capacity',
+            value: capacityFilter,
+            options: [
+              { label: 'All Capacity Levels', value: 'all' },
+              { label: 'Optimal (40-79%)', value: 'optimal' },
+              { label: 'Near Capacity (80-99%)', value: 'near_capacity' },
+              { label: 'Overloaded (100%+)', value: 'overloaded' },
+              { label: 'Under-Capacity (<40%)', value: 'under_capacity' },
+            ],
+            onChange: setCapacityFilter,
           },
         ]}
         actionButton={
@@ -70,23 +105,29 @@ export function EmployeeList({
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {filteredEmployees.map((emp) => {
-          const workloadPercentage = Math.min(
-            100,
-            Math.round((emp.currentActiveTasks / emp.maxConcurrentTasks) * 100)
-          );
-          const isHighWorkload = workloadPercentage >= 80;
+          const capInfo = getWorkloadCapacityInfo(emp.currentActiveTasks, emp.maxConcurrentTasks);
+          const isInactive = emp.status === 'inactive';
 
           return (
             <div
               key={emp.id}
-              className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs hover:border-slate-300 transition-all flex flex-col justify-between"
+              className={`bg-white rounded-xl border p-5 shadow-xs transition-all flex flex-col justify-between ${
+                isInactive ? 'border-slate-200 opacity-60 bg-slate-50/50' : 'border-slate-200 hover:border-slate-300'
+              }`}
             >
               <div>
                 <div className="flex items-center justify-between mb-3">
                   <Badge variant="blue">{emp.department}</Badge>
-                  <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                    {emp.performanceScore}% Quality Score
-                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${capInfo.badgeClass}`}>
+                      {capInfo.label}
+                    </span>
+                    {emp.performanceScore && (
+                      <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                        {emp.performanceScore}% Score
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 <div className="flex items-center gap-3">
@@ -112,25 +153,27 @@ export function EmployeeList({
                   )}
                 </div>
 
-                {/* Workload Progress */}
+                {/* Workload Capacity Progress Bar */}
                 <div className="mt-4 p-3 bg-slate-50 rounded-lg border border-slate-100">
                   <div className="flex items-center justify-between text-xs mb-1.5">
-                    <span className="text-slate-600 font-medium">Active Workload:</span>
+                    <span className="text-slate-600 font-medium">Workload Distribution:</span>
                     <span
                       className={`font-bold ${
-                        isHighWorkload ? 'text-rose-600' : 'text-slate-800'
+                        capInfo.isOverloaded
+                          ? 'text-rose-600'
+                          : capInfo.isHigh
+                          ? 'text-amber-600'
+                          : 'text-slate-800'
                       }`}
                     >
-                      {emp.currentActiveTasks} / {emp.maxConcurrentTasks} tasks
+                      {emp.currentActiveTasks} / {emp.maxConcurrentTasks} tasks ({capInfo.percentage}%)
                     </span>
                   </div>
 
                   <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
                     <div
-                      className={`h-full rounded-full transition-all ${
-                        isHighWorkload ? 'bg-rose-500' : 'bg-blue-600'
-                      }`}
-                      style={{ width: `${workloadPercentage}%` }}
+                      className={`h-full rounded-full transition-all ${capInfo.barColor}`}
+                      style={{ width: `${Math.min(100, capInfo.percentage)}%` }}
                     />
                   </div>
                 </div>
@@ -150,14 +193,30 @@ export function EmployeeList({
                 )}
               </div>
 
-              {canAdmin && onEditEmployee && (
-                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-end">
-                  <button
-                    onClick={() => onEditEmployee(emp)}
-                    className="text-xs font-semibold text-blue-600 hover:text-blue-800"
-                  >
-                    Edit Profile
-                  </button>
+              {canAdmin && (
+                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                  <span className="text-[11px] text-slate-400 font-medium">
+                    Status: <strong className={isInactive ? 'text-rose-600' : 'text-emerald-600'}>{emp.status}</strong>
+                  </span>
+                  <div className="flex items-center gap-3">
+                    {onEditEmployee && (
+                      <button
+                        onClick={() => onEditEmployee(emp)}
+                        className="text-xs font-semibold text-blue-600 hover:text-blue-800"
+                      >
+                        Edit Profile
+                      </button>
+                    )}
+                    {onDeactivateEmployee && !isInactive && (
+                      <button
+                        onClick={() => onDeactivateEmployee(emp)}
+                        className="text-xs font-semibold text-rose-600 hover:text-rose-800 flex items-center gap-1"
+                      >
+                        <UserX className="w-3.5 h-3.5" />
+                        <span>Deactivate</span>
+                      </button>
+                    )}
+                  </div>
                 </div>
               )}
             </div>

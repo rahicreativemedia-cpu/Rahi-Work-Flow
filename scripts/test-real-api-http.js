@@ -453,6 +453,178 @@ async function runRealHttpSecurityTests() {
   );
 
   // -------------------------------------------------------------
+  // [8] PHASE 4: EMPLOYEE & TASK MANAGEMENT HTTP INTEGRATION TESTS
+  // -------------------------------------------------------------
+  console.log(`\n${colors.bold}[8] PHASE 4: EMPLOYEE & TASK MANAGEMENT HTTP VERIFICATION${colors.reset}`);
+
+  // 1. Unauthenticated checks for employees & tasks
+  const unauthGetEmp = await fetch(`${BASE_URL}/api/employees`);
+  assert(
+    unauthGetEmp.status === 401,
+    'HTTP GET /api/employees without auth returns 401 Unauthorized',
+    `Status: ${unauthGetEmp.status}`
+  );
+
+  const unauthGetTasks = await fetch(`${BASE_URL}/api/tasks`);
+  assert(
+    unauthGetTasks.status === 401,
+    'HTTP GET /api/tasks without auth returns 401 Unauthorized',
+    `Status: ${unauthGetTasks.status}`
+  );
+
+  const unauthPostTask = await fetch(`${BASE_URL}/api/tasks`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'create', title: 'Unauth Task' }),
+  });
+  assert(
+    unauthPostTask.status === 401,
+    'HTTP POST /api/tasks without auth returns 401 Unauthorized',
+    `Status: ${unauthPostTask.status}`
+  );
+
+  // 2. Admin & Manager Parity on Employees
+  const adminGetEmp = await fetch(`${BASE_URL}/api/employees`, {
+    headers: { Cookie: adminSession.cookieHeader },
+  });
+  const adminEmpData = await adminGetEmp.json();
+  assert(adminGetEmp.status === 200, 'Admin session GET /api/employees returns 200 OK');
+
+  const managerGetEmp = await fetch(`${BASE_URL}/api/employees`, {
+    headers: { Cookie: managerSession.cookieHeader },
+  });
+  const managerEmpData = await managerGetEmp.json();
+  assert(managerGetEmp.status === 200, 'Manager session GET /api/employees returns 200 OK');
+  assert(
+    adminEmpData.employees.length === managerEmpData.employees.length,
+    'Admin and Manager receive exact identical employee roster over HTTP',
+    `Count: ${adminEmpData.employees.length}`
+  );
+
+  // 3. Admin & Manager Parity on Tasks
+  const adminGetTasks = await fetch(`${BASE_URL}/api/tasks`, {
+    headers: { Cookie: adminSession.cookieHeader },
+  });
+  const adminTasksData = await adminGetTasks.json();
+  assert(adminGetTasks.status === 200, 'Admin session GET /api/tasks returns 200 OK');
+
+  const managerGetTasks = await fetch(`${BASE_URL}/api/tasks`, {
+    headers: { Cookie: managerSession.cookieHeader },
+  });
+  const managerTasksData = await managerGetTasks.json();
+  assert(managerGetTasks.status === 200, 'Manager session GET /api/tasks returns 200 OK');
+  assert(
+    adminTasksData.tasks.length === managerTasksData.tasks.length,
+    'Admin and Manager receive exact identical company-wide task list over HTTP',
+    `Count: ${adminTasksData.tasks.length}`
+  );
+
+  // 4. Admin & Manager Task Creation Parity
+  const adminCreateTaskRes = await fetch(`${BASE_URL}/api/tasks`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: adminSession.cookieHeader },
+    body: JSON.stringify({
+      action: 'create',
+      title: 'HTTP Task Created by Admin',
+      clientId: 'cli-1',
+      assignedEmployeeId: 'emp-1',
+      priority: 'high',
+      deadline: '2026-11-30',
+    }),
+  });
+  const adminCreateTaskData = await adminCreateTaskRes.json();
+  assert(adminCreateTaskRes.status === 200, 'Admin can create task via HTTP POST');
+
+  const managerCreateTaskRes = await fetch(`${BASE_URL}/api/tasks`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: managerSession.cookieHeader },
+    body: JSON.stringify({
+      action: 'create',
+      title: 'HTTP Task Created by Manager',
+      clientId: 'cli-1',
+      assignedEmployeeId: 'emp-2',
+      priority: 'urgent',
+      deadline: '2026-11-29',
+    }),
+  });
+  const managerCreateTaskData = await managerCreateTaskRes.json();
+  assert(managerCreateTaskRes.status === 200, 'Manager can create task via HTTP POST (Parity Verified!)');
+
+  // 5. Task Reassignment via HTTP PUT by Manager
+  const reassignRes = await fetch(`${BASE_URL}/api/tasks`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', Cookie: managerSession.cookieHeader },
+    body: JSON.stringify({
+      taskId: adminCreateTaskData.task.id,
+      assignedEmployeeId: 'emp-3',
+      priority: 'urgent',
+    }),
+  });
+  const reassignData = await reassignRes.json();
+  assert(reassignRes.status === 200, 'Manager can reassign task via HTTP PUT (Parity Verified!)');
+  assert(reassignData.task.assignedEmployeeId === 'emp-3', 'Task assignedEmployeeId updated to Kabir Joshi (emp-3)');
+
+  // 6. Employee Boundary Checks
+  const empGetEmp = await fetch(`${BASE_URL}/api/employees`, {
+    headers: { Cookie: employeeSession.cookieHeader },
+  });
+  const empEmpData = await empGetEmp.json();
+  assert(empGetEmp.status === 200, 'Employee session GET /api/employees returns 200 OK');
+  assert(
+    empEmpData.employees.every((e) => e.performanceScore === undefined),
+    'Employee HTTP view: Performance scores strictly stripped across all records'
+  );
+
+  const empGetTasks = await fetch(`${BASE_URL}/api/tasks`, {
+    headers: { Cookie: employeeSession.cookieHeader },
+  });
+  const empTasksData = await empGetTasks.json();
+  assert(empGetTasks.status === 200, 'Employee session GET /api/tasks returns 200 OK');
+  assert(
+    empTasksData.tasks.every(
+      (t) =>
+        t.assignedEmployeeId === 'emp-1' ||
+        t.assignedEmployeeId === 'usr-emp-1' ||
+        t.assignedEmployeeName.toLowerCase() === 'vikram mehta'
+    ),
+    'Employee HTTP task boundary: Employee strictly receives ONLY tasks assigned to them',
+    `Returned: ${empTasksData.tasks.length} tasks`
+  );
+
+  // Employee mutation blocks
+  const empPostEmp = await fetch(`${BASE_URL}/api/employees`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: employeeSession.cookieHeader },
+    body: JSON.stringify({ name: 'Tampered Emp', email: 'tampered@emp.com' }),
+  });
+  assert(empPostEmp.status === 403, 'Employee POST /api/employees is strictly rejected with 403 Forbidden');
+
+  const empPostTask = await fetch(`${BASE_URL}/api/tasks`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Cookie: employeeSession.cookieHeader },
+    body: JSON.stringify({ action: 'create', title: 'Unauthorized Task' }),
+  });
+  assert(empPostTask.status === 403, 'Employee POST /api/tasks (action: create) is strictly rejected with 403 Forbidden');
+
+  const empPutTask = await fetch(`${BASE_URL}/api/tasks`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', Cookie: employeeSession.cookieHeader },
+    body: JSON.stringify({ taskId: adminCreateTaskData.task.id, priority: 'low' }),
+  });
+  assert(empPutTask.status === 403, 'Employee PUT /api/tasks is strictly rejected with 403 Forbidden');
+
+  // 7. Client Role Restrictions
+  const clientGetEmp = await fetch(`${BASE_URL}/api/employees`, {
+    headers: { Cookie: clientASession.cookieHeader },
+  });
+  assert(clientGetEmp.status === 403, 'Client GET /api/employees is strictly rejected with 403 Forbidden');
+
+  const clientGetTasks = await fetch(`${BASE_URL}/api/tasks`, {
+    headers: { Cookie: clientASession.cookieHeader },
+  });
+  assert(clientGetTasks.status === 403, 'Client GET /api/tasks is strictly rejected with 403 Forbidden');
+
+  // -------------------------------------------------------------
   // SUMMARY
   // -------------------------------------------------------------
   console.log(`\n${colors.bold}${colors.blue}================================================================${colors.reset}`);

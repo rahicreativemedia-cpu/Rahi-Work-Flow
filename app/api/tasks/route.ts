@@ -1,48 +1,87 @@
 import { NextResponse } from 'next/server';
 import { getDB, saveDB } from '@/lib/db';
-import { Task, TaskSubmission, TaskComment, NotificationItem, AuditLog } from '@/lib/types';
+import {
+  Task,
+  TaskSubmission,
+  TaskComment,
+  NotificationItem,
+  TaskStatus,
+  Priority,
+} from '@/lib/types';
 import { hasFullAdminAccess } from '@/lib/permissions';
+import { getAuthenticatedUser } from '@/lib/session';
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const userId = searchParams.get('userId');
-  const db = getDB();
+  // 1. Authenticate caller session
+  const auth = getAuthenticatedUser(request);
+  if (!auth.user) {
+    return NextResponse.json(
+      { error: auth.error || 'Unauthorized: Valid active session required' },
+      { status: auth.status || 401 }
+    );
+  }
+  const user = auth.user;
 
-  const user = db.users.find((u) => u.id === userId);
-
-  // Clients do not view internal employee tasks
-  if (user && user.role === 'client') {
-    return NextResponse.json({ tasks: [] });
+  // 2. Client role cannot access internal operational tasks
+  if (user.role === 'client') {
+    return NextResponse.json(
+      { error: 'Forbidden: Clients cannot access internal operational tasks' },
+      { status: 403 }
+    );
   }
 
-  // Employees only see their own assigned tasks
-  if (user && user.role === 'employee') {
+  const db = getDB();
+
+  // 3. Employee boundary: strictly restricted to tasks assigned to them
+  if (user.role === 'employee') {
+    const employeeRecord = db.employees.find(
+      (e) => e.userId === user.id || e.id === user.employeeId
+    );
+    const empId = employeeRecord?.id || user.employeeId;
+
     const employeeTasks = db.tasks.filter(
       (t) =>
-        t.assignedEmployeeId === user.employeeId ||
+        (empId && t.assignedEmployeeId === empId) ||
         t.assignedEmployeeId === user.id ||
         t.assignedEmployeeName.toLowerCase() === user.name.toLowerCase()
     );
-    return NextResponse.json({ tasks: employeeTasks });
+
+    return NextResponse.json({
+      success: true,
+      tasks: employeeTasks,
+    });
   }
 
-  // Admin and Manager have access to all tasks across all clients and employees
-  return NextResponse.json({ tasks: db.tasks });
+  // 4. Admin and Manager have full access across all company tasks
+  return NextResponse.json({
+    success: true,
+    tasks: db.tasks,
+  });
 }
 
 export async function POST(request: Request) {
   try {
+    // 1. Authenticate caller session
+    const auth = getAuthenticatedUser(request);
+    if (!auth.user) {
+      return NextResponse.json(
+        { error: auth.error || 'Unauthorized: Valid active session required' },
+        { status: auth.status || 401 }
+      );
+    }
+    const user = auth.user;
+
     const body = await request.json();
-    const { action, callerUserId } = body;
+    const { action } = body;
     const db = getDB();
 
-    const caller = db.users.find((u) => u.id === callerUserId);
-
-    // Action 1: Create a new task (Admin & Manager)
+    // -------------------------------------------------------------
+    // ACTION 1: CREATE TASK (Admin & Manager Equal Parity)
+    // -------------------------------------------------------------
     if (!action || action === 'create') {
-      if (!hasFullAdminAccess(caller)) {
+      if (!hasFullAdminAccess(user)) {
         return NextResponse.json(
-          { error: 'Unauthorized: Admin or Manager permission required to create tasks' },
+          { error: 'Forbidden: Admin or Manager permission required to create tasks' },
           { status: 403 }
         );
       }
@@ -61,28 +100,51 @@ export async function POST(request: Request) {
         referenceFiles,
       } = body;
 
+      if (!title || !clientId || !assignedEmployeeId) {
+        return NextResponse.json(
+          { error: 'Task title, client, and assigned employee are required' },
+          { status: 400 }
+        );
+      }
+
       const client = db.clients.find((c) => c.id === clientId);
       const project = db.projects.find((p) => p.id === projectId);
       const employee = db.employees.find((e) => e.id === assignedEmployeeId);
 
+      // Check current active workload for the assigned employee
+      const activeTasksCount = db.tasks.filter(
+        (t) =>
+          t.assignedEmployeeId === assignedEmployeeId &&
+          t.status !== 'completed' &&
+          t.status !== 'backlog'
+      ).length;
+
+      const maxTasks = employee?.maxConcurrentTasks || 5;
+      const isOverloaded = activeTasksCount >= maxTasks;
+      const warning = isOverloaded
+        ? `Warning: ${employee?.name || 'Assignee'} currently has ${activeTasksCount} active tasks (max capacity is ${maxTasks}).`
+        : undefined;
+
       const newTask: Task = {
         id: `tsk-${Date.now()}`,
-        title,
+        title: title.trim(),
         clientId,
-        clientName: client ? client.name : 'Unknown Client',
-        projectId,
+        clientName: client ? client.name : 'General Client',
+        projectId: projectId || (project ? project.id : 'proj-gen'),
         projectTitle: project ? project.title : 'General Project',
-        deliverableId,
+        deliverableId: deliverableId || undefined,
         description: description || '',
         assignedEmployeeId,
         assignedEmployeeName: employee ? employee.name : 'Unassigned',
         assignedEmployeeDepartment: employee ? employee.department : 'Video Editing',
-        priority: priority || 'medium',
+        priority: (priority as Priority) || 'medium',
         startDate: startDate || new Date().toISOString().split('T')[0],
-        deadline: deadline || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        deadline:
+          deadline ||
+          new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
         status: 'todo',
         referenceFiles: referenceFiles || [],
-        requiredOutput: requiredOutput || 'Standard high quality creative asset as briefed.',
+        requiredOutput: requiredOutput || 'Standard creative asset meeting agency guidelines.',
         submissions: [],
         comments: [],
         createdAt: new Date().toISOString(),
@@ -106,24 +168,33 @@ export async function POST(request: Request) {
         db.notifications.unshift(notif);
       }
 
-      // Audit Log
+      // Record immutable audit log
       db.auditLogs.unshift({
         id: `aud-${Date.now()}`,
-        userId: caller?.id || 'sys',
-        userName: caller?.name || 'Administrator',
-        userRole: caller?.role || 'admin',
+        userId: user.id,
+        userName: user.name,
+        userRole: user.role,
         action: 'Task Assigned',
-        details: `Created and assigned task "${newTask.title}" to ${newTask.assignedEmployeeName}`,
+        details: `Assigned task "${newTask.title}" to ${newTask.assignedEmployeeName} (${newTask.priority.toUpperCase()} priority).${
+          isOverloaded ? ' [Assigned despite high capacity]' : ''
+        }`,
         targetType: 'task',
         targetId: newTask.id,
         timestamp: new Date().toISOString(),
       });
 
       saveDB(db);
-      return NextResponse.json({ success: true, task: newTask });
+      return NextResponse.json({
+        success: true,
+        task: newTask,
+        warning,
+        isOverloaded,
+      });
     }
 
-    // Action 2: Submit Completed / Revision Work (Employee or Admin/Manager)
+    // -------------------------------------------------------------
+    // ACTION 2: SUBMIT WORK (Assigned Employee OR Admin/Manager)
+    // -------------------------------------------------------------
     if (action === 'submit_work') {
       const { taskId, fileName, fileUrl, fileSize, notes } = body;
       const taskIndex = db.tasks.findIndex((t) => t.id === taskId);
@@ -132,10 +203,17 @@ export async function POST(request: Request) {
       }
 
       const task = db.tasks[taskIndex];
+      const employeeRecord = db.employees.find((e) => e.userId === user.id);
       const isAssigned =
-        caller?.employeeId === task.assignedEmployeeId || caller?.id === task.assignedEmployeeId;
-      if (!isAssigned && !hasFullAdminAccess(caller)) {
-        return NextResponse.json({ error: 'Unauthorized to submit work for this task' }, { status: 403 });
+        task.assignedEmployeeId === user.id ||
+        task.assignedEmployeeId === user.employeeId ||
+        (employeeRecord && task.assignedEmployeeId === employeeRecord.id);
+
+      if (!isAssigned && !hasFullAdminAccess(user)) {
+        return NextResponse.json(
+          { error: 'Forbidden: You can only submit work for your assigned tasks' },
+          { status: 403 }
+        );
       }
 
       const newVersion = task.submissions.length + 1;
@@ -143,11 +221,13 @@ export async function POST(request: Request) {
         id: `sub-${Date.now()}`,
         version: newVersion,
         fileName: fileName || `Submission_v${newVersion}.mp4`,
-        fileUrl: fileUrl || 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyBlazes.mp4',
+        fileUrl:
+          fileUrl ||
+          'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyBlazes.mp4',
         fileSize: fileSize || '38.4 MB',
         submittedAt: new Date().toISOString(),
-        submittedByUserId: caller?.id || 'emp',
-        submittedByUserName: caller?.name || 'Assigned Creative',
+        submittedByUserId: user.id,
+        submittedByUserName: user.name,
         notes: notes || '',
       };
 
@@ -181,20 +261,20 @@ export async function POST(request: Request) {
       db.notifications.unshift({
         id: `notif-${Date.now()}`,
         targetRole: 'all_admin',
-        title: 'New Work Submitted for Review',
-        message: `${caller?.name} submitted v${newVersion} for "${task.title}" (${task.clientName}).`,
+        title: 'New Creative Submission for Review',
+        message: `${user.name} submitted Version ${newVersion} for "${task.title}" (${task.clientName}).`,
         type: 'submission',
         relatedId: task.id,
         read: false,
         createdAt: new Date().toISOString(),
       });
 
-      // Audit Log
+      // Record immutable audit log
       db.auditLogs.unshift({
         id: `aud-${Date.now()}`,
-        userId: caller?.id || 'emp',
-        userName: caller?.name || 'Employee',
-        userRole: caller?.role || 'employee',
+        userId: user.id,
+        userName: user.name,
+        userRole: user.role,
         action: 'Work Submitted',
         details: `Submitted version ${newVersion} for task "${task.title}"`,
         targetType: 'task',
@@ -206,7 +286,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, task, submission });
     }
 
-    // Action 3: Add Comment
+    // -------------------------------------------------------------
+    // ACTION 3: ADD COMMENT
+    // -------------------------------------------------------------
     if (action === 'comment') {
       const { taskId, text } = body;
       const task = db.tasks.find((t) => t.id === taskId);
@@ -214,12 +296,16 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Task not found' }, { status: 404 });
       }
 
+      if (!text || !text.trim()) {
+        return NextResponse.json({ error: 'Comment text cannot be empty' }, { status: 400 });
+      }
+
       const comment: TaskComment = {
         id: `cmt-${Date.now()}`,
-        userId: caller?.id || 'usr',
-        userName: caller?.name || 'Team Member',
-        userRole: caller?.role || 'employee',
-        text,
+        userId: user.id,
+        userName: user.name,
+        userRole: user.role,
+        text: text.trim(),
         createdAt: new Date().toISOString(),
       };
 
@@ -228,7 +314,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, comment });
     }
 
-    // Action 4: Update task status or details
+    // -------------------------------------------------------------
+    // ACTION 4: UPDATE STATUS
+    // -------------------------------------------------------------
     if (action === 'update_status') {
       const { taskId, status, feedbackNotes } = body;
       const task = db.tasks.find((t) => t.id === taskId);
@@ -236,7 +324,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Task not found' }, { status: 404 });
       }
 
-      task.status = status;
+      task.status = status as TaskStatus;
       if (feedbackNotes !== undefined) {
         task.feedbackNotes = feedbackNotes;
       }
@@ -248,8 +336,206 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, task });
     }
 
-    return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid action specified' }, { status: 400 });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message || 'Task operation failed' }, { status: 500 });
+    return NextResponse.json(
+      { error: error.message || 'Task operation failed' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(request: Request) {
+  try {
+    // 1. Authenticate caller session
+    const auth = getAuthenticatedUser(request);
+    if (!auth.user) {
+      return NextResponse.json(
+        { error: auth.error || 'Unauthorized: Valid active session required' },
+        { status: auth.status || 401 }
+      );
+    }
+    const user = auth.user;
+
+    // 2. Strict parity: Admin and Manager have equal administrative authority
+    if (!hasFullAdminAccess(user)) {
+      return NextResponse.json(
+        { error: 'Forbidden: Admin or Manager permission required to edit/reassign tasks' },
+        { status: 403 }
+      );
+    }
+
+    const body = await request.json();
+    const { taskId, assignedEmployeeId, priority, deadline, status, title, description, requiredOutput } = body;
+
+    if (!taskId) {
+      return NextResponse.json({ error: 'Task ID is required' }, { status: 400 });
+    }
+
+    const db = getDB();
+    const taskIndex = db.tasks.findIndex((t) => t.id === taskId);
+    if (taskIndex === -1) {
+      return NextResponse.json({ error: 'Task not found' }, { status: 404 });
+    }
+
+    const task = db.tasks[taskIndex];
+    const oldAssigneeName = task.assignedEmployeeName;
+    const oldAssigneeId = task.assignedEmployeeId;
+    let isReassigned = false;
+    let warning: string | undefined = undefined;
+
+    // Handle Employee Reassignment
+    if (assignedEmployeeId && assignedEmployeeId !== task.assignedEmployeeId) {
+      const newEmployee = db.employees.find((e) => e.id === assignedEmployeeId);
+      if (!newEmployee) {
+        return NextResponse.json({ error: 'New assignee employee not found' }, { status: 404 });
+      }
+
+      // Workload capacity check for the new assignee
+      const newAssigneeActiveTasks = db.tasks.filter(
+        (t) =>
+          t.assignedEmployeeId === assignedEmployeeId &&
+          t.id !== taskId &&
+          t.status !== 'completed' &&
+          t.status !== 'backlog'
+      ).length;
+
+      if (newAssigneeActiveTasks >= newEmployee.maxConcurrentTasks) {
+        warning = `Warning: ${newEmployee.name} is currently at capacity (${newAssigneeActiveTasks}/${newEmployee.maxConcurrentTasks} tasks).`;
+      }
+
+      task.assignedEmployeeId = newEmployee.id;
+      task.assignedEmployeeName = newEmployee.name;
+      task.assignedEmployeeDepartment = newEmployee.department;
+      isReassigned = true;
+
+      // Notify new assignee
+      db.notifications.unshift({
+        id: `notif-${Date.now()}-new`,
+        targetRole: 'employee',
+        recipientUserId: newEmployee.userId,
+        title: 'Task Reassigned to You',
+        message: `You were reassigned "${task.title}" (${task.clientName}) by ${user.name}.`,
+        type: 'assignment',
+        relatedId: task.id,
+        read: false,
+        createdAt: new Date().toISOString(),
+      });
+
+      // Notify previous assignee
+      const oldEmp = db.employees.find((e) => e.id === oldAssigneeId);
+      if (oldEmp) {
+        db.notifications.unshift({
+          id: `notif-${Date.now()}-old`,
+          targetRole: 'employee',
+          recipientUserId: oldEmp.userId,
+          title: 'Task Reassigned',
+          message: `Task "${task.title}" was reassigned to ${newEmployee.name}.`,
+          type: 'assignment',
+          relatedId: task.id,
+          read: false,
+          createdAt: new Date().toISOString(),
+        });
+      }
+    }
+
+    // Update other metadata fields if provided
+    if (priority) task.priority = priority as Priority;
+    if (deadline) task.deadline = deadline;
+    if (status) task.status = status as TaskStatus;
+    if (title) task.title = title.trim();
+    if (description !== undefined) task.description = description;
+    if (requiredOutput !== undefined) task.requiredOutput = requiredOutput;
+
+    // Record immutable audit log
+    db.auditLogs.unshift({
+      id: `aud-${Date.now()}`,
+      userId: user.id,
+      userName: user.name,
+      userRole: user.role,
+      action: isReassigned ? 'Task Reassigned' : 'Task Updated',
+      details: isReassigned
+        ? `Reassigned task "${task.title}" from ${oldAssigneeName} to ${task.assignedEmployeeName}`
+        : `Updated task details for "${task.title}"`,
+      targetType: 'task',
+      targetId: task.id,
+      timestamp: new Date().toISOString(),
+    });
+
+    saveDB(db);
+    return NextResponse.json({
+      success: true,
+      task,
+      warning,
+      isReassigned,
+    });
+  } catch (error: any) {
+    return NextResponse.json(
+      { error: error.message || 'Failed to update/reassign task' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    // 1. Authenticate caller session
+    const auth = getAuthenticatedUser(request);
+    if (!auth.user) {
+      return NextResponse.json(
+        { error: auth.error || 'Unauthorized: Valid active session required' },
+        { status: auth.status || 401 }
+      );
+    }
+    const user = auth.user;
+
+    // 2. Strict parity: Admin and Manager have equal administrative authority
+    if (!hasFullAdminAccess(user)) {
+      return NextResponse.json(
+        { error: 'Forbidden: Admin or Manager permission required to cancel/delete tasks' },
+        { status: 403 }
+      );
+    }
+
+    const { id } = await request.json();
+    if (!id) {
+      return NextResponse.json({ error: 'Task ID is required' }, { status: 400 });
+    }
+
+    const db = getDB();
+    const task = db.tasks.find((t) => t.id === id);
+    if (!task) {
+      return NextResponse.json({ error: 'Task not found' }, { status: 404 });
+    }
+
+    // Soft-cancellation: mark status as completed/cancelled and preserve in audit log
+    task.status = 'completed';
+    task.cancelledAt = new Date().toISOString();
+    task.cancelledByUserId = user.id;
+
+    // Record immutable audit log
+    db.auditLogs.unshift({
+      id: `aud-${Date.now()}`,
+      userId: user.id,
+      userName: user.name,
+      userRole: user.role,
+      action: 'Task Cancelled',
+      details: `Cancelled task "${task.title}" for ${task.clientName}. Historical records preserved.`,
+      targetType: 'task',
+      targetId: task.id,
+      timestamp: new Date().toISOString(),
+    });
+
+    saveDB(db);
+    return NextResponse.json({
+      success: true,
+      message: `Task "${task.title}" cancelled successfully`,
+      task,
+    });
+  } catch (error: any) {
+    return NextResponse.json(
+      { error: error.message || 'Failed to cancel task' },
+      { status: 500 }
+    );
   }
 }

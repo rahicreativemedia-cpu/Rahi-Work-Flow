@@ -104,11 +104,13 @@ export function CreateEmployeeModal({
               onChange={(e) => setDepartment(e.target.value as Department)}
               className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-medium"
             >
+              <option value="Video Production">Video Production</option>
               <option value="Video Editing">Video Editing</option>
               <option value="Graphic Design">Graphic Design</option>
               <option value="Scriptwriting">Scriptwriting</option>
               <option value="Social Media">Social Media</option>
               <option value="Content Planning">Content Planning</option>
+              <option value="Operations">Operations</option>
             </select>
           </div>
 

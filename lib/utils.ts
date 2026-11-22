@@ -309,3 +309,66 @@ export function getDeliverableStatusBadge(status: DeliverableStatus) {
 export function getStageDetails(stage: CreativeWorkflowStage) {
   return WORKFLOW_STAGE_METADATA[stage];
 }
+
+export type CapacityStatus = 'under_capacity' | 'optimal' | 'near_capacity' | 'overloaded';
+
+export interface WorkloadCapacityInfo {
+  percentage: number;
+  status: CapacityStatus;
+  label: string;
+  badgeClass: string;
+  barColor: string;
+  isOverloaded: boolean;
+  isHigh: boolean;
+}
+
+export function getWorkloadCapacityInfo(currentActive: number, maxConcurrent: number): WorkloadCapacityInfo {
+  const max = Math.max(1, maxConcurrent);
+  const percentage = Math.round((currentActive / max) * 100);
+
+  if (currentActive >= max) {
+    return {
+      percentage,
+      status: 'overloaded',
+      label: 'Overloaded',
+      badgeClass: 'bg-rose-50 text-rose-700 border-rose-200',
+      barColor: 'bg-rose-600',
+      isOverloaded: true,
+      isHigh: true,
+    };
+  }
+
+  if (percentage >= 80) {
+    return {
+      percentage,
+      status: 'near_capacity',
+      label: 'Near Capacity',
+      badgeClass: 'bg-amber-50 text-amber-700 border-amber-200',
+      barColor: 'bg-amber-500',
+      isOverloaded: false,
+      isHigh: true,
+    };
+  }
+
+  if (percentage >= 40) {
+    return {
+      percentage,
+      status: 'optimal',
+      label: 'Optimal',
+      badgeClass: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+      barColor: 'bg-emerald-600',
+      isOverloaded: false,
+      isHigh: false,
+    };
+  }
+
+  return {
+    percentage,
+    status: 'under_capacity',
+    label: 'Under-Capacity',
+    badgeClass: 'bg-blue-50 text-blue-700 border-blue-200',
+    barColor: 'bg-blue-600',
+    isOverloaded: false,
+    isHigh: false,
+  };
+}

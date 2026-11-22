@@ -15,6 +15,7 @@ import {
   AuditLog,
   CreativeWorkflowStage,
   TaskStatus,
+  Priority,
 } from '@/lib/types';
 import { initialData } from '@/data/seedData';
 import { AppHeader } from '@/components/layout/AppHeader';
@@ -416,6 +417,73 @@ export default function FlowdeskApp() {
     }
   };
 
+  // Deactivate Employee (Admin & Manager Equal Access)
+  const handleDeactivateEmployee = async (employee: Employee) => {
+    if (!confirm(`Are you sure you want to deactivate ${employee.name}? Their login will be disabled but past records will be preserved.`)) return;
+    try {
+      const res = await fetch('/api/employees', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: employee.id }),
+      });
+      if (res.ok) {
+        await refreshData();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // Reassign Task (Admin & Manager Equal Access)
+  const handleReassignTask = async (
+    taskId: string,
+    newEmployeeId: string,
+    priority?: Priority,
+    deadline?: string
+  ) => {
+    try {
+      const res = await fetch('/api/tasks', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          taskId,
+          assignedEmployeeId: newEmployeeId,
+          priority,
+          deadline,
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.warning) {
+          alert(data.warning);
+        }
+        await refreshData();
+        if (selectedTask && selectedTask.id === taskId) {
+          setSelectedTask(data.task);
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // Cancel Task (Admin & Manager Equal Access)
+  const handleCancelTask = async (taskId: string) => {
+    try {
+      const res = await fetch('/api/tasks', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: taskId }),
+      });
+      if (res.ok) {
+        await refreshData();
+        setSelectedTask(null);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   // Create Task (Admin & Manager Equal Access)
   const handleCreateTask = async (taskData: any) => {
     try {
@@ -684,6 +752,7 @@ export default function FlowdeskApp() {
                       setEmployeeToEdit(emp);
                       setIsCreateEmployeeOpen(true);
                     }}
+                    onDeactivateEmployee={handleDeactivateEmployee}
                   />
                 )}
                 {activeTab === 'projects_tasks' && (
@@ -799,6 +868,7 @@ export default function FlowdeskApp() {
                       setEmployeeToEdit(emp);
                       setIsCreateEmployeeOpen(true);
                     }}
+                    onDeactivateEmployee={handleDeactivateEmployee}
                   />
                 )}
                 {activeTab === 'projects_tasks' && (
@@ -941,6 +1011,8 @@ export default function FlowdeskApp() {
             setSelectedTask(null);
             setTaskForSubmitWork(t);
           }}
+          onReassignTask={handleReassignTask}
+          onCancelTask={handleCancelTask}
         />
       )}
 
