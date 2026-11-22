@@ -138,6 +138,7 @@ export interface User {
   avatar?: string;
   status: 'active' | 'inactive';
   phone?: string;
+  passwordHash?: string;
   createdAt: string;
 }
 
@@ -336,6 +337,17 @@ export interface Invitation {
   token: string;
   status: 'pending' | 'accepted' | 'expired';
   expiresAt: string;
+  acceptedAt?: string;
+  createdAt: string;
+}
+
+export interface PasswordResetToken {
+  id: string;
+  userId: string;
+  email: string;
+  token: string;
+  expiresAt: string;
+  used: boolean;
   createdAt: string;
 }
 
@@ -362,4 +374,5 @@ export interface AppState {
   notifications: NotificationItem[];
   invitations: Invitation[];
   auditLogs: AuditLog[];
+  passwordResets?: PasswordResetToken[];
 }

@@ -6,12 +6,17 @@ import { User, UserRole, Task } from './types';
  * Both belong to the shared 'FULL_ADMIN_ACCESS' permission group.
  * There are NO operational or administrative restrictions separating Admin from Manager.
  * There is NO separate Boss role; the Boss operates via the Admin Portal.
+ * 
+ * Account Status Requirement:
+ * Inactive/deactivated accounts are strictly revoked across all permissions.
  */
 
 export const FULL_ADMIN_ACCESS_ROLES: readonly UserRole[] = ['admin', 'manager'] as const;
 
 export function hasFullAdminAccess(user: User | null | undefined): boolean {
   if (!user) return false;
+  // Server-side deactivation enforcement: Inactive accounts have ZERO access
+  if (user.status === 'inactive') return false;
   return (
     user.role === 'admin' ||
     user.role === 'manager' ||
@@ -20,19 +25,65 @@ export function hasFullAdminAccess(user: User | null | undefined): boolean {
 }
 
 export function isEmployee(user: User | null | undefined): boolean {
-  if (!user) return false;
+  if (!user || user.status === 'inactive') return false;
   return user.role === 'employee';
 }
 
 export function isClient(user: User | null | undefined): boolean {
-  if (!user) return false;
+  if (!user || user.status === 'inactive') return false;
   return user.role === 'client';
 }
 
 /**
- * Comprehensive Account & Operational Permission Engine:
- * All 29 operational capabilities from Section 2 of the Master Development Prompt.
- * Admin and Manager possess 100% parity across all 29 capabilities.
+ * The 29 Canonical Capabilities from Section 2 ("Equal Permissions Implementation")
+ * of the Master Development Prompt:
+ */
+export const MASTER_29_CAPABILITIES = [
+  '1_create_client_accounts',
+  '2_create_employee_accounts',
+  '3_create_admin_and_manager_accounts',
+  '4_send_invitations_and_password_setup',
+  '5_manage_usernames_and_account_info',
+  '6_activate_deactivate_and_manage_accounts',
+  '7_create_edit_and_delete_projects',
+  '8_add_and_edit_clients',
+  '9_manage_client_services_and_contracts',
+  '10_set_monthly_deliverable_targets',
+  '11_assign_tasks_to_any_employee',
+  '12_reassign_tasks',
+  '13_create_and_manage_content_calendars',
+  '14_create_and_manage_scripts',
+  '15_assign_video_editing_work',
+  '16_assign_graphic_design_work',
+  '17_review_submitted_work',
+  '18_approve_or_reject_internal_submissions',
+  '19_send_scripts_and_videos_to_clients_for_approval',
+  '20_handle_client_revisions',
+  '21_schedule_and_track_content',
+  '22_mark_deliverables_as_published_or_delivered',
+  '23_view_all_employee_activity',
+  '24_view_all_client_activity',
+  '25_manage_notifications',
+  '26_view_reports_and_analytics',
+  '27_manage_financial_and_contract_information',
+  '28_manage_application_settings',
+  '29_access_all_company_wide_operational_data',
+] as const;
+
+export type MasterCapability = typeof MASTER_29_CAPABILITIES[number];
+
+/**
+ * Master Permission Checker for the 29 capabilities.
+ * Guarantees 100% parity: whatever Admin can do, Manager can do.
+ */
+export function checkCapability(user: User | null | undefined, capability: MasterCapability): boolean {
+  if (!user || user.status === 'inactive') return false;
+  // All 29 administrative capabilities are granted to FULL_ADMIN_ACCESS (Admin & Manager)
+  return hasFullAdminAccess(user);
+}
+
+/**
+ * Detailed permission helper functions used across UI and API endpoints.
  */
 export const permissions = {
   // 1. Create client accounts
@@ -146,7 +197,7 @@ export const permissions = {
 
   // EMPLOYEE PORTAL RESTRICTED PERMISSIONS
   canSubmitTaskWork: (user: User | null | undefined, task: Task) => {
-    if (!user) return false;
+    if (!user || user.status === 'inactive') return false;
     if (hasFullAdminAccess(user)) return true;
     if (user.role === 'employee') {
       return (
@@ -159,7 +210,7 @@ export const permissions = {
   },
 
   canViewTask: (user: User | null | undefined, task: Task) => {
-    if (!user) return false;
+    if (!user || user.status === 'inactive') return false;
     if (hasFullAdminAccess(user)) return true;
     if (user.role === 'employee') {
       return (
@@ -173,7 +224,7 @@ export const permissions = {
 
   // CLIENT PORTAL PRIVATE WORKSPACE BOUNDARY RESTRICTIONS
   canAccessClientData: (user: User | null | undefined, clientId: string) => {
-    if (!user) return false;
+    if (!user || user.status === 'inactive') return false;
     if (hasFullAdminAccess(user)) return true;
     if (user.role === 'client') {
       return user.clientId === clientId;
@@ -182,7 +233,7 @@ export const permissions = {
   },
 
   canApproveOrRejectDeliverable: (user: User | null | undefined, clientId: string) => {
-    if (!user) return false;
+    if (!user || user.status === 'inactive') return false;
     if (user.role === 'client') {
       return user.clientId === clientId;
     }

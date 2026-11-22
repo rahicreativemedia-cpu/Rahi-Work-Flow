@@ -69,8 +69,8 @@ export function InviteAcceptModal({
       setError('Please enter a password');
       return;
     }
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters');
+    if (password.length < 12) {
+      setError('Security Policy Violation: Password must be at least 12 characters in length');
       return;
     }
     if (password !== confirmPassword) {
@@ -180,10 +180,11 @@ export function InviteAcceptModal({
             <Input
               type="password"
               label="Choose a Password"
-              placeholder="Minimum 6 characters"
+              placeholder="Minimum 12 characters (RAHI Policy)"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              helperText="Must be at least 12 characters"
               leftIcon={<Lock className="w-4 h-4 text-slate-400" />}
             />
 
