@@ -44,3 +44,51 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+/* RAHI Flowdesk Cinematic Entrance Keyframes */
+@keyframes walkStrideLeft {
+  0% { transform: rotate(-24deg); }
+  50% { transform: rotate(24deg); }
+  100% { transform: rotate(-24deg); }
+}
+
+@keyframes walkStrideRight {
+  0% { transform: rotate(24deg); }
+  50% { transform: rotate(-24deg); }
+  100% { transform: rotate(24deg); }
+}
+
+@keyframes walkBob {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes briefcaseSwing {
+  0% { transform: rotate(-14deg); }
+  50% { transform: rotate(14deg); }
+  100% { transform: rotate(-14deg); }
+}
+
+@keyframes briefcaseLidOpen {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-105deg); }
+}
+
+@keyframes beamRise {
+  0% { transform: scaleY(0) scaleX(0.6); opacity: 0; }
+  40% { transform: scaleY(1.1) scaleX(1.1); opacity: 0.9; }
+  100% { transform: scaleY(1) scaleX(1); opacity: 0.7; }
+}
+
+@keyframes cardSpringReveal {
+  0% { transform: scale(0.65) translateY(45px); opacity: 0; }
+  60% { transform: scale(1.02) translateY(-4px); opacity: 1; }
+  85% { transform: scale(0.99) translateY(1px); }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+@keyframes particleDrift {
+  0% { transform: translateY(0px) scale(0.6); opacity: 0; }
+  50% { opacity: 0.9; }
+  100% { transform: translateY(-80px) scale(1.1); opacity: 0; }
+}
