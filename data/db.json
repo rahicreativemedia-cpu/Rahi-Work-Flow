@@ -118,6 +118,58 @@
   ],
   "clients": [
     {
+      "id": "cli-1795350159574",
+      "name": "Test Client Manager 1795350159573",
+      "company": "Test Client Manager 1795350159573",
+      "email": "mgr_created_1795350159573@test.com",
+      "phone": "",
+      "logoUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=128&q=80",
+      "servicePackage": "Full Marketing",
+      "contractStartDate": "2026-11-22",
+      "contractEndDate": "2027-11-22",
+      "monthlyRetainer": 220000,
+      "currency": "INR",
+      "monthlyCommitment": {
+        "reels": 15,
+        "longVideos": 2,
+        "graphics": 6,
+        "carousels": 4,
+        "customTargetNote": ""
+      },
+      "status": "archived",
+      "primaryContactName": "Test Client Manager 1795350159573",
+      "notes": "Updated by Manager",
+      "createdAt": "2026-11-22T12:22:39.574Z",
+      "archivedAt": "2026-11-22T12:22:39.583Z",
+      "archivedByUserId": "usr-manager"
+    },
+    {
+      "id": "cli-1795350159572",
+      "name": "Test Client Admin 1795350159570",
+      "company": "Test Client Admin 1795350159570",
+      "email": "admin_created_1795350159570@test.com",
+      "phone": "",
+      "logoUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=128&q=80",
+      "servicePackage": "Full Marketing",
+      "contractStartDate": "2026-11-22",
+      "contractEndDate": "2027-11-22",
+      "monthlyRetainer": 200000,
+      "currency": "INR",
+      "monthlyCommitment": {
+        "reels": 15,
+        "longVideos": 2,
+        "graphics": 6,
+        "carousels": 4,
+        "customTargetNote": ""
+      },
+      "status": "archived",
+      "primaryContactName": "Test Client Admin 1795350159570",
+      "notes": "Updated by Admin",
+      "createdAt": "2026-11-22T12:22:39.572Z",
+      "archivedAt": "2026-11-22T12:22:39.581Z",
+      "archivedByUserId": "usr-admin"
+    },
+    {
       "id": "cli-1795350086044",
       "name": "Test Client Manager 1795350086041",
       "company": "Test Client Manager 1795350086041",
@@ -1052,6 +1104,127 @@
   ],
   "auditLogs": [
     {
+      "id": "aud-1795350159583",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Client Archived",
+      "details": "Archived client \"Test Client Manager 1795350159573\" (cli-1795350159574). Historical projects, tasks, deliverables, and approvals permanently preserved.",
+      "targetType": "client",
+      "targetId": "cli-1795350159574",
+      "timestamp": "2026-11-22T12:22:39.583Z"
+    },
+    {
+      "id": "aud-1795350159581",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Client Archived",
+      "details": "Archived client \"Test Client Admin 1795350159570\" (cli-1795350159572). Historical projects, tasks, deliverables, and approvals permanently preserved.",
+      "targetType": "client",
+      "targetId": "cli-1795350159572",
+      "timestamp": "2026-11-22T12:22:39.581Z"
+    },
+    {
+      "id": "aud-1795350159579",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Client Updated",
+      "details": "Updated client \"Test Client Manager 1795350159573\" (Status: active, Retainer: 220000 INR/mo)",
+      "targetType": "client",
+      "targetId": "cli-1795350159574",
+      "timestamp": "2026-11-22T12:22:39.579Z"
+    },
+    {
+      "id": "aud-1795350159577",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Client Updated",
+      "details": "Updated client \"Test Client Admin 1795350159570\" (Status: active, Retainer: 200000 INR/mo)",
+      "targetType": "client",
+      "targetId": "cli-1795350159572",
+      "timestamp": "2026-11-22T12:22:39.577Z"
+    },
+    {
+      "id": "aud-1795350159574",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "Client Created",
+      "details": "Added new client \"Test Client Manager 1795350159573\" with package Full Marketing (220000 INR/mo)",
+      "targetType": "client",
+      "targetId": "cli-1795350159574",
+      "timestamp": "2026-11-22T12:22:39.574Z"
+    },
+    {
+      "id": "aud-1795350159572",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "Client Created",
+      "details": "Added new client \"Test Client Admin 1795350159570\" with package Full Marketing (200000 INR/mo)",
+      "targetType": "client",
+      "targetId": "cli-1795350159572",
+      "timestamp": "2026-11-22T12:22:39.572Z"
+    },
+    {
+      "id": "aud-1795350159560",
+      "userId": "usr-client-2",
+      "userName": "Mira Rajput",
+      "userRole": "client",
+      "action": "User Authentication",
+      "details": "Mira Rajput authenticated into CLIENT PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-client-2",
+      "timestamp": "2026-11-22T12:22:39.560Z"
+    },
+    {
+      "id": "aud-1795350159557",
+      "userId": "usr-client-1",
+      "userName": "Arjun Kapoor",
+      "userRole": "client",
+      "action": "User Authentication",
+      "details": "Arjun Kapoor authenticated into CLIENT PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-client-1",
+      "timestamp": "2026-11-22T12:22:39.557Z"
+    },
+    {
+      "id": "aud-1795350159554",
+      "userId": "usr-emp-1",
+      "userName": "Vikram Mehta",
+      "userRole": "employee",
+      "action": "User Authentication",
+      "details": "Vikram Mehta authenticated into EMPLOYEE PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-emp-1",
+      "timestamp": "2026-11-22T12:22:39.554Z"
+    },
+    {
+      "id": "aud-1795350159550",
+      "userId": "usr-manager",
+      "userName": "Priya Sharma",
+      "userRole": "manager",
+      "action": "User Authentication",
+      "details": "Priya Sharma authenticated into MANAGER PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-manager",
+      "timestamp": "2026-11-22T12:22:39.550Z"
+    },
+    {
+      "id": "aud-1795350159546",
+      "userId": "usr-admin",
+      "userName": "Rohan Rahi",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rohan Rahi authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-22T12:22:39.546Z"
+    },
+    {
       "id": "aud-1795350086058",
       "userId": "usr-manager",
       "userName": "Priya Sharma",
@@ -1207,6 +1380,53 @@
     }
   ],
   "sessions": [
+    {
+      "id": "sess-1795350159561-135dec87",
+      "token": "fe3058cb177f29e3e4c2807d0375dc11f7207ad4d4823f658ecf18f6f692fc4d",
+      "userId": "usr-client-2",
+      "role": "client",
+      "permissionGroup": "CLIENT_ACCESS",
+      "clientId": "cli-2",
+      "createdAt": "2026-11-22T12:22:39.561Z",
+      "expiresAt": "2026-11-29T12:22:39.561Z"
+    },
+    {
+      "id": "sess-1795350159557-18935c96",
+      "token": "ca875134f4c67204639d57a04139c0533c12790794633c9d37e0ffe9292a4e3b",
+      "userId": "usr-client-1",
+      "role": "client",
+      "permissionGroup": "CLIENT_ACCESS",
+      "clientId": "cli-1",
+      "createdAt": "2026-11-22T12:22:39.557Z",
+      "expiresAt": "2026-11-29T12:22:39.557Z"
+    },
+    {
+      "id": "sess-1795350159554-b7e45174",
+      "token": "5e1a67f569d1772c76fb51ce147000966ac41c315e0173690285a1fb8dd05f80",
+      "userId": "usr-emp-1",
+      "role": "employee",
+      "permissionGroup": "EMPLOYEE_ACCESS",
+      "createdAt": "2026-11-22T12:22:39.554Z",
+      "expiresAt": "2026-11-29T12:22:39.554Z"
+    },
+    {
+      "id": "sess-1795350159551-3fe372f1",
+      "token": "a69df597268214b1db6585a746cb2951bc7a8be8c5fe44e7ca55ee190f142452",
+      "userId": "usr-manager",
+      "role": "manager",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-22T12:22:39.551Z",
+      "expiresAt": "2026-11-29T12:22:39.551Z"
+    },
+    {
+      "id": "sess-1795350159546-1eac1552",
+      "token": "28374f604ab5d9cb8b1434d6c986264d771e6587f148eb623affdc4ccce3a727",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-22T12:22:39.546Z",
+      "expiresAt": "2026-11-29T12:22:39.546Z"
+    },
     {
       "id": "sess-1795350086029-250ab33d",
       "token": "e2ba16234243e591a859815d9d6c81d2e729ce56cce2150dc9158c04965628b4",
