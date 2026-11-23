@@ -185,7 +185,7 @@ export function CreateProjectModal({
                   const selClient = clients.find((c) => c.id === e.target.value);
                   if (selClient?.currency) setCurrency(selClient.currency);
                 }}
-                className="w-full text-xs p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-slate-900"
+                className="w-full text-xs p-2.5 bg-white border border-neutral-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-black/10 focus:border-black text-neutral-900"
               >
                 <option value="">Select a Client...</option>
                 {clients.map((c) => (
@@ -204,7 +204,7 @@ export function CreateProjectModal({
               <select
                 value={projectManagerId}
                 onChange={(e) => setProjectManagerId(e.target.value)}
-                className="w-full text-xs p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-slate-900"
+                className="w-full text-xs p-2.5 bg-white border border-neutral-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-black/10 focus:border-black text-neutral-900"
               >
                 <option value="">Select Manager / Lead...</option>
                 {users
@@ -226,7 +226,7 @@ export function CreateProjectModal({
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="High-level scope of work, deliverables summary, and deliverables cadence..."
-                className="w-full text-xs p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-slate-900"
+                className="w-full text-xs p-2.5 bg-white border border-neutral-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-black/10 focus:border-black text-neutral-900"
                 rows={2}
               />
             </div>
@@ -241,7 +241,7 @@ export function CreateProjectModal({
                 value={objective}
                 onChange={(e) => setObjective(e.target.value)}
                 placeholder="e.g. Generate 50,000 profile visits and 20% conversion lift on launch reel"
-                className="w-full text-xs p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-slate-900"
+                className="w-full text-xs p-2.5 bg-white border border-neutral-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-black/10 focus:border-black text-neutral-900"
               />
             </div>
 
@@ -254,7 +254,7 @@ export function CreateProjectModal({
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="w-full text-xs p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-slate-900"
+                className="w-full text-xs p-2.5 bg-white border border-neutral-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-black/10 focus:border-black text-neutral-900"
               />
             </div>
 
@@ -267,7 +267,7 @@ export function CreateProjectModal({
                 type="date"
                 value={targetEndDate}
                 onChange={(e) => setTargetEndDate(e.target.value)}
-                className="w-full text-xs p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-slate-900"
+                className="w-full text-xs p-2.5 bg-white border border-neutral-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-black/10 focus:border-black text-neutral-900"
               />
             </div>
 
@@ -279,7 +279,7 @@ export function CreateProjectModal({
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as any)}
-                className="w-full text-xs p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-slate-900"
+                className="w-full text-xs p-2.5 bg-white border border-neutral-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-black/10 focus:border-black text-neutral-900"
               >
                 <option value="planning">Planning</option>
                 <option value="not_started">Not Started</option>
@@ -298,7 +298,7 @@ export function CreateProjectModal({
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value as any)}
-                className="w-full text-xs p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-slate-900"
+                className="w-full text-xs p-2.5 bg-white border border-neutral-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-black/10 focus:border-black text-neutral-900"
               >
                 <option value="low">Low</option>
                 <option value="medium">Medium</option>
@@ -318,7 +318,7 @@ export function CreateProjectModal({
                 max="100"
                 value={totalDeliverablesTarget}
                 onChange={(e) => setTotalDeliverablesTarget(e.target.value)}
-                className="w-full text-xs p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-slate-900"
+                className="w-full text-xs p-2.5 bg-white border border-neutral-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-black/10 focus:border-black text-neutral-900"
               />
             </div>
 
@@ -334,7 +334,7 @@ export function CreateProjectModal({
                   value={budget}
                   onChange={(e) => setBudget(e.target.value)}
                   placeholder="e.g. 150000"
-                  className="w-full text-xs p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-slate-900"
+                  className="w-full text-xs p-2.5 bg-white border border-neutral-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-black/10 focus:border-black text-neutral-900"
                 />
               </div>
               <div>
@@ -344,7 +344,7 @@ export function CreateProjectModal({
                 <select
                   value={currency}
                   onChange={(e) => setCurrency(e.target.value)}
-                  className="w-full text-xs p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-slate-900"
+                  className="w-full text-xs p-2.5 bg-white border border-neutral-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-black/10 focus:border-black text-neutral-900"
                 >
                   <option value="INR">INR (₹)</option>
                   <option value="USD">USD ($)</option>

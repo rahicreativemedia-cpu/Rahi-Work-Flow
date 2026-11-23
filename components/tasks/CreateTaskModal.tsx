@@ -85,7 +85,7 @@ export function CreateTaskModal({
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="e.g. Cut 30s Reel with motion typography"
-            className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:ring-2 focus:ring-blue-500/20"
+            className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900 focus:outline-hidden focus:ring-2 focus:ring-black/10 focus:border-black"
           />
         </div>
 

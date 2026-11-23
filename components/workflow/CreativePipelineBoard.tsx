@@ -67,7 +67,7 @@ export function CreativePipelineBoard({
           <select
             value={selectedClientFilter}
             onChange={(e) => setSelectedClientFilter(e.target.value)}
-            className="text-xs px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 font-medium focus:ring-2 focus:ring-blue-500/20"
+            className="text-xs px-3 py-1.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-700 font-medium focus:outline-hidden focus:ring-2 focus:ring-black/10 focus:border-black"
           >
             <option value="all">All Clients</option>
             {uniqueClients.map((client) => (

@@ -43,13 +43,13 @@ export function AppHeader({
   const hasAdminEqual = hasFullAdminAccess(currentUser);
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-xs border-b border-slate-200/90 px-4 sm:px-6 py-2.5 flex items-center justify-between gap-4">
+    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-xs border-b border-neutral-200/90 px-4 sm:px-6 py-2.5 flex items-center justify-between gap-4">
       {/* Left: Hamburger (mobile) + Brand & Portal Badge */}
       <div className="flex items-center gap-3">
         {onToggleMobileMenu && (
           <button
             onClick={onToggleMobileMenu}
-            className="md:hidden p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition border border-slate-200"
+            className="md:hidden p-1.5 rounded-lg text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 transition border border-neutral-200"
             aria-label="Toggle navigation menu"
           >
             <Menu className="w-5 h-5" />
@@ -57,12 +57,12 @@ export function AppHeader({
         )}
 
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-lg bg-white border border-slate-200/80 p-1 flex items-center justify-center shadow-xs shrink-0">
+          <div className="w-9 h-9 rounded-lg bg-white border border-neutral-200/80 p-1 flex items-center justify-center shadow-xs shrink-0">
             <img src="/rahi-logo.png" alt="RAHI Flowdesk" className="w-7 h-auto max-h-7 object-contain" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-bold text-slate-900 text-sm sm:text-base tracking-tight">
+              <span className="font-bold text-neutral-900 text-sm sm:text-base tracking-tight">
                 RAHI Flowdesk
               </span>
               <span
@@ -71,7 +71,7 @@ export function AppHeader({
                 {currentPortalConfig.name}
               </span>
             </div>
-            <p className="text-[10px] sm:text-[11px] text-slate-400 font-medium">
+            <p className="text-[10px] sm:text-[11px] text-neutral-400 font-medium">
               RAHI Creative Media
             </p>
           </div>

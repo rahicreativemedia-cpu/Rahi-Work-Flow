@@ -828,7 +828,7 @@ export default function FlowdeskApp() {
   const unreadNotifsCount = notifications.filter((n) => !n.read).length;
 
   return (
-    <div className="flex h-screen bg-slate-50 text-slate-900 overflow-hidden font-sans">
+    <div className="flex h-screen bg-neutral-50 text-neutral-900 overflow-hidden font-sans">
       {/* Sidebar Navigation */}
       <Sidebar
         currentUser={currentUser}

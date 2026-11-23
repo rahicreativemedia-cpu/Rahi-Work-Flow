@@ -35,6 +35,17 @@
   "invitations": [],
   "auditLogs": [
     {
+      "id": "aud-1795424674640",
+      "userId": "usr-admin",
+      "userName": "Rahi Creative Media",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rahi Creative Media authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-23T09:04:34.640Z"
+    },
+    {
       "id": "aud-1795413952887",
       "userId": "usr-admin",
       "userName": "Rahi Creative Media",
@@ -102,6 +113,15 @@
     }
   ],
   "sessions": [
+    {
+      "id": "sess-1795424674641-5474fe85",
+      "token": "785209ed4cdea7766d81323e5148d4653f2d2f85732eb31b66a7f4a3f22c5ff2",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-23T09:04:34.641Z",
+      "expiresAt": "2026-11-30T09:04:34.641Z"
+    },
     {
       "id": "sess-1795413630181-07996c22",
       "token": "5664e00b531aa4b5240f624da11575023659f390c8609941664e312151096331",
