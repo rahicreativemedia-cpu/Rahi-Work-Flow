@@ -1,0 +1,256 @@
+{
+  "users": [
+    {
+      "id": "usr-admin",
+      "name": "Rahi Creative Media",
+      "email": "admin@rahicreative.com",
+      "username": "admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "department": "Creative Direction",
+      "status": "active",
+      "phone": "",
+      "passwordHash": "2e6232c0a238d61061d4855afeb6228d:e24ab1b79a33baa966230b53183ef87c81721a613d0be5bb92dec4ed569e88461d0d15946db3034ba202e7f9569e57f9115f1d51de7df6f23f5e15db5c04fb96",
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "usr-1795413952887",
+      "name": "Zayn",
+      "email": "zayn@rahicreativemedia.com",
+      "username": "zayn",
+      "role": "manager",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "phone": "7359668298",
+      "status": "active",
+      "createdAt": "2026-11-23T06:05:52.887Z"
+    }
+  ],
+  "clients": [],
+  "employees": [],
+  "projects": [],
+  "tasks": [],
+  "deliverables": [],
+  "approvals": [],
+  "notifications": [],
+  "invitations": [],
+  "auditLogs": [
+    {
+      "id": "aud-1795434437653",
+      "userId": "usr-admin",
+      "userName": "Rahi Creative Media",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rahi Creative Media authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-23T11:47:17.653Z"
+    },
+    {
+      "id": "aud-1795433394982",
+      "userId": "usr-admin",
+      "userName": "Rahi Creative Media",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rahi Creative Media authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-23T11:29:54.982Z"
+    },
+    {
+      "id": "aud-1795432075841",
+      "userId": "usr-admin",
+      "userName": "Rahi Creative Media",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rahi Creative Media authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-23T11:07:55.841Z"
+    },
+    {
+      "id": "aud-1795431223867",
+      "userId": "usr-admin",
+      "userName": "Rahi Creative Media",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rahi Creative Media authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-23T10:53:43.867Z"
+    },
+    {
+      "id": "aud-1795424674640",
+      "userId": "usr-admin",
+      "userName": "Rahi Creative Media",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rahi Creative Media authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-23T09:04:34.640Z"
+    },
+    {
+      "id": "aud-1795413952887",
+      "userId": "usr-admin",
+      "userName": "Rahi Creative Media",
+      "userRole": "admin",
+      "action": "Account Created",
+      "details": "Created MANAGER account for Zayn  (zayn@rahicreativemedia.com)",
+      "targetType": "auth",
+      "targetId": "usr-1795413952887",
+      "timestamp": "2026-11-23T06:05:52.887Z"
+    },
+    {
+      "id": "aud-1795413630180",
+      "userId": "usr-admin",
+      "userName": "Rahi Creative Media",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rahi Creative Media authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-23T06:00:30.180Z"
+    },
+    {
+      "id": "aud-1795413212894",
+      "userId": "usr-admin",
+      "userName": "Rahi Creative Media",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rahi Creative Media authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-23T05:53:32.894Z"
+    },
+    {
+      "id": "aud-1795413172922",
+      "userId": "usr-admin",
+      "userName": "Rahi Creative Media",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rahi Creative Media authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-23T05:52:52.922Z"
+    },
+    {
+      "id": "aud-1795413130572",
+      "userId": "usr-admin",
+      "userName": "Rahi Creative Media",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rahi Creative Media authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-23T05:52:10.572Z"
+    },
+    {
+      "id": "aud-1795412763929",
+      "userId": "usr-admin",
+      "userName": "Rahi Creative Media",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rahi Creative Media authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-23T05:46:03.929Z"
+    }
+  ],
+  "sessions": [
+    {
+      "id": "sess-1795434437700-58fae070",
+      "token": "a8ea9350621caaa9af110e22e07d75711f8d970eb950879cbb69bc556b390131",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-23T11:47:17.700Z",
+      "expiresAt": "2026-11-30T11:47:17.700Z"
+    },
+    {
+      "id": "sess-1795433394983-bcd880db",
+      "token": "10bed4a4bf7ee405fc8c24a0dbb24de5c3cfd11c53f9d334e901f255f7df6310",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-23T11:29:54.983Z",
+      "expiresAt": "2026-11-30T11:29:54.983Z"
+    },
+    {
+      "id": "sess-1795432075842-d2de20a4",
+      "token": "a44526512eccee9d20bdf06ea2ed12c51ab1ef8765f3253bff7db46b62bcbd0d",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-23T11:07:55.842Z",
+      "expiresAt": "2026-11-30T11:07:55.842Z"
+    },
+    {
+      "id": "sess-1795431223870-2b87813e",
+      "token": "10eb174112bd58d5c87f7a3e37acab1c477249bf8bd615d2553089e852010474",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-23T10:53:43.870Z",
+      "expiresAt": "2026-11-30T10:53:43.870Z"
+    },
+    {
+      "id": "sess-1795424674641-5474fe85",
+      "token": "785209ed4cdea7766d81323e5148d4653f2d2f85732eb31b66a7f4a3f22c5ff2",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-23T09:04:34.641Z",
+      "expiresAt": "2026-11-30T09:04:34.641Z"
+    },
+    {
+      "id": "sess-1795413630181-07996c22",
+      "token": "5664e00b531aa4b5240f624da11575023659f390c8609941664e312151096331",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-23T06:00:30.181Z",
+      "expiresAt": "2026-11-30T06:00:30.181Z"
+    },
+    {
+      "id": "sess-1795413212894-7a01d023",
+      "token": "de3ffac650581e8dbd3d2c147ee4742308896afc8d130444be7a475cdc8d598d",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-23T05:53:32.894Z",
+      "expiresAt": "2026-11-30T05:53:32.894Z"
+    },
+    {
+      "id": "sess-1795413172922-9431369c",
+      "token": "2fbd903e80dc4335eb1ff582d1932567ad40abc22c94076869ee6dc61d611495",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-23T05:52:52.922Z",
+      "expiresAt": "2026-11-30T05:52:52.922Z"
+    },
+    {
+      "id": "sess-1795413130572-7e618079",
+      "token": "36fdcc2a9786d9d45732f3abb1d891166f51a90a4f1428de4e1248ed463785f4",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-23T05:52:10.572Z",
+      "expiresAt": "2026-11-30T05:52:10.572Z"
+    },
+    {
+      "id": "sess-1795412763930-23cca820",
+      "token": "177021fef7ba10ce9662e8c698ad65915780fdbbbaf618d2142db90b45e3545f",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-23T05:46:03.930Z",
+      "expiresAt": "2026-11-30T05:46:03.930Z"
+    }
+  ],
+  "invoices": [],
+  "payments": [],
+  "expenses": [],
+  "passwordResets": [],
+  "rateLimits": []
+}

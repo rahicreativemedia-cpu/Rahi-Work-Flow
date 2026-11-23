@@ -1,64 +1,95 @@
-import { NextResponse } from 'next/server';
 import crypto from 'crypto';
-import { getDB, saveDB } from '@/lib/db';
+import {
+  getUsers,
+  getUserById,
+  getUserByEmailOrUsername,
+  createUser,
+  updateUser,
+  getInvitations,
+  getInvitationById,
+  getInvitationByToken,
+  createInvitation,
+  updateInvitation,
+  createAuditLog,
+  createEmployee,
+  getPasswordResetByToken,
+  createPasswordReset,
+  markPasswordResetUsed,
+} from '@/lib/db';
 import { User, Invitation, AuditLog, PasswordResetToken } from '@/lib/types';
 import { hasFullAdminAccess } from '@/lib/permissions';
 import { hashPassword, verifyPassword } from '@/lib/crypto';
-import { createSession, formatSessionSetCookie, formatSessionClearCookie, getAuthenticatedUser } from '@/lib/session';
-import { checkRateLimit, clearRateLimit, isRateLimitLocked, RATE_LIMIT_CONFIGS, getClientIp } from '@/lib/ratelimit';
+import {
+  createSession,
+  formatSessionSetCookie,
+  formatSessionClearCookie,
+  getAuthenticatedUser,
+} from '@/lib/session';
+import {
+  checkRateLimit,
+  clearRateLimit,
+  isRateLimitLocked,
+  RATE_LIMIT_CONFIGS,
+} from '@/lib/ratelimit';
+import { privateJsonResponse, privateErrorResponse } from '@/lib/api-response';
+
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const userId = searchParams.get('userId');
-  const token = searchParams.get('token');
-  const db = getDB();
+  try {
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get('userId');
+    const token = searchParams.get('token');
 
-  // Look up specific invitation by cryptographically secure token
-  if (token) {
-    const invitation = db.invitations.find((i) => i.token === token);
-    if (!invitation) {
-      return NextResponse.json({ error: 'Invitation not found' }, { status: 404 });
+    // Look up specific invitation by cryptographically secure token
+    if (token) {
+      const invitation = await getInvitationByToken(token);
+      if (!invitation) {
+        return privateErrorResponse('Invitation not found', 404);
+      }
+      return privateJsonResponse({
+        invitation: {
+          id: invitation.id,
+          fullName: invitation.fullName,
+          email: invitation.email,
+          role: invitation.role,
+          department: invitation.department,
+          clientName: invitation.clientName,
+          status: invitation.status,
+          expiresAt: invitation.expiresAt,
+        },
+      });
     }
-    // Return sanitized invitation data
-    return NextResponse.json({
-      invitation: {
-        id: invitation.id,
-        fullName: invitation.fullName,
-        email: invitation.email,
-        role: invitation.role,
-        department: invitation.department,
-        clientName: invitation.clientName,
-        status: invitation.status,
-        expiresAt: invitation.expiresAt,
-      },
-    });
-  }
 
-  // Look up specific user by userId
-  if (userId) {
-    const user = db.users.find((u) => u.id === userId);
-    if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    // Look up specific user by userId
+    if (userId) {
+      const user = await getUserById(userId);
+      if (!user) {
+        return privateErrorResponse('User not found', 404);
+      }
+      const { passwordHash: _, ...safeUser } = user as any;
+      return privateJsonResponse({ user: safeUser });
     }
-    // Never expose password hash to frontend
-    const { passwordHash: _, ...safeUser } = user as any;
-    return NextResponse.json({ user: safeUser });
-  }
 
-  // Return sanitized users & invitations (for Admin/Manager user management)
-  const safeUsers = db.users.map(({ passwordHash: _, ...u }: any) => u);
-  return NextResponse.json({ users: safeUsers, invitations: db.invitations });
+    // Return sanitized users & invitations (for Admin/Manager user management)
+    const [allUsers, allInvitations] = await Promise.all([
+      getUsers(),
+      getInvitations(),
+    ]);
+
+    const safeUsers = allUsers.map(({ passwordHash: _, ...u }: any) => u);
+    return privateJsonResponse({ users: safeUsers, invitations: allInvitations });
+  } catch (error: any) {
+    return privateErrorResponse('Failed to fetch authentication data', 500, error);
+  }
 }
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { action } = body;
-    const db = getDB();
 
-    // Authenticate caller strictly via cryptographic session (HttpOnly cookie or Bearer token)
-    // Never trust client-provided callerUserId from request body
-    const auth = getAuthenticatedUser(request);
+    // Authenticate caller strictly via cryptographic session
+    const auth = await getAuthenticatedUser(request);
     const caller = auth.user;
 
     // 1. Direct login / credentials verification
@@ -70,72 +101,78 @@ export async function POST(request: Request) {
       // Check brute-force lockout (5 failed attempts per 15 minutes)
       const lockCheck = isRateLimitLocked(rateLimitKey, RATE_LIMIT_CONFIGS.loginFailed);
       if (lockCheck.locked) {
-        return NextResponse.json(
-          { error: `Too many failed login attempts. Please try again in ${lockCheck.retryAfterSeconds} seconds.` },
-          { status: 429 }
+        return privateErrorResponse(
+          `Too many failed login attempts. Please try again in ${lockCheck.retryAfterSeconds} seconds.`,
+          429
         );
       }
 
-      let user: User | undefined = userId
-        ? db.users.find((u) => u.id === userId)
-        : db.users.find(
-            (u) =>
-              u.email.toLowerCase() === cleanEmail ||
-              (u.username && u.username.toLowerCase() === cleanEmail) ||
-              (u.role === 'admin' && (cleanEmail === 'admin' || cleanEmail === 'root' || cleanEmail === 'rahi' || cleanEmail.includes('rahi')))
-          );
+      let user: User | null = null;
+      if (userId) {
+        user = await getUserById(userId);
+      } else if (cleanEmail) {
+        user = await getUserByEmailOrUsername(cleanEmail);
+      }
 
-      // Initial Bootstrap: If this is the initial login and no admin exists or database is fresh, register the user as Administrator
-      if (!user && cleanEmail && (db.users.length === 0 || (db.users.length === 1 && db.users[0].email === 'admin@rahicreative.com' && !db.users[0].passwordHash))) {
-        if (db.users.length === 1 && db.users[0].email === 'admin@rahicreative.com' && !db.users[0].passwordHash) {
-          user = db.users[0];
-          user.email = cleanEmail;
-          user.name = cleanEmail.split('@')[0];
-          user.username = cleanEmail.split('@')[0];
-          if (password) {
-            user.passwordHash = hashPassword(password);
+      // Initial Bootstrap: If this is the initial login and no admin exists or database is fresh
+      if (!user && cleanEmail) {
+        const existingUsers = await getUsers().catch(() => []);
+        if (
+          existingUsers.length === 0 ||
+          (existingUsers.length === 1 &&
+            existingUsers[0].email === 'admin@rahicreative.com' &&
+            !existingUsers[0].passwordHash)
+        ) {
+          if (
+            existingUsers.length === 1 &&
+            existingUsers[0].email === 'admin@rahicreative.com' &&
+            !existingUsers[0].passwordHash
+          ) {
+            user = existingUsers[0];
+            const updated = await updateUser(user.id, {
+              email: cleanEmail,
+              name: cleanEmail.split('@')[0],
+              username: cleanEmail.split('@')[0],
+              passwordHash: password ? hashPassword(password) : undefined,
+            });
+            if (updated) user = updated;
+          } else {
+            const newAdmin: User = {
+              id: 'usr-admin',
+              name: cleanEmail.split('@')[0],
+              email: cleanEmail,
+              username: cleanEmail.split('@')[0],
+              role: 'admin',
+              permissionGroup: 'FULL_ADMIN_ACCESS',
+              department: 'Creative Direction',
+              status: 'active',
+              phone: '',
+              passwordHash: password ? hashPassword(password) : undefined,
+              createdAt: new Date().toISOString(),
+            };
+            await createUser(newAdmin);
+            user = newAdmin;
           }
-          saveDB(db);
-        } else {
-          const newAdmin: User = {
-            id: 'usr-admin',
-            name: cleanEmail.split('@')[0],
-            email: cleanEmail,
-            username: cleanEmail.split('@')[0],
-            role: 'admin',
-            permissionGroup: 'FULL_ADMIN_ACCESS',
-            department: 'Creative Direction',
-            status: 'active',
-            phone: '',
-            passwordHash: password ? hashPassword(password) : undefined,
-            createdAt: new Date().toISOString(),
-          };
-          db.users.push(newAdmin);
-          saveDB(db);
-          user = newAdmin;
         }
       }
 
       if (!user) {
         checkRateLimit(rateLimitKey, RATE_LIMIT_CONFIGS.loginFailed);
-        return NextResponse.json(
-          { error: 'Invalid credentials or user not registered' },
-          { status: 401 }
-        );
+        return privateErrorResponse('Invalid credentials or user not registered', 401);
       }
 
       // Server-side deactivation enforcement: Inactive accounts CANNOT authenticate
       if (user.status === 'inactive') {
-        return NextResponse.json(
-          { error: 'Account is deactivated. Please contact company administration.' },
-          { status: 403 }
+        return privateErrorResponse(
+          'Account is deactivated. Please contact company administration.',
+          403
         );
       }
 
       // If user has no passwordHash set yet (initial login), securely set and store it now
       if (!user.passwordHash && password) {
         user.passwordHash = hashPassword(password);
-        saveDB(db);
+        await updateUser(user.id, { passwordHash: user.passwordHash });
       } else if (user.passwordHash && password) {
         const cleanPass = (password || '').trim();
         const isValid =
@@ -143,15 +180,12 @@ export async function POST(request: Request) {
           verifyPassword(cleanPass, user.passwordHash) ||
           (user.role === 'admin' &&
             (cleanPass.toLowerCase() === 'admin123' ||
-             cleanPass.toLowerCase() === 'admin' ||
-             cleanPass.toLowerCase() === 'rahi123'));
+              cleanPass.toLowerCase() === 'admin' ||
+              cleanPass.toLowerCase() === 'rahi123'));
 
         if (!isValid) {
           checkRateLimit(rateLimitKey, RATE_LIMIT_CONFIGS.loginFailed);
-          return NextResponse.json(
-            { error: 'Invalid email or password' },
-            { status: 401 }
-          );
+          return privateErrorResponse('Invalid email or password', 401);
         }
       }
 
@@ -159,7 +193,7 @@ export async function POST(request: Request) {
       clearRateLimit(rateLimitKey);
 
       // Record successful login in immutable audit log
-      db.auditLogs.unshift({
+      await createAuditLog({
         id: `aud-${Date.now()}`,
         userId: user.id,
         userName: user.name,
@@ -171,11 +205,9 @@ export async function POST(request: Request) {
         timestamp: new Date().toISOString(),
       });
 
-      saveDB(db);
-
-      const session = createSession(user);
+      const session = await createSession(user);
       const { passwordHash: _, ...safeUser } = user as any;
-      const response = NextResponse.json({
+      const response = privateJsonResponse({
         success: true,
         sessionToken: session.token,
         user: safeUser,
@@ -186,7 +218,10 @@ export async function POST(request: Request) {
 
     // 1b. Logout & Clear Session Cookie
     if (action === 'logout') {
-      const response = NextResponse.json({ success: true, message: 'Logged out successfully' });
+      const response = privateJsonResponse({
+        success: true,
+        message: 'Logged out successfully',
+      });
       response.headers.set('Set-Cookie', formatSessionClearCookie());
       return response;
     }
@@ -194,30 +229,30 @@ export async function POST(request: Request) {
     // 2. Send Invitation (Admin & Manager have EQUAL capability)
     if (action === 'invite') {
       if (!caller || caller.status === 'inactive' || !hasFullAdminAccess(caller)) {
-        return NextResponse.json(
-          { error: 'Unauthorized: Active Admin or Manager permission required' },
-          { status: 403 }
+        return privateErrorResponse(
+          'Unauthorized: Active Admin or Manager permission required',
+          403
         );
       }
 
       const { email, fullName, username, role, department, clientId, clientName } = body;
 
       if (!email || !fullName || !role) {
-        return NextResponse.json({ error: 'Missing required invitation fields' }, { status: 400 });
+        return privateErrorResponse('Missing required invitation fields', 400);
       }
 
       const cleanEmail = email.toLowerCase().trim();
-      const existingUser = db.users.find((u) => u.email.toLowerCase() === cleanEmail);
+      const existingUser = await getUserByEmailOrUsername(cleanEmail);
       if (existingUser) {
-        return NextResponse.json(
-          { error: 'A user with this email address is already registered' },
-          { status: 400 }
+        return privateErrorResponse(
+          'A user with this email address is already registered',
+          400
         );
       }
 
       // Cryptographically secure token (48 characters hexadecimal)
       const token = `inv_${crypto.randomBytes(24).toString('hex')}`;
-      const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(); // Strict 7-day expiration
+      const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
 
       const newInvitation: Invitation = {
         id: `inv-${Date.now()}`,
@@ -234,10 +269,9 @@ export async function POST(request: Request) {
         createdAt: new Date().toISOString(),
       };
 
-      db.invitations.unshift(newInvitation);
+      await createInvitation(newInvitation);
 
-      // Audit log entry
-      db.auditLogs.unshift({
+      await createAuditLog({
         id: `aud-${Date.now()}`,
         userId: caller.id,
         userName: caller.name,
@@ -249,71 +283,59 @@ export async function POST(request: Request) {
         timestamp: new Date().toISOString(),
       });
 
-      saveDB(db);
-      return NextResponse.json({ success: true, invitation: newInvitation });
+      return privateJsonResponse({ success: true, invitation: newInvitation });
     }
 
-    // 3. Accept invitation & set initial secure password (Enforces 12-char policy, single-use, & expiry)
+    // 3. Accept invitation & set initial secure password
     if (action === 'accept_invitation') {
       const { token, password } = body;
       if (!token) {
-        return NextResponse.json({ error: 'Missing invitation token' }, { status: 400 });
+        return privateErrorResponse('Missing invitation token', 400);
       }
 
-      // Brute-force token guessing defense (5 attempts per 15 minutes)
-      const invRate = checkRateLimit(`invite_accept:${token}`, RATE_LIMIT_CONFIGS.invitationAccept);
-      if (!invRate.allowed) {
-        return NextResponse.json(
-          { error: 'Too many invitation acceptance attempts. Please try again in 15 minutes.' },
-          { status: 429 }
-        );
-      }
-
-      // Password policy: Minimum 12 characters
-      if (!password || password.length < 12) {
-        return NextResponse.json(
-          { error: 'Security Policy Violation: Password must be at least 12 characters in length.' },
-          { status: 400 }
-        );
-      }
-
-      const invIndex = db.invitations.findIndex((i) => i.token === token);
-      if (invIndex === -1) {
-        return NextResponse.json(
-          { error: 'Invalid invitation token.' },
-          { status: 400 }
-        );
-      }
-
-      const inv = db.invitations[invIndex];
-
-      // Single-use enforcement: Cannot reuse an already accepted or expired token
-      if (inv.status !== 'pending') {
-        return NextResponse.json(
-          { error: 'This invitation has already been claimed or revoked and cannot be reused.' },
-          { status: 400 }
-        );
-      }
-
-      // Expiry enforcement: Strict 7 days
-      if (new Date(inv.expiresAt) < new Date()) {
-        inv.status = 'expired';
-        saveDB(db);
-        return NextResponse.json(
-          { error: 'This invitation token has expired. Please request a new invitation.' },
-          { status: 400 }
-        );
-      }
-
-      // Prevent duplicate account creation
-      const existingUser = db.users.find(
-        (u) => u.email.toLowerCase() === inv.email.toLowerCase()
+      const invRate = checkRateLimit(
+        `invite_accept:${token}`,
+        RATE_LIMIT_CONFIGS.invitationAccept
       );
-      if (existingUser) {
-        return NextResponse.json({ error: 'User already exists' }, { status: 400 });
+      if (!invRate.allowed) {
+        return privateErrorResponse(
+          'Too many invitation acceptance attempts. Please try again in 15 minutes.',
+          429
+        );
       }
 
-      // Cryptographically hash password before saving
+      if (!password || password.length < 12) {
+        return privateErrorResponse(
+          'Security Policy Violation: Password must be at least 12 characters in length.',
+          400
+        );
+      }
+
+      const inv = await getInvitationByToken(token);
+      if (!inv) {
+        return privateErrorResponse('Invalid invitation token.', 400);
+      }
+
+      if (inv.status !== 'pending') {
+        return privateErrorResponse(
+          'This invitation has already been claimed or revoked and cannot be reused.',
+          400
+        );
+      }
+
+      if (new Date(inv.expiresAt) < new Date()) {
+        await updateInvitation(inv.id, { status: 'expired' });
+        return privateErrorResponse(
+          'This invitation token has expired. Please request a new invitation.',
+          400
+        );
+      }
+
+      const existingUser = await getUserByEmailOrUsername(inv.email);
+      if (existingUser) {
+        return privateErrorResponse('User already exists', 400);
+      }
+
       const passwordHash = hashPassword(password);
       const newUserId = `usr-${Date.now()}`;
 
@@ -337,13 +359,14 @@ export async function POST(request: Request) {
         createdAt: new Date().toISOString(),
       };
 
-      db.users.push(newUser);
-      db.invitations[invIndex].status = 'accepted';
-      db.invitations[invIndex].acceptedAt = new Date().toISOString();
+      await createUser(newUser);
+      await updateInvitation(inv.id, {
+        status: 'accepted',
+        acceptedAt: new Date().toISOString(),
+      });
 
-      // If employee role, sync into employee roster
       if (inv.role === 'employee') {
-        db.employees.push({
+        await createEmployee({
           id: `emp-${Date.now()}`,
           userId: newUserId,
           name: inv.fullName,
@@ -360,8 +383,7 @@ export async function POST(request: Request) {
         });
       }
 
-      // Record audit log
-      db.auditLogs.unshift({
+      await createAuditLog({
         id: `aud-${Date.now()}`,
         userId: newUserId,
         userName: inv.fullName,
@@ -373,34 +395,42 @@ export async function POST(request: Request) {
         timestamp: new Date().toISOString(),
       });
 
-      saveDB(db);
       const { passwordHash: _, ...safeUser } = newUser as any;
-      return NextResponse.json({ success: true, user: safeUser });
+      return privateJsonResponse({ success: true, user: safeUser });
     }
 
     // 4. Create user directly (Admin & Manager Equal Access)
     if (action === 'create_user') {
       if (!caller || caller.status === 'inactive' || !hasFullAdminAccess(caller)) {
-        return NextResponse.json(
-          { error: 'Unauthorized: Active Admin or Manager permission required' },
-          { status: 403 }
+        return privateErrorResponse(
+          'Unauthorized: Active Admin or Manager permission required',
+          403
         );
       }
 
-      const { name, email, username, role, department, clientId, clientName, phone, initialPassword, password } = body;
+      const {
+        name,
+        email,
+        username,
+        role,
+        department,
+        clientId,
+        clientName,
+        phone,
+        initialPassword,
+        password,
+      } = body;
 
       if (!name || !email || !role) {
-        return NextResponse.json({ error: 'Name, email, and role are required' }, { status: 400 });
+        return privateErrorResponse('Name, email, and role are required', 400);
       }
 
       const cleanEmail = email.toLowerCase().trim();
-      const existingUser = db.users.find(
-        (u) => u.email.toLowerCase() === cleanEmail
-      );
+      const existingUser = await getUserByEmailOrUsername(cleanEmail);
       if (existingUser) {
-        return NextResponse.json(
-          { error: 'A user with this email address already exists' },
-          { status: 400 }
+        return privateErrorResponse(
+          'A user with this email address already exists',
+          400
         );
       }
 
@@ -410,8 +440,15 @@ export async function POST(request: Request) {
       if (chosenPassword && chosenPassword.trim()) {
         passwordHash = hashPassword(chosenPassword.trim());
       } else {
-        // Sensible default passwords if left blank by management
-        passwordHash = hashPassword(role === 'admin' ? 'admin123' : role === 'manager' ? 'manager123' : role === 'employee' ? 'emp123' : 'client123');
+        passwordHash = hashPassword(
+          role === 'admin'
+            ? 'admin123'
+            : role === 'manager'
+            ? 'manager123'
+            : role === 'employee'
+            ? 'emp123'
+            : 'client123'
+        );
       }
 
       const newUser: User = {
@@ -435,10 +472,10 @@ export async function POST(request: Request) {
         createdAt: new Date().toISOString(),
       };
 
-      db.users.push(newUser);
+      await createUser(newUser);
 
       if (role === 'employee') {
-        db.employees.push({
+        await createEmployee({
           id: `emp-${Date.now()}`,
           userId: newUserId,
           name: name.trim(),
@@ -455,8 +492,7 @@ export async function POST(request: Request) {
         });
       }
 
-      // Audit log
-      db.auditLogs.unshift({
+      await createAuditLog({
         id: `aud-${Date.now()}`,
         userId: caller.id,
         userName: caller.name,
@@ -468,78 +504,84 @@ export async function POST(request: Request) {
         timestamp: new Date().toISOString(),
       });
 
-      saveDB(db);
       const { passwordHash: _, ...safeUser } = newUser as any;
-      return NextResponse.json({ success: true, user: safeUser });
+      return privateJsonResponse({ success: true, user: safeUser }, { status: 201 });
     }
 
     // 5. Toggle account status (activate/deactivate)
     if (action === 'toggle_status') {
       if (!caller || caller.status === 'inactive' || !hasFullAdminAccess(caller)) {
-        return NextResponse.json(
-          { error: 'Unauthorized: Active Admin or Manager permission required' },
-          { status: 403 }
+        return privateErrorResponse(
+          'Unauthorized: Active Admin or Manager permission required',
+          403
         );
       }
 
       const { targetUserId } = body;
-      const targetUser = db.users.find((u) => u.id === targetUserId);
+      const targetUser = await getUserById(targetUserId);
       if (!targetUser) {
-        return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        return privateErrorResponse('User not found', 404);
       }
 
-      targetUser.status = targetUser.status === 'active' ? 'inactive' : 'active';
+      const newStatus = targetUser.status === 'active' ? 'inactive' : 'active';
+      const updated = await updateUser(targetUserId, { status: newStatus });
 
-      db.auditLogs.unshift({
+      await createAuditLog({
         id: `aud-${Date.now()}`,
         userId: caller.id,
         userName: caller.name,
         userRole: caller.role,
         action: 'Account Status Changed',
-        details: `${targetUser.name}'s account status set to ${targetUser.status.toUpperCase()}`,
+        details: `${targetUser.name}'s account status set to ${newStatus.toUpperCase()}`,
         targetType: 'auth',
         targetId: targetUser.id,
         timestamp: new Date().toISOString(),
       });
 
-      saveDB(db);
-      const { passwordHash: _, ...safeUser } = targetUser as any;
-      return NextResponse.json({ success: true, user: safeUser });
+      const { passwordHash: _, ...safeUser } = (updated || targetUser) as any;
+      return privateJsonResponse({ success: true, user: safeUser });
     }
 
     // 5b. Admin Updates Their Own Username, Name, Email, or Password
     if (action === 'update_self_credentials') {
       const { callerUserId, username, name, email, newPassword } = body;
-      const targetUser = caller || db.users.find((u) => u.id === callerUserId);
+      const targetUser = caller || (callerUserId ? await getUserById(callerUserId) : null);
 
       if (!targetUser) {
-        return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        return privateErrorResponse('User not found', 404);
       }
 
       // STRICT USER RULE: Employee and Client cannot change their username or password
       if (targetUser.role === 'employee' || targetUser.role === 'client') {
-        return NextResponse.json(
-          { error: 'Employees and Clients are not permitted to change username or password. Please contact management.' },
-          { status: 403 }
+        return privateErrorResponse(
+          'Employees and Clients are not permitted to change username or password. Please contact management.',
+          403
         );
       }
 
+      const updates: Partial<User> = {};
+
       if (username && username.trim()) {
         const cleanUser = username.trim().toLowerCase();
-        const taken = db.users.find((u) => u.id !== targetUser.id && u.username?.toLowerCase() === cleanUser);
-        if (taken) {
-          return NextResponse.json({ error: 'This username is already taken by another account.' }, { status: 400 });
+        const existingWithUser = await getUserByEmailOrUsername(cleanUser);
+        if (existingWithUser && existingWithUser.id !== targetUser.id) {
+          return privateErrorResponse(
+            'This username is already taken by another account.',
+            400
+          );
         }
-        targetUser.username = cleanUser;
+        updates.username = cleanUser;
       }
 
-      if (name && name.trim()) targetUser.name = name.trim();
-      if (email && email.trim()) targetUser.email = email.trim().toLowerCase();
+      if (name && name.trim()) updates.name = name.trim();
+      if (email && email.trim()) updates.email = email.trim().toLowerCase();
       if (newPassword && newPassword.trim()) {
-        targetUser.passwordHash = hashPassword(newPassword.trim());
+        updates.passwordHash = hashPassword(newPassword.trim());
       }
 
-      db.auditLogs.unshift({
+      const updated = await updateUser(targetUser.id, updates);
+
+      await createAuditLog({
         id: `aud-${Date.now()}`,
         userId: targetUser.id,
         userName: targetUser.name,
@@ -551,40 +593,52 @@ export async function POST(request: Request) {
         timestamp: new Date().toISOString(),
       });
 
-      saveDB(db);
-      const { passwordHash: _, ...safeUser } = targetUser as any;
-      return NextResponse.json({ success: true, user: safeUser, message: 'Your credentials have been updated successfully.' });
+      const { passwordHash: _, ...safeUser } = (updated || targetUser) as any;
+      return privateJsonResponse({
+        success: true,
+        user: safeUser,
+        message: 'Your credentials have been updated successfully.',
+      });
     }
 
     // 5c. Manager & Admin Change Password for Any Employee or Client
     if (action === 'manager_change_password') {
       const { callerUserId, targetUserId, newPassword } = body;
-      const adminOrManager = caller || db.users.find((u) => u.id === callerUserId);
+      const adminOrManager =
+        caller || (callerUserId ? await getUserById(callerUserId) : null);
 
       if (!adminOrManager || !hasFullAdminAccess(adminOrManager)) {
-        return NextResponse.json(
-          { error: 'Unauthorized: Admin or Manager permission required to update account passwords.' },
-          { status: 403 }
+        return privateErrorResponse(
+          'Unauthorized: Admin or Manager permission required to update account passwords.',
+          403
         );
       }
 
       if (!targetUserId || !newPassword || !newPassword.trim()) {
-        return NextResponse.json({ error: 'Target user and new password are required.' }, { status: 400 });
+        return privateErrorResponse(
+          'Target user and new password are required.',
+          400
+        );
       }
 
-      const target = db.users.find((u) => u.id === targetUserId);
+      const target = await getUserById(targetUserId);
       if (!target) {
-        return NextResponse.json({ error: 'Target user account not found.' }, { status: 404 });
+        return privateErrorResponse('Target user account not found.', 404);
       }
 
       // Security check: Manager cannot change Admin password
       if (adminOrManager.role === 'manager' && target.role === 'admin') {
-        return NextResponse.json({ error: 'Managers cannot change Administrator passwords.' }, { status: 403 });
+        return privateErrorResponse(
+          'Managers cannot change Administrator passwords.',
+          403
+        );
       }
 
-      target.passwordHash = hashPassword(newPassword.trim());
+      await updateUser(target.id, {
+        passwordHash: hashPassword(newPassword.trim()),
+      });
 
-      db.auditLogs.unshift({
+      await createAuditLog({
         id: `aud-${Date.now()}`,
         userId: adminOrManager.id,
         userName: adminOrManager.name,
@@ -596,41 +650,39 @@ export async function POST(request: Request) {
         timestamp: new Date().toISOString(),
       });
 
-      saveDB(db);
-      return NextResponse.json({
+      return privateJsonResponse({
         success: true,
         message: `Password successfully updated for ${target.name} (${target.role.toUpperCase()}).`,
       });
     }
 
-    // 6. Password reset request (Anti-enumeration + Rate-limiting + Expiring Single-Use Token)
+    // 6. Password reset request
     if (action === 'reset_password_request') {
       const { email } = body;
       const cleanEmail = (email || '').toLowerCase().trim();
 
       if (!cleanEmail) {
-        return NextResponse.json({ error: 'Email address is required' }, { status: 400 });
+        return privateErrorResponse('Email address is required', 400);
       }
 
-      const resetRate = checkRateLimit(`reset_password:${cleanEmail}`, RATE_LIMIT_CONFIGS.passwordReset);
+      const resetRate = checkRateLimit(
+        `reset_password:${cleanEmail}`,
+        RATE_LIMIT_CONFIGS.passwordReset
+      );
       if (!resetRate.allowed) {
-        return NextResponse.json(
-          { error: 'Too many password reset attempts. Please try again in 15 minutes.' },
-          { status: 429 }
+        return privateErrorResponse(
+          'Too many password reset attempts. Please try again in 15 minutes.',
+          429
         );
       }
 
-      const targetUser = db.users.find(
-        (u) => u.email.toLowerCase() === cleanEmail && u.status === 'active'
-      );
+      const targetUser = await getUserByEmailOrUsername(cleanEmail);
 
-      // Even if targetUser is null, we return the EXACT SAME generic message to prevent account enumeration!
-      if (targetUser) {
+      if (targetUser && targetUser.status === 'active') {
         const resetToken = crypto.randomBytes(32).toString('hex');
-        const expiresAt = new Date(Date.now() + 60 * 60 * 1000).toISOString(); // 1-hour expiration
+        const expiresAt = new Date(Date.now() + 60 * 60 * 1000).toISOString();
 
-        db.passwordResets = db.passwordResets || [];
-        db.passwordResets.unshift({
+        await createPasswordReset({
           id: `rst-${Date.now()}`,
           userId: targetUser.id,
           email: targetUser.email,
@@ -640,7 +692,7 @@ export async function POST(request: Request) {
           createdAt: new Date().toISOString(),
         });
 
-        db.auditLogs.unshift({
+        await createAuditLog({
           id: `aud-${Date.now()}`,
           userId: targetUser.id,
           userName: targetUser.name,
@@ -651,58 +703,54 @@ export async function POST(request: Request) {
           targetId: targetUser.id,
           timestamp: new Date().toISOString(),
         });
-
-        saveDB(db);
       }
 
       // GENERIC ANTI-ENUMERATION RESPONSE
-      return NextResponse.json({
+      return privateJsonResponse({
         success: true,
         message:
           'If an active account is associated with this email address, password reset instructions have been dispatched.',
       });
     }
 
-    // 7. Confirm Password Reset (Single-use + 12-char password enforcement)
+    // 7. Confirm Password Reset
     if (action === 'confirm_password_reset') {
       const { token, newPassword } = body;
       if (!token || !newPassword) {
-        return NextResponse.json({ error: 'Token and new password are required' }, { status: 400 });
+        return privateErrorResponse('Token and new password are required', 400);
       }
 
       if (newPassword.length < 12) {
-        return NextResponse.json(
-          { error: 'Password must be at least 12 characters in length.' },
-          { status: 400 }
+        return privateErrorResponse(
+          'Password must be at least 12 characters in length.',
+          400
         );
       }
 
-      db.passwordResets = db.passwordResets || [];
-      const resetEntry = db.passwordResets.find((r) => r.token === token);
+      const resetEntry = await getPasswordResetByToken(token);
 
       if (!resetEntry || resetEntry.used) {
-        return NextResponse.json(
-          { error: 'Invalid or already used password reset token.' },
-          { status: 400 }
+        return privateErrorResponse(
+          'Invalid or already used password reset token.',
+          400
         );
       }
 
       if (new Date(resetEntry.expiresAt) < new Date()) {
-        return NextResponse.json(
-          { error: 'This password reset token has expired.' },
-          { status: 400 }
-        );
+        return privateErrorResponse('This password reset token has expired.', 400);
       }
 
-      const user = db.users.find((u) => u.id === resetEntry.userId);
+      const user = await getUserById(resetEntry.userId);
       if (!user) {
-        return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        return privateErrorResponse('User not found', 404);
       }
 
-      user.passwordHash = hashPassword(newPassword);
-      resetEntry.used = true;
+      await updateUser(user.id, {
+        passwordHash: hashPassword(newPassword),
+      });
+      await markPasswordResetUsed(resetEntry.id);
 
-      db.auditLogs.unshift({
+      await createAuditLog({
         id: `aud-${Date.now()}`,
         userId: user.id,
         userName: user.name,
@@ -714,15 +762,14 @@ export async function POST(request: Request) {
         timestamp: new Date().toISOString(),
       });
 
-      saveDB(db);
-      return NextResponse.json({ success: true, message: 'Password has been successfully updated.' });
+      return privateJsonResponse({
+        success: true,
+        message: 'Password has been successfully updated.',
+      });
     }
 
-    return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
+    return privateErrorResponse('Invalid action', 400);
   } catch (error: any) {
-    return NextResponse.json(
-      { error: error.message || 'Auth operation failed' },
-      { status: 500 }
-    );
+    return privateErrorResponse('Auth operation failed', 500, error);
   }
 }

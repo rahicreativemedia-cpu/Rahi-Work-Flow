@@ -1,79 +1,102 @@
-import { NextResponse } from 'next/server';
-import { getDB, saveDB } from '@/lib/db';
+import {
+  getProjects,
+  getProjectById,
+  createProject,
+  updateProject,
+  deleteProject,
+  getClients,
+  getClientById,
+  getEmployees,
+  getTasks,
+  getUsers,
+  createAuditLog,
+} from '@/lib/db';
 import { Project, ProjectStatus, Priority, AuditLog } from '@/lib/types';
 import { hasFullAdminAccess } from '@/lib/permissions';
 import { getAuthenticatedUser } from '@/lib/session';
+import { privateJsonResponse, privateErrorResponse } from '@/lib/api-response';
+
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const explicitUserId = searchParams.get('userId');
-  const clientIdFilter = searchParams.get('clientId');
-  const statusFilter = searchParams.get('status');
-  const includeArchived = searchParams.get('includeArchived') === 'true';
+  try {
+    const { searchParams } = new URL(request.url);
+    const explicitUserId = searchParams.get('userId');
+    const clientIdFilter = searchParams.get('clientId');
+    const statusFilter = searchParams.get('status');
+    const includeArchived = searchParams.get('includeArchived') === 'true';
 
-  const auth = getAuthenticatedUser(request, explicitUserId);
-  if (!auth.user) {
-    return NextResponse.json(
-      { error: auth.error || 'Unauthorized: Authentication required to access projects' },
-      { status: auth.status || 401 }
-    );
-  }
-
-  const user = auth.user;
-  if (user.status === 'inactive') {
-    return NextResponse.json({ error: 'Forbidden: Account is inactive' }, { status: 403 });
-  }
-
-  const db = getDB();
-  let projects = [...db.projects];
-
-  // 1. Client Isolation
-  if (user.role === 'client') {
-    projects = projects.filter((p) => p.clientId === user.clientId && p.status !== 'archived');
-    // Sanitize: strip internal budget from client view
-    const sanitized = projects.map((p) => {
-      const { budget, currency, ...rest } = p;
-      return rest;
-    });
-    return NextResponse.json({ projects: sanitized });
-  }
-
-  // 2. Employee Assigned Boundary
-  if (user.role === 'employee') {
-    const empRecord = db.employees.find((e) => e.userId === user.id || e.id === user.employeeId);
-    const empId = empRecord?.id || user.employeeId || user.id;
-
-    projects = projects.filter((p) => {
-      if (p.status === 'archived') return false;
-      const isAssigned = (p.assignedEmployees || []).includes(empId) || (p.assignedEmployees || []).includes(user.id);
-      const hasAssignedTask = db.tasks.some(
-        (t) => t.projectId === p.id && (t.assignedEmployeeId === empId || t.assignedEmployeeId === user.id)
+    const auth = await getAuthenticatedUser(request, explicitUserId);
+    if (!auth.user) {
+      return privateErrorResponse(
+        auth.error || 'Unauthorized: Authentication required to access projects',
+        auth.status || 401
       );
-      return isAssigned || hasAssignedTask;
-    });
+    }
 
-    // Sanitize: hide budget from employees
-    const sanitized = projects.map((p) => {
-      const { budget, currency, ...rest } = p;
-      return rest;
-    });
-    return NextResponse.json({ projects: sanitized });
+    const user = auth.user;
+    if (user.status === 'inactive') {
+      return privateErrorResponse('Forbidden: Account is inactive', 403);
+    }
+
+    let projects = await getProjects();
+
+    // 1. Client Isolation
+    if (user.role === 'client') {
+      projects = projects.filter((p) => p.clientId === user.clientId && p.status !== 'archived');
+      // Sanitize: strip internal budget from client view
+      const sanitized = projects.map((p) => {
+        const { budget, currency, ...rest } = p;
+        return rest;
+      });
+      return privateJsonResponse({ projects: sanitized });
+    }
+
+    // 2. Employee Assigned Boundary
+    if (user.role === 'employee') {
+      const [allEmployees, allTasks] = await Promise.all([getEmployees(), getTasks()]);
+      const empRecord = allEmployees.find(
+        (e) => e.userId === user.id || e.id === user.employeeId
+      );
+      const empId = empRecord?.id || user.employeeId || user.id;
+
+      projects = projects.filter((p) => {
+        if (p.status === 'archived') return false;
+        const isAssigned =
+          (p.assignedEmployees || []).includes(empId) ||
+          (p.assignedEmployees || []).includes(user.id);
+        const hasAssignedTask = allTasks.some(
+          (t) =>
+            t.projectId === p.id &&
+            (t.assignedEmployeeId === empId || t.assignedEmployeeId === user.id)
+        );
+        return isAssigned || hasAssignedTask;
+      });
+
+      // Sanitize: hide budget from employees
+      const sanitized = projects.map((p) => {
+        const { budget, currency, ...rest } = p;
+        return rest;
+      });
+      return privateJsonResponse({ projects: sanitized });
+    }
+
+    // 3. Admin & Manager: Full company-wide access
+    if (!includeArchived) {
+      projects = projects.filter((p) => p.status !== 'archived');
+    }
+
+    if (clientIdFilter) {
+      projects = projects.filter((p) => p.clientId === clientIdFilter);
+    }
+
+    if (statusFilter && statusFilter !== 'all') {
+      projects = projects.filter((p) => p.status === statusFilter);
+    }
+
+    return privateJsonResponse({ projects });
+  } catch (error: any) {
+    return privateErrorResponse('Failed to retrieve projects', 500, error);
   }
-
-  // 3. Admin & Manager: Full company-wide access
-  if (!includeArchived) {
-    projects = projects.filter((p) => p.status !== 'archived');
-  }
-
-  if (clientIdFilter) {
-    projects = projects.filter((p) => p.clientId === clientIdFilter);
-  }
-
-  if (statusFilter && statusFilter !== 'all') {
-    projects = projects.filter((p) => p.status === statusFilter);
-  }
-
-  return NextResponse.json({ projects });
 }
 
 export async function POST(request: Request) {
@@ -97,48 +120,47 @@ export async function POST(request: Request) {
       totalDeliverablesTarget,
     } = body;
 
-    const auth = getAuthenticatedUser(request, callerUserId);
+    const auth = await getAuthenticatedUser(request, callerUserId);
     if (!auth.user) {
-      return NextResponse.json(
-        { error: auth.error || 'Unauthorized: Authentication required' },
-        { status: auth.status || 401 }
+      return privateErrorResponse(
+        auth.error || 'Unauthorized: Authentication required',
+        auth.status || 401
       );
     }
 
     const caller = auth.user;
     if (caller.status === 'inactive') {
-      return NextResponse.json({ error: 'Forbidden: Account is inactive' }, { status: 403 });
+      return privateErrorResponse('Forbidden: Account is inactive', 403);
     }
 
     // Role check: Admin and Manager only
     if (!hasFullAdminAccess(caller)) {
-      return NextResponse.json(
-        { error: 'Forbidden: Admin or Manager permission required to create projects' },
-        { status: 403 }
+      return privateErrorResponse(
+        'Forbidden: Admin or Manager permission required to create projects',
+        403
       );
     }
 
     // Validation: Title
     if (!title || !title.trim()) {
-      return NextResponse.json({ error: 'Project title is required' }, { status: 400 });
+      return privateErrorResponse('Project title is required', 400);
     }
 
-    const db = getDB();
-
     // Validation: Foreign Key - Client must exist
-    const client = db.clients.find((c) => c.id === clientId);
+    const client = await getClientById(clientId);
     if (!client) {
-      return NextResponse.json(
-        { error: 'Invalid client reference: Project must belong to an existing client' },
-        { status: 400 }
+      return privateErrorResponse(
+        'Invalid client reference: Project must belong to an existing client',
+        400
       );
     }
 
     // Validation: Foreign Key - Assigned employees must exist
+    const allEmployees = await getEmployees();
     const validAssignedEmployees: string[] = [];
     if (Array.isArray(assignedEmployees)) {
       for (const empId of assignedEmployees) {
-        const empExists = db.employees.some((e) => e.id === empId || e.userId === empId);
+        const empExists = allEmployees.some((e) => e.id === empId || e.userId === empId);
         if (empExists) {
           validAssignedEmployees.push(empId);
         }
@@ -148,11 +170,17 @@ export async function POST(request: Request) {
     // Resolve project manager name if provided
     let pmName = undefined;
     if (projectManagerId) {
-      const pmUser = db.users.find((u) => u.id === projectManagerId || u.employeeId === projectManagerId);
+      const allUsers = await getUsers();
+      const pmUser = allUsers.find(
+        (u) => u.id === projectManagerId || u.employeeId === projectManagerId
+      );
       pmName = pmUser?.name;
     }
 
-    const finalEndDate = targetEndDate || deadline || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+    const finalEndDate =
+      targetEndDate ||
+      deadline ||
+      new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
     const newProject: Project = {
       id: `prj-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
@@ -176,10 +204,10 @@ export async function POST(request: Request) {
       createdAt: new Date().toISOString(),
     };
 
-    db.projects.unshift(newProject);
+    await createProject(newProject);
 
     // Immutable Audit Log
-    db.auditLogs.unshift({
+    await createAuditLog({
       id: `aud-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
       userId: caller.id,
       userName: caller.name,
@@ -191,10 +219,9 @@ export async function POST(request: Request) {
       timestamp: new Date().toISOString(),
     });
 
-    saveDB(db);
-    return NextResponse.json({ success: true, project: newProject }, { status: 201 });
+    return privateJsonResponse({ success: true, project: newProject }, { status: 201 });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message || 'Failed to create project' }, { status: 500 });
+    return privateErrorResponse('Failed to create project', 500, error);
   }
 }
 
@@ -203,42 +230,41 @@ export async function PUT(request: Request) {
     const body = await request.json();
     const { callerUserId, id, action, ...updates } = body;
 
-    const auth = getAuthenticatedUser(request, callerUserId);
+    const auth = await getAuthenticatedUser(request, callerUserId);
     if (!auth.user) {
-      return NextResponse.json(
-        { error: auth.error || 'Unauthorized: Authentication required' },
-        { status: auth.status || 401 }
+      return privateErrorResponse(
+        auth.error || 'Unauthorized: Authentication required',
+        auth.status || 401
       );
     }
 
     const caller = auth.user;
     if (caller.status === 'inactive') {
-      return NextResponse.json({ error: 'Forbidden: Account is inactive' }, { status: 403 });
+      return privateErrorResponse('Forbidden: Account is inactive', 403);
     }
 
     // Role check: Admin and Manager only
     if (!hasFullAdminAccess(caller)) {
-      return NextResponse.json(
-        { error: 'Forbidden: Admin or Manager permission required to modify projects' },
-        { status: 403 }
+      return privateErrorResponse(
+        'Forbidden: Admin or Manager permission required to modify projects',
+        403
       );
     }
 
-    const db = getDB();
-    const index = db.projects.findIndex((p) => p.id === id);
-    if (index === -1) {
-      return NextResponse.json({ error: 'Project not found' }, { status: 404 });
+    const existingProject = await getProjectById(id);
+    if (!existingProject) {
+      return privateErrorResponse('Project not found', 404);
     }
-
-    const existingProject = db.projects[index];
 
     // Handle Archive Action
     if (action === 'archive') {
-      existingProject.status = 'archived';
-      existingProject.archivedAt = new Date().toISOString();
-      existingProject.archivedByUserId = caller.id;
+      const archived = await updateProject(id, {
+        status: 'archived',
+        archivedAt: new Date().toISOString(),
+        archivedByUserId: caller.id,
+      });
 
-      db.auditLogs.unshift({
+      await createAuditLog({
         id: `aud-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
         userId: caller.id,
         userName: caller.name,
@@ -250,17 +276,22 @@ export async function PUT(request: Request) {
         timestamp: new Date().toISOString(),
       });
 
-      saveDB(db);
-      return NextResponse.json({ success: true, project: existingProject, message: 'Project archived successfully' });
+      return privateJsonResponse({
+        success: true,
+        project: archived,
+        message: 'Project archived successfully',
+      });
     }
 
     // Handle Restore Action
     if (action === 'restore') {
-      existingProject.status = 'active';
-      delete existingProject.archivedAt;
-      delete existingProject.archivedByUserId;
+      const restored = await updateProject(id, {
+        status: 'active',
+        archivedAt: undefined,
+        archivedByUserId: undefined,
+      });
 
-      db.auditLogs.unshift({
+      await createAuditLog({
         id: `aud-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
         userId: caller.id,
         userName: caller.name,
@@ -272,58 +303,68 @@ export async function PUT(request: Request) {
         timestamp: new Date().toISOString(),
       });
 
-      saveDB(db);
-      return NextResponse.json({ success: true, project: existingProject, message: 'Project restored successfully' });
+      return privateJsonResponse({
+        success: true,
+        project: restored,
+        message: 'Project restored successfully',
+      });
     }
 
     // Standard Project Edit / Update
+    const projectUpdates: Partial<Project> = {};
+
     if (updates.clientId && updates.clientId !== existingProject.clientId) {
-      const client = db.clients.find((c) => c.id === updates.clientId);
+      const client = await getClientById(updates.clientId);
       if (!client) {
-        return NextResponse.json({ error: 'Invalid client reference' }, { status: 400 });
+        return privateErrorResponse('Invalid client reference', 400);
       }
-      existingProject.clientId = client.id;
-      existingProject.clientName = client.name;
+      projectUpdates.clientId = client.id;
+      projectUpdates.clientName = client.name;
     }
 
-    if (updates.title) existingProject.title = updates.title.trim();
-    if (updates.description !== undefined) existingProject.description = updates.description.trim();
-    if (updates.objective !== undefined) existingProject.objective = updates.objective.trim();
-    if (updates.startDate) existingProject.startDate = updates.startDate;
+    if (updates.title) projectUpdates.title = updates.title.trim();
+    if (updates.description !== undefined)
+      projectUpdates.description = updates.description.trim();
+    if (updates.objective !== undefined)
+      projectUpdates.objective = updates.objective.trim();
+    if (updates.startDate) projectUpdates.startDate = updates.startDate;
     if (updates.targetEndDate || updates.deadline) {
-      existingProject.targetEndDate = updates.targetEndDate || updates.deadline;
+      projectUpdates.targetEndDate = updates.targetEndDate || updates.deadline;
     }
-    if (updates.priority) existingProject.priority = updates.priority;
-    if (updates.status) existingProject.status = updates.status;
-    if (Array.isArray(updates.assignedEmployees)) existingProject.assignedEmployees = updates.assignedEmployees;
+    if (updates.priority) projectUpdates.priority = updates.priority;
+    if (updates.status) projectUpdates.status = updates.status;
+    if (Array.isArray(updates.assignedEmployees))
+      projectUpdates.assignedEmployees = updates.assignedEmployees;
     if (updates.projectManagerId !== undefined) {
-      existingProject.projectManagerId = updates.projectManagerId;
-      const pmUser = db.users.find((u) => u.id === updates.projectManagerId);
-      existingProject.projectManagerName = pmUser?.name;
+      projectUpdates.projectManagerId = updates.projectManagerId;
+      const allUsers = await getUsers();
+      const pmUser = allUsers.find((u) => u.id === updates.projectManagerId);
+      projectUpdates.projectManagerName = pmUser?.name;
     }
-    if (updates.budget !== undefined) existingProject.budget = Number(updates.budget);
-    if (updates.currency) existingProject.currency = updates.currency;
-    if (updates.progress !== undefined) existingProject.progress = Number(updates.progress);
+    if (updates.budget !== undefined) projectUpdates.budget = Number(updates.budget);
+    if (updates.currency) projectUpdates.currency = updates.currency;
+    if (updates.progress !== undefined) projectUpdates.progress = Number(updates.progress);
     if (updates.totalDeliverablesTarget !== undefined) {
-      existingProject.totalDeliverablesTarget = Number(updates.totalDeliverablesTarget);
+      projectUpdates.totalDeliverablesTarget = Number(updates.totalDeliverablesTarget);
     }
 
-    db.auditLogs.unshift({
+    const updated = await updateProject(id, projectUpdates);
+
+    await createAuditLog({
       id: `aud-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
       userId: caller.id,
       userName: caller.name,
       userRole: caller.role,
       action: 'Project Updated',
-      details: `${caller.name} updated project details for "${existingProject.title}"`,
+      details: `${caller.name} updated project details for "${updated?.title || existingProject.title}"`,
       targetType: 'project',
       targetId: existingProject.id,
       timestamp: new Date().toISOString(),
     });
 
-    saveDB(db);
-    return NextResponse.json({ success: true, project: existingProject });
+    return privateJsonResponse({ success: true, project: updated });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message || 'Failed to update project' }, { status: 500 });
+    return privateErrorResponse('Failed to update project', 500, error);
   }
 }
 
@@ -333,38 +374,39 @@ export async function DELETE(request: Request) {
     const id = searchParams.get('id');
     const callerUserId = searchParams.get('userId');
 
-    const auth = getAuthenticatedUser(request, callerUserId);
+    const auth = await getAuthenticatedUser(request, callerUserId);
     if (!auth.user) {
-      return NextResponse.json(
-        { error: auth.error || 'Unauthorized: Authentication required' },
-        { status: auth.status || 401 }
+      return privateErrorResponse(
+        auth.error || 'Unauthorized: Authentication required',
+        auth.status || 401
       );
     }
 
     const caller = auth.user;
     if (!hasFullAdminAccess(caller)) {
-      return NextResponse.json(
-        { error: 'Forbidden: Admin or Manager permission required to archive projects' },
-        { status: 403 }
+      return privateErrorResponse(
+        'Forbidden: Admin or Manager permission required to archive projects',
+        403
       );
     }
 
     if (!id) {
-      return NextResponse.json({ error: 'Project ID is required' }, { status: 400 });
+      return privateErrorResponse('Project ID is required', 400);
     }
 
-    const db = getDB();
-    const project = db.projects.find((p) => p.id === id);
+    const project = await getProjectById(id);
     if (!project) {
-      return NextResponse.json({ error: 'Project not found' }, { status: 404 });
+      return privateErrorResponse('Project not found', 404);
     }
 
     // Soft-archive to preserve historical records and task associations
-    project.status = 'archived';
-    project.archivedAt = new Date().toISOString();
-    project.archivedByUserId = caller.id;
+    const archived = await updateProject(id, {
+      status: 'archived',
+      archivedAt: new Date().toISOString(),
+      archivedByUserId: caller.id,
+    });
 
-    db.auditLogs.unshift({
+    await createAuditLog({
       id: `aud-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
       userId: caller.id,
       userName: caller.name,
@@ -376,12 +418,12 @@ export async function DELETE(request: Request) {
       timestamp: new Date().toISOString(),
     });
 
-    saveDB(db);
-    return NextResponse.json({
+    return privateJsonResponse({
       success: true,
       message: `Project "${project.title}" has been safely archived. Historical deliverables and tasks are preserved.`,
+      project: archived,
     });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message || 'Failed to archive project' }, { status: 500 });
+    return privateErrorResponse('Failed to archive project', 500, error);
   }
 }

@@ -1,5 +1,3 @@
-import { getDB, saveDB } from './db';
-
 export interface RateLimitRecord {
   key: string;
   timestamps: number[];
@@ -31,9 +29,19 @@ export const RATE_LIMIT_CONFIGS = {
 } as const;
 
 /**
+ * In-memory sliding window rate limiter cache (zero filesystem dependency).
+ * Works reliably in Cloudflare Workers and serverless Node runtimes.
+ */
+const rateLimitMemoryMap = new Map<string, number[]>();
+
+/**
  * Extracts client IP address safely from standard proxy headers
  */
 export function getClientIp(request: Request): string {
+  const cfConnectingIp = request.headers.get('cf-connecting-ip');
+  if (cfConnectingIp) {
+    return cfConnectingIp.trim();
+  }
   const forwardedFor = request.headers.get('x-forwarded-for');
   if (forwardedFor) {
     return forwardedFor.split(',')[0].trim();
@@ -52,15 +60,13 @@ export function isRateLimitLocked(
   key: string,
   config: RateLimitConfig
 ): { locked: boolean; retryAfterSeconds: number } {
-  const db = getDB() as any;
-  if (!Array.isArray(db.rateLimits)) return { locked: false, retryAfterSeconds: 0 };
-  const record: RateLimitRecord | undefined = db.rateLimits.find((r: RateLimitRecord) => r.key === key);
-  if (!record || !record.timestamps || record.timestamps.length === 0) {
+  const timestamps = rateLimitMemoryMap.get(key);
+  if (!timestamps || timestamps.length === 0) {
     return { locked: false, retryAfterSeconds: 0 };
   }
   const now = Date.now();
   const windowStart = now - config.windowMs;
-  const activeTimestamps = record.timestamps.filter((t: number) => t > windowStart);
+  const activeTimestamps = timestamps.filter((t) => t > windowStart);
   if (activeTimestamps.length >= config.maxAttempts) {
     const oldest = activeTimestamps[0];
     const retryAfterSeconds = Math.max(1, Math.ceil((oldest + config.windowMs - now) / 1000));
@@ -70,39 +76,20 @@ export function isRateLimitLocked(
 }
 
 /**
- * Persistent Rate Limiter.
- * Uses atomic state in db.rateLimits to ensure persistence across server restarts
- * and provide the blueprint for the PostgreSQL / Redis distributed rate-limiting table.
+ * Checks and records an attempt in the sliding window limiter
  */
 export function checkRateLimit(
   key: string,
   config: RateLimitConfig
 ): { allowed: boolean; remainingAttempts: number; retryAfterSeconds: number } {
-  const db = getDB() as any;
-  if (!Array.isArray(db.rateLimits)) {
-    db.rateLimits = [];
-  }
-
   const now = Date.now();
   const windowStart = now - config.windowMs;
 
-  let record: RateLimitRecord | undefined = db.rateLimits.find((r: RateLimitRecord) => r.key === key);
+  let timestamps = rateLimitMemoryMap.get(key) || [];
+  timestamps = timestamps.filter((t) => t > windowStart);
 
-  if (!record) {
-    record = {
-      key,
-      timestamps: [],
-      updatedAt: new Date(now).toISOString(),
-    };
-    db.rateLimits.push(record);
-  }
-
-  // Filter timestamps within the active sliding window
-  const activeTimestamps = record.timestamps.filter((t: number) => t > windowStart);
-  record.timestamps = activeTimestamps;
-
-  if (activeTimestamps.length >= config.maxAttempts) {
-    const oldestTimestamp = activeTimestamps[0];
+  if (timestamps.length >= config.maxAttempts) {
+    const oldestTimestamp = timestamps[0];
     const retryAfterMs = oldestTimestamp + config.windowMs - now;
     const retryAfterSeconds = Math.max(1, Math.ceil(retryAfterMs / 1000));
     return {
@@ -113,14 +100,12 @@ export function checkRateLimit(
   }
 
   // Record this attempt
-  activeTimestamps.push(now);
-  record.timestamps = activeTimestamps;
-  record.updatedAt = new Date(now).toISOString();
-  saveDB(db);
+  timestamps.push(now);
+  rateLimitMemoryMap.set(key, timestamps);
 
   return {
     allowed: true,
-    remainingAttempts: config.maxAttempts - activeTimestamps.length,
+    remainingAttempts: config.maxAttempts - timestamps.length,
     retryAfterSeconds: 0,
   };
 }
@@ -129,11 +114,5 @@ export function checkRateLimit(
  * Resets / clears rate limit counter (e.g. after successful login)
  */
 export function clearRateLimit(key: string): void {
-  const db = getDB() as any;
-  if (!Array.isArray(db.rateLimits)) return;
-  const index = db.rateLimits.findIndex((r: RateLimitRecord) => r.key === key);
-  if (index !== -1) {
-    db.rateLimits.splice(index, 1);
-    saveDB(db);
-  }
+  rateLimitMemoryMap.delete(key);
 }

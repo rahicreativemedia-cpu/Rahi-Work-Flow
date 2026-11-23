@@ -496,6 +496,7 @@ export interface ExpenseRecord {
   amount: number;
   currency: 'INR' | 'USD' | 'AED' | 'EUR' | 'GBP';
   date: string;
+  vendor?: string;
   recordedByUserId: string;
   notes?: string;
   createdAt: string;

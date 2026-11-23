@@ -1,68 +1,77 @@
-import { NextResponse } from 'next/server';
-import { getDB, saveDB } from '@/lib/db';
+import {
+  getClientApprovals,
+  createClientApproval,
+  getDeliverableById,
+  updateDeliverable,
+  getEmployees,
+  getEmployeeById,
+  createNotification,
+  createAuditLog,
+  getDeliverables,
+} from '@/lib/db';
 import { ClientApprovalRecord, NotificationItem, AuditLog } from '@/lib/types';
 import { hasFullAdminAccess } from '@/lib/permissions';
 import { getAuthenticatedUser } from '@/lib/session';
+import { privateJsonResponse, privateErrorResponse } from '@/lib/api-response';
+
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const explicitUserId = searchParams.get('userId');
-  const deliverableId = searchParams.get('deliverableId');
-  const clientId = searchParams.get('clientId');
-  const status = searchParams.get('status');
-  const type = searchParams.get('type');
+  try {
+    const { searchParams } = new URL(request.url);
+    const explicitUserId = searchParams.get('userId');
+    const deliverableId = searchParams.get('deliverableId');
+    const clientId = searchParams.get('clientId');
+    const status = searchParams.get('status');
+    const type = searchParams.get('type');
 
-  const auth = getAuthenticatedUser(request, explicitUserId);
+    const auth = await getAuthenticatedUser(request, explicitUserId);
 
-  if (!auth.user) {
-    return NextResponse.json(
-      { error: auth.error || 'Unauthorized: Authentication required to access approvals' },
-      { status: auth.status || 401 }
-    );
-  }
-
-  const user = auth.user;
-  if (user.status === 'inactive') {
-    return NextResponse.json(
-      { error: 'Forbidden: Account is inactive' },
-      { status: 403 }
-    );
-  }
-
-  const db = getDB();
-  let approvals = [...db.approvals];
-
-  // Role-based access boundaries:
-  if (user.role === 'client') {
-    // Strictly isolate client to their own organization's records
-    approvals = approvals.filter((a) => a.clientId === user.clientId);
-  } else if (!hasFullAdminAccess(user)) {
-    // Employees can only view approvals for their assigned deliverables
-    const empId = user.employeeId || user.id;
-    const assignedDeliverableIds = new Set(
-      db.deliverables
-        .filter((d) => d.assignedEmployeeId === empId || d.assignedEmployeeId === user.id)
-        .map((d) => d.id)
-    );
-    approvals = approvals.filter((a) => assignedDeliverableIds.has(a.deliverableId));
-  } else {
-    // Admin and Manager have identical company-wide access
-    if (clientId) {
-      approvals = approvals.filter((a) => a.clientId === clientId);
+    if (!auth.user) {
+      return privateErrorResponse(
+        auth.error || 'Unauthorized: Authentication required to access approvals',
+        auth.status || 401
+      );
     }
-  }
 
-  if (deliverableId) {
-    approvals = approvals.filter((a) => a.deliverableId === deliverableId);
-  }
-  if (status) {
-    approvals = approvals.filter((a) => a.status === status);
-  }
-  if (type) {
-    approvals = approvals.filter((a) => a.type === type);
-  }
+    const user = auth.user;
+    if (user.status === 'inactive') {
+      return privateErrorResponse('Forbidden: Account is inactive', 403);
+    }
 
-  return NextResponse.json({ approvals });
+    let approvals = await getClientApprovals();
+
+    // Role-based access boundaries:
+    if (user.role === 'client') {
+      approvals = approvals.filter((a) => a.clientId === user.clientId);
+    } else if (!hasFullAdminAccess(user)) {
+      const allDeliverables = await getDeliverables();
+      const empId = user.employeeId || user.id;
+      const assignedDeliverableIds = new Set(
+        allDeliverables
+          .filter((d) => d.assignedEmployeeId === empId || d.assignedEmployeeId === user.id)
+          .map((d) => d.id)
+      );
+      approvals = approvals.filter((a) => assignedDeliverableIds.has(a.deliverableId));
+    } else {
+      if (clientId) {
+        approvals = approvals.filter((a) => a.clientId === clientId);
+      }
+    }
+
+    if (deliverableId) {
+      approvals = approvals.filter((a) => a.deliverableId === deliverableId);
+    }
+    if (status) {
+      approvals = approvals.filter((a) => a.status === status);
+    }
+    if (type) {
+      approvals = approvals.filter((a) => a.type === type);
+    }
+
+    return privateJsonResponse({ approvals });
+  } catch (error: any) {
+    return privateErrorResponse('Failed to retrieve approvals', 500, error);
+  }
 }
 
 export async function POST(request: Request) {
@@ -71,77 +80,70 @@ export async function POST(request: Request) {
     const {
       callerUserId,
       deliverableId,
-      approvalType, // 'script' | 'video' | 'design'
-      decision, // 'approve' | 'revision'
+      approvalType,
+      decision,
       feedback,
-      categories, // optional string[] e.g. ["Hook / Angle", "Brand Tone / Voice"]
+      categories,
     } = body;
 
-    const auth = getAuthenticatedUser(request, callerUserId);
+    const auth = await getAuthenticatedUser(request, callerUserId);
     if (!auth.user) {
-      return NextResponse.json(
-        { error: auth.error || 'Unauthorized: Authentication required' },
-        { status: auth.status || 401 }
+      return privateErrorResponse(
+        auth.error || 'Unauthorized: Authentication required',
+        auth.status || 401
       );
     }
 
     const caller = auth.user;
     if (caller.status === 'inactive') {
-      return NextResponse.json(
-        { error: 'Forbidden: Account is inactive' },
-        { status: 403 }
-      );
+      return privateErrorResponse('Forbidden: Account is inactive', 403);
     }
 
     // Role verification:
-    // 1. Employees cannot submit client approvals or revisions
     if (caller.role === 'employee') {
-      return NextResponse.json(
-        { error: 'Forbidden: Employees cannot submit client approvals or revisions' },
-        { status: 403 }
+      return privateErrorResponse(
+        'Forbidden: Employees cannot submit client approvals or revisions',
+        403
       );
     }
 
-    const db = getDB();
-    const deliverable = db.deliverables.find((d) => d.id === deliverableId);
+    const deliverable = await getDeliverableById(deliverableId);
     if (!deliverable) {
-      return NextResponse.json({ error: 'Deliverable not found' }, { status: 404 });
+      return privateErrorResponse('Deliverable not found', 404);
     }
 
-    // 2. Client role can only approve/revise their own organization's deliverables
     const isClientOwner = caller.role === 'client' && caller.clientId === deliverable.clientId;
     const isAdminOrManager = hasFullAdminAccess(caller);
 
     if (!isClientOwner && !isAdminOrManager) {
-      return NextResponse.json(
-        { error: 'Forbidden: Cross-client approval actions are strictly blocked' },
-        { status: 403 }
+      return privateErrorResponse(
+        'Forbidden: Cross-client approval actions are strictly blocked',
+        403
       );
     }
 
     // Validate inputs
     if (!['script', 'video', 'design'].includes(approvalType)) {
-      return NextResponse.json(
-        { error: 'Invalid approval type. Must be script, video, or design' },
-        { status: 400 }
+      return privateErrorResponse(
+        'Invalid approval type. Must be script, video, or design',
+        400
       );
     }
 
     if (!['approve', 'revision'].includes(decision)) {
-      return NextResponse.json(
-        { error: 'Invalid decision. Must be approve or revision' },
-        { status: 400 }
+      return privateErrorResponse(
+        'Invalid decision. Must be approve or revision',
+        400
       );
     }
 
-    // Mandatory feedback requirement for revision requests
     const isApproved = decision === 'approve';
     const trimmedFeedback = (feedback || '').trim();
 
     if (!isApproved && !trimmedFeedback) {
-      return NextResponse.json(
-        { error: 'Feedback explanation is mandatory when requesting revisions' },
-        { status: 400 }
+      return privateErrorResponse(
+        'Feedback explanation is mandatory when requesting revisions',
+        400
       );
     }
 
@@ -167,7 +169,9 @@ export async function POST(request: Request) {
           : isApproved
           ? 'video_approved'
           : 'video_revision',
-      feedback: trimmedFeedback || (isApproved ? 'Approved by client without changes.' : 'Revision requested.'),
+      feedback:
+        trimmedFeedback ||
+        (isApproved ? 'Approved by client without changes.' : 'Revision requested.'),
       categories: finalCategories,
       decisionDate: new Date().toISOString(),
       decidedByUserId: caller.id,
@@ -175,48 +179,50 @@ export async function POST(request: Request) {
       recordedByAdminOrManager: isAdminOrManager && caller.role !== 'client',
     };
 
-    db.approvals.unshift(approvalRecord);
+    await createClientApproval(approvalRecord);
+
+    const deliverableUpdates: Partial<typeof deliverable> = {};
 
     // Update deliverable state based on approval type
     if (approvalType === 'script') {
       if (isApproved) {
-        deliverable.scriptApproved = true;
-        deliverable.scriptApprovedAt = new Date().toISOString();
-        // Advance to video editing (Stage 5)
-        deliverable.stage = 'video_editing';
-        deliverable.status = 'in_progress';
+        deliverableUpdates.scriptApproved = true;
+        deliverableUpdates.scriptApprovedAt = new Date().toISOString();
+        deliverableUpdates.stage = 'video_editing';
+        deliverableUpdates.status = 'in_progress';
       } else {
-        // Route to revisions (Stage 8)
-        deliverable.stage = 'revisions';
-        deliverable.status = 'revision_requested';
+        deliverableUpdates.stage = 'revisions';
+        deliverableUpdates.status = 'revision_requested';
       }
     } else if (approvalType === 'video') {
       if (isApproved) {
-        deliverable.videoApproved = true;
-        deliverable.videoApprovedAt = new Date().toISOString();
-        // Advance to scheduling (Stage 9)
-        deliverable.stage = 'scheduling';
-        deliverable.status = 'approved';
+        deliverableUpdates.videoApproved = true;
+        deliverableUpdates.videoApprovedAt = new Date().toISOString();
+        deliverableUpdates.stage = 'scheduling';
+        deliverableUpdates.status = 'approved';
       } else {
-        // Route to revisions (Stage 8)
-        deliverable.stage = 'revisions';
-        deliverable.status = 'revision_requested';
+        deliverableUpdates.stage = 'revisions';
+        deliverableUpdates.status = 'revision_requested';
       }
     }
 
     // Attach feedback to current version in deliverable history if revisions requested
     if (!isApproved && deliverable.versions && deliverable.versions.length > 0) {
-      const latestVer = deliverable.versions[deliverable.versions.length - 1];
-      if (latestVer) {
-        latestVer.feedback = approvalRecord.feedback;
-      }
+      const versions = [...deliverable.versions];
+      const latestVer = { ...versions[versions.length - 1] };
+      latestVer.feedback = approvalRecord.feedback;
+      versions[versions.length - 1] = latestVer;
+      deliverableUpdates.versions = versions;
     }
 
-    // CRITICAL REQUIREMENT: Notify BOTH Admin and Manager (all_admin) when a client responds
-    const notifAction = isApproved ? 'Approved' : 'Revision Requested';
-    const tagSuffix = finalCategories.length > 0 ? ` [Tags: ${finalCategories.join(', ')}]` : '';
+    const updatedDeliverable = await updateDeliverable(deliverable.id, deliverableUpdates);
 
-    const notif: NotificationItem = {
+    // CRITICAL: Notify BOTH Admin and Manager (all_admin) when a client responds
+    const notifAction = isApproved ? 'Approved' : 'Revision Requested';
+    const tagSuffix =
+      finalCategories.length > 0 ? ` [Tags: ${finalCategories.join(', ')}]` : '';
+
+    await createNotification({
       id: `notif-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
       targetRole: 'all_admin',
       title: `Client ${notifAction}: ${deliverable.title}`,
@@ -225,14 +231,13 @@ export async function POST(request: Request) {
       relatedId: deliverable.id,
       read: false,
       createdAt: new Date().toISOString(),
-    };
-    db.notifications.unshift(notif);
+    });
 
     // If revision was requested, also notify assigned employee
     if (!isApproved && deliverable.assignedEmployeeId) {
-      const emp = db.employees.find((e) => e.id === deliverable.assignedEmployeeId);
+      const emp = await getEmployeeById(deliverable.assignedEmployeeId);
       if (emp) {
-        db.notifications.unshift({
+        await createNotification({
           id: `notif-${Date.now()}-${Math.random().toString(36).substring(2, 6)}-emp`,
           targetRole: 'employee',
           recipientUserId: emp.userId,
@@ -247,8 +252,10 @@ export async function POST(request: Request) {
     }
 
     // Immutable System Audit Log
-    const adminOversightNote = approvalRecord.recordedByAdminOrManager ? ' (Admin/Manager Oversight)' : '';
-    db.auditLogs.unshift({
+    const adminOversightNote = approvalRecord.recordedByAdminOrManager
+      ? ' (Admin/Manager Oversight)'
+      : '';
+    await createAuditLog({
       id: `aud-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
       userId: caller.id,
       userName: caller.name,
@@ -260,14 +267,12 @@ export async function POST(request: Request) {
       timestamp: new Date().toISOString(),
     });
 
-    saveDB(db);
-
-    return NextResponse.json({
+    return privateJsonResponse({
       success: true,
       approval: approvalRecord,
-      deliverable,
+      deliverable: updatedDeliverable,
     });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message || 'Approval action failed' }, { status: 500 });
+    return privateErrorResponse('Approval action failed', 500, error);
   }
 }

@@ -1,108 +1,119 @@
-import { NextResponse } from 'next/server';
-import { getDB, saveDB } from '@/lib/db';
+import {
+  getEmployees,
+  getEmployeeById,
+  createEmployee,
+  updateEmployee,
+  deleteEmployee,
+  getTasks,
+  createUser,
+  getUserByEmailOrUsername,
+  createAuditLog,
+} from '@/lib/db';
 import { Employee } from '@/lib/types';
 import { hasFullAdminAccess } from '@/lib/permissions';
 import { getAuthenticatedUser } from '@/lib/session';
 import { hashPassword } from '@/lib/crypto';
+import { privateJsonResponse, privateErrorResponse } from '@/lib/api-response';
+
 
 export async function GET(request: Request) {
-  // 1. Authenticate caller session via HttpOnly cookie or Bearer token
-  const auth = getAuthenticatedUser(request);
-  if (!auth.user) {
-    return NextResponse.json(
-      { error: auth.error || 'Unauthorized: Valid active session required' },
-      { status: auth.status || 401 }
-    );
-  }
-  const user = auth.user;
+  try {
+    // 1. Authenticate caller session via HttpOnly cookie or Bearer token
+    const auth = await getAuthenticatedUser(request);
+    if (!auth.user) {
+      return privateErrorResponse(
+        auth.error || 'Unauthorized: Valid active session required',
+        auth.status || 401
+      );
+    }
+    const user = auth.user;
 
-  // 2. Client role cannot inspect internal employee rosters or performance data
-  if (user.role === 'client') {
-    return NextResponse.json(
-      { error: 'Forbidden: Clients cannot access internal agency employee roster' },
-      { status: 403 }
-    );
-  }
-
-  const db = getDB();
-
-  // 3. Compute dynamic live active workload per employee from active tasks
-  const employeesWithWorkload = db.employees.map((emp) => {
-    const activeTasks = db.tasks.filter(
-      (t) =>
-        (t.assignedEmployeeId === emp.id || t.assignedEmployeeId === emp.userId) &&
-        t.status !== 'completed' &&
-        t.status !== 'backlog'
-    ).length;
-
-    // Base employee object with live active task count
-    const enriched: Employee = {
-      ...emp,
-      currentActiveTasks: activeTasks,
-    };
-
-    // Employees viewing colleagues receive a sanitized roster
-    if (user.role === 'employee') {
-      return {
-        id: enriched.id,
-        userId: enriched.userId,
-        name: enriched.name,
-        email: enriched.email,
-        phone: enriched.phone,
-        department: enriched.department,
-        designation: enriched.designation,
-        status: enriched.status,
-        skills: enriched.skills,
-        currentActiveTasks: enriched.currentActiveTasks,
-        maxConcurrentTasks: enriched.maxConcurrentTasks,
-      };
+    // 2. Client role cannot inspect internal employee rosters or performance data
+    if (user.role === 'client') {
+      return privateErrorResponse(
+        'Forbidden: Clients cannot access internal agency employee roster',
+        403
+      );
     }
 
-    return enriched;
-  });
+    const [allEmployees, allTasks] = await Promise.all([
+      getEmployees(),
+      getTasks(),
+    ]);
 
-  return NextResponse.json({
-    success: true,
-    employees: employeesWithWorkload,
-  });
+    // 3. Compute dynamic live active workload per employee from active tasks
+    const employeesWithWorkload = allEmployees.map((emp) => {
+      const activeTasks = allTasks.filter(
+        (t) =>
+          (t.assignedEmployeeId === emp.id || t.assignedEmployeeId === emp.userId) &&
+          t.status !== 'completed' &&
+          t.status !== 'backlog'
+      ).length;
+
+      const enriched: Employee = {
+        ...emp,
+        currentActiveTasks: activeTasks,
+      };
+
+      // Employees viewing colleagues receive a sanitized roster
+      if (user.role === 'employee') {
+        return {
+          id: enriched.id,
+          userId: enriched.userId,
+          name: enriched.name,
+          email: enriched.email,
+          phone: enriched.phone,
+          department: enriched.department,
+          designation: enriched.designation,
+          status: enriched.status,
+          skills: enriched.skills,
+          currentActiveTasks: enriched.currentActiveTasks,
+          maxConcurrentTasks: enriched.maxConcurrentTasks,
+        };
+      }
+
+      return enriched;
+    });
+
+    return privateJsonResponse({
+      success: true,
+      employees: employeesWithWorkload,
+    });
+  } catch (error: any) {
+    return privateErrorResponse('Failed to retrieve employees', 500, error);
+  }
 }
 
 export async function POST(request: Request) {
   try {
     // 1. Authenticate caller session
-    const auth = getAuthenticatedUser(request);
+    const auth = await getAuthenticatedUser(request);
     if (!auth.user) {
-      return NextResponse.json(
-        { error: auth.error || 'Unauthorized: Valid active session required' },
-        { status: auth.status || 401 }
+      return privateErrorResponse(
+        auth.error || 'Unauthorized: Valid active session required',
+        auth.status || 401
       );
     }
     const user = auth.user;
 
     // 2. Strict parity: Admin and Manager have equal administrative authority
     if (!hasFullAdminAccess(user)) {
-      return NextResponse.json(
-        { error: 'Forbidden: Admin or Manager permission required to add employees' },
-        { status: 403 }
+      return privateErrorResponse(
+        'Forbidden: Admin or Manager permission required to add employees',
+        403
       );
     }
 
     const body = await request.json();
-    const db = getDB();
 
     if (!body.name || !body.email) {
-      return NextResponse.json(
-        { error: 'Employee name and email are required' },
-        { status: 400 }
-      );
+      return privateErrorResponse('Employee name and email are required', 400);
     }
 
-    // Check for duplicate email
-    if (db.employees.some((e) => e.email.toLowerCase() === body.email.toLowerCase())) {
-      return NextResponse.json(
-        { error: 'An employee with this email already exists' },
-        { status: 400 }
-      );
+    const cleanEmail = body.email.trim().toLowerCase();
+    const existingUser = await getUserByEmailOrUsername(cleanEmail);
+    if (existingUser) {
+      return privateErrorResponse('An employee or user with this email already exists', 400);
     }
 
     const timestamp = Date.now();
@@ -113,7 +124,7 @@ export async function POST(request: Request) {
       id: newEmpId,
       userId: newUserId,
       name: body.name.trim(),
-      email: body.email.trim().toLowerCase(),
+      email: cleanEmail,
       phone: body.phone || '',
       department: body.department || 'Video Editing',
       designation: body.designation || 'Creative Specialist',
@@ -129,18 +140,17 @@ export async function POST(request: Request) {
         : ['Creative Production'],
     };
 
-    db.employees.unshift(newEmp);
+    await createEmployee(newEmp);
 
     // Create corresponding user login record with assigned password and username
     const employeePassword = (body.password || 'emp123').trim();
     const employeeUsername = (body.username || newEmp.email.split('@')[0]).trim().toLowerCase();
 
-    // Portal Access Role: Only explicitly assigning 'manager' grants administrative access
     const isManagerRole = body.portalRole === 'manager';
     const portalRole = isManagerRole ? 'manager' : 'employee';
     const permissionGroup = isManagerRole ? 'FULL_ADMIN_ACCESS' : 'EMPLOYEE_ACCESS';
 
-    db.users.push({
+    await createUser({
       id: newEmp.userId,
       name: newEmp.name,
       email: newEmp.email,
@@ -150,186 +160,146 @@ export async function POST(request: Request) {
       department: newEmp.department,
       employeeId: newEmp.id,
       phone: newEmp.phone,
-      passwordHash: hashPassword(employeePassword),
       status: 'active',
+      passwordHash: hashPassword(employeePassword),
       createdAt: new Date().toISOString(),
     });
 
-    // Record immutable audit log
-    db.auditLogs.unshift({
-      id: `aud-${timestamp}`,
+    // Audit log
+    await createAuditLog({
+      id: `aud-${Date.now()}`,
       userId: user.id,
       userName: user.name,
       userRole: user.role,
-      action: 'Employee Created',
-      details: `Added new employee ${newEmp.name} (${newEmp.designation}) in ${newEmp.department} department`,
+      action: 'Employee Added',
+      details: `Added ${newEmp.name} (${newEmp.department}) with portal role ${portalRole.toUpperCase()}`,
       targetType: 'employee',
       targetId: newEmp.id,
       timestamp: new Date().toISOString(),
     });
 
-    saveDB(db);
-    return NextResponse.json({ success: true, employee: newEmp });
+    return privateJsonResponse({ success: true, employee: newEmp }, { status: 201 });
   } catch (error: any) {
-    return NextResponse.json(
-      { error: error.message || 'Failed to add employee' },
-      { status: 500 }
-    );
+    return privateErrorResponse('Failed to create employee', 500, error);
   }
 }
 
 export async function PUT(request: Request) {
   try {
-    // 1. Authenticate caller session
-    const auth = getAuthenticatedUser(request);
+    const auth = await getAuthenticatedUser(request);
     if (!auth.user) {
-      return NextResponse.json(
-        { error: auth.error || 'Unauthorized: Valid active session required' },
-        { status: auth.status || 401 }
+      return privateErrorResponse(
+        auth.error || 'Unauthorized: Valid active session required',
+        auth.status || 401
       );
     }
     const user = auth.user;
 
-    // 2. Strict parity: Admin and Manager have equal administrative authority
     if (!hasFullAdminAccess(user)) {
-      return NextResponse.json(
-        { error: 'Forbidden: Admin or Manager permission required to update employees' },
-        { status: 403 }
+      return privateErrorResponse(
+        'Forbidden: Admin or Manager permission required to update employee profiles',
+        403
       );
     }
 
     const body = await request.json();
     const { id, ...updates } = body;
+
     if (!id) {
-      return NextResponse.json({ error: 'Employee ID is required' }, { status: 400 });
+      return privateErrorResponse('Employee ID is required', 400);
     }
 
-    const db = getDB();
-    const index = db.employees.findIndex((e) => e.id === id);
-    if (index === -1) {
-      return NextResponse.json({ error: 'Employee not found' }, { status: 404 });
+    const existing = await getEmployeeById(id);
+    if (!existing) {
+      return privateErrorResponse('Employee not found', 404);
     }
 
-    const existing = db.employees[index];
-    const updated: Employee = {
-      ...existing,
-      ...updates,
-      skills: Array.isArray(updates.skills)
-        ? updates.skills
-        : typeof updates.skills === 'string'
-        ? updates.skills.split(',').map((s: string) => s.trim()).filter(Boolean)
-        : existing.skills,
-    };
+    const updated = await updateEmployee(id, {
+      name: updates.name !== undefined ? updates.name : existing.name,
+      phone: updates.phone !== undefined ? updates.phone : existing.phone,
+      department: updates.department !== undefined ? updates.department : existing.department,
+      designation: updates.designation !== undefined ? updates.designation : existing.designation,
+      status: updates.status !== undefined ? updates.status : existing.status,
+      maxConcurrentTasks:
+        updates.maxConcurrentTasks !== undefined
+          ? Number(updates.maxConcurrentTasks)
+          : existing.maxConcurrentTasks,
+      performanceScore:
+        updates.performanceScore !== undefined
+          ? Number(updates.performanceScore)
+          : existing.performanceScore,
+      skills: Array.isArray(updates.skills) ? updates.skills : existing.skills,
+    });
 
-    db.employees[index] = updated;
-
-    // Synchronize updates with corresponding login user record
-    const userIndex = db.users.findIndex(
-      (u) => u.employeeId === id || u.id === updated.userId
-    );
-    if (userIndex !== -1) {
-      if (updated.name) db.users[userIndex].name = updated.name;
-      if (updated.email) db.users[userIndex].email = updated.email;
-      if (updated.department) db.users[userIndex].department = updated.department;
-      if (updated.phone) db.users[userIndex].phone = updated.phone;
-      if (updated.status) db.users[userIndex].status = updated.status;
-      if (updates.portalRole) {
-        const isManager = updates.portalRole === 'manager';
-        db.users[userIndex].role = isManager ? 'manager' : 'employee';
-        db.users[userIndex].permissionGroup = isManager ? 'FULL_ADMIN_ACCESS' : 'EMPLOYEE_ACCESS';
-      }
-    }
-
-    // Record immutable audit log
-    db.auditLogs.unshift({
+    await createAuditLog({
       id: `aud-${Date.now()}`,
       userId: user.id,
       userName: user.name,
       userRole: user.role,
-      action: 'Employee Updated',
-      details: `Updated profile and settings for ${updated.name} (${updated.department})`,
+      action: 'Employee Profile Updated',
+      details: `Updated details for ${updated?.name || id}`,
       targetType: 'employee',
-      targetId: updated.id,
+      targetId: id,
       timestamp: new Date().toISOString(),
     });
 
-    saveDB(db);
-    return NextResponse.json({ success: true, employee: updated });
+    return privateJsonResponse({ success: true, employee: updated });
   } catch (error: any) {
-    return NextResponse.json(
-      { error: error.message || 'Failed to update employee' },
-      { status: 500 }
-    );
+    return privateErrorResponse('Failed to update employee', 500, error);
   }
 }
 
 export async function DELETE(request: Request) {
   try {
-    // 1. Authenticate caller session
-    const auth = getAuthenticatedUser(request);
+    const auth = await getAuthenticatedUser(request);
     if (!auth.user) {
-      return NextResponse.json(
-        { error: auth.error || 'Unauthorized: Valid active session required' },
-        { status: auth.status || 401 }
+      return privateErrorResponse(
+        auth.error || 'Unauthorized: Valid active session required',
+        auth.status || 401
       );
     }
     const user = auth.user;
 
-    // 2. Strict parity: Admin and Manager have equal administrative authority
     if (!hasFullAdminAccess(user)) {
-      return NextResponse.json(
-        { error: 'Forbidden: Admin or Manager permission required to deactivate employees' },
-        { status: 403 }
+      return privateErrorResponse(
+        'Forbidden: Admin or Manager permission required to archive employees',
+        403
       );
     }
 
-    const { id } = await request.json();
-    if (!id) {
-      return NextResponse.json({ error: 'Employee ID is required' }, { status: 400 });
+    const { searchParams } = new URL(request.url);
+    const empId = searchParams.get('id');
+
+    if (!empId) {
+      return privateErrorResponse('Employee ID is required', 400);
     }
 
-    const db = getDB();
-    const employee = db.employees.find((e) => e.id === id);
-    if (!employee) {
-      return NextResponse.json({ error: 'Employee not found' }, { status: 404 });
+    const existing = await getEmployeeById(empId);
+    if (!existing) {
+      return privateErrorResponse('Employee not found', 404);
     }
 
-    // Non-destructive soft deactivation
-    employee.status = 'inactive';
-    employee.deactivatedAt = new Date().toISOString();
-    employee.deactivatedByUserId = user.id;
+    // Soft delete / archive
+    const updated = await updateEmployee(empId, { status: 'inactive' });
 
-    // Deactivate user login account to block further access
-    const userToDeactivate = db.users.find(
-      (u) => u.employeeId === id || u.id === employee.userId
-    );
-    if (userToDeactivate) {
-      userToDeactivate.status = 'inactive';
-    }
-
-    // Record immutable audit log
-    db.auditLogs.unshift({
+    await createAuditLog({
       id: `aud-${Date.now()}`,
       userId: user.id,
       userName: user.name,
       userRole: user.role,
       action: 'Employee Deactivated',
-      details: `Deactivated employee ${employee.name} (${employee.department}). Historical assignments and tasks preserved.`,
+      details: `Deactivated employee ${existing.name}`,
       targetType: 'employee',
-      targetId: employee.id,
+      targetId: empId,
       timestamp: new Date().toISOString(),
     });
 
-    saveDB(db);
-    return NextResponse.json({
+    return privateJsonResponse({
       success: true,
-      message: `Employee ${employee.name} successfully deactivated`,
-      employee,
+      message: 'Employee deactivated successfully',
+      employee: updated,
     });
   } catch (error: any) {
-    return NextResponse.json(
-      { error: error.message || 'Failed to deactivate employee' },
-      { status: 500 }
-    );
+    return privateErrorResponse('Failed to deactivate employee', 500, error);
   }
 }
