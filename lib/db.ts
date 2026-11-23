@@ -599,25 +599,25 @@ export async function createTask(task: Task): Promise<Task> {
     id: task.id,
     title: task.title,
     client_id: task.clientId,
-    client_name: task.clientName,
-    project_id: task.projectId,
-    project_title: task.projectTitle,
-    deliverable_id: task.deliverableId,
+    client_name: task.clientName || null,
+    project_id: (task.projectId && task.projectId !== 'proj-gen' && task.projectId.trim() !== '') ? task.projectId : null,
+    project_title: task.projectTitle || null,
+    deliverable_id: (task.deliverableId && task.deliverableId.trim() !== '') ? task.deliverableId : null,
     description: task.description || '',
-    assigned_employee_id: task.assignedEmployeeId,
-    assigned_employee_name: task.assignedEmployeeName,
-    assigned_employee_department: task.assignedEmployeeDepartment,
+    assigned_employee_id: (task.assignedEmployeeId && task.assignedEmployeeId.trim() !== '') ? task.assignedEmployeeId : null,
+    assigned_employee_name: task.assignedEmployeeName || null,
+    assigned_employee_department: task.assignedEmployeeDepartment || null,
     assigned_employee_ids: task.assignedEmployeeIds || [],
     priority: task.priority || 'medium',
     status: task.status || 'backlog',
     start_date: task.startDate || new Date().toISOString().split('T')[0],
-    deadline: task.deadline,
+    deadline: task.deadline || null,
     estimated_hours: task.estimatedHours || 4,
     reference_files: task.referenceFiles || [],
     required_output: task.requiredOutput || '',
     submissions: task.submissions || [],
     comments: task.comments || [],
-    feedback_notes: task.feedbackNotes,
+    feedback_notes: task.feedbackNotes || null,
     created_at: task.createdAt || new Date().toISOString(),
   };
 
@@ -632,9 +632,11 @@ export async function updateTask(id: string, updates: Partial<Task>): Promise<Ta
   if (updates.title !== undefined) payload.title = updates.title;
   if (updates.status !== undefined) payload.status = updates.status;
   if (updates.priority !== undefined) payload.priority = updates.priority;
-  if (updates.deadline !== undefined) payload.deadline = updates.deadline;
+  if (updates.deadline !== undefined) payload.deadline = updates.deadline || null;
   if (updates.description !== undefined) payload.description = updates.description;
-  if (updates.assignedEmployeeId !== undefined) payload.assigned_employee_id = updates.assignedEmployeeId;
+  if (updates.projectId !== undefined) payload.project_id = (updates.projectId && updates.projectId !== 'proj-gen' && updates.projectId.trim() !== '') ? updates.projectId : null;
+  if (updates.deliverableId !== undefined) payload.deliverable_id = (updates.deliverableId && updates.deliverableId.trim() !== '') ? updates.deliverableId : null;
+  if (updates.assignedEmployeeId !== undefined) payload.assigned_employee_id = (updates.assignedEmployeeId && updates.assignedEmployeeId.trim() !== '') ? updates.assignedEmployeeId : null;
   if (updates.assignedEmployeeName !== undefined) payload.assigned_employee_name = updates.assignedEmployeeName;
   if (updates.assignedEmployeeDepartment !== undefined) payload.assigned_employee_department = updates.assignedEmployeeDepartment;
   if (updates.assignedEmployeeIds !== undefined) payload.assigned_employee_ids = updates.assignedEmployeeIds;
@@ -744,30 +746,30 @@ export async function createDeliverable(d: Deliverable): Promise<Deliverable> {
     id: d.id,
     title: d.title,
     client_id: d.clientId,
-    client_name: d.clientName,
-    project_id: d.projectId,
-    project_title: d.projectTitle,
+    client_name: d.clientName || null,
+    project_id: (d.projectId && d.projectId !== 'proj-gen' && d.projectId.trim() !== '') ? d.projectId : null,
+    project_title: d.projectTitle || null,
     type: d.type,
-    target_month: d.targetMonth || '2026-11',
+    target_month: d.targetMonth || new Date().toISOString().substring(0, 7),
     status: d.status || 'in_progress',
     stage: d.stage || 'content_planning',
-    assigned_employee_id: d.assignedEmployeeId,
-    assigned_employee_name: d.assignedEmployeeName,
-    deadline: d.deadline,
-    scheduled_publish_date: d.scheduledPublishDate,
-    media_url: d.mediaUrl,
-    thumbnail_url: d.thumbnailUrl,
-    script_text: d.scriptText,
+    assigned_employee_id: (d.assignedEmployeeId && d.assignedEmployeeId.trim() !== '') ? d.assignedEmployeeId : null,
+    assigned_employee_name: d.assignedEmployeeName || null,
+    deadline: d.deadline || null,
+    scheduled_publish_date: d.scheduledPublishDate || null,
+    media_url: d.mediaUrl || null,
+    thumbnail_url: d.thumbnailUrl || null,
+    script_text: d.scriptText || null,
     script_approved: Boolean(d.scriptApproved),
-    script_approved_at: d.scriptApprovedAt,
+    script_approved_at: d.scriptApprovedAt || null,
     video_approved: Boolean(d.videoApproved),
-    video_approved_at: d.videoApprovedAt,
+    video_approved_at: d.videoApprovedAt || null,
     current_version: d.currentVersion || 1,
     versions: d.versions || [],
     is_counted_towards_commitment: Boolean(d.isCountedTowardsCommitment),
-    published_at: d.publishedAt,
-    cancelled_at: d.cancelledAt,
-    cancellation_reason: d.cancellationReason,
+    published_at: d.publishedAt || null,
+    cancelled_at: d.cancelledAt || null,
+    cancellation_reason: d.cancellationReason || null,
     created_at: d.createdAt || new Date().toISOString(),
   };
 
@@ -782,6 +784,12 @@ export async function updateDeliverable(id: string, updates: Partial<Deliverable
   if (updates.title !== undefined) payload.title = updates.title;
   if (updates.status !== undefined) payload.status = updates.status;
   if (updates.stage !== undefined) payload.stage = updates.stage;
+  if (updates.projectId !== undefined) {
+    payload.project_id = (updates.projectId && updates.projectId !== 'proj-gen' && updates.projectId.trim() !== '') ? updates.projectId : null;
+  }
+  if (updates.assignedEmployeeId !== undefined) {
+    payload.assigned_employee_id = (updates.assignedEmployeeId && updates.assignedEmployeeId.trim() !== '') ? updates.assignedEmployeeId : null;
+  }
   if (updates.currentVersion !== undefined) payload.current_version = updates.currentVersion;
   if (updates.versions !== undefined) payload.versions = updates.versions;
   if (updates.scriptText !== undefined) payload.script_text = updates.scriptText;

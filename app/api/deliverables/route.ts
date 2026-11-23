@@ -170,8 +170,8 @@ export async function POST(request: Request) {
         id: `del-${Date.now()}`,
         clientId,
         clientName: client ? client.name : 'Unknown Client',
-        projectId: projectId || (project ? project.id : 'proj-gen'),
-        projectTitle: project ? project.title : 'General Campaign',
+        projectId: project ? project.id : (projectId && projectId !== 'proj-gen' && projectId.trim() !== '' ? projectId : undefined),
+        projectTitle: project ? project.title : 'General Deliverables',
         title: title.trim(),
         type: type || 'reel',
         targetMonth: targetMonth || new Date().toISOString().substring(0, 7),
@@ -184,8 +184,8 @@ export async function POST(request: Request) {
         thumbnailUrl:
           thumbnailUrl ||
           'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=400&q=80',
-        assignedEmployeeId: assignedEmployeeId || '',
-        assignedEmployeeName: employee ? employee.name : 'Unassigned',
+        assignedEmployeeId: employee ? employee.id : (assignedEmployeeId && assignedEmployeeId.trim() !== '' ? assignedEmployeeId : undefined),
+        assignedEmployeeName: employee ? employee.name : (assignedEmployeeId ? 'Assigned' : 'Unassigned'),
         deadline:
           deadline ||
           new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
@@ -268,42 +268,44 @@ export async function POST(request: Request) {
       }
 
       // CRITICAL DELIVERY RULE:
-      if (
-        stage === 'publishing_or_delivery' &&
-        (updates.status === 'published' || updates.status === 'delivered')
-      ) {
-        updates.isCountedTowardsCommitment = true;
-        updates.publishedAt = del.publishedAt || new Date().toISOString();
+      if (stage === 'publishing_or_delivery') {
+        if (!updates.status || updates.status === 'in_progress') {
+          updates.status = 'delivered';
+        }
+        if (updates.status === 'published' || updates.status === 'delivered') {
+          updates.isCountedTowardsCommitment = true;
+          updates.publishedAt = del.publishedAt || new Date().toISOString();
 
-        const client = await getClientById(del.clientId);
-        if (client) {
-          const allDel = await getDeliverables();
-          const completedCount = allDel.filter(
-            (d) =>
-              d.clientId === client.id &&
-              d.stage === 'publishing_or_delivery' &&
-              (d.status === 'published' || d.status === 'delivered') &&
-              d.targetMonth === del.targetMonth
-          ).length;
+          const client = await getClientById(del.clientId);
+          if (client) {
+            const allDel = await getDeliverables();
+            const completedCount = allDel.filter(
+              (d) =>
+                d.clientId === client.id &&
+                d.stage === 'publishing_or_delivery' &&
+                (d.status === 'published' || d.status === 'delivered') &&
+                d.targetMonth === del.targetMonth
+            ).length;
 
-          const totalTarget =
-            (client.monthlyCommitment?.reels || 0) +
-            (client.monthlyCommitment?.marketingReels || 0) +
-            (client.monthlyCommitment?.posts ?? client.monthlyCommitment?.graphics ?? 0) +
-            (client.monthlyCommitment?.carousels || 0) +
-            (client.monthlyCommitment?.showreels || 0) +
-            (client.monthlyCommitment?.longVideos || 0);
+            const totalTarget =
+              (client.monthlyCommitment?.reels || 0) +
+              (client.monthlyCommitment?.marketingReels || 0) +
+              (client.monthlyCommitment?.posts ?? client.monthlyCommitment?.graphics ?? 0) +
+              (client.monthlyCommitment?.carousels || 0) +
+              (client.monthlyCommitment?.showreels || 0) +
+              (client.monthlyCommitment?.longVideos || 0);
 
-          await createNotification({
-            id: `notif-${Date.now()}`,
-            targetRole: 'all_admin',
-            title: 'Deliverable Published & Counted',
-            message: `"${del.title}" published. ${client.name} has now completed ${completedCount}/${totalTarget} deliverables.`,
-            type: 'published',
-            relatedId: del.id,
-            read: false,
-            createdAt: new Date().toISOString(),
-          });
+            await createNotification({
+              id: `notif-${Date.now()}`,
+              targetRole: 'all_admin',
+              title: 'Deliverable Published & Counted',
+              message: `"${del.title}" published. ${client.name} has now completed ${completedCount}/${totalTarget} deliverables.`,
+              type: 'published',
+              relatedId: del.id,
+              read: false,
+              createdAt: new Date().toISOString(),
+            });
+          }
         }
       } else {
         updates.isCountedTowardsCommitment = false;

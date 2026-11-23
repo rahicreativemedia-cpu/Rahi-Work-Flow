@@ -10,11 +10,12 @@ import {
   Sparkles,
   ChevronDown,
 } from 'lucide-react';
-import { User } from '@/lib/types';
+import { User, Client } from '@/lib/types';
 import { hasFullAdminAccess } from '@/lib/permissions';
 
 interface AppHeaderProps {
   currentUser: User;
+  currentClient?: Client | null;
   allUsers: User[];
   onSwitchUser: (user: User) => void;
   unreadNotifsCount: number;
@@ -30,6 +31,7 @@ interface AppHeaderProps {
 
 export function AppHeader({
   currentUser,
+  currentClient,
   allUsers,
   onSwitchUser,
   unreadNotifsCount,
@@ -77,6 +79,26 @@ export function AppHeader({
             RAHI Flowdesk
           </span>
         </div>
+
+        {/* Client Co-Branding Identity in Unified Header */}
+        {currentClient && (
+          <div className="flex items-center gap-2.5 pl-3 border-l border-stone-200/80 shrink-0">
+            {currentClient.logoUrl ? (
+              <img
+                src={currentClient.logoUrl}
+                alt={currentClient.name}
+                className="w-7 h-7 object-contain rounded-md"
+              />
+            ) : (
+              <div className="w-7 h-7 rounded-lg bg-rose-50 border border-rose-200 text-[#ED1C24] font-bold text-xs flex items-center justify-center">
+                {currentClient.name?.slice(0, 2).toUpperCase() || 'CP'}
+              </div>
+            )}
+            <span className="font-bold text-stone-800 text-sm hidden md:inline-block">
+              {currentClient.name}
+            </span>
+          </div>
+        )}
 
         {/* Planex Global Search Pill */}
         <div className="relative flex items-center flex-1 max-w-xs sm:max-w-md">

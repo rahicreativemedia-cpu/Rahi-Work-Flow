@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { Eye } from 'lucide-react';
 import { TODAY_STRING } from '@/lib/utils';
 import {
   User,
@@ -98,15 +99,15 @@ export default function FlowdeskApp() {
     try {
       const [authRes, clientRes, empRes, projRes, taskRes, delRes, apprRes, notifRes, audRes] =
         await Promise.all([
-          fetch(`/api/auth?userId=${currentUser.id}`),
-          fetch(`/api/clients?userId=${currentUser.id}`),
-          fetch(`/api/employees?userId=${currentUser.id}`),
-          fetch(`/api/projects?userId=${currentUser.id}`),
-          fetch(`/api/tasks?userId=${currentUser.id}`),
-          fetch(`/api/deliverables?userId=${currentUser.id}`),
-          fetch(`/api/approvals`),
-          fetch(`/api/notifications?userId=${currentUser.id}`),
-          fetch(`/api/audit?userId=${currentUser.id}`),
+          fetch(`/api/auth?userId=${currentUser.id}`, { cache: 'no-store' }),
+          fetch(`/api/clients?userId=${currentUser.id}`, { cache: 'no-store' }),
+          fetch(`/api/employees?userId=${currentUser.id}`, { cache: 'no-store' }),
+          fetch(`/api/projects?userId=${currentUser.id}`, { cache: 'no-store' }),
+          fetch(`/api/tasks?userId=${currentUser.id}`, { cache: 'no-store' }),
+          fetch(`/api/deliverables?userId=${currentUser.id}`, { cache: 'no-store' }),
+          fetch(`/api/approvals?userId=${currentUser.id}`, { cache: 'no-store' }),
+          fetch(`/api/notifications?userId=${currentUser.id}`, { cache: 'no-store' }),
+          fetch(`/api/audit?userId=${currentUser.id}`, { cache: 'no-store' }),
         ]);
 
       if (authRes.ok) {
@@ -865,29 +866,89 @@ export default function FlowdeskApp() {
   // ADMIN PREVIEW MODE: Displays read-only Client Portal with persistent top exit banner
   if (previewClient) {
     return (
-      <div className="h-screen overflow-y-auto">
-        <ClientDashboard
-          client={previewClient}
-          projects={projects.filter((p) => p.clientId === previewClient.id)}
-          deliverables={deliverables.filter((d) => d.clientId === previewClient.id)}
+      <div className="flex flex-col h-screen liquid-glass-canvas text-[#1C1917] overflow-hidden font-sans">
+        {/* Persistent Admin Preview Mode Exit Banner */}
+        <div className="bg-[#171717] text-white px-6 py-2.5 flex items-center justify-between text-xs sticky top-0 z-50 shadow-md shrink-0">
+          <div className="flex items-center gap-2">
+            <Eye className="w-4 h-4 text-white" />
+            <span className="font-semibold tracking-wide">
+              ADMIN PREVIEW MODE — Viewing {previewClient.name} Client Portal
+            </span>
+          </div>
+          <button
+            onClick={() => setPreviewClient(null)}
+            className="px-3.5 py-1.5 bg-[#262626] hover:bg-[#333333] text-white rounded-md text-xs font-semibold flex items-center gap-1.5 border border-neutral-700 transition-colors shadow-2xs cursor-pointer"
+          >
+            <span>Exit Preview</span>
+            <span>&rarr;</span>
+          </button>
+        </div>
+
+        {/* Unified Application Header with Client Co-Branding */}
+        <AppHeader
           currentUser={currentUser}
-          onNavigateTab={(tab) => {
-            if (tab === 'commitment_tracker') {
-              setTrackerClientId(previewClient.id);
-              setActiveTab('deliverable_tracker');
-              setPreviewClient(null);
-            } else if (tab === 'approvals') {
-              setActiveTab('approvals');
-              setPreviewClient(null);
-            } else if (tab === 'projects_tasks') {
-              setActiveTab('projects_tasks');
-              setPreviewClient(null);
-            }
-          }}
-          onSelectDeliverable={(d) => setSelectedDeliverable(d)}
-          isPreviewMode={true}
-          onExitPreview={() => setPreviewClient(null)}
+          currentClient={previewClient}
+          allUsers={users}
+          onSwitchUser={handleSwitchUser}
+          unreadNotifsCount={unreadNotifsCount}
+          onOpenNotifications={() => setIsNotificationsOpen(true)}
+          onResetDB={handleResetDB}
+          activePortal="client"
+          onToggleMobileMenu={() => setIsMobileMenuOpen((prev) => !prev)}
+          onLogout={handleLogout}
+          onOpenProfileModal={() => setIsProfileModalOpen(true)}
         />
+
+        {/* Main Full-Width Container */}
+        <div className="flex-1 flex min-h-0 overflow-hidden">
+          <Sidebar
+            currentUser={{ ...currentUser, role: 'client' }}
+            activeTab="client_dashboard"
+            onSelectTab={(tab) => {
+              if (tab === 'commitment_tracker') {
+                setTrackerClientId(previewClient.id);
+                setActiveTab('deliverable_tracker');
+                setPreviewClient(null);
+              } else if (tab === 'approvals') {
+                setActiveTab('approvals');
+                setPreviewClient(null);
+              } else if (tab === 'projects_tasks') {
+                setActiveTab('projects_tasks');
+                setPreviewClient(null);
+              }
+            }}
+            pendingApprovalsCount={deliverables.filter((d) => d.clientId === previewClient.id && d.status === 'client_review').length}
+            isOpenMobile={isMobileMenuOpen}
+            onCloseMobile={() => setIsMobileMenuOpen(false)}
+          />
+
+          <main className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8 py-4 pb-12 w-full">
+            <div className="w-full max-w-full space-y-6">
+              <ClientDashboard
+                client={previewClient}
+                projects={projects.filter((p) => p.clientId === previewClient.id)}
+                deliverables={deliverables.filter((d) => d.clientId === previewClient.id)}
+                currentUser={currentUser}
+                onNavigateTab={(tab) => {
+                  if (tab === 'commitment_tracker') {
+                    setTrackerClientId(previewClient.id);
+                    setActiveTab('deliverable_tracker');
+                    setPreviewClient(null);
+                  } else if (tab === 'approvals') {
+                    setActiveTab('approvals');
+                    setPreviewClient(null);
+                  } else if (tab === 'projects_tasks') {
+                    setActiveTab('projects_tasks');
+                    setPreviewClient(null);
+                  }
+                }}
+                onSelectDeliverable={(d) => setSelectedDeliverable(d)}
+                isPreviewMode={false}
+              />
+            </div>
+          </main>
+        </div>
+
         {selectedDeliverable && (
           <DeliverableDetailsModal
             deliverable={selectedDeliverable}
@@ -911,6 +972,7 @@ export default function FlowdeskApp() {
       {/* Top Header (Full Width matching Planex Reference) */}
       <AppHeader
         currentUser={currentUser}
+        currentClient={activePortalRole === 'client' ? currentClient : null}
         allUsers={users}
         onSwitchUser={handleSwitchUser}
         unreadNotifsCount={unreadNotifsCount}
@@ -935,9 +997,9 @@ export default function FlowdeskApp() {
           onCloseMobile={() => setIsMobileMenuOpen(false)}
         />
 
-        {/* Scrollable Main Content Area */}
-        <main className="flex-1 overflow-y-auto px-3 sm:px-6 py-2 pb-8">
-          <div className="max-w-[1440px] mx-auto space-y-5">
+        {/* Scrollable Main Content Area - Full Available Viewport Width */}
+        <main className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8 py-3 pb-12 w-full">
+          <div className="w-full max-w-full space-y-6">
             {/* 1. ADMIN PORTAL VIEWS */}
             {activePortalRole === 'admin' && (
               <>
