@@ -3,6 +3,7 @@ import { getDB, saveDB } from '@/lib/db';
 import { Client, AuditLog } from '@/lib/types';
 import { hasFullAdminAccess } from '@/lib/permissions';
 import { getAuthenticatedUser } from '@/lib/session';
+import { hashPassword } from '@/lib/crypto';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -138,6 +139,30 @@ export async function POST(request: Request) {
     };
 
     db.clients.unshift(newClient);
+
+    // Create user login record for client with assigned password and username
+    const clientUserPassword = (clientData.password || 'client123').trim();
+    const clientUsername = (clientData.username || clientData.email.split('@')[0]).trim().toLowerCase();
+
+    const existingUser = db.users.find(
+      (u) => u.email.toLowerCase() === newClient.email.toLowerCase() || u.username?.toLowerCase() === clientUsername
+    );
+    if (!existingUser) {
+      db.users.push({
+        id: `usr-cli-${Date.now()}`,
+        name: newClient.name,
+        email: newClient.email.toLowerCase().trim(),
+        username: clientUsername,
+        role: 'client',
+        permissionGroup: 'CLIENT_ACCESS',
+        clientId: newClient.id,
+        clientName: newClient.company || newClient.name,
+        phone: newClient.phone,
+        passwordHash: hashPassword(clientUserPassword),
+        status: 'active',
+        createdAt: new Date().toISOString(),
+      });
+    }
 
     // Audit log
     const audit: AuditLog = {

@@ -387,7 +387,7 @@ export async function POST(request: Request) {
         );
       }
 
-      const { name, email, username, role, department, clientId, clientName, phone, initialPassword } = body;
+      const { name, email, username, role, department, clientId, clientName, phone, initialPassword, password } = body;
 
       if (!name || !email || !role) {
         return NextResponse.json({ error: 'Name, email, and role are required' }, { status: 400 });
@@ -405,22 +405,20 @@ export async function POST(request: Request) {
       }
 
       const newUserId = `usr-${Date.now()}`;
+      const chosenPassword = password || initialPassword;
       let passwordHash: string | undefined = undefined;
-      if (initialPassword) {
-        if (initialPassword.length < 12) {
-          return NextResponse.json(
-            { error: 'Password must be at least 12 characters in length.' },
-            { status: 400 }
-          );
-        }
-        passwordHash = hashPassword(initialPassword);
+      if (chosenPassword && chosenPassword.trim()) {
+        passwordHash = hashPassword(chosenPassword.trim());
+      } else {
+        // Sensible default passwords if left blank by management
+        passwordHash = hashPassword(role === 'admin' ? 'admin123' : role === 'manager' ? 'manager123' : role === 'employee' ? 'emp123' : 'client123');
       }
 
       const newUser: User = {
         id: newUserId,
         name: name.trim(),
         email: cleanEmail,
-        username: (username || cleanEmail.split('@')[0]).trim(),
+        username: (username || cleanEmail.split('@')[0]).trim().toLowerCase(),
         role,
         permissionGroup:
           role === 'admin' || role === 'manager'
@@ -507,6 +505,102 @@ export async function POST(request: Request) {
       saveDB(db);
       const { passwordHash: _, ...safeUser } = targetUser as any;
       return NextResponse.json({ success: true, user: safeUser });
+    }
+
+    // 5b. Admin Updates Their Own Username, Name, Email, or Password
+    if (action === 'update_self_credentials') {
+      const { callerUserId, username, name, email, newPassword } = body;
+      const targetUser = caller || db.users.find((u) => u.id === callerUserId);
+
+      if (!targetUser) {
+        return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      }
+
+      // STRICT USER RULE: Employee and Client cannot change their username or password
+      if (targetUser.role === 'employee' || targetUser.role === 'client') {
+        return NextResponse.json(
+          { error: 'Employees and Clients are not permitted to change username or password. Please contact management.' },
+          { status: 403 }
+        );
+      }
+
+      if (username && username.trim()) {
+        const cleanUser = username.trim().toLowerCase();
+        const taken = db.users.find((u) => u.id !== targetUser.id && u.username?.toLowerCase() === cleanUser);
+        if (taken) {
+          return NextResponse.json({ error: 'This username is already taken by another account.' }, { status: 400 });
+        }
+        targetUser.username = cleanUser;
+      }
+
+      if (name && name.trim()) targetUser.name = name.trim();
+      if (email && email.trim()) targetUser.email = email.trim().toLowerCase();
+      if (newPassword && newPassword.trim()) {
+        targetUser.passwordHash = hashPassword(newPassword.trim());
+      }
+
+      db.auditLogs.unshift({
+        id: `aud-${Date.now()}`,
+        userId: targetUser.id,
+        userName: targetUser.name,
+        userRole: targetUser.role,
+        action: 'Profile Updated',
+        details: `${targetUser.name} (${targetUser.role}) updated their credentials/profile`,
+        targetType: 'auth',
+        targetId: targetUser.id,
+        timestamp: new Date().toISOString(),
+      });
+
+      saveDB(db);
+      const { passwordHash: _, ...safeUser } = targetUser as any;
+      return NextResponse.json({ success: true, user: safeUser, message: 'Your credentials have been updated successfully.' });
+    }
+
+    // 5c. Manager & Admin Change Password for Any Employee or Client
+    if (action === 'manager_change_password') {
+      const { callerUserId, targetUserId, newPassword } = body;
+      const adminOrManager = caller || db.users.find((u) => u.id === callerUserId);
+
+      if (!adminOrManager || !hasFullAdminAccess(adminOrManager)) {
+        return NextResponse.json(
+          { error: 'Unauthorized: Admin or Manager permission required to update account passwords.' },
+          { status: 403 }
+        );
+      }
+
+      if (!targetUserId || !newPassword || !newPassword.trim()) {
+        return NextResponse.json({ error: 'Target user and new password are required.' }, { status: 400 });
+      }
+
+      const target = db.users.find((u) => u.id === targetUserId);
+      if (!target) {
+        return NextResponse.json({ error: 'Target user account not found.' }, { status: 404 });
+      }
+
+      // Security check: Manager cannot change Admin password
+      if (adminOrManager.role === 'manager' && target.role === 'admin') {
+        return NextResponse.json({ error: 'Managers cannot change Administrator passwords.' }, { status: 403 });
+      }
+
+      target.passwordHash = hashPassword(newPassword.trim());
+
+      db.auditLogs.unshift({
+        id: `aud-${Date.now()}`,
+        userId: adminOrManager.id,
+        userName: adminOrManager.name,
+        userRole: adminOrManager.role,
+        action: 'Password Changed by Management',
+        details: `${adminOrManager.name} changed password for ${target.name} (${target.role})`,
+        targetType: 'auth',
+        targetId: target.id,
+        timestamp: new Date().toISOString(),
+      });
+
+      saveDB(db);
+      return NextResponse.json({
+        success: true,
+        message: `Password successfully updated for ${target.name} (${target.role.toUpperCase()}).`,
+      });
     }
 
     // 6. Password reset request (Anti-enumeration + Rate-limiting + Expiring Single-Use Token)

@@ -35,6 +35,50 @@
   "invitations": [],
   "auditLogs": [
     {
+      "id": "aud-1795434437653",
+      "userId": "usr-admin",
+      "userName": "Rahi Creative Media",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rahi Creative Media authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-23T11:47:17.653Z"
+    },
+    {
+      "id": "aud-1795433394982",
+      "userId": "usr-admin",
+      "userName": "Rahi Creative Media",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rahi Creative Media authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-23T11:29:54.982Z"
+    },
+    {
+      "id": "aud-1795432075841",
+      "userId": "usr-admin",
+      "userName": "Rahi Creative Media",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rahi Creative Media authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-23T11:07:55.841Z"
+    },
+    {
+      "id": "aud-1795431223867",
+      "userId": "usr-admin",
+      "userName": "Rahi Creative Media",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rahi Creative Media authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-23T10:53:43.867Z"
+    },
+    {
       "id": "aud-1795424674640",
       "userId": "usr-admin",
       "userName": "Rahi Creative Media",
@@ -113,6 +157,42 @@
     }
   ],
   "sessions": [
+    {
+      "id": "sess-1795434437700-58fae070",
+      "token": "a8ea9350621caaa9af110e22e07d75711f8d970eb950879cbb69bc556b390131",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-23T11:47:17.700Z",
+      "expiresAt": "2026-11-30T11:47:17.700Z"
+    },
+    {
+      "id": "sess-1795433394983-bcd880db",
+      "token": "10bed4a4bf7ee405fc8c24a0dbb24de5c3cfd11c53f9d334e901f255f7df6310",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-23T11:29:54.983Z",
+      "expiresAt": "2026-11-30T11:29:54.983Z"
+    },
+    {
+      "id": "sess-1795432075842-d2de20a4",
+      "token": "a44526512eccee9d20bdf06ea2ed12c51ab1ef8765f3253bff7db46b62bcbd0d",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-23T11:07:55.842Z",
+      "expiresAt": "2026-11-30T11:07:55.842Z"
+    },
+    {
+      "id": "sess-1795431223870-2b87813e",
+      "token": "10eb174112bd58d5c87f7a3e37acab1c477249bf8bd615d2553089e852010474",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-23T10:53:43.870Z",
+      "expiresAt": "2026-11-30T10:53:43.870Z"
+    },
     {
       "id": "sess-1795424674641-5474fe85",
       "token": "785209ed4cdea7766d81323e5148d4653f2d2f85732eb31b66a7f4a3f22c5ff2",

@@ -3,6 +3,7 @@ import { getDB, saveDB } from '@/lib/db';
 import { Employee } from '@/lib/types';
 import { hasFullAdminAccess } from '@/lib/permissions';
 import { getAuthenticatedUser } from '@/lib/session';
+import { hashPassword } from '@/lib/crypto';
 
 export async function GET(request: Request) {
   // 1. Authenticate caller session via HttpOnly cookie or Bearer token
@@ -130,17 +131,21 @@ export async function POST(request: Request) {
 
     db.employees.unshift(newEmp);
 
-    // Create corresponding user login record
+    // Create corresponding user login record with assigned password and username
+    const employeePassword = (body.password || 'emp123').trim();
+    const employeeUsername = (body.username || newEmp.email.split('@')[0]).trim().toLowerCase();
+
     db.users.push({
       id: newEmp.userId,
       name: newEmp.name,
       email: newEmp.email,
-      username: newEmp.email.split('@')[0],
+      username: employeeUsername,
       role: 'employee',
       permissionGroup: 'EMPLOYEE_ACCESS',
       department: newEmp.department,
       employeeId: newEmp.id,
       phone: newEmp.phone,
+      passwordHash: hashPassword(employeePassword),
       status: 'active',
       createdAt: new Date().toISOString(),
     });

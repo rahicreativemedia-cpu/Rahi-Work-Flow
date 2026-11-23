@@ -10,19 +10,19 @@ interface BadgeProps {
 
 export function Badge({ children, variant = 'slate', size = 'sm', className }: BadgeProps) {
   const variantStyles = {
-    slate: 'bg-stone-100 text-stone-800 border-stone-200',
-    blue: 'bg-rose-950 text-rose-100 border-rose-800',
-    emerald: 'bg-stone-900 text-white border-stone-800',
-    amber: 'bg-rose-50 text-rose-900 border-rose-200 font-semibold',
-    rose: 'bg-rose-100 text-rose-950 border-rose-300 font-semibold',
-    purple: 'bg-rose-950 text-rose-100 border-rose-800',
-    cyan: 'bg-stone-100 text-stone-800 border-stone-200',
-    indigo: 'bg-rose-950 text-rose-100 border-rose-800',
+    slate: 'bg-stone-100 text-stone-700 border-stone-200',
+    blue: 'bg-blue-50 text-blue-700 border-blue-200/60',
+    emerald: 'bg-emerald-50 text-emerald-700 border-emerald-200/60',
+    amber: 'bg-amber-50 text-amber-700 border-amber-200/60 font-semibold',
+    rose: 'bg-rose-50 text-rose-700 border-rose-200/60 font-semibold',
+    purple: 'bg-purple-50 text-purple-700 border-purple-200/60',
+    cyan: 'bg-cyan-50 text-cyan-700 border-cyan-200/60',
+    indigo: 'bg-indigo-50 text-indigo-700 border-indigo-200/60',
   };
 
   const sizeStyles = {
-    sm: 'text-xs px-2 py-0.5',
-    md: 'text-xs font-medium px-2.5 py-1',
+    sm: 'text-[11px] px-2.5 py-0.5',
+    md: 'text-xs font-medium px-3 py-1',
   };
 
   return (

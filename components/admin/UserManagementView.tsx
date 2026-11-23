@@ -16,6 +16,9 @@ import {
   UserCheck,
   KeyRound,
   Shield,
+  Eye,
+  EyeOff,
+  RefreshCw,
 } from 'lucide-react';
 
 interface UserManagementViewProps {
@@ -53,10 +56,21 @@ export function UserManagementView({
   const [directName, setDirectName] = useState('');
   const [directEmail, setDirectEmail] = useState('');
   const [directUsername, setDirectUsername] = useState('');
+  const [directPassword, setDirectPassword] = useState('rahi123');
+  const [showDirectPassword, setShowDirectPassword] = useState(false);
   const [directRole, setDirectRole] = useState<UserRole>('employee');
   const [directDept, setDirectDept] = useState<Department>('Video Editing');
   const [directClientId, setDirectClientId] = useState(clients[0]?.id || '');
   const [directPhone, setDirectPhone] = useState('');
+
+  // Management Change Password Modal State
+  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
+  const [userForPasswordChange, setUserForPasswordChange] = useState<User | null>(null);
+  const [newPasswordForUser, setNewPasswordForUser] = useState('');
+  const [showChangePasswordInput, setShowChangePasswordInput] = useState(false);
+  const [isSubmittingPasswordChange, setIsSubmittingPasswordChange] = useState(false);
+  const [passwordChangeSuccess, setPasswordChangeSuccess] = useState<string | null>(null);
+  const [passwordChangeError, setPasswordChangeError] = useState<string | null>(null);
 
   const [copiedToken, setCopiedToken] = useState<string | null>(null);
 
@@ -98,6 +112,7 @@ export function UserManagementView({
       name: directName,
       email: directEmail,
       username: directUsername || directEmail.split('@')[0],
+      password: directPassword.trim() || 'rahi123',
       role: directRole,
       department: directRole === 'employee' ? directDept : undefined,
       clientId: directRole === 'client' ? directClientId : undefined,
@@ -108,6 +123,47 @@ export function UserManagementView({
     setIsDirectCreateModalOpen(false);
     setDirectName('');
     setDirectEmail('');
+    setDirectUsername('');
+    setDirectPassword('rahi123');
+  };
+
+  const handleAdminChangePasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!userForPasswordChange || !newPasswordForUser.trim()) return;
+
+    setIsSubmittingPasswordChange(true);
+    setPasswordChangeSuccess(null);
+    setPasswordChangeError(null);
+
+    try {
+      const res = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'manager_change_password',
+          callerUserId: currentUser.id,
+          targetUserId: userForPasswordChange.id,
+          newPassword: newPasswordForUser.trim(),
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setPasswordChangeSuccess(data.message || `Password successfully updated for ${userForPasswordChange.name}`);
+        setNewPasswordForUser('');
+        setTimeout(() => {
+          setIsChangePasswordOpen(false);
+          setUserForPasswordChange(null);
+          setPasswordChangeSuccess(null);
+        }, 1500);
+      } else {
+        setPasswordChangeError(data.error || 'Failed to update user password.');
+      }
+    } catch {
+      setPasswordChangeError('A network error occurred while updating the password.');
+    } finally {
+      setIsSubmittingPasswordChange(false);
+    }
   };
 
   return (
@@ -243,14 +299,32 @@ export function UserManagementView({
                         </Badge>
                       </td>
                       <td className="py-3.5 px-4 text-right">
-                        {canAdmin && u.id !== currentUser.id && (
-                          <button
-                            onClick={() => onToggleUserStatus(u.id)}
-                            className="text-xs font-semibold text-neutral-600 hover:text-neutral-900 px-2 py-1 rounded hover:bg-neutral-100"
-                          >
-                            {u.status === 'active' ? 'Deactivate' : 'Activate'}
-                          </button>
-                        )}
+                        <div className="flex items-center justify-end gap-2">
+                          {canAdmin && (currentUser.role === 'admin' || (currentUser.role === 'manager' && u.role !== 'admin')) && (
+                            <button
+                              onClick={() => {
+                                setUserForPasswordChange(u);
+                                setNewPasswordForUser('');
+                                setPasswordChangeSuccess(null);
+                                setPasswordChangeError(null);
+                                setIsChangePasswordOpen(true);
+                              }}
+                              title={`Set password for ${u.name}`}
+                              className="inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-700 hover:text-black px-2 py-1 rounded-md hover:bg-neutral-100 transition-colors border border-neutral-200"
+                            >
+                              <KeyRound className="w-3 h-3 text-stone-600" />
+                              <span>Set Password</span>
+                            </button>
+                          )}
+                          {canAdmin && u.id !== currentUser.id && (
+                            <button
+                              onClick={() => onToggleUserStatus(u.id)}
+                              className="text-[11px] font-semibold text-neutral-600 hover:text-neutral-900 px-2 py-1 rounded-md hover:bg-neutral-100 transition-colors"
+                            >
+                              {u.status === 'active' ? 'Deactivate' : 'Activate'}
+                            </button>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   );
@@ -442,10 +516,70 @@ export function UserManagementView({
               type="email"
               required
               value={directEmail}
-              onChange={(e) => setDirectEmail(e.target.value)}
+              onChange={(e) => {
+                setDirectEmail(e.target.value);
+                if (!directUsername || directUsername === directEmail.split('@')[0]) {
+                  setDirectUsername(e.target.value.split('@')[0].toLowerCase().replace(/[^a-z0-9._-]/g, ''));
+                }
+              }}
               placeholder="sameer@rahicreative.com"
               className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
             />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 bg-neutral-50 rounded-xl border border-neutral-200">
+            <div>
+              <label className="block text-xs font-semibold text-neutral-700 mb-1">
+                Username / Handle *
+              </label>
+              <input
+                type="text"
+                required
+                value={directUsername}
+                onChange={(e) => setDirectUsername(e.target.value)}
+                placeholder="e.g. sameer.d"
+                className="w-full text-xs p-2 bg-white border border-neutral-300 rounded-lg text-neutral-900 font-mono"
+              />
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-xs font-semibold text-neutral-700">
+                  Account Password *
+                </label>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789!@#$%';
+                    let gen = '';
+                    for (let i = 0; i < 10; i++) gen += chars.charAt(Math.floor(Math.random() * chars.length));
+                    setDirectPassword(gen);
+                    setShowDirectPassword(true);
+                  }}
+                  className="text-[10px] text-stone-600 hover:text-black flex items-center gap-1 font-medium"
+                >
+                  <RefreshCw className="w-2.5 h-2.5" />
+                  <span>Auto</span>
+                </button>
+              </div>
+              <div className="relative flex items-center">
+                <input
+                  type={showDirectPassword ? 'text' : 'password'}
+                  required
+                  value={directPassword}
+                  onChange={(e) => setDirectPassword(e.target.value)}
+                  placeholder="Set initial password"
+                  className="w-full text-xs p-2 pr-8 bg-white border border-neutral-300 rounded-lg text-neutral-900 font-mono"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowDirectPassword(!showDirectPassword)}
+                  className="absolute right-2 text-stone-400 hover:text-stone-700"
+                >
+                  {showDirectPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                </button>
+              </div>
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
@@ -522,6 +656,106 @@ export function UserManagementView({
               className="px-4 py-2 bg-black hover:bg-neutral-800 text-white rounded-lg text-xs font-semibold shadow-xs"
             >
               Create User Account
+            </button>
+          </div>
+        </form>
+      </Modal>
+      {/* MODAL: MANAGEMENT CHANGE PASSWORD */}
+      <Modal
+        isOpen={isChangePasswordOpen}
+        onClose={() => {
+          setIsChangePasswordOpen(false);
+          setUserForPasswordChange(null);
+        }}
+        title={`Set Password: ${userForPasswordChange?.name || 'User'}`}
+        description={`Management Authority: Set or reset login password for ${userForPasswordChange?.name} (${userForPasswordChange?.role.toUpperCase()}).`}
+        maxWidth="sm"
+      >
+        <form onSubmit={handleAdminChangePasswordSubmit} className="space-y-4">
+          <div className="p-3 bg-neutral-50 rounded-xl border border-neutral-200 text-xs space-y-1">
+            <div className="flex justify-between">
+              <span className="text-neutral-500">Account Handle:</span>
+              <span className="font-mono font-bold text-neutral-900">@{userForPasswordChange?.username}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-neutral-500">Registered Email:</span>
+              <span className="font-mono text-neutral-800">{userForPasswordChange?.email}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-neutral-500">Role / Access:</span>
+              <span className="uppercase font-semibold text-neutral-900">{userForPasswordChange?.role}</span>
+            </div>
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <label className="block text-xs font-bold text-neutral-700">
+                New Login Password *
+              </label>
+              <button
+                type="button"
+                onClick={() => {
+                  const chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789!@#$%';
+                  let gen = '';
+                  for (let i = 0; i < 10; i++) gen += chars.charAt(Math.floor(Math.random() * chars.length));
+                  setNewPasswordForUser(gen);
+                  setShowChangePasswordInput(true);
+                }}
+                className="text-[10px] text-stone-600 hover:text-black flex items-center gap-1 font-medium"
+              >
+                <RefreshCw className="w-2.5 h-2.5" />
+                <span>Auto-generate</span>
+              </button>
+            </div>
+            <div className="relative flex items-center">
+              <input
+                type={showChangePasswordInput ? 'text' : 'password'}
+                required
+                value={newPasswordForUser}
+                onChange={(e) => setNewPasswordForUser(e.target.value)}
+                placeholder="Enter new password"
+                className="w-full text-xs p-2.5 pr-8 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900 font-mono"
+              />
+              <button
+                type="button"
+                onClick={() => setShowChangePasswordInput(!showChangePasswordInput)}
+                className="absolute right-2 text-stone-400 hover:text-stone-700"
+              >
+                {showChangePasswordInput ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+              </button>
+            </div>
+          </div>
+
+          {passwordChangeSuccess && (
+            <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg text-xs flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span>{passwordChangeSuccess}</span>
+            </div>
+          )}
+
+          {passwordChangeError && (
+            <div className="p-3 bg-rose-50 border border-rose-200 text-rose-800 rounded-lg text-xs">
+              {passwordChangeError}
+            </div>
+          )}
+
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-neutral-100">
+            <button
+              type="button"
+              onClick={() => {
+                setIsChangePasswordOpen(false);
+                setUserForPasswordChange(null);
+              }}
+              className="px-4 py-2 text-xs font-medium text-neutral-600 hover:text-neutral-900"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={isSubmittingPasswordChange || !newPasswordForUser.trim()}
+              className="px-4 py-2 bg-black hover:bg-neutral-800 disabled:opacity-50 text-white rounded-lg text-xs font-semibold shadow-xs"
+            >
+              {isSubmittingPasswordChange ? 'Updating...' : 'Save New Password'}
             </button>
           </div>
         </form>

@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Bell,
   RotateCcw,
   ShieldCheck,
   Menu,
   LogOut,
+  Search,
+  Settings,
+  Sparkles,
+  ChevronDown,
 } from 'lucide-react';
 import { User } from '@/lib/types';
 import { hasFullAdminAccess } from '@/lib/permissions';
@@ -19,6 +23,9 @@ interface AppHeaderProps {
   activePortal: 'admin' | 'manager' | 'employee' | 'client';
   onToggleMobileMenu?: () => void;
   onLogout?: () => void;
+  searchQuery?: string;
+  onSearchChange?: (query: string) => void;
+  onOpenProfileModal?: () => void;
 }
 
 export function AppHeader({
@@ -31,118 +38,179 @@ export function AppHeader({
   activePortal,
   onToggleMobileMenu,
   onLogout,
+  searchQuery = '',
+  onSearchChange,
+  onOpenProfileModal,
 }: AppHeaderProps) {
-  const portalLabels = {
-    admin: { name: 'ADMIN PORTAL', color: 'bg-rose-950 text-rose-100 border border-rose-800' },
-    manager: { name: 'MANAGER PORTAL', color: 'bg-[#22131e] text-rose-200 border border-[#351e2f]' },
-    employee: { name: 'EMPLOYEE PORTAL', color: 'bg-stone-900 text-stone-200 border border-stone-800' },
-    client: { name: 'CLIENT PORTAL', color: 'bg-stone-900 text-stone-200 border border-stone-800' },
-  };
-
-  const currentPortalConfig = portalLabels[activePortal];
+  const [isSwitchUserOpen, setIsSwitchUserOpen] = useState(false);
   const hasAdminEqual = hasFullAdminAccess(currentUser);
 
+  const roleSubtitle =
+    currentUser.role === 'admin'
+      ? 'Executive Director'
+      : currentUser.role === 'manager'
+      ? 'Ops Manager'
+      : currentUser.role === 'employee'
+      ? currentUser.department || 'Creative Lead'
+      : currentUser.clientName || 'Client Partner';
+
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-xs border-b border-rose-100/80 px-4 sm:px-6 py-2.5 flex items-center justify-between gap-4">
-      {/* Left: Hamburger (mobile) + Brand & Portal Badge */}
-      <div className="flex items-center gap-3">
+    <header className="w-full liquid-glass-header px-4 sm:px-6 py-3 flex items-center justify-between gap-4 shrink-0 z-30 transition-all">
+      {/* Left: Brand Logo + Planex-Style Search Input */}
+      <div className="flex items-center gap-4 sm:gap-6 flex-1 min-w-0">
         {onToggleMobileMenu && (
           <button
             onClick={onToggleMobileMenu}
-            className="md:hidden p-1.5 rounded-lg text-stone-600 hover:text-stone-900 hover:bg-rose-50 transition border border-stone-200"
+            className="lg:hidden p-2 rounded-full liquid-glass-pill text-stone-700"
             aria-label="Toggle navigation menu"
           >
-            <Menu className="w-5 h-5" />
+            <Menu className="w-4 h-4" />
           </button>
         )}
 
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-lg bg-white border border-rose-100 p-1 flex items-center justify-center shadow-xs shrink-0">
-            <img src="/rahi-logo.png" alt="RAHI Flowdesk" className="w-7 h-auto max-h-7 object-contain" />
+        {/* Brand Logo & Name */}
+        <div className="flex items-center gap-2.5 shrink-0">
+          <div className="w-8 h-8 rounded-xl liquid-glass-pill p-1 flex items-center justify-center shadow-2xs">
+            <img src="/rahi-logo.png" alt="RAHI Flowdesk" className="w-6 h-6 object-contain" />
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-stone-900 text-sm sm:text-base tracking-tight">
-                RAHI Flowdesk
-              </span>
-              <span
-                className={`text-[9px] sm:text-[10px] font-bold tracking-wider px-2 py-0.5 rounded-sm uppercase ${currentPortalConfig.color}`}
-              >
-                {currentPortalConfig.name}
-              </span>
-            </div>
-            <p className="text-[10px] sm:text-[11px] text-stone-400 font-medium">
-              RAHI Creative Media
-            </p>
-          </div>
+          <span className="font-extrabold text-stone-900 text-base tracking-tight hidden sm:inline-block">
+            RAHI Flowdesk
+          </span>
         </div>
 
-        {/* Equal Admin Notice Banner (For Admin & Manager) */}
-        {hasAdminEqual && (
-          <div className="hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-50/80 border border-rose-200/80 text-[11px] font-medium text-rose-950">
-            <ShieldCheck className="w-3.5 h-3.5 text-rose-800" />
-            <span>
-              Equal Rights: <strong>FULL_ADMIN_ACCESS</strong>
-            </span>
-          </div>
-        )}
+        {/* Planex Global Search Pill */}
+        <div className="relative flex items-center flex-1 max-w-xs sm:max-w-md">
+          <Search className="w-4 h-4 text-stone-400 absolute left-3.5 pointer-events-none" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
+            placeholder="Search projects, tasks, members..."
+            className="w-full liquid-glass-pill rounded-full pl-10 pr-4 py-2 text-xs text-stone-800 placeholder:text-stone-400 focus:outline-hidden focus:ring-2 focus:ring-[#ED1C24]/15 focus:border-[#ED1C24]/30 transition-all"
+          />
+        </div>
       </div>
 
-      {/* Right Controls: Notifications, User & Logout */}
-      <div className="flex items-center gap-2 sm:gap-3">
+      {/* Right: User Profile, Notifications, Settings & Logout */}
+      <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+        {/* Equal Admin Badge (Discreet) */}
+        {hasAdminEqual && (
+          <div className="hidden xl:flex items-center gap-1.5 px-3 py-1 rounded-full liquid-glass-pill text-[11px] font-semibold text-stone-700">
+            <ShieldCheck className="w-3.5 h-3.5 text-[#ED1C24]" />
+            <span>FULL ADMIN</span>
+          </div>
+        )}
 
-        {/* Reset Database Button */}
-        <button
-          onClick={onResetDB}
-          title="Reset database to fresh seed state"
-          className="p-2 text-stone-400 hover:text-rose-950 hover:bg-rose-50 rounded-lg transition-colors border border-transparent hover:border-rose-200"
-        >
-          <RotateCcw className="w-4 h-4" />
-        </button>
+        {/* User Profile Card (Reference Style) */}
+        <div className="relative">
+          <button
+            onClick={() => setIsSwitchUserOpen((prev) => !prev)}
+            className="flex items-center gap-2.5 liquid-glass-pill rounded-full p-1 pr-3 transition text-left"
+          >
+            <div className="w-8 h-8 rounded-full bg-[#1C1917] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-2xs">
+              {currentUser.name.substring(0, 2).toUpperCase()}
+            </div>
+            <div className="hidden md:block leading-tight">
+              <div className="text-xs font-bold text-stone-900 truncate max-w-[120px]">
+                {currentUser.name}
+              </div>
+              <div className="text-[10px] text-stone-400 font-medium truncate">
+                {roleSubtitle}
+              </div>
+            </div>
+            <ChevronDown className="w-3.5 h-3.5 text-stone-400 hidden sm:block" />
+          </button>
 
-        {/* Notifications Bell */}
+          {/* Quick Switch User Menu */}
+          {isSwitchUserOpen && (
+            <div className="absolute right-0 mt-2 w-56 liquid-glass rounded-2xl shadow-xl p-2 z-50">
+              {hasAdminEqual && onOpenProfileModal && (
+                <div className="p-1 border-b border-stone-200/50 mb-1">
+                  <button
+                    onClick={() => {
+                      setIsSwitchUserOpen(false);
+                      onOpenProfileModal();
+                    }}
+                    className="w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-semibold text-stone-800 hover:bg-white/80 flex items-center gap-2 transition-colors"
+                  >
+                    <Settings className="w-3.5 h-3.5 text-[#ED1C24]" />
+                    <span>My Account & Password</span>
+                  </button>
+                </div>
+              )}
+              <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-stone-400 border-b border-stone-200/50">
+                Switch Test Role
+              </div>
+              <div className="max-h-60 overflow-y-auto space-y-0.5 mt-1">
+                {allUsers.map((u) => (
+                  <button
+                    key={u.id}
+                    onClick={() => {
+                      onSwitchUser(u);
+                      setIsSwitchUserOpen(false);
+                    }}
+                    className={`w-full text-left px-3 py-1.5 rounded-lg text-xs flex items-center justify-between ${
+                      currentUser.id === u.id
+                        ? 'bg-[#1C1917] text-white font-semibold'
+                        : 'text-stone-700 hover:bg-white/60'
+                    }`}
+                  >
+                    <span className="truncate">{u.name}</span>
+                    <span className="text-[10px] uppercase opacity-75">{u.role}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Settings / Credential Management for Admin & Manager */}
+        {hasAdminEqual && onOpenProfileModal && (
+          <button
+            onClick={onOpenProfileModal}
+            title="Profile & Credential Settings"
+            aria-label="Profile and Credentials"
+            className="w-9 h-9 rounded-full liquid-glass-pill text-stone-700 hover:text-black flex items-center justify-center transition-colors"
+          >
+            <Settings className="w-4 h-4" />
+          </button>
+        )}
+
+        {/* Notification Bell (Circular Glass Button) */}
         <button
           onClick={onOpenNotifications}
-          className="relative p-2 text-stone-700 hover:text-stone-900 hover:bg-rose-50 rounded-lg transition-colors border border-stone-200"
+          aria-label="Notifications"
+          className="relative w-9 h-9 rounded-full liquid-glass-pill text-stone-700 flex items-center justify-center"
         >
           <Bell className="w-4 h-4" />
           {unreadNotifsCount > 0 && (
-            <span className="absolute -top-1 -right-1 bg-rose-600 text-white font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center ring-2 ring-white">
+            <span className="absolute -top-0.5 -right-0.5 bg-[#ED1C24] text-white font-bold text-[9px] w-4 h-4 rounded-full flex items-center justify-center ring-2 ring-white">
               {unreadNotifsCount}
             </span>
           )}
         </button>
 
-        {/* User Avatar & Info */}
-        <div className="flex items-center gap-2 pl-2 border-l border-stone-200">
-          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-rose-900 to-rose-950 text-white flex items-center justify-center font-bold text-xs shadow-2xs shrink-0 border border-rose-800">
-            {currentUser.name.substring(0, 2).toUpperCase()}
-          </div>
-          <div className="hidden lg:block text-left">
-            <div className="text-xs font-semibold text-neutral-900 leading-tight truncate max-w-[120px]">
-              {currentUser.name}
-            </div>
-            <div className="text-[10px] text-neutral-400 font-medium capitalize truncate">
-              {currentUser.role === 'admin'
-                ? 'Executive Director'
-                : currentUser.role === 'manager'
-                ? 'Operations Manager'
-                : currentUser.role === 'employee'
-                ? currentUser.department
-                : currentUser.clientName}
-            </div>
-          </div>
+        {/* Database Reset / Maintenance */}
+        <button
+          onClick={onResetDB}
+          title="Reset database to seed"
+          aria-label="Reset database"
+          className="w-9 h-9 rounded-full liquid-glass-pill text-stone-600 hover:text-black flex items-center justify-center"
+        >
+          <RotateCcw className="w-4 h-4" />
+        </button>
 
-          {onLogout && (
-            <button
-              onClick={onLogout}
-              title="Sign Out to Login Screen"
-              className="p-1.5 text-neutral-400 hover:text-black hover:bg-neutral-100 rounded-lg transition-colors border border-transparent hover:border-neutral-200 ml-1"
-            >
-              <LogOut className="w-4 h-4" />
-            </button>
-          )}
-        </div>
+        {/* Logout (Circular Glass Button) */}
+        {onLogout && (
+          <button
+            onClick={onLogout}
+            title="Sign Out"
+            aria-label="Sign Out"
+            className="w-9 h-9 rounded-full liquid-glass-pill hover:text-[#ED1C24] text-stone-600 flex items-center justify-center"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
+        )}
       </div>
     </header>
   );

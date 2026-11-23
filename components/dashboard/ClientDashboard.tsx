@@ -1,21 +1,20 @@
 import React from 'react';
 import { Client, Deliverable, Project, User } from '@/lib/types';
-import { calculateClientDeliverableStats, formatDateTime } from '@/lib/utils';
-import { StatCard } from '../common/StatCard';
-import { Badge } from '../common/Badge';
+import { calculateClientDeliverableStats, formatDate } from '@/lib/utils';
 import {
   Award,
   CheckCircle2,
   Clock,
-  Video,
-  FileText,
-  AlertTriangle,
-  Download,
-  Calendar,
   Layers,
-  ArrowRight,
-  Shield,
+  Calendar,
+  ChevronRight,
+  AlertCircle,
+  FileCheck2,
 } from 'lucide-react';
+import { PlanexGreetingBar } from './PlanexGreetingBar';
+import { PlanexKpiRow, KpiItem } from './PlanexKpiRow';
+import { PlanexCalendar, CalendarEventItem } from './PlanexCalendar';
+import { cn } from '@/lib/utils';
 
 interface ClientDashboardProps {
   client: Client;
@@ -40,203 +39,318 @@ export function ClientDashboard({
   // Deliverables pending client review
   const pendingApprovals = deliverables.filter(
     (d) =>
-      d.clientId === client.id &&
+      d.clientId === client?.id &&
       (d.stage === 'client_script_approval' ||
         d.stage === 'client_video_approval' ||
         d.status === 'client_review')
   );
 
-  // Scheduled deliverables
-  const scheduledDeliverables = deliverables.filter(
-    (d) => d.clientId === client.id && (d.stage === 'scheduling' || d.status === 'scheduled')
+  // Active deliverables in production
+  const inProduction = deliverables.filter(
+    (d) =>
+      d.clientId === client?.id &&
+      d.status !== 'cancelled' &&
+      d.status !== 'delivered' &&
+      d.status !== 'published'
   );
 
-  // Final published assets available for download
-  const publishedAssets = deliverables.filter(
-    (d) =>
-      d.clientId === client.id &&
-      d.stage === 'publishing_or_delivery' &&
-      (d.status === 'published' || d.status === 'delivered')
-  );
+  // 4 Client KPI Cards
+  const kpiItems: KpiItem[] = [
+    {
+      id: 'monthly_target',
+      label: 'Monthly Target',
+      value: stats.totalCommitment,
+      icon: Award,
+      onClick: () => onNavigateTab('commitment_tracker'),
+    },
+    {
+      id: 'published',
+      label: 'Published / Delivered',
+      value: stats.completed,
+      icon: CheckCircle2,
+      onClick: () => onNavigateTab('asset_library'),
+    },
+    {
+      id: 'pending_approvals',
+      label: 'Pending Approvals',
+      value: pendingApprovals.length,
+      icon: Clock,
+      onClick: () => onNavigateTab('approvals'),
+    },
+    {
+      id: 'in_production',
+      label: 'In Production',
+      value: inProduction.length,
+      icon: Layers,
+      onClick: () => onNavigateTab('commitment_tracker'),
+    },
+  ];
+
+  // Calendar events
+  const calendarEvents: CalendarEventItem[] = deliverables
+    .filter((d) => d.scheduledPublishDate || d.deadline)
+    .map((d) => ({
+      id: d.id,
+      title: d.title,
+      date: (d.scheduledPublishDate || d.deadline).split('T')[0],
+      type: 'deliverable' as const,
+      priority: 'medium',
+    }));
+
+  const getStageBadge = (stage: string) => {
+    switch (stage) {
+      case 'publishing_or_delivery':
+      case 'scheduling':
+        return { label: 'Delivered', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200/60' };
+      case 'client_video_approval':
+      case 'client_script_approval':
+        return { label: 'Awaiting Your Sign-off', cls: 'bg-amber-50 text-amber-700 border-amber-200/60' };
+      case 'revisions':
+        return { label: 'In Revision', cls: 'bg-rose-50 text-rose-700 border-rose-200/60' };
+      default:
+        return { label: 'In Production', cls: 'bg-blue-50 text-blue-700 border-blue-200/60' };
+    }
+  };
+
+  const progressPercent = stats.completionPercentage || 0;
 
   return (
     <div className="space-y-6">
-      {/* Client Welcome Banner */}
-      <div className="bg-gradient-to-r from-[#170C12] via-[#24101B] to-[#140810] text-white p-6 rounded-2xl shadow-lg border border-[#3D1A2C] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-rose-950 text-rose-100 border border-rose-800/80">
-              CLIENT PRIVATE WORKSPACE
-            </span>
-            <span className="text-xs text-rose-200/70 font-medium">{client.name}</span>
-          </div>
-          <h2 className="text-xl sm:text-2xl font-black tracking-tight mt-1 text-white">
-            Welcome, {currentUser.name}
-          </h2>
-          <p className="text-xs text-rose-100/70 mt-1 max-w-xl leading-relaxed">
-            Your private brand hub at RAHI Creative Media. Track your monthly deliverable progress, review scripts and video edits, and access your published master files.
-          </p>
-        </div>
+      {/* 1. Top Greeting Bar */}
+      <PlanexGreetingBar
+        userName={client?.name || currentUser.name.split(' ')[0] || 'Client'}
+        subtitle="Review ongoing production, monthly deliverable milestones, and pending approvals."
+        primaryActionLabel={
+          pendingApprovals.length > 0
+            ? `Review Approvals (${pendingApprovals.length})`
+            : 'View Calendar'
+        }
+        onPrimaryAction={() => {
+          if (pendingApprovals.length > 0) {
+            onNavigateTab('approvals');
+          } else {
+            onNavigateTab('calendar');
+          }
+        }}
+      />
 
-        <div className="p-3 bg-[#1F101A] rounded-xl border border-[#3D1A2C] text-xs text-rose-200 flex items-center gap-3">
-          <Shield className="w-5 h-5 text-rose-400 shrink-0" />
-          <div className="text-[11px] leading-tight">
-            Encrypted & Isolated Workspace: Only {client.name} data is visible here.
-          </div>
-        </div>
-      </div>
+      {/* 2. KPI Cards Row */}
+      <PlanexKpiRow items={kpiItems} />
 
-      {/* Monthly Commitment Big Progress Card (Section 9 Requirement) */}
-      <div className="bg-white rounded-xl border border-neutral-200 p-6 shadow-xs">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
-          <div>
-            <div className="flex items-center gap-2">
-              <Award className="w-5 h-5 text-neutral-900" />
-              <h3 className="text-base font-bold text-neutral-900 tracking-tight">
-                Monthly Commitment Progress — November 2026
-              </h3>
+      {/* 3. Main 2-Column Split matching Planex Reference */}
+      <div className="grid grid-cols-12 gap-6 items-start">
+        {/* Left Column (~64% width on desktop) */}
+        <div className="col-span-12 lg:col-span-8 space-y-6">
+          {/* Deliverables Overview Table */}
+          <div className="liquid-glass rounded-3xl p-6">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h3 className="text-base font-bold text-stone-900 tracking-tight">
+                  Monthly Deliverables
+                </h3>
+                <p className="text-xs text-stone-400 mt-0.5">
+                  Content pipeline tracking for {client?.name || 'your brand'}
+                </p>
+              </div>
+              <button
+                onClick={() => onNavigateTab('commitment_tracker')}
+                className="px-4 py-2 liquid-glass-pill text-stone-800 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all"
+              >
+                <span>Full Tracker</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
             </div>
-            <p className="text-xs text-neutral-500 mt-0.5">
-              Agreed package commitment: {stats.totalCommitment} deliverables ({client.monthlyCommitment.reels} Reels, {client.monthlyCommitment.longVideos} Long Videos, {client.monthlyCommitment.graphics} Graphics).
-            </p>
-          </div>
 
-          <span className="text-xs font-bold text-neutral-900 bg-neutral-100 px-3 py-1 rounded-full border border-neutral-300">
-            {stats.completionPercentage}% Delivered
-          </span>
-        </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-stone-200/50 text-[11px] font-semibold text-stone-400 uppercase tracking-wider">
+                    <th className="pb-3 pr-4">Deliverable</th>
+                    <th className="pb-3 px-4">Format</th>
+                    <th className="pb-3 px-4">Stage</th>
+                    <th className="pb-3 px-4">Target Date</th>
+                    <th className="pb-3 pl-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-stone-200/40 text-xs">
+                  {deliverables.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="py-12 text-center text-stone-400">
+                        <CheckCircle2 className="w-8 h-8 text-stone-300 mx-auto mb-2" />
+                        <p className="font-medium text-stone-600">No deliverables scheduled</p>
+                        <p className="text-xs text-stone-400 mt-0.5">
+                          Your creative team will add planned deliverables shortly.
+                        </p>
+                      </td>
+                    </tr>
+                  ) : (
+                    deliverables.map((deliv) => {
+                      const stageInfo = getStageBadge(deliv.stage);
+                      const displayDate = deliv.scheduledPublishDate || deliv.deadline;
 
-        {/* 3 Metric Box */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center my-4">
-          <div className="p-4 bg-neutral-50 rounded-xl border border-neutral-200">
-            <div className="text-xs font-semibold text-neutral-700">Completed & Delivered</div>
-            <div className="text-3xl font-black text-black mt-1">{stats.completed}</div>
-            <div className="text-[11px] text-neutral-500 mt-1">Verified Published Deliverables</div>
-          </div>
-
-          <div className="p-4 bg-neutral-50 rounded-xl border border-neutral-200">
-            <div className="text-xs font-semibold text-neutral-700">In Creative Pipeline</div>
-            <div className="text-3xl font-black text-black mt-1">{stats.inProgress}</div>
-            <div className="text-[11px] text-neutral-500 mt-1">Scripting, Editing & Reviews</div>
-          </div>
-
-          <div className="p-4 bg-neutral-50 rounded-xl border border-neutral-200">
-            <div className="text-xs font-semibold text-neutral-700">Remaining to Target</div>
-            <div className="text-3xl font-black text-black mt-1">{stats.remaining}</div>
-            <div className="text-[11px] text-neutral-500 mt-1">Scheduled for Month-End</div>
-          </div>
-        </div>
-
-        {/* Progress Bar */}
-        <div className="mt-4">
-          <div className="w-full bg-neutral-100 h-3 rounded-full overflow-hidden">
-            <div
-              className="bg-black h-full rounded-full transition-all duration-500"
-              style={{ width: `${stats.completionPercentage}%` }}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Grid: Pending Approvals & Scheduled Posts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Pending Approvals */}
-        <div className="bg-white rounded-xl border border-neutral-200 p-5 shadow-xs flex flex-col justify-between">
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-bold text-neutral-900 tracking-tight">
-                Pending Your Review & Approval
-              </h3>
-              <Badge variant="slate">{pendingApprovals.length} to review</Badge>
+                      return (
+                        <tr
+                          key={deliv.id}
+                          className="group hover:bg-stone-50/60 transition-colors cursor-pointer"
+                          onClick={() => onSelectDeliverable(deliv)}
+                        >
+                          <td className="py-4 pr-4">
+                            <div>
+                              <span className="font-bold text-stone-900 group-hover:text-black transition-colors block">
+                                {deliv.title}
+                              </span>
+                              <span className="text-[11px] text-stone-400 block mt-0.5">
+                                #{deliv.id.slice(-6)}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="py-4 px-4 whitespace-nowrap">
+                            <span className="text-[11px] font-medium text-stone-600 capitalize">
+                              {deliv.type.replace('_', ' ')}
+                            </span>
+                          </td>
+                          <td className="py-4 px-4 whitespace-nowrap">
+                            <span
+                              className={cn(
+                                'px-2.5 py-0.5 rounded-full text-[11px] font-semibold border inline-block',
+                                stageInfo.cls
+                              )}
+                            >
+                              {stageInfo.label}
+                            </span>
+                          </td>
+                          <td className="py-4 px-4 whitespace-nowrap text-stone-600 font-medium">
+                            <span className="inline-flex items-center gap-1.5 text-[11px]">
+                              <Calendar className="w-3.5 h-3.5 text-stone-400" />
+                              {displayDate ? formatDate(displayDate) : 'TBD'}
+                            </span>
+                          </td>
+                          <td className="py-4 pl-4 text-right whitespace-nowrap">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onSelectDeliverable(deliv);
+                              }}
+                              className="text-[11px] font-bold text-stone-600 hover:text-stone-900 inline-flex items-center gap-0.5 group-hover:underline"
+                            >
+                              <span>Review</span>
+                              <ChevronRight className="w-3.5 h-3.5" />
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
+                </tbody>
+              </table>
             </div>
-            <p className="text-xs text-neutral-500 mb-4">
-              Review scripts or video cuts prepared by RAHI creative team.
-            </p>
+          </div>
 
-            <div className="space-y-3">
-              {pendingApprovals.length === 0 ? (
-                <div className="p-8 text-center text-xs text-neutral-400 border border-dashed border-neutral-300 rounded-lg">
-                  <CheckCircle2 className="w-6 h-6 text-neutral-600 mx-auto mb-1" />
-                  No items waiting for your approval right now.
+          {/* Pending Approvals Card */}
+          {pendingApprovals.length > 0 && (
+            <div className="bg-amber-50/60 rounded-3xl border border-amber-200/80 p-5 shadow-xs">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 text-amber-600" />
+                  <h4 className="text-xs font-bold text-amber-900 uppercase tracking-wider">
+                    Sign-Off Requested ({pendingApprovals.length})
+                  </h4>
                 </div>
-              ) : (
-                pendingApprovals.map((del) => (
+                <button
+                  onClick={() => onNavigateTab('approvals')}
+                  className="text-xs font-semibold text-amber-800 underline"
+                >
+                  Manage All Approvals
+                </button>
+              </div>
+              <div className="space-y-2">
+                {pendingApprovals.map((pa) => (
                   <div
-                    key={del.id}
-                    onClick={() => onSelectDeliverable(del)}
-                    className="p-3.5 bg-neutral-50 hover:bg-neutral-100 border border-neutral-200 rounded-xl cursor-pointer transition-colors"
+                    key={pa.id}
+                    onClick={() => onSelectDeliverable(pa)}
+                    className="p-3 bg-white rounded-xl border border-amber-200 flex items-center justify-between gap-3 cursor-pointer hover:shadow-xs transition-shadow"
                   >
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-neutral-900">{del.title}</span>
-                      <span className="text-[10px] font-bold text-neutral-900 bg-neutral-200 px-2 py-0.5 rounded uppercase">
-                        {del.stage === 'client_script_approval' ? 'Script' : 'Video Cut'}
+                    <div>
+                      <span className="text-xs font-bold text-stone-900 block">{pa.title}</span>
+                      <span className="text-[11px] text-amber-700 font-medium capitalize">
+                        {pa.stage.replace(/_/g, ' ')}
                       </span>
                     </div>
-                    <p className="text-xs text-neutral-600 mt-1 line-clamp-1">
-                      {del.scriptText || 'Click to preview video asset and approve or request revision.'}
-                    </p>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onSelectDeliverable(pa);
+                      }}
+                      className="px-3 py-1.5 bg-black hover:bg-neutral-800 text-white rounded-full text-xs font-semibold shrink-0"
+                    >
+                      Sign Off / Revise
+                    </button>
                   </div>
-                ))
-              )}
+                ))}
+              </div>
             </div>
-          </div>
-
-          <button
-            onClick={() => onNavigateTab('approvals')}
-            className="w-full mt-4 py-2 bg-black hover:bg-neutral-800 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors"
-          >
-            Open Approvals Center
-          </button>
+          )}
         </div>
 
-        {/* Final Assets Ready for Download */}
-        <div className="bg-white rounded-xl border border-neutral-200 p-5 shadow-xs flex flex-col justify-between">
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-bold text-neutral-900 tracking-tight">
-                Published & Final Deliverables
-              </h3>
-              <Badge variant="slate">{publishedAssets.length} assets</Badge>
+        {/* Right Column (~36% width on desktop) */}
+        <div className="col-span-12 lg:col-span-4 space-y-6">
+          {/* Content Calendar */}
+          <PlanexCalendar
+            events={calendarEvents}
+            onSelectDate={(d) => {}}
+          />
+
+          {/* Monthly Commitment Progress Card */}
+          <div className="liquid-glass rounded-3xl p-6">
+            <div className="flex items-center justify-between mb-5">
+              <div>
+                <h3 className="text-base font-bold text-stone-900 tracking-tight">Deliverable Goal</h3>
+                <p className="text-xs text-stone-400 mt-0.5">Monthly retainer commitments</p>
+              </div>
+              <div className="p-1.5 liquid-glass-subtle rounded-full text-stone-700">
+                <FileCheck2 className="w-4 h-4" />
+              </div>
             </div>
-            <p className="text-xs text-neutral-500 mb-4">
-              Download authorized 4K vertical exports and graphic assets.
-            </p>
 
-            <div className="space-y-2.5 max-h-56 overflow-y-auto">
-              {publishedAssets.map((asset) => (
+            {/* Progress Card */}
+            <div className="p-4 rounded-2xl liquid-glass-subtle mb-6">
+              <div className="flex items-center justify-between text-xs mb-1.5">
+                <span className="text-stone-500 font-medium">Monthly Goal Achieved</span>
+                <span className="text-stone-900 font-bold">{progressPercent}%</span>
+              </div>
+              <div className="w-full h-2 bg-stone-200/70 rounded-full overflow-hidden">
                 <div
-                  key={asset.id}
-                  className="p-3 bg-neutral-50 border border-neutral-200 rounded-lg flex items-center justify-between text-xs"
-                >
-                  <div className="truncate mr-2">
-                    <div className="font-semibold text-neutral-900 truncate">{asset.title}</div>
-                    <div className="text-[10px] text-neutral-400 capitalize">
-                      {asset.type} • Published on {formatDateTime(asset.publishedAt)}
-                    </div>
-                  </div>
+                  className="h-full bg-stone-900 rounded-full transition-all duration-500"
+                  style={{ width: `${progressPercent}%` }}
+                />
+              </div>
+              <p className="text-[11px] text-stone-400 mt-2">
+                {stats.completed} of {stats.totalCommitment} deliverables published
+              </p>
+            </div>
 
-                  {asset.mediaUrl && (
-                    <a
-                      href={asset.mediaUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="px-2.5 py-1 bg-white hover:bg-neutral-100 border border-neutral-200 rounded text-neutral-900 font-semibold flex items-center gap-1 text-xs shrink-0"
-                    >
-                      <Download className="w-3 h-3" />
-                      <span>Download</span>
-                    </a>
-                  )}
-                </div>
-              ))}
+            {/* Bottom 3 Summary Stats */}
+            <div className="grid grid-cols-3 gap-2 pt-2 border-t border-stone-200/50 text-center">
+              <div>
+                <span className="text-xl font-bold text-stone-900">
+                  {String(stats.totalCommitment).padStart(2, '0')}
+                </span>
+                <p className="text-[11px] text-stone-400 font-medium mt-0.5">Target</p>
+              </div>
+              <div>
+                <span className="text-xl font-bold text-stone-900">
+                  {String(stats.completed).padStart(2, '0')}
+                </span>
+                <p className="text-[11px] text-stone-400 font-medium mt-0.5">Delivered</p>
+              </div>
+              <div>
+                <span className="text-xl font-bold text-stone-900">
+                  {String(pendingApprovals.length).padStart(2, '0')}
+                </span>
+                <p className="text-[11px] text-stone-400 font-medium mt-0.5">Approvals</p>
+              </div>
             </div>
           </div>
-
-          <button
-            onClick={() => onNavigateTab('asset_library')}
-            className="w-full mt-4 py-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 rounded-lg text-xs font-semibold transition-colors"
-          >
-            View Complete Asset Library
-          </button>
         </div>
       </div>
     </div>

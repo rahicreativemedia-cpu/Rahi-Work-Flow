@@ -1,34 +1,28 @@
 import React from 'react';
-import { Client, Employee, Deliverable, Task, User } from '@/lib/types';
-import { formatCurrency, calculateClientDeliverableStats, TODAY_STRING } from '@/lib/utils';
-import { StatCard } from '../common/StatCard';
-import { Badge } from '../common/Badge';
-import {
-  Briefcase,
-  Users,
-  CheckCircle2,
-  Clock,
-  AlertTriangle,
-  FileCheck2,
-  DollarSign,
-  TrendingUp,
-  Plus,
-  ArrowRight,
-  ShieldCheck,
-  Kanban,
-} from 'lucide-react';
+import { Client, Employee, Deliverable, Task, Project, User } from '@/lib/types';
+import { TODAY_STRING } from '@/lib/utils';
+import { FolderGit2, CheckCircle2, Clock, Users } from 'lucide-react';
+import { PlanexGreetingBar } from './PlanexGreetingBar';
+import { PlanexKpiRow, KpiItem } from './PlanexKpiRow';
+import { PlanexProjectsTable } from './PlanexProjectsTable';
+import { PlanexTaskBoard } from './PlanexTaskBoard';
+import { PlanexCalendar, CalendarEventItem } from './PlanexCalendar';
+import { PlanexProjectSummary } from './PlanexProjectSummary';
 
 interface AdminDashboardProps {
   clients: Client[];
   employees: Employee[];
   deliverables: Deliverable[];
   tasks: Task[];
+  projects?: Project[];
   currentUser: User;
   onNavigateTab: (tab: string) => void;
   onSelectDeliverable: (deliverable: Deliverable) => void;
   onSelectTask: (task: Task) => void;
+  onSelectProject?: (project: Project) => void;
   onCreateClient: () => void;
   onCreateTask: () => void;
+  onCreateProject?: () => void;
 }
 
 export function AdminDashboard({
@@ -36,294 +30,130 @@ export function AdminDashboard({
   employees,
   deliverables,
   tasks,
+  projects = [],
   currentUser,
   onNavigateTab,
   onSelectDeliverable,
   onSelectTask,
+  onSelectProject,
   onCreateClient,
   onCreateTask,
+  onCreateProject,
 }: AdminDashboardProps) {
   const today = TODAY_STRING;
 
-  const activeClients = clients.filter((c) => c.status === 'active');
-  const activeDeliverables = deliverables.filter((d) => d.status !== 'cancelled');
-  const completedDeliverables = activeDeliverables.filter(
-    (d) =>
-      d.stage === 'publishing_or_delivery' &&
-      (d.status === 'published' || d.status === 'delivered')
-  );
-  const pendingDeliverables = activeDeliverables.filter(
-    (d) =>
-      !(
-        d.stage === 'publishing_or_delivery' &&
-        (d.status === 'published' || d.status === 'delivered')
-      )
-  );
+  const activeProjects = projects.filter((p) => p.status !== 'archived');
+  const activeTasks = tasks.filter((t) => t.status !== 'completed');
+  const overdueTasks = tasks.filter((t) => t.deadline && t.deadline < today && t.status !== 'completed');
+  const activeEmployees = employees.filter((e) => e.status === 'active');
 
-  const pendingApprovals = deliverables.filter(
-    (d) => d.status === 'client_review' || d.stage === 'client_video_approval' || d.stage === 'client_script_approval'
-  );
+  // KPI Items matching reference: Total Projects, Active Tasks, Overdue Tasks, Team Members
+  const kpiItems: KpiItem[] = [
+    {
+      id: 'projects',
+      label: 'Total Projects',
+      value: activeProjects.length,
+      icon: FolderGit2,
+      onClick: () => onNavigateTab('projects_tasks'),
+    },
+    {
+      id: 'active_tasks',
+      label: 'Active Tasks',
+      value: activeTasks.length.toLocaleString(),
+      icon: CheckCircle2,
+      onClick: () => onNavigateTab('projects_tasks'),
+    },
+    {
+      id: 'overdue_tasks',
+      label: 'Overdue Tasks',
+      value: overdueTasks.length,
+      icon: Clock,
+      onClick: () => onNavigateTab('projects_tasks'),
+    },
+    {
+      id: 'team_members',
+      label: 'Team Members',
+      value: activeEmployees.length,
+      icon: Users,
+      onClick: () => onNavigateTab('employees'),
+    },
+  ];
 
-  const overdueTasks = tasks.filter((t) => t.deadline < today && t.status !== 'completed');
-
-  const totalMRR = activeClients.reduce((acc, c) => acc + c.monthlyRetainer, 0);
+  // Calendar Events from tasks and project deadlines
+  const calendarEvents: CalendarEventItem[] = [
+    ...tasks
+      .filter((t) => t.deadline)
+      .map((t) => ({
+        id: t.id,
+        title: t.title,
+        date: t.deadline.split('T')[0],
+        type: 'task' as const,
+        priority: t.priority,
+      })),
+    ...projects
+      .filter((p) => p.targetEndDate)
+      .map((p) => ({
+        id: p.id,
+        title: p.title,
+        date: p.targetEndDate.split('T')[0],
+        type: 'deadline' as const,
+        priority: p.priority,
+      })),
+  ];
 
   return (
     <div className="space-y-6">
-      {/* Welcome Banner */}
-      <div className="bg-gradient-to-r from-[#170C12] via-[#24101B] to-[#140810] text-white p-6 rounded-2xl shadow-lg border border-[#3D1A2C] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-rose-950 text-rose-100 border border-rose-800/80">
-              ADMIN EXECUTIVE PORTAL
-            </span>
-            <span className="text-xs text-rose-200/70 font-medium flex items-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-rose-400" />
-              Shared Full Admin Rights with Manager
-            </span>
-          </div>
-          <h2 className="text-xl sm:text-2xl font-black tracking-tight mt-1 text-white">
-            Welcome back, {currentUser.name}
-          </h2>
-          <p className="text-xs text-rose-100/70 mt-1 max-w-xl leading-relaxed">
-            Company-wide creative agency command center. Monitor clients, team productivity, creative pipeline stages, and monthly deliverable milestones.
-          </p>
+      {/* 1. Top Greeting Bar */}
+      <PlanexGreetingBar
+        userName={currentUser.name.split(' ')[0] || currentUser.name}
+        subtitle="Here's a quick overview of your workspace today."
+        primaryActionLabel="Create Project"
+        onPrimaryAction={onCreateProject || onCreateTask}
+      />
+
+      {/* 2. KPI Cards Row */}
+      <PlanexKpiRow items={kpiItems} />
+
+      {/* 3. Main 2-Column Split matching Planex Reference */}
+      <div className="grid grid-cols-12 gap-6 items-start">
+        {/* Left Column (~64% width on desktop) */}
+        <div className="col-span-12 lg:col-span-8 space-y-6">
+          {/* Projects Overview Table */}
+          <PlanexProjectsTable
+            projects={activeProjects}
+            deliverables={deliverables}
+            onCreateProject={onCreateProject}
+            onSelectProject={onSelectProject}
+          />
+
+          {/* Task Board */}
+          <PlanexTaskBoard
+            tasks={tasks}
+            onCreateTask={onCreateTask}
+            onSelectTask={onSelectTask}
+          />
         </div>
 
-        {/* Quick Action Buttons */}
-        <div className="flex items-center gap-2.5 shrink-0 flex-wrap">
-          <button
-            onClick={onCreateClient}
-            className="px-3.5 py-2 bg-gradient-to-r from-rose-700 to-rose-800 hover:from-rose-600 hover:to-rose-700 text-white rounded-lg text-xs font-bold shadow-sm flex items-center gap-1.5 transition-all border border-rose-600"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            <span>Add Client</span>
-          </button>
-          <button
-            onClick={onCreateTask}
-            className="px-3.5 py-2 bg-[#22101B] hover:bg-[#2F1525] text-rose-100 border border-[#401C30] rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-2xs"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            <span>Assign Task</span>
-          </button>
-          <button
-            onClick={() => onNavigateTab('pipeline')}
-            className="px-3.5 py-2 bg-[#22101B] hover:bg-[#2F1525] text-rose-100 border border-[#401C30] rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-2xs"
-          >
-            <Kanban className="w-3.5 h-3.5" />
-            <span>View 10-Stage Pipeline</span>
-          </button>
-        </div>
-      </div>
+        {/* Right Column (~36% width on desktop) */}
+        <div className="col-span-12 lg:col-span-4 space-y-6">
+          {/* Calendar Card */}
+          <PlanexCalendar
+            events={calendarEvents}
+            onAddEvent={onCreateTask}
+            onSelectDate={(d) => {
+              // Could filter or highlight tasks on that date
+            }}
+          />
 
-      {/* Dashboard Metrics (Prompt Section 4 Requirement) */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5">
-        <StatCard
-          label="Active Clients"
-          value={activeClients.length}
-          subtext={`${clients.length} total registered`}
-          icon={Briefcase}
-          color="blue"
-          onClick={() => onNavigateTab('clients')}
-        />
-        <StatCard
-          label="Creative Team"
-          value={employees.length}
-          subtext="Active members"
-          icon={Users}
-          color="indigo"
-          onClick={() => onNavigateTab('employees')}
-        />
-        <StatCard
-          label="Deliverables Done"
-          value={completedDeliverables.length}
-          subtext={`${pendingDeliverables.length} in production`}
-          icon={CheckCircle2}
-          color="emerald"
-          onClick={() => onNavigateTab('deliverable_tracker')}
-        />
-        <StatCard
-          label="Pending Approvals"
-          value={pendingApprovals.length}
-          subtext="Awaiting client"
-          icon={FileCheck2}
-          color="purple"
-          highlight={pendingApprovals.length > 0}
-          onClick={() => onNavigateTab('approvals')}
-        />
-        <StatCard
-          label="Overdue Tasks"
-          value={overdueTasks.length}
-          subtext="Needs attention"
-          icon={AlertTriangle}
-          color="rose"
-          highlight={overdueTasks.length > 0}
-          onClick={() => onNavigateTab('projects_tasks')}
-        />
-        <StatCard
-          label="Agency Retainers"
-          value={formatCurrency(totalMRR)}
-          subtext="Monthly contracted"
-          icon={DollarSign}
-          color="emerald"
-          onClick={() => onNavigateTab('reports')}
-        />
-      </div>
-
-      {/* Middle Grid: Client Commitments & Pending Approvals Queue */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Client Commitments Overview (2 Cols) */}
-        <div className="lg:col-span-2 bg-white rounded-xl border border-neutral-200 p-5 shadow-xs">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h3 className="text-sm font-bold text-neutral-900 tracking-tight">
-                Monthly Deliverable Commitments (November 2026)
-              </h3>
-              <p className="text-xs text-neutral-500 mt-0.5">
-                Target commitments vs verified published deliveries per client.
-              </p>
-            </div>
-            <button
-              onClick={() => onNavigateTab('deliverable_tracker')}
-              className="text-xs font-semibold text-neutral-900 hover:text-black underline flex items-center gap-1"
-            >
-              <span>Full Tracker</span>
-              <ArrowRight className="w-3 h-3" />
-            </button>
-          </div>
-
-          <div className="space-y-4">
-            {clients.length === 0 ? (
-              <div className="p-8 text-center text-xs text-neutral-400 border border-dashed border-neutral-300 rounded-xl space-y-2">
-                <Briefcase className="w-8 h-8 text-neutral-300 mx-auto" />
-                <div className="font-semibold text-neutral-600">No Clients Added Yet</div>
-                <p className="text-[11px] text-neutral-400 max-w-sm mx-auto">
-                  Your agency workspace is clean and ready. Click &quot;Add Client&quot; above to create your first client contract.
-                </p>
-                <button
-                  onClick={onCreateClient}
-                  className="mt-2 px-3 py-1.5 bg-black hover:bg-neutral-800 text-white rounded-lg text-xs font-semibold inline-flex items-center gap-1"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>Add First Client</span>
-                </button>
-              </div>
-            ) : (
-              clients.map((client) => {
-                const stats = calculateClientDeliverableStats(client, deliverables, '2026-11');
-                return (
-                  <div key={client.id} className="p-4 bg-neutral-50 rounded-xl border border-neutral-200">
-                    <div className="flex items-center justify-between mb-1.5">
-                      <div>
-                        <span className="font-bold text-neutral-900 text-xs">{client.name}</span>
-                        <span className="text-[11px] text-neutral-500 ml-2">
-                          Target: {stats.totalCommitment} assets ({client.monthlyCommitment.reels} Reels)
-                        </span>
-                      </div>
-                      <span className="text-xs font-bold text-neutral-900 bg-neutral-100 px-2 py-0.5 rounded border border-neutral-300">
-                        {stats.completed} Completed • {stats.inProgress} In Progress • {stats.remaining} Remaining
-                      </span>
-                    </div>
-
-                    <div className="w-full bg-neutral-200 h-2 rounded-full overflow-hidden mt-2">
-                      <div
-                        className="bg-black h-full rounded-full transition-all"
-                        style={{ width: `${stats.completionPercentage}%` }}
-                      />
-                    </div>
-                  </div>
-                );
-              })
-            )}
-          </div>
-        </div>
-
-        {/* Pending Client Approvals Queue (1 Col) */}
-        <div className="bg-white rounded-xl border border-neutral-200 p-5 shadow-xs flex flex-col justify-between">
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-bold text-neutral-900 tracking-tight">
-                Pending Client Approvals
-              </h3>
-              <Badge variant="slate">{pendingApprovals.length}</Badge>
-            </div>
-            <p className="text-xs text-neutral-500 mb-4">
-              Items currently waiting for client script sign-off or video review.
-            </p>
-
-            <div className="space-y-2.5">
-              {pendingApprovals.length === 0 ? (
-                <div className="p-6 text-center text-xs text-neutral-400 border border-dashed border-neutral-300 rounded-lg">
-                  No items pending client sign-off
-                </div>
-              ) : (
-                pendingApprovals.map((del) => (
-                  <div
-                    key={del.id}
-                    onClick={() => onSelectDeliverable(del)}
-                    className="p-3 bg-neutral-50 hover:bg-neutral-100 border border-neutral-200 rounded-lg cursor-pointer transition-colors"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-bold text-neutral-900 uppercase">
-                        {del.clientName}
-                      </span>
-                      <span className="text-[10px] text-neutral-400">v{del.currentVersion}</span>
-                    </div>
-                    <div className="text-xs font-semibold text-neutral-900 mt-1 line-clamp-1">
-                      {del.title}
-                    </div>
-                    <div className="mt-1 text-[11px] text-neutral-600 font-medium capitalize">
-                      {del.stage === 'client_script_approval' ? 'Script Approval' : 'Video Approval'}
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-
-          <button
-            onClick={() => onNavigateTab('approvals')}
-            className="w-full mt-4 py-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 rounded-lg text-xs font-semibold transition-colors"
-          >
-            Manage All Approvals
-          </button>
+          {/* Projects Summary Card */}
+          <PlanexProjectSummary
+            projects={activeProjects}
+            deliverables={deliverables}
+            onFilterClick={() => onNavigateTab('projects_tasks')}
+            onSelectProject={onSelectProject}
+          />
         </div>
       </div>
-
-      {/* Overdue Tasks Alert Row */}
-      {overdueTasks.length > 0 && (
-        <div className="p-4 bg-neutral-50 border border-neutral-300 rounded-xl">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-neutral-900" />
-              <h4 className="text-xs font-bold text-neutral-900 uppercase tracking-wider">
-                Attention: {overdueTasks.length} Overdue Tasks Detected
-              </h4>
-            </div>
-            <button
-              onClick={() => onNavigateTab('projects_tasks')}
-              className="text-xs font-semibold text-neutral-900 hover:text-black underline"
-            >
-              Reassign Tasks →
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 mt-2">
-            {overdueTasks.slice(0, 3).map((task) => (
-              <div
-                key={task.id}
-                onClick={() => onSelectTask(task)}
-                className="p-2.5 bg-white rounded-lg border border-neutral-200 cursor-pointer hover:border-neutral-400 text-xs"
-              >
-                <div className="font-bold text-neutral-900 truncate">{task.title}</div>
-                <div className="text-[11px] text-neutral-500 mt-0.5">
-                  Assigned to <strong className="text-neutral-700">{task.assignedEmployeeName}</strong> • Due {task.deadline}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

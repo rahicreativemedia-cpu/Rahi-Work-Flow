@@ -63,8 +63,15 @@ export function ResetPasswordModal({ isOpen, onClose }: ResetPasswordModalProps)
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             <p className="text-xs text-neutral-500 leading-relaxed">
-              Enter your registered RAHI Flowdesk email address. We will verify your account and dispatch secure password reset instructions.
+              Enter your registered administrator or management email address to receive secure reset instructions.
             </p>
+
+            <div className="p-3 bg-neutral-50 rounded-xl border border-neutral-200 text-[11px] text-neutral-600 space-y-1">
+              <span className="font-semibold text-neutral-900 block">Notice for Creative Team & Clients:</span>
+              <span>
+                Employee and Client accounts are managed exclusively by RAHI Creative Media management. Passwords cannot be self-reset; please contact your operations manager or administrator to update credentials.
+              </span>
+            </div>
 
             <Input
               type="email"

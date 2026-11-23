@@ -48,6 +48,7 @@ import { EmployeeWorkViews } from '@/components/employee/EmployeeWorkViews';
 import { LoginView } from '@/components/auth/LoginView';
 import { InviteAcceptModal } from '@/components/auth/InviteAcceptModal';
 import { ResetPasswordModal } from '@/components/auth/ResetPasswordModal';
+import { AdminProfileModal } from '@/components/auth/AdminProfileModal';
 import { hasFullAdminAccess } from '@/lib/permissions';
 
 export default function FlowdeskApp() {
@@ -73,6 +74,7 @@ export default function FlowdeskApp() {
   const [isInviteAcceptOpen, setIsInviteAcceptOpen] = useState(false);
   const [inviteTokenToClaim, setInviteTokenToClaim] = useState('');
   const [isResetPasswordOpen, setIsResetPasswordOpen] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   // Modal dialog states
   const [selectedDeliverable, setSelectedDeliverable] = useState<Deliverable | null>(null);
@@ -828,36 +830,37 @@ export default function FlowdeskApp() {
   const unreadNotifsCount = notifications.filter((n) => !n.read).length;
 
   return (
-    <div className="flex h-screen bg-neutral-50 text-neutral-900 overflow-hidden font-sans">
-      {/* Sidebar Navigation */}
-      <Sidebar
+    <div className="flex flex-col h-screen liquid-glass-canvas text-[#1C1917] overflow-hidden font-sans">
+      {/* Top Header (Full Width matching Planex Reference) */}
+      <AppHeader
         currentUser={currentUser}
-        activeTab={activeTab}
-        onSelectTab={setActiveTab}
-        pendingApprovalsCount={pendingApprovalsCount}
-        overdueTasksCount={overdueTasksCount}
-        isOpenMobile={isMobileMenuOpen}
-        onCloseMobile={() => setIsMobileMenuOpen(false)}
+        allUsers={users}
+        onSwitchUser={handleSwitchUser}
+        unreadNotifsCount={unreadNotifsCount}
+        onOpenNotifications={() => setIsNotificationsOpen(true)}
+        onResetDB={handleResetDB}
+        activePortal={activePortalRole}
+        onToggleMobileMenu={() => setIsMobileMenuOpen((prev) => !prev)}
+        onLogout={handleLogout}
+        onOpenProfileModal={() => setIsProfileModalOpen(true)}
       />
 
-      {/* Main Container */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        {/* Top Header */}
-        <AppHeader
+      {/* Main Container: Floating Left Sidebar + Dashboard Content */}
+      <div className="flex-1 flex min-h-0 overflow-hidden">
+        {/* Minimal Floating Icon Sidebar */}
+        <Sidebar
           currentUser={currentUser}
-          allUsers={users}
-          onSwitchUser={handleSwitchUser}
-          unreadNotifsCount={unreadNotifsCount}
-          onOpenNotifications={() => setIsNotificationsOpen(true)}
-          onResetDB={handleResetDB}
-          activePortal={activePortalRole}
-          onToggleMobileMenu={() => setIsMobileMenuOpen((prev) => !prev)}
-          onLogout={handleLogout}
+          activeTab={activeTab}
+          onSelectTab={setActiveTab}
+          pendingApprovalsCount={pendingApprovalsCount}
+          overdueTasksCount={overdueTasksCount}
+          isOpenMobile={isMobileMenuOpen}
+          onCloseMobile={() => setIsMobileMenuOpen(false)}
         />
 
         {/* Scrollable Main Content Area */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-          <div className="max-w-7xl mx-auto space-y-6">
+        <main className="flex-1 overflow-y-auto px-3 sm:px-6 py-2 pb-8">
+          <div className="max-w-[1440px] mx-auto space-y-5">
             {/* 1. ADMIN PORTAL VIEWS */}
             {activePortalRole === 'admin' && (
               <>
@@ -867,15 +870,21 @@ export default function FlowdeskApp() {
                     employees={employees}
                     deliverables={deliverables}
                     tasks={tasks}
+                    projects={projects}
                     currentUser={currentUser}
                     onNavigateTab={setActiveTab}
                     onSelectDeliverable={(d) => setSelectedDeliverable(d)}
                     onSelectTask={(t) => setSelectedTask(t)}
+                    onSelectProject={(p) => setSelectedProject(p)}
                     onCreateClient={() => {
                       setClientToEdit(null);
                       setIsCreateClientOpen(true);
                     }}
                     onCreateTask={() => setIsCreateTaskOpen(true)}
+                    onCreateProject={() => {
+                      setProjectToEdit(null);
+                      setIsCreateProjectOpen(true);
+                    }}
                   />
                 )}
                 {activeTab === 'pipeline' && (
@@ -998,16 +1007,22 @@ export default function FlowdeskApp() {
                     employees={employees}
                     deliverables={deliverables}
                     tasks={tasks}
+                    projects={projects}
                     currentUser={currentUser}
                     onNavigateTab={setActiveTab}
                     onSelectDeliverable={(d) => setSelectedDeliverable(d)}
                     onSelectTask={(t) => setSelectedTask(t)}
+                    onSelectProject={(p) => setSelectedProject(p)}
                     onCreateTask={() => setIsCreateTaskOpen(true)}
                     onCreateClient={() => {
                       setClientToEdit(null);
                       setIsCreateClientOpen(true);
                     }}
                     onCreateDeliverable={() => setIsCreateDeliverableOpen(true)}
+                    onCreateProject={() => {
+                      setProjectToEdit(null);
+                      setIsCreateProjectOpen(true);
+                    }}
                   />
                 )}
                 {activeTab === 'pipeline' && (
@@ -1325,6 +1340,18 @@ export default function FlowdeskApp() {
         isOpen={isResetPasswordOpen}
         onClose={() => setIsResetPasswordOpen(false)}
       />
+
+      {isProfileModalOpen && currentUser && (
+        <AdminProfileModal
+          isOpen={isProfileModalOpen}
+          onClose={() => setIsProfileModalOpen(false)}
+          currentUser={currentUser}
+          onUserUpdated={(updatedUser) => {
+            setCurrentUser(updatedUser);
+            refreshData();
+          }}
+        />
+      )}
 
       {/* Slide-over Notifications Drawer */}
       <NotificationsDrawer

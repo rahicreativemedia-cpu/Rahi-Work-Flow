@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Department, Employee } from '@/lib/types';
 import { Modal } from '../common/Modal';
+import { Eye, EyeOff, RefreshCw, Key } from 'lucide-react';
 
 interface CreateEmployeeModalProps {
   isOpen: boolean;
@@ -17,6 +18,9 @@ export function CreateEmployeeModal({
 }: CreateEmployeeModalProps) {
   const [name, setName] = useState(employeeToEdit?.name || '');
   const [email, setEmail] = useState(employeeToEdit?.email || '');
+  const [username, setUsername] = useState((employeeToEdit as any)?.username || '');
+  const [password, setPassword] = useState('emp123');
+  const [showPassword, setShowPassword] = useState(false);
   const [phone, setPhone] = useState(employeeToEdit?.phone || '');
   const [department, setDepartment] = useState<Department>(
     employeeToEdit?.department || 'Video Editing'
@@ -31,6 +35,47 @@ export function CreateEmployeeModal({
     employeeToEdit?.skills ? employeeToEdit.skills.join(', ') : 'Premiere Pro, After Effects'
   );
 
+  useEffect(() => {
+    if (employeeToEdit) {
+      setName(employeeToEdit.name || '');
+      setEmail(employeeToEdit.email || '');
+      setUsername((employeeToEdit as any).username || employeeToEdit.email?.split('@')[0] || '');
+      setPhone(employeeToEdit.phone || '');
+      setDepartment(employeeToEdit.department || 'Video Editing');
+      setDesignation(employeeToEdit.designation || 'Creative Specialist');
+      setMaxConcurrentTasks(employeeToEdit.maxConcurrentTasks || 5);
+      setSkills(employeeToEdit.skills ? employeeToEdit.skills.join(', ') : 'Premiere Pro, After Effects');
+    } else {
+      setName('');
+      setEmail('');
+      setUsername('');
+      setPassword('emp123');
+      setPhone('');
+      setDepartment('Video Editing');
+      setDesignation('Creative Specialist');
+      setMaxConcurrentTasks(5);
+      setSkills('Premiere Pro, After Effects');
+    }
+  }, [employeeToEdit, isOpen]);
+
+  // Auto-suggest username when email is typed
+  const handleEmailChange = (val: string) => {
+    setEmail(val);
+    if (!employeeToEdit && (!username || username === email.split('@')[0])) {
+      setUsername(val.split('@')[0].toLowerCase().replace(/[^a-z0-9._-]/g, ''));
+    }
+  };
+
+  const handleGeneratePassword = () => {
+    const chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789!@#$%';
+    let generated = '';
+    for (let i = 0; i < 10; i++) {
+      generated += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    setPassword(generated);
+    setShowPassword(true);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !email.trim()) {
@@ -38,13 +83,17 @@ export function CreateEmployeeModal({
       return;
     }
 
+    const finalUsername = (username.trim() || email.split('@')[0]).toLowerCase();
+
     onSubmit({
       id: employeeToEdit?.id,
-      name,
-      email,
-      phone,
+      name: name.trim(),
+      email: email.trim().toLowerCase(),
+      username: finalUsername,
+      password: password.trim(),
+      phone: phone.trim(),
       department,
-      designation: designation || `${department} Specialist`,
+      designation: designation.trim() || `${department} Specialist`,
       maxConcurrentTasks: Number(maxConcurrentTasks),
       skills,
     });
@@ -57,7 +106,7 @@ export function CreateEmployeeModal({
       isOpen={isOpen}
       onClose={onClose}
       title={employeeToEdit ? 'Edit Employee Profile' : 'Add Creative Employee'}
-      description="Equal Admin Capability: Creates employee profile and system login credentials."
+      description="Admin & Manager Authority: Assign employee details, portal email, username, and initial login password directly."
       maxWidth="md"
     >
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -69,7 +118,7 @@ export function CreateEmployeeModal({
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="e.g. Vikram Mehta"
-            className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
+            className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900 focus:outline-hidden focus:ring-1 focus:ring-black"
           />
         </div>
 
@@ -79,11 +128,73 @@ export function CreateEmployeeModal({
             type="email"
             required
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => handleEmailChange(e.target.value)}
             placeholder="editor@rahicreative.com"
-            className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
+            className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900 focus:outline-hidden focus:ring-1 focus:ring-black"
           />
         </div>
+
+        {/* Credentials Section - Admin/Manager Sets Email & Password */}
+        {!employeeToEdit && (
+          <div className="p-3.5 bg-neutral-50 rounded-xl border border-neutral-200 space-y-3">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-neutral-900">
+              <Key className="w-3.5 h-3.5 text-black" />
+              <span>Portal Login Credentials (Set by Management)</span>
+            </div>
+            <p className="text-[11px] text-neutral-500 leading-tight">
+              Management sets the employee&apos;s username and initial password. Employees cannot change credentials themselves.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+              <div>
+                <label className="block text-xs font-semibold text-neutral-700 mb-1">
+                  Login Username *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="e.g. vikram.m"
+                  className="w-full text-xs p-2 bg-white border border-neutral-300 rounded-lg text-neutral-900 font-mono"
+                />
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-semibold text-neutral-700">
+                    Initial Password *
+                  </label>
+                  <button
+                    type="button"
+                    onClick={handleGeneratePassword}
+                    className="text-[10px] text-stone-600 hover:text-black flex items-center gap-1 font-medium"
+                  >
+                    <RefreshCw className="w-2.5 h-2.5" />
+                    <span>Auto</span>
+                  </button>
+                </div>
+                <div className="relative flex items-center">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Set login password"
+                    className="w-full text-xs p-2 pr-8 bg-white border border-neutral-300 rounded-lg text-neutral-900 font-mono"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-2 text-stone-400 hover:text-stone-700"
+                  >
+                    {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div>
           <label className="block text-xs font-bold text-neutral-700 mb-1">Phone</label>
@@ -165,7 +276,7 @@ export function CreateEmployeeModal({
             type="submit"
             className="px-4 py-2 bg-black hover:bg-neutral-800 text-white rounded-lg text-xs font-semibold shadow-xs"
           >
-            {employeeToEdit ? 'Save Changes' : 'Create Employee'}
+            {employeeToEdit ? 'Save Changes' : 'Create Employee & Account'}
           </button>
         </div>
       </form>

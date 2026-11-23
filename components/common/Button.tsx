@@ -21,21 +21,21 @@ export function Button({
 }: ButtonProps) {
   const variantStyles = {
     primary:
-      'bg-gradient-to-r from-rose-900 via-rose-950 to-rose-900 hover:brightness-110 text-white shadow-xs border border-rose-800/60 focus:ring-rose-500/20',
+      'bg-black hover:bg-neutral-800 text-white shadow-xs border border-black focus:ring-stone-900/20 font-semibold',
     secondary:
-      'bg-rose-50/80 hover:bg-rose-100 text-rose-950 border border-rose-200/80 focus:ring-rose-500/10 font-semibold',
+      'bg-stone-100 hover:bg-stone-200 text-stone-900 border border-stone-200/80 focus:ring-stone-400/20 font-semibold',
     outline:
-      'bg-white hover:bg-rose-50/50 text-stone-900 border border-stone-200 shadow-2xs focus:ring-rose-500/10',
+      'bg-white hover:bg-stone-50 text-stone-900 border border-[#E2DDD8] shadow-2xs focus:ring-stone-400/20 font-semibold',
     danger:
-      'bg-rose-950 hover:bg-black text-rose-100 border border-rose-900 focus:ring-rose-500/20',
+      'bg-rose-600 hover:bg-rose-700 text-white border border-rose-600 focus:ring-rose-500/20 font-semibold',
     ghost:
-      'bg-transparent hover:bg-rose-50/70 text-stone-700 hover:text-rose-950 border border-transparent focus:ring-rose-500/10',
+      'bg-transparent hover:bg-stone-100 text-stone-700 hover:text-stone-900 border border-transparent focus:ring-stone-400/10 font-medium',
   };
 
   const sizeStyles = {
-    sm: 'text-xs px-2.5 py-1.5 rounded-md gap-1.5 font-medium',
-    md: 'text-xs px-3.5 py-2 rounded-lg gap-2 font-semibold',
-    lg: 'text-sm px-4 py-2.5 rounded-lg gap-2.5 font-semibold',
+    sm: 'text-xs px-3 py-1.5 rounded-full gap-1.5',
+    md: 'text-xs px-4 py-2 rounded-full gap-2',
+    lg: 'text-sm px-5 py-2.5 rounded-full gap-2.5',
   };
 
   return (
