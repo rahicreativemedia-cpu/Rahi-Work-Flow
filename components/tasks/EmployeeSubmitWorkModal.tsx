@@ -66,55 +66,55 @@ export function EmployeeSubmitWorkModal({
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1">File Name</label>
+          <label className="block text-xs font-bold text-neutral-700 mb-1">File Name</label>
           <input
             type="text"
             value={fileName}
             onChange={(e) => setFileName(e.target.value)}
             placeholder={`e.g. ${task.title.replace(/\s+/g, '_')}_v${nextVersion}.mp4`}
-            className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
+            className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1">Asset URL / Preview Link</label>
+          <label className="block text-xs font-bold text-neutral-700 mb-1">Asset URL / Preview Link</label>
           <input
             type="text"
             required
             value={fileUrl}
             onChange={(e) => setFileUrl(e.target.value)}
-            className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-mono text-[11px]"
+            className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900 font-mono text-[11px]"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1">File Size</label>
+          <label className="block text-xs font-bold text-neutral-700 mb-1">File Size</label>
           <input
             type="text"
             value={fileSize}
             onChange={(e) => setFileSize(e.target.value)}
-            className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
+            className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1">
+          <label className="block text-xs font-bold text-neutral-700 mb-1">
             Creative Notes & Changes Summary
           </label>
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             placeholder="Describe what was executed, changes made from previous feedback, or special instructions..."
-            className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
+            className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
             rows={3}
           />
         </div>
 
-        <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+        <div className="flex items-center justify-end gap-3 pt-3 border-t border-neutral-100">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-xs font-medium text-slate-600 hover:text-slate-900"
+            className="px-4 py-2 text-xs font-medium text-neutral-600 hover:text-neutral-900"
           >
             Cancel
           </button>

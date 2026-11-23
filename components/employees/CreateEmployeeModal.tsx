@@ -62,47 +62,47 @@ export function CreateEmployeeModal({
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1">Full Name *</label>
+          <label className="block text-xs font-bold text-neutral-700 mb-1">Full Name *</label>
           <input
             type="text"
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="e.g. Vikram Mehta"
-            className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
+            className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1">Email Address *</label>
+          <label className="block text-xs font-bold text-neutral-700 mb-1">Email Address *</label>
           <input
             type="email"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="editor@rahicreative.com"
-            className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
+            className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1">Phone</label>
+          <label className="block text-xs font-bold text-neutral-700 mb-1">Phone</label>
           <input
             type="text"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             placeholder="+91 98200 12345"
-            className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
+            className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
           />
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Department</label>
+            <label className="block text-xs font-bold text-neutral-700 mb-1">Department</label>
             <select
               value={department}
               onChange={(e) => setDepartment(e.target.value as Department)}
-              className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-medium"
+              className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900 font-medium"
             >
               <option value="Video Production">Video Production</option>
               <option value="Video Editing">Video Editing</option>
@@ -115,7 +115,7 @@ export function CreateEmployeeModal({
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">
+            <label className="block text-xs font-bold text-neutral-700 mb-1">
               Max Concurrent Tasks
             </label>
             <input
@@ -124,24 +124,24 @@ export function CreateEmployeeModal({
               max="20"
               value={maxConcurrentTasks}
               onChange={(e) => setMaxConcurrentTasks(Number(e.target.value))}
-              className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-bold"
+              className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900 font-bold"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1">Designation</label>
+          <label className="block text-xs font-bold text-neutral-700 mb-1">Designation</label>
           <input
             type="text"
             value={designation}
             onChange={(e) => setDesignation(e.target.value)}
             placeholder="e.g. Senior Video Editor"
-            className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
+            className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1">
+          <label className="block text-xs font-bold text-neutral-700 mb-1">
             Skills (comma separated)
           </label>
           <input
@@ -149,15 +149,15 @@ export function CreateEmployeeModal({
             value={skills}
             onChange={(e) => setSkills(e.target.value)}
             placeholder="e.g. Premiere Pro, After Effects, Sound Design"
-            className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
+            className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
           />
         </div>
 
-        <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+        <div className="flex items-center justify-end gap-3 pt-3 border-t border-neutral-100">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-xs font-medium text-slate-600 hover:text-slate-900"
+            className="px-4 py-2 text-xs font-medium text-neutral-600 hover:text-neutral-900"
           >
             Cancel
           </button>

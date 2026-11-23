@@ -186,7 +186,7 @@ export function ProjectsAndTasksCenter({
               </span>
             )}
           </div>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-neutral-500 mt-1">
             Manage agency campaigns, track multi-employee project milestones, monitor Kanban task boards, and track deadlines.
           </p>
         </div>
@@ -194,13 +194,13 @@ export function ProjectsAndTasksCenter({
         {/* View Switchers & Creation Actions */}
         <div className="flex flex-wrap items-center gap-2.5 w-full lg:w-auto">
           {/* View Mode Pills */}
-          <div className="flex items-center bg-slate-100 p-1 rounded-lg text-xs font-semibold">
+          <div className="flex items-center bg-neutral-100 p-1 rounded-lg text-xs font-semibold">
             <button
               onClick={() => setViewMode('projects_cards')}
               className={`px-2.5 py-1.5 rounded-md flex items-center gap-1.5 transition-all ${
                 viewMode === 'projects_cards'
-                  ? 'bg-white text-slate-900 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white text-neutral-900 shadow-xs'
+                  : 'text-neutral-600 hover:text-neutral-900'
               }`}
               title="Project Cards View"
             >
@@ -211,8 +211,8 @@ export function ProjectsAndTasksCenter({
               onClick={() => setViewMode('projects_table')}
               className={`px-2.5 py-1.5 rounded-md flex items-center gap-1.5 transition-all ${
                 viewMode === 'projects_table'
-                  ? 'bg-white text-slate-900 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white text-neutral-900 shadow-xs'
+                  : 'text-neutral-600 hover:text-neutral-900'
               }`}
               title="Project List View"
             >
@@ -223,8 +223,8 @@ export function ProjectsAndTasksCenter({
               onClick={() => setViewMode('tasks_kanban')}
               className={`px-2.5 py-1.5 rounded-md flex items-center gap-1.5 transition-all ${
                 viewMode === 'tasks_kanban'
-                  ? 'bg-white text-slate-900 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white text-neutral-900 shadow-xs'
+                  : 'text-neutral-600 hover:text-neutral-900'
               }`}
               title="Task Kanban Board"
             >
@@ -235,8 +235,8 @@ export function ProjectsAndTasksCenter({
               onClick={() => setViewMode('tasks_table')}
               className={`px-2.5 py-1.5 rounded-md flex items-center gap-1.5 transition-all ${
                 viewMode === 'tasks_table'
-                  ? 'bg-white text-slate-900 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white text-neutral-900 shadow-xs'
+                  : 'text-neutral-600 hover:text-neutral-900'
               }`}
               title="Task Table View"
             >
@@ -247,8 +247,8 @@ export function ProjectsAndTasksCenter({
               onClick={() => setViewMode('calendar')}
               className={`px-2.5 py-1.5 rounded-md flex items-center gap-1.5 transition-all ${
                 viewMode === 'calendar'
-                  ? 'bg-white text-slate-900 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white text-neutral-900 shadow-xs'
+                  : 'text-neutral-600 hover:text-neutral-900'
               }`}
               title="Deadlines Calendar View"
             >
@@ -272,7 +272,7 @@ export function ProjectsAndTasksCenter({
               {onCreateTask && (
                 <button
                   onClick={onCreateTask}
-                  className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-semibold shadow-xs flex items-center gap-1.5 transition-colors"
+                  className="px-3 py-1.5 bg-neutral-900 hover:bg-neutral-800 text-white rounded-lg text-xs font-semibold shadow-xs flex items-center gap-1.5 transition-colors"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>New Task</span>
@@ -284,11 +284,11 @@ export function ProjectsAndTasksCenter({
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-3 text-xs">
+      <div className="bg-white p-3.5 rounded-xl border border-neutral-200 shadow-xs flex flex-wrap items-center justify-between gap-3 text-xs">
         <div className="flex flex-wrap items-center gap-2.5 flex-1 min-w-[280px]">
           {/* Keyword Search */}
           <div className="relative flex-1 min-w-[200px] max-w-sm">
-            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-3.5 h-3.5 text-neutral-400 absolute left-2.5 top-1/2 -tranneutral-y-1/2" />
             <input
               type="text"
               value={searchQuery}
@@ -302,7 +302,7 @@ export function ProjectsAndTasksCenter({
           <select
             value={clientFilter}
             onChange={(e) => setClientFilter(e.target.value)}
-            className="py-1.5 px-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 focus:outline-hidden"
+            className="py-1.5 px-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-800 focus:outline-hidden"
           >
             <option value="all">All Clients</option>
             {clients.map((c) => (
@@ -316,7 +316,7 @@ export function ProjectsAndTasksCenter({
           <select
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
-            className="py-1.5 px-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 focus:outline-hidden"
+            className="py-1.5 px-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-800 focus:outline-hidden"
           >
             <option value="all">All Priorities</option>
             <option value="urgent">Urgent</option>
@@ -330,7 +330,7 @@ export function ProjectsAndTasksCenter({
             <select
               value={employeeFilter}
               onChange={(e) => setEmployeeFilter(e.target.value)}
-              className="py-1.5 px-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 focus:outline-hidden"
+              className="py-1.5 px-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-800 focus:outline-hidden"
             >
               <option value="all">All Assignees</option>
               {employees.map((e) => (
@@ -377,9 +377,9 @@ export function ProjectsAndTasksCenter({
       {viewMode === 'projects_cards' && (
         <div className="space-y-4">
           {filteredProjects.length === 0 ? (
-            <div className="p-12 text-center bg-white rounded-xl border border-slate-200 text-slate-400 text-xs">
-              <FolderKanban className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-              <p className="font-semibold text-slate-700">No projects match the active criteria.</p>
+            <div className="p-12 text-center bg-white rounded-xl border border-neutral-200 text-neutral-400 text-xs">
+              <FolderKanban className="w-8 h-8 text-neutral-300 mx-auto mb-2" />
+              <p className="font-semibold text-neutral-700">No projects match the active criteria.</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -400,7 +400,7 @@ export function ProjectsAndTasksCenter({
                   <div
                     key={project.id}
                     onClick={() => onSelectProject(project)}
-                    className="bg-white rounded-xl border border-slate-200 hover:border-slate-300 shadow-xs hover:shadow-md transition-all p-5 flex flex-col justify-between cursor-pointer group"
+                    className="bg-white rounded-xl border border-neutral-200 hover:border-neutral-300 shadow-xs hover:shadow-md transition-all p-5 flex flex-col justify-between cursor-pointer group"
                   >
                     <div>
                       {/* Top Badges */}
@@ -412,34 +412,34 @@ export function ProjectsAndTasksCenter({
                           <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${priorityBadge.bg}`}>
                             {priorityBadge.label}
                           </span>
-                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 capitalize">
+                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-neutral-100 text-neutral-700 capitalize">
                             {project.status.replace('_', ' ')}
                           </span>
                         </div>
                       </div>
 
                       {/* Title & Description */}
-                      <h3 className="text-sm font-bold text-slate-900 group-hover:text-neutral-600 transition-colors">
+                      <h3 className="text-sm font-bold text-neutral-900 group-hover:text-neutral-600 transition-colors">
                         {project.title}
                       </h3>
                       {project.description && (
-                        <p className="text-xs text-slate-500 mt-1 line-clamp-2">
+                        <p className="text-xs text-neutral-500 mt-1 line-clamp-2">
                           {project.description}
                         </p>
                       )}
                       {project.objective && (
-                        <p className="text-[11px] text-slate-600 mt-2 bg-slate-50 p-2 rounded-lg border border-slate-100 italic line-clamp-1">
+                        <p className="text-[11px] text-neutral-600 mt-2 bg-neutral-50 p-2 rounded-lg border border-neutral-100 italic line-clamp-1">
                           🎯 {project.objective}
                         </p>
                       )}
 
                       {/* Progress Bar */}
                       <div className="mt-4">
-                        <div className="flex items-center justify-between text-[11px] font-semibold text-slate-600 mb-1">
+                        <div className="flex items-center justify-between text-[11px] font-semibold text-neutral-600 mb-1">
                           <span>Deliverables Completion</span>
                           <span>{project.completedDeliverablesCount} / {project.totalDeliverablesTarget} ({progressPct}%)</span>
                         </div>
-                        <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                        <div className="w-full bg-neutral-100 rounded-full h-2 overflow-hidden">
                           <div
                             className={`h-2 rounded-full transition-all ${
                               progressPct >= 100 ? 'bg-black' : 'bg-neutral-800'
@@ -451,9 +451,9 @@ export function ProjectsAndTasksCenter({
                     </div>
 
                     {/* Footer Info */}
-                    <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                    <div className="pt-4 mt-4 border-t border-neutral-100 flex items-center justify-between text-xs text-neutral-500">
                       <div className="flex items-center gap-1.5">
-                        <Clock className="w-3.5 h-3.5 text-slate-400" />
+                        <Clock className="w-3.5 h-3.5 text-neutral-400" />
                         <span className={isDelayed ? 'text-black font-bold underline' : ''}>
                           Due {project.targetEndDate} {isDelayed && '(DELAYED)'}
                         </span>
@@ -461,7 +461,7 @@ export function ProjectsAndTasksCenter({
 
                       {/* Budget (Admin / Manager only) */}
                       {isAdminOrManager && project.budget && (
-                        <span className="font-semibold text-slate-700">
+                        <span className="font-semibold text-neutral-700">
                           {project.currency} {project.budget.toLocaleString()}
                         </span>
                       )}
@@ -475,7 +475,7 @@ export function ProjectsAndTasksCenter({
                           {onEditProject && (
                             <button
                               onClick={() => onEditProject(project)}
-                              className="p-1 text-slate-500 hover:text-black rounded hover:bg-slate-100"
+                              className="p-1 text-neutral-500 hover:text-black rounded hover:bg-neutral-100"
                               title="Edit Project"
                             >
                               <Edit className="w-3.5 h-3.5" />
@@ -492,7 +492,7 @@ export function ProjectsAndTasksCenter({
                           ) : onArchiveProject ? (
                             <button
                               onClick={() => onArchiveProject(project.id)}
-                              className="p-1 text-slate-400 hover:text-black rounded hover:bg-neutral-100"
+                              className="p-1 text-neutral-400 hover:text-black rounded hover:bg-neutral-100"
                               title="Archive Project"
                             >
                               <Archive className="w-3.5 h-3.5" />
@@ -513,10 +513,10 @@ export function ProjectsAndTasksCenter({
       {/* VIEW 2: PROJECT LIST TABLE VIEW */}
       {/* ------------------------------------------------------------- */}
       {viewMode === 'projects_table' && (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
+        <div className="bg-white rounded-xl border border-neutral-200 shadow-xs overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-500 font-semibold uppercase text-[10px] tracking-wider border-b border-slate-200">
+              <thead className="bg-neutral-50 text-neutral-500 font-semibold uppercase text-[10px] tracking-wider border-b border-neutral-200">
                 <tr>
                   <th className="py-3 px-4">Client</th>
                   <th className="py-3 px-4">Project Title</th>
@@ -528,7 +528,7 @@ export function ProjectsAndTasksCenter({
                   {isAdminOrManager && <th className="py-3 px-4 text-right">Actions</th>}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 text-slate-700">
+              <tbody className="divide-y divide-neutral-100 text-neutral-700">
                 {filteredProjects.map((p) => {
                   const priorityBadge = getPriorityBadge(p.priority || 'medium');
                   const progressPct =
@@ -542,12 +542,12 @@ export function ProjectsAndTasksCenter({
                     <tr
                       key={p.id}
                       onClick={() => onSelectProject(p)}
-                      className="hover:bg-slate-50/70 cursor-pointer"
+                      className="hover:bg-neutral-50/70 cursor-pointer"
                     >
-                      <td className="py-3 px-4 font-bold text-slate-900">{p.clientName}</td>
-                      <td className="py-3 px-4 font-semibold text-slate-800">{p.title}</td>
+                      <td className="py-3 px-4 font-bold text-neutral-900">{p.clientName}</td>
+                      <td className="py-3 px-4 font-semibold text-neutral-800">{p.title}</td>
                       <td className="py-3 px-4 capitalize">
-                        <span className="bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-medium text-[11px]">
+                        <span className="bg-neutral-100 text-neutral-700 px-2 py-0.5 rounded font-medium text-[11px]">
                           {p.status.replace('_', ' ')}
                         </span>
                       </td>
@@ -557,11 +557,11 @@ export function ProjectsAndTasksCenter({
                         </span>
                       </td>
                       <td className="py-3 px-4">
-                        <span className="font-semibold text-slate-800">{progressPct}%</span>
+                        <span className="font-semibold text-neutral-800">{progressPct}%</span>
                       </td>
-                      <td className="py-3 px-4 text-slate-500 whitespace-nowrap">{p.targetEndDate}</td>
+                      <td className="py-3 px-4 text-neutral-500 whitespace-nowrap">{p.targetEndDate}</td>
                       {isAdminOrManager && (
-                        <td className="py-3 px-4 font-medium text-slate-700 whitespace-nowrap">
+                        <td className="py-3 px-4 font-medium text-neutral-700 whitespace-nowrap">
                           {p.budget ? `${p.currency} ${p.budget.toLocaleString()}` : '—'}
                         </td>
                       )}
@@ -619,12 +619,12 @@ export function ProjectsAndTasksCenter({
             return (
               <div
                 key={col.id}
-                className="bg-slate-50/70 rounded-xl border border-slate-200/80 p-3 flex flex-col max-h-[75vh]"
+                className="bg-neutral-50/70 rounded-xl border border-neutral-200/80 p-3 flex flex-col max-h-[75vh]"
               >
                 {/* Column Header */}
-                <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-200">
-                  <span className="text-xs font-bold text-slate-800">{col.label}</span>
-                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-slate-200 text-slate-700">
+                <div className="flex items-center justify-between pb-2 mb-2 border-b border-neutral-200">
+                  <span className="text-xs font-bold text-neutral-800">{col.label}</span>
+                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-neutral-200 text-neutral-700">
                     {colTasks.length}
                   </span>
                 </div>
@@ -632,7 +632,7 @@ export function ProjectsAndTasksCenter({
                 {/* Column Cards */}
                 <div className="space-y-2.5 overflow-y-auto pr-1 flex-1">
                   {colTasks.length === 0 ? (
-                    <div className="py-8 text-center text-slate-400 text-[11px] italic">
+                    <div className="py-8 text-center text-neutral-400 text-[11px] italic">
                       No tasks
                     </div>
                   ) : (
@@ -644,7 +644,7 @@ export function ProjectsAndTasksCenter({
                         <div
                           key={task.id}
                           onClick={() => onSelectTask(task)}
-                          className="bg-white p-3 rounded-lg border border-slate-200 hover:border-slate-300 shadow-2xs hover:shadow-xs transition-all cursor-pointer group"
+                          className="bg-white p-3 rounded-lg border border-neutral-200 hover:border-neutral-300 shadow-2xs hover:shadow-xs transition-all cursor-pointer group"
                         >
                           {/* Client & Priority */}
                           <div className="flex items-center justify-between gap-1 mb-1.5">
@@ -662,7 +662,7 @@ export function ProjectsAndTasksCenter({
                           </h4>
 
                           {/* Footer Info */}
-                          <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500">
+                          <div className="mt-2.5 pt-2 border-t border-neutral-100 flex items-center justify-between text-[10px] text-neutral-500">
                             <span className="truncate max-w-[90px]" title={task.assignedEmployeeName}>
                               {task.assignedEmployeeName}
                             </span>
@@ -685,10 +685,10 @@ export function ProjectsAndTasksCenter({
       {/* VIEW 4: TASK TABLE VIEW */}
       {/* ------------------------------------------------------------- */}
       {viewMode === 'tasks_table' && (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
+        <div className="bg-white rounded-xl border border-neutral-200 shadow-xs overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-500 font-semibold uppercase text-[10px] tracking-wider border-b border-slate-200">
+              <thead className="bg-neutral-50 text-neutral-500 font-semibold uppercase text-[10px] tracking-wider border-b border-neutral-200">
                 <tr>
                   <th className="py-3 px-4">Client</th>
                   <th className="py-3 px-4">Task Title</th>
@@ -700,10 +700,10 @@ export function ProjectsAndTasksCenter({
                   <th className="py-3 px-4 text-right">Activity</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 text-slate-700">
+              <tbody className="divide-y divide-neutral-100 text-neutral-700">
                 {filteredTasks.length === 0 ? (
                   <tr>
-                    <td colSpan={8} className="py-8 text-center text-slate-400">
+                    <td colSpan={8} className="py-8 text-center text-neutral-400">
                       No tasks found matching criteria.
                     </td>
                   </tr>
@@ -717,19 +717,19 @@ export function ProjectsAndTasksCenter({
                       <tr
                         key={t.id}
                         onClick={() => onSelectTask(t)}
-                        className="hover:bg-slate-50/70 cursor-pointer"
+                        className="hover:bg-neutral-50/70 cursor-pointer"
                       >
-                        <td className="py-3 px-4 font-bold text-slate-900">{t.clientName}</td>
-                        <td className="py-3 px-4 font-semibold text-slate-800">{t.title}</td>
-                        <td className="py-3 px-4 text-slate-600 truncate max-w-[150px]">{t.projectTitle}</td>
-                        <td className="py-3 px-4 font-medium text-slate-700">{t.assignedEmployeeName}</td>
+                        <td className="py-3 px-4 font-bold text-neutral-900">{t.clientName}</td>
+                        <td className="py-3 px-4 font-semibold text-neutral-800">{t.title}</td>
+                        <td className="py-3 px-4 text-neutral-600 truncate max-w-[150px]">{t.projectTitle}</td>
+                        <td className="py-3 px-4 font-medium text-neutral-700">{t.assignedEmployeeName}</td>
                         <td className="py-3 px-4">
                           <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${priorityBadge.bg}`}>
                             {priorityBadge.label}
                           </span>
                         </td>
                         <td className="py-3 px-4 whitespace-nowrap">
-                          <span className={isOverdue ? 'text-black font-bold underline' : 'text-slate-600'}>
+                          <span className={isOverdue ? 'text-black font-bold underline' : 'text-neutral-600'}>
                             {t.deadline} {isOverdue && '(OVERDUE)'}
                           </span>
                         </td>
@@ -738,7 +738,7 @@ export function ProjectsAndTasksCenter({
                             {statusBadge.label}
                           </span>
                         </td>
-                        <td className="py-3 px-4 text-right text-slate-500 whitespace-nowrap">
+                        <td className="py-3 px-4 text-right text-neutral-500 whitespace-nowrap">
                           {t.submissions.length > 0 && <span className="mr-2">v{t.submissions.length}</span>}
                           {t.comments.length > 0 && <span>💬 {t.comments.length}</span>}
                         </td>
@@ -756,11 +756,11 @@ export function ProjectsAndTasksCenter({
       {/* VIEW 5: CALENDAR DEADLINE TIMELINE VIEW */}
       {/* ------------------------------------------------------------- */}
       {viewMode === 'calendar' && (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div className="bg-white rounded-xl border border-neutral-200 shadow-xs p-5 space-y-4">
+          <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
             <div>
-              <h3 className="text-sm font-bold text-slate-900">Upcoming Agency Deadlines</h3>
-              <p className="text-xs text-slate-500">Chronological schedule of active tasks and project targets.</p>
+              <h3 className="text-sm font-bold text-neutral-900">Upcoming Agency Deadlines</h3>
+              <p className="text-xs text-neutral-500">Chronological schedule of active tasks and project targets.</p>
             </div>
           </div>
 
@@ -774,9 +774,9 @@ export function ProjectsAndTasksCenter({
                 const isDueToday = dateStr === today;
 
                 return (
-                  <div key={dateStr} className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
+                  <div key={dateStr} className="p-3.5 rounded-xl border border-neutral-200 bg-neutral-50/50 space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                      <span className="text-xs font-bold text-neutral-800 flex items-center gap-1.5">
                         <Calendar className="w-3.5 h-3.5 text-black" />
                         <span>{dateStr}</span>
                         {isDueToday && (
@@ -790,7 +790,7 @@ export function ProjectsAndTasksCenter({
                           </span>
                         )}
                       </span>
-                      <span className="text-xs text-slate-500 font-medium">{dateTasks.length} task(s)</span>
+                      <span className="text-xs text-neutral-500 font-medium">{dateTasks.length} task(s)</span>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
@@ -798,14 +798,14 @@ export function ProjectsAndTasksCenter({
                         <div
                           key={t.id}
                           onClick={() => onSelectTask(t)}
-                          className="bg-white p-2.5 rounded-lg border border-slate-200 hover:border-slate-300 shadow-2xs cursor-pointer text-xs"
+                          className="bg-white p-2.5 rounded-lg border border-neutral-200 hover:border-neutral-300 shadow-2xs cursor-pointer text-xs"
                         >
-                          <div className="flex items-center justify-between text-[10px] text-slate-500 mb-1">
+                          <div className="flex items-center justify-between text-[10px] text-neutral-500 mb-1">
                             <span className="font-bold text-neutral-900">{t.clientName}</span>
                             <span className="capitalize">{t.status.replace('_', ' ')}</span>
                           </div>
-                          <h5 className="font-bold text-slate-800 truncate">{t.title}</h5>
-                          <span className="text-[10px] text-slate-400 mt-1 block">
+                          <h5 className="font-bold text-neutral-800 truncate">{t.title}</h5>
+                          <span className="text-[10px] text-neutral-400 mt-1 block">
                             Assignee: {t.assignedEmployeeName}
                           </span>
                         </div>

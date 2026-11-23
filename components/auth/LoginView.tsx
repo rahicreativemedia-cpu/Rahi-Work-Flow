@@ -64,7 +64,7 @@ export function LoginView({
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans">
+    <div className="min-h-screen bg-neutral-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         {/* Brand Header */}
         <div className="text-center">
@@ -75,20 +75,20 @@ export function LoginView({
               className="w-16 h-auto max-h-16 object-contain drop-shadow-sm"
             />
           </div>
-          <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-900 uppercase">
+          <h2 className="mt-2 text-2xl font-black tracking-tight text-neutral-900 uppercase">
             RAHI FLOWDESK
           </h2>
-          <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+          <p className="text-xs font-bold text-neutral-500 uppercase tracking-wider">
             BY RAHI CREATIVE MEDIA
           </p>
-          <p className="mt-1 text-xs text-slate-400 italic">
+          <p className="mt-1 text-xs text-neutral-400 italic">
             One Workspace. Every Creative Workflow.
           </p>
         </div>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-lg">
-        <div className="bg-white py-8 px-6 sm:px-10 border border-slate-200/80 rounded-2xl shadow-xs space-y-6">
+        <div className="bg-white py-8 px-6 sm:px-10 border border-neutral-200/80 rounded-2xl shadow-xs space-y-6">
           {/* Architecture Banner */}
           <div className="p-3.5 bg-neutral-50 border border-neutral-200 rounded-xl space-y-1.5">
             <div className="flex items-center gap-1.5 text-xs font-bold text-neutral-900">
@@ -179,7 +179,7 @@ export function LoginView({
           </div>
 
           {/* Security Policy Reminder */}
-          <div className="p-3 bg-slate-50 border border-slate-200/60 rounded-xl text-[11px] text-slate-500 text-center leading-relaxed">
+          <div className="p-3 bg-neutral-50 border border-neutral-200/60 rounded-xl text-[11px] text-neutral-500 text-center leading-relaxed">
             Strict policy enforced: No public self-registration. Passwords are never stored in plain text. Equal administrative authority shared between Admin and Manager.
           </div>
         </div>

@@ -112,23 +112,23 @@ export function EmployeeDashboard({
       </div>
 
       {/* Active Work Queue */}
-      <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
+      <div className="bg-white rounded-xl border border-neutral-200 p-5 shadow-xs">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-sm font-bold text-slate-900 tracking-tight">
+            <h3 className="text-sm font-bold text-neutral-900 tracking-tight">
               My Active Creative Tasks
             </h3>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-neutral-500 mt-0.5">
               Review brief requirements and submit your output exports.
             </p>
           </div>
-          <span className="text-xs font-semibold px-2.5 py-1 bg-slate-100 rounded-lg text-slate-600">
+          <span className="text-xs font-semibold px-2.5 py-1 bg-neutral-100 rounded-lg text-neutral-600">
             {activeTasks.length} Pending Tasks
           </span>
         </div>
 
         {activeTasks.length === 0 ? (
-          <div className="p-12 text-center text-slate-400 text-xs border border-dashed rounded-lg">
+          <div className="p-12 text-center text-neutral-400 text-xs border border-dashed rounded-lg">
             No active tasks pending. Great work!
           </div>
         ) : (
@@ -142,7 +142,7 @@ export function EmployeeDashboard({
                 <div
                   key={task.id}
                   onClick={() => onSelectTask(task)}
-                  className="p-4 bg-slate-50 hover:bg-slate-100/80 rounded-xl border border-slate-200 cursor-pointer transition-all flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 group"
+                  className="p-4 bg-neutral-50 hover:bg-neutral-100/80 rounded-xl border border-neutral-200 cursor-pointer transition-all flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 group"
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">

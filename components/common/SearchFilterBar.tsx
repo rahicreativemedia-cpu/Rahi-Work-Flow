@@ -22,9 +22,9 @@ export function SearchFilterBar({
   actionButton,
 }: SearchFilterBarProps) {
   return (
-    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white p-3 rounded-xl border border-slate-200 shadow-xs mb-5">
+    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white p-3 rounded-xl border border-neutral-200 shadow-xs mb-5">
       <div className="flex-1 relative flex items-center">
-        <Search className="w-4 h-4 text-slate-400 absolute left-3 pointer-events-none" />
+        <Search className="w-4 h-4 text-neutral-400 absolute left-3 pointer-events-none" />
         <input
           type="text"
           value={searchQuery}

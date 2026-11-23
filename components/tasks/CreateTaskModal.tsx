@@ -78,7 +78,7 @@ export function CreateTaskModal({
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1">Task Title *</label>
+          <label className="block text-xs font-bold text-neutral-700 mb-1">Task Title *</label>
           <input
             type="text"
             required
@@ -91,7 +91,7 @@ export function CreateTaskModal({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Client *</label>
+            <label className="block text-xs font-bold text-neutral-700 mb-1">Client *</label>
             <select
               value={clientId}
               onChange={(e) => {
@@ -99,7 +99,7 @@ export function CreateTaskModal({
                 const nextProjects = projects.filter((p) => p.clientId === e.target.value);
                 setProjectId(nextProjects[0]?.id || '');
               }}
-              className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-medium"
+              className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900 font-medium"
             >
               {clients.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -110,11 +110,11 @@ export function CreateTaskModal({
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Project</label>
+            <label className="block text-xs font-bold text-neutral-700 mb-1">Project</label>
             <select
               value={projectId}
               onChange={(e) => setProjectId(e.target.value)}
-              className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-medium"
+              className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900 font-medium"
             >
               {filteredProjects.map((p) => (
                 <option key={p.id} value={p.id}>
@@ -127,13 +127,13 @@ export function CreateTaskModal({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">
+            <label className="block text-xs font-bold text-neutral-700 mb-1">
               Assign to Creative Specialist *
             </label>
             <select
               value={assignedEmployeeId}
               onChange={(e) => setAssignedEmployeeId(e.target.value)}
-              className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-medium"
+              className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900 font-medium"
             >
               {employees.map((emp) => {
                 const cap = getWorkloadCapacityInfo(emp.currentActiveTasks, emp.maxConcurrentTasks);
@@ -147,11 +147,11 @@ export function CreateTaskModal({
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Priority</label>
+            <label className="block text-xs font-bold text-neutral-700 mb-1">Priority</label>
             <select
               value={priority}
               onChange={(e) => setPriority(e.target.value as Priority)}
-              className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-medium"
+              className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900 font-medium"
             >
               <option value="urgent">Urgent</option>
               <option value="high">High</option>
@@ -173,35 +173,35 @@ export function CreateTaskModal({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Start Date</label>
+            <label className="block text-xs font-bold text-neutral-700 mb-1">Start Date</label>
             <input
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
+              className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Deadline *</label>
+            <label className="block text-xs font-bold text-neutral-700 mb-1">Deadline *</label>
             <input
               type="date"
               required
               value={deadline}
               onChange={(e) => setDeadline(e.target.value)}
-              className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
+              className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1">
+          <label className="block text-xs font-bold text-neutral-700 mb-1">
             Linked Deliverable (Optional)
           </label>
           <select
             value={deliverableId}
             onChange={(e) => setDeliverableId(e.target.value)}
-            className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-medium"
+            className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900 font-medium"
           >
             <option value="">None (Independent Operational Task)</option>
             {filteredDeliverables.map((d) => (
@@ -213,7 +213,7 @@ export function CreateTaskModal({
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1">
+          <label className="block text-xs font-bold text-neutral-700 mb-1">
             Instructions & Creative Brief
           </label>
           <textarea
@@ -221,12 +221,12 @@ export function CreateTaskModal({
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Provide shooting direction, pacing requirements, hook details, sound notes..."
-            className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
+            className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1">
+          <label className="block text-xs font-bold text-neutral-700 mb-1">
             Required Creative Output
           </label>
           <input
@@ -234,15 +234,15 @@ export function CreateTaskModal({
             value={requiredOutput}
             onChange={(e) => setRequiredOutput(e.target.value)}
             placeholder="e.g. 1080x1920 9:16 MP4 under 30 seconds with subtitles"
-            className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
+            className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
           />
         </div>
 
-        <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+        <div className="flex items-center justify-end gap-2 pt-3 border-t border-neutral-100">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg"
+            className="px-4 py-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-xs font-semibold rounded-lg"
           >
             Cancel
           </button>

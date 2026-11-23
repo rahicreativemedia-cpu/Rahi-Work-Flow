@@ -93,12 +93,12 @@ export function DataTable<T>({
   };
 
   return (
-    <div className={cn('bg-white border border-slate-200 rounded-xl overflow-hidden shadow-2xs', className)}>
+    <div className={cn('bg-white border border-neutral-200 rounded-xl overflow-hidden shadow-2xs', className)}>
       {/* Top Controls: Search Field */}
       {searchFilter && (
-        <div className="p-3.5 border-b border-slate-200/80 bg-slate-50/60 flex items-center justify-between gap-3">
+        <div className="p-3.5 border-b border-neutral-200/80 bg-neutral-50/60 flex items-center justify-between gap-3">
           <div className="relative flex-1 max-w-sm">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <Search className="w-4 h-4 text-neutral-400 absolute left-3 top-1/2 -tranneutral-y-1/2 pointer-events-none" />
             <input
               type="text"
               placeholder={searchPlaceholder}
@@ -107,10 +107,10 @@ export function DataTable<T>({
                 setSearchQuery(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full pl-9 pr-3 py-1.5 text-xs bg-white border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition"
+              className="w-full pl-9 pr-3 py-1.5 text-xs bg-white border border-neutral-200 rounded-lg text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition"
             />
           </div>
-          <div className="text-xs text-slate-500 font-medium">
+          <div className="text-xs text-neutral-500 font-medium">
             Showing {filteredData.length} {filteredData.length === 1 ? 'record' : 'records'}
           </div>
         </div>
@@ -118,8 +118,8 @@ export function DataTable<T>({
 
       {/* Table Container */}
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-xs text-slate-700">
-          <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold uppercase tracking-wider text-[11px]">
+        <table className="w-full text-left text-xs text-neutral-700">
+          <thead className="bg-neutral-50 border-b border-neutral-200 text-neutral-600 font-semibold uppercase tracking-wider text-[11px]">
             <tr>
               {columns.map((col) => {
                 const isSorted = sortKey === col.key;
@@ -138,7 +138,7 @@ export function DataTable<T>({
                     {col.sortable ? (
                       <button
                         onClick={() => handleSort(col.key)}
-                        className="inline-flex items-center gap-1 font-semibold text-slate-600 hover:text-slate-900 transition-colors uppercase tracking-wider text-[11px]"
+                        className="inline-flex items-center gap-1 font-semibold text-neutral-600 hover:text-neutral-900 transition-colors uppercase tracking-wider text-[11px]"
                       >
                         <span>{col.header}</span>
                         {isSorted ? (
@@ -148,7 +148,7 @@ export function DataTable<T>({
                             <ChevronDown className="w-3.5 h-3.5 text-black" />
                           )
                         ) : (
-                          <ChevronsUpDown className="w-3.5 h-3.5 text-slate-400 opacity-60" />
+                          <ChevronsUpDown className="w-3.5 h-3.5 text-neutral-400 opacity-60" />
                         )}
                       </button>
                     ) : (
@@ -159,7 +159,7 @@ export function DataTable<T>({
               })}
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-neutral-100">
             {paginatedData.length === 0 ? (
               <tr>
                 <td colSpan={columns.length} className="p-8 text-center">
@@ -183,7 +183,7 @@ export function DataTable<T>({
                   onClick={() => onRowClick?.(item)}
                   className={cn(
                     'transition-colors',
-                    onRowClick ? 'cursor-pointer hover:bg-slate-50/80' : 'hover:bg-slate-50/40'
+                    onRowClick ? 'cursor-pointer hover:bg-neutral-50/80' : 'hover:bg-neutral-50/40'
                   )}
                 >
                   {columns.map((col) => {
@@ -208,7 +208,7 @@ export function DataTable<T>({
 
       {/* Pagination Controls */}
       {totalPages > 1 && (
-        <div className="px-4 py-3 border-t border-slate-200 bg-slate-50/60 flex items-center justify-between text-xs text-slate-600">
+        <div className="px-4 py-3 border-t border-neutral-200 bg-neutral-50/60 flex items-center justify-between text-xs text-neutral-600">
           <div>
             Page {currentPage} of {totalPages}
           </div>
@@ -216,14 +216,14 @@ export function DataTable<T>({
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="px-2.5 py-1 rounded border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition"
+              className="px-2.5 py-1 rounded border border-neutral-200 bg-white hover:bg-neutral-50 disabled:opacity-40 disabled:cursor-not-allowed transition"
             >
               Previous
             </button>
             <button
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="px-2.5 py-1 rounded border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition"
+              className="px-2.5 py-1 rounded border border-neutral-200 bg-white hover:bg-neutral-50 disabled:opacity-40 disabled:cursor-not-allowed transition"
             >
               Next
             </button>

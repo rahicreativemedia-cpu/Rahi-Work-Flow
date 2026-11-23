@@ -170,13 +170,13 @@ export function ManagerDashboard({
       {/* Middle Operations Layout: Internal Review Desk & Creative Workload Balance */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Internal Submissions Waiting for Manager/Admin Sign-off (2 Cols) */}
-        <div className="lg:col-span-2 bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
+        <div className="lg:col-span-2 bg-white rounded-xl border border-neutral-200 p-5 shadow-xs">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-sm font-bold text-slate-900 tracking-tight">
+              <h3 className="text-sm font-bold text-neutral-900 tracking-tight">
                 Internal Review Queue (Quality Benchmark)
               </h3>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-neutral-500 mt-0.5">
                 Review cuts submitted by editors/writers before dispatching to clients for approval.
               </p>
             </div>
@@ -269,7 +269,7 @@ export function ManagerDashboard({
 
           <button
             onClick={onCreateTask}
-            className="w-full mt-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg text-xs font-semibold transition-colors"
+            className="w-full mt-4 py-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 rounded-lg text-xs font-semibold transition-colors"
           >
             Assign Work to Team
           </button>

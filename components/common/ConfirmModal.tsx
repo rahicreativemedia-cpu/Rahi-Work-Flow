@@ -39,10 +39,10 @@ export function ConfirmModal({
               <Info className="w-5 h-5 text-black" />
             )}
           </div>
-          <p className="text-xs text-slate-600 leading-relaxed pt-0.5">{message}</p>
+          <p className="text-xs text-neutral-600 leading-relaxed pt-0.5">{message}</p>
         </div>
 
-        <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+        <div className="flex items-center justify-end gap-2 pt-3 border-t border-neutral-100">
           <Button variant="outline" size="sm" onClick={onClose} disabled={isLoading}>
             {cancelLabel}
           </Button>

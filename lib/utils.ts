@@ -168,7 +168,7 @@ export function calculateClientDeliverableStats(
       pacingDelta: 0,
       pacingStatus: 'on_track',
       pacingLabel: 'No Target Configured',
-      pacingBadgeClass: 'bg-slate-100 text-slate-600 border-slate-200',
+      pacingBadgeClass: 'bg-neutral-100 text-neutral-600 border-neutral-200',
     };
 
     return {

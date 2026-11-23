@@ -173,13 +173,13 @@ export function AdminDashboard({
       {/* Middle Grid: Client Commitments & Pending Approvals Queue */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Client Commitments Overview (2 Cols) */}
-        <div className="lg:col-span-2 bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
+        <div className="lg:col-span-2 bg-white rounded-xl border border-neutral-200 p-5 shadow-xs">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-sm font-bold text-slate-900 tracking-tight">
+              <h3 className="text-sm font-bold text-neutral-900 tracking-tight">
                 Monthly Deliverable Commitments (November 2026)
               </h3>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-neutral-500 mt-0.5">
                 Target commitments vs verified published deliveries per client.
               </p>
             </div>

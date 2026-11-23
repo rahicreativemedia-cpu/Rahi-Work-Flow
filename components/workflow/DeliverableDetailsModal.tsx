@@ -139,16 +139,16 @@ export function DeliverableDetailsModal({
     >
       <div className="space-y-6">
         {/* Deliverable Meta Row */}
-        <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 bg-slate-50 border border-slate-200 rounded-xl">
+        <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 bg-neutral-50 border border-neutral-200 rounded-xl">
           <div className="flex items-center gap-2 text-xs">
-            <span className="font-semibold text-slate-700">Type:</span>
-            <span className="capitalize font-bold text-slate-900">{deliverable.type}</span>
-            <span className="text-slate-300">|</span>
-            <span className="font-semibold text-slate-700">Creative:</span>
-            <span className="font-bold text-slate-900">{deliverable.assignedEmployeeName}</span>
-            <span className="text-slate-300">|</span>
-            <span className="font-semibold text-slate-700">Deadline:</span>
-            <span className="font-bold text-slate-900">{deliverable.deadline}</span>
+            <span className="font-semibold text-neutral-700">Type:</span>
+            <span className="capitalize font-bold text-neutral-900">{deliverable.type}</span>
+            <span className="text-neutral-300">|</span>
+            <span className="font-semibold text-neutral-700">Creative:</span>
+            <span className="font-bold text-neutral-900">{deliverable.assignedEmployeeName}</span>
+            <span className="text-neutral-300">|</span>
+            <span className="font-semibold text-neutral-700">Deadline:</span>
+            <span className="font-bold text-neutral-900">{deliverable.deadline}</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -185,13 +185,13 @@ export function DeliverableDetailsModal({
         )}
 
         {/* Tab Switcher */}
-        <div className="flex border-b border-slate-200 gap-6 text-xs font-semibold text-slate-500">
+        <div className="flex border-b border-neutral-200 gap-6 text-xs font-semibold text-neutral-500">
           <button
             onClick={() => setActiveTab('workflow')}
             className={`pb-2.5 transition-colors border-b-2 flex items-center gap-1.5 ${
               activeTab === 'workflow'
                 ? 'border-black text-black font-bold'
-                : 'border-transparent hover:text-slate-800'
+                : 'border-transparent hover:text-neutral-800'
             }`}
           >
             <Layers className="w-4 h-4" />
@@ -205,7 +205,7 @@ export function DeliverableDetailsModal({
             className={`pb-2.5 transition-colors border-b-2 flex items-center gap-1.5 ${
               activeTab === 'script'
                 ? 'border-black text-black font-bold'
-                : 'border-transparent hover:text-slate-800'
+                : 'border-transparent hover:text-neutral-800'
             }`}
           >
             <FileText className="w-4 h-4" />
@@ -219,7 +219,7 @@ export function DeliverableDetailsModal({
             className={`pb-2.5 transition-colors border-b-2 flex items-center gap-1.5 ${
               activeTab === 'media'
                 ? 'border-black text-black font-bold'
-                : 'border-transparent hover:text-slate-800'
+                : 'border-transparent hover:text-neutral-800'
             }`}
           >
             <Video className="w-4 h-4" />
@@ -230,7 +230,7 @@ export function DeliverableDetailsModal({
             className={`pb-2.5 transition-colors border-b-2 flex items-center gap-1.5 ${
               activeTab === 'versions'
                 ? 'border-black text-black font-bold'
-                : 'border-transparent hover:text-slate-800'
+                : 'border-transparent hover:text-neutral-800'
             }`}
           >
             <Clock className="w-4 h-4" />
@@ -241,11 +241,11 @@ export function DeliverableDetailsModal({
         {/* TAB 1: WORKFLOW TIMELINE */}
         {activeTab === 'workflow' && (
           <div className="space-y-5">
-            <div className="text-xs text-slate-600 flex items-center justify-between">
-              <span className="font-semibold text-slate-800">
+            <div className="text-xs text-neutral-600 flex items-center justify-between">
+              <span className="font-semibold text-neutral-800">
                 Current Active Stage: {WORKFLOW_STAGE_METADATA[deliverable.stage].label} (Step {currentStageIndex + 1} of 10)
               </span>
-              <span className="text-slate-500">
+              <span className="text-neutral-500">
                 Status: <strong className="capitalize">{deliverable.status.replace('_', ' ')}</strong>
               </span>
             </div>
@@ -266,7 +266,7 @@ export function DeliverableDetailsModal({
                         ? 'bg-black text-white border-black shadow-xs'
                         : isPast
                         ? 'bg-neutral-100 text-neutral-900 border-neutral-300'
-                        : 'bg-slate-50 text-slate-500 border-slate-200'
+                        : 'bg-neutral-50 text-neutral-500 border-neutral-200'
                     } ${canAdmin ? 'cursor-pointer hover:border-neutral-500' : ''}`}
                   >
                     <div className="flex items-center justify-between text-[10px] font-bold">
@@ -287,12 +287,12 @@ export function DeliverableDetailsModal({
 
             {/* Administrative Controls to Advance Stage */}
             {canAdmin && (
-              <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+              <div className="p-4 bg-neutral-50 rounded-xl border border-neutral-200 space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                  <span className="text-xs font-bold text-neutral-800 uppercase tracking-wider">
                     Equal Admin Actions (Admin & Manager)
                   </span>
-                  <span className="text-[11px] text-slate-500">
+                  <span className="text-[11px] text-neutral-500">
                     Advance stage, request approvals, or finalize delivery
                   </span>
                 </div>
@@ -326,15 +326,15 @@ export function DeliverableDetailsModal({
 
                   <button
                     onClick={() => setShowCancelPrompt(!showCancelPrompt)}
-                    className="px-3 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-xs font-medium transition-colors"
+                    className="px-3 py-2 bg-neutral-200 hover:bg-neutral-300 text-neutral-700 rounded-lg text-xs font-medium transition-colors"
                   >
                     Cancel Deliverable...
                   </button>
                 </div>
 
                 {showCancelPrompt && (
-                  <div className="mt-3 p-3 bg-white rounded-lg border border-slate-300 space-y-2">
-                    <label className="block text-xs font-medium text-slate-700">
+                  <div className="mt-3 p-3 bg-white rounded-lg border border-neutral-300 space-y-2">
+                    <label className="block text-xs font-medium text-neutral-700">
                       Reason for cancellation (will be preserved in audit history):
                     </label>
                     <input
@@ -342,12 +342,12 @@ export function DeliverableDetailsModal({
                       value={cancelReason}
                       onChange={(e) => setCancelReason(e.target.value)}
                       placeholder="e.g. Scope revised by client / product out of stock"
-                      className="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-md"
+                      className="w-full px-3 py-1.5 text-xs border border-neutral-300 rounded-md"
                     />
                     <div className="flex justify-end gap-2">
                       <button
                         onClick={() => setShowCancelPrompt(false)}
-                        className="px-2.5 py-1 text-xs text-slate-600"
+                        className="px-2.5 py-1 text-xs text-neutral-600"
                       >
                         Nevermind
                       </button>
@@ -388,7 +388,7 @@ export function DeliverableDetailsModal({
                   <div className="space-y-3">
                     {/* Structured Revision Category Chips */}
                     <div>
-                      <label className="block text-[11px] font-bold text-slate-700 mb-1.5">
+                      <label className="block text-[11px] font-bold text-neutral-700 mb-1.5">
                         Revision Category Tags (Select relevant areas):
                       </label>
                       <div className="flex flex-wrap gap-1.5">
@@ -423,7 +423,7 @@ export function DeliverableDetailsModal({
                               className={`text-[10px] px-2 py-1 rounded-md font-medium transition-all ${
                                 isSelected
                                   ? 'bg-black text-white shadow-xs'
-                                  : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
+                                  : 'bg-white text-neutral-600 border border-neutral-200 hover:bg-neutral-100'
                               }`}
                             >
                               {cat}
@@ -437,7 +437,7 @@ export function DeliverableDetailsModal({
                       value={feedbackText}
                       onChange={(e) => setFeedbackText(e.target.value)}
                       placeholder="Provide specific feedback or revision instructions (mandatory for revision requests)..."
-                      className="w-full text-xs p-2.5 bg-white border border-neutral-300 rounded-lg focus:ring-2 focus:ring-black/10 focus:border-black text-slate-900"
+                      className="w-full text-xs p-2.5 bg-white border border-neutral-300 rounded-lg focus:ring-2 focus:ring-black/10 focus:border-black text-neutral-900"
                       rows={3}
                     />
 
@@ -486,8 +486,8 @@ export function DeliverableDetailsModal({
         {/* TAB 2: SCRIPT & COPYWRITING */}
         {activeTab === 'script' && (
           <div className="space-y-4">
-            <div className="flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-lg">
-              <span className="text-xs font-semibold text-slate-700">Script Approval Status:</span>
+            <div className="flex items-center justify-between p-3 bg-neutral-50 border border-neutral-200 rounded-lg">
+              <span className="text-xs font-semibold text-neutral-700">Script Approval Status:</span>
               <div className="flex items-center gap-2">
                 {deliverable.scriptApproved ? (
                   <span className="inline-flex items-center gap-1 text-xs font-bold text-neutral-900 bg-neutral-100 px-2.5 py-0.5 rounded-full border border-neutral-300">
@@ -510,16 +510,16 @@ export function DeliverableDetailsModal({
               </div>
             </div>
 
-            <div className="p-4 bg-white border border-slate-200 rounded-xl space-y-2">
+            <div className="p-4 bg-white border border-neutral-200 rounded-xl space-y-2">
               <div className="flex items-center justify-between mb-1">
-                <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                <h4 className="text-xs font-bold text-neutral-500 uppercase tracking-wider">
                   Voiceover Script & Direct Response Copy
                 </h4>
                 {isEditingScript && (
                   <div className="flex gap-2">
                     <button
                       onClick={() => setIsEditingScript(false)}
-                      className="px-2.5 py-1 text-xs text-slate-600 hover:bg-slate-100 rounded"
+                      className="px-2.5 py-1 text-xs text-neutral-600 hover:bg-neutral-100 rounded"
                     >
                       Cancel
                     </button>
@@ -539,10 +539,10 @@ export function DeliverableDetailsModal({
                   rows={8}
                   value={editableScriptText}
                   onChange={(e) => setEditableScriptText(e.target.value)}
-                  className="w-full text-xs font-mono p-3 bg-slate-50 border border-slate-300 rounded-lg text-slate-900 focus:ring-2 focus:ring-black/10 focus:border-black"
+                  className="w-full text-xs font-mono p-3 bg-neutral-50 border border-neutral-300 rounded-lg text-neutral-900 focus:ring-2 focus:ring-black/10 focus:border-black"
                 />
               ) : (
-                <p className="text-xs text-slate-800 whitespace-pre-wrap leading-relaxed font-mono bg-slate-50 p-4 rounded-lg border border-slate-200">
+                <p className="text-xs text-neutral-800 whitespace-pre-wrap leading-relaxed font-mono bg-neutral-50 p-4 rounded-lg border border-neutral-200">
                   {deliverable.scriptText || 'No script text entered yet.'}
                 </p>
               )}
@@ -553,8 +553,8 @@ export function DeliverableDetailsModal({
         {/* TAB 3: MEDIA ASSETS */}
         {activeTab === 'media' && (
           <div className="space-y-4">
-            <div className="flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-lg">
-              <span className="text-xs font-semibold text-slate-700">Video Approval Status:</span>
+            <div className="flex items-center justify-between p-3 bg-neutral-50 border border-neutral-200 rounded-lg">
+              <span className="text-xs font-semibold text-neutral-700">Video Approval Status:</span>
               <div className="flex items-center gap-2">
                 {deliverable.videoApproved ? (
                   <span className="inline-flex items-center gap-1 text-xs font-bold text-neutral-900 bg-neutral-100 px-2.5 py-0.5 rounded-full border border-neutral-300">
@@ -584,11 +584,11 @@ export function DeliverableDetailsModal({
                   value={editableMediaUrl}
                   onChange={(e) => setEditableMediaUrl(e.target.value)}
                   placeholder="https://..."
-                  className="flex-1 text-xs p-2 bg-white border border-slate-300 rounded"
+                  className="flex-1 text-xs p-2 bg-white border border-neutral-300 rounded"
                 />
                 <button
                   onClick={() => setIsEditingMedia(false)}
-                  className="px-2.5 py-1 text-xs text-slate-600"
+                  className="px-2.5 py-1 text-xs text-neutral-600"
                 >
                   Cancel
                 </button>
@@ -602,7 +602,7 @@ export function DeliverableDetailsModal({
             )}
 
             {deliverable.mediaUrl ? (
-              <div className="rounded-xl overflow-hidden border border-slate-200 bg-black aspect-video max-h-[380px] flex items-center justify-center">
+              <div className="rounded-xl overflow-hidden border border-neutral-200 bg-black aspect-video max-h-[380px] flex items-center justify-center">
                 <video
                   src={deliverable.mediaUrl}
                   controls
@@ -610,7 +610,7 @@ export function DeliverableDetailsModal({
                 />
               </div>
             ) : (
-              <div className="p-12 text-center border-2 border-dashed border-slate-200 rounded-xl text-xs text-slate-400">
+              <div className="p-12 text-center border-2 border-dashed border-neutral-200 rounded-xl text-xs text-neutral-400">
                 No video preview uploaded yet for this deliverable.
               </div>
             )}
@@ -622,10 +622,10 @@ export function DeliverableDetailsModal({
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h4 className="text-xs font-bold text-slate-900">
+                <h4 className="text-xs font-bold text-neutral-900">
                   Deliverable Iteration & Version Log (Current: v{deliverable.currentVersion || deliverable.versions.length})
                 </h4>
-                <p className="text-[11px] text-slate-500">
+                <p className="text-[11px] text-neutral-500">
                   Full historical archive of creative cuts, scripts, and revision iterations.
                 </p>
               </div>
@@ -642,12 +642,12 @@ export function DeliverableDetailsModal({
             </div>
 
             {showVersionUpload && (
-              <form onSubmit={handleUploadNewVersionSubmit} className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3">
-                <h5 className="text-xs font-bold text-slate-800">
+              <form onSubmit={handleUploadNewVersionSubmit} className="p-4 bg-neutral-50 border border-neutral-200 rounded-xl space-y-3">
+                <h5 className="text-xs font-bold text-neutral-800">
                   Upload New Version {(deliverable.currentVersion || 1) + 1}
                 </h5>
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                  <label className="block text-[11px] font-bold text-neutral-700 mb-1">
                     Media / Asset URL
                   </label>
                   <input
@@ -655,11 +655,11 @@ export function DeliverableDetailsModal({
                     value={newVersionMediaUrl}
                     onChange={(e) => setNewVersionMediaUrl(e.target.value)}
                     placeholder="https://commondatastorage.googleapis.com/... or MP4 link"
-                    className="w-full text-xs p-2 bg-white border border-slate-200 rounded-lg text-slate-900"
+                    className="w-full text-xs p-2 bg-white border border-neutral-200 rounded-lg text-neutral-900"
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                  <label className="block text-[11px] font-bold text-neutral-700 mb-1">
                     Version Notes & Changelog
                   </label>
                   <input
@@ -668,14 +668,14 @@ export function DeliverableDetailsModal({
                     value={newVersionNotes}
                     onChange={(e) => setNewVersionNotes(e.target.value)}
                     placeholder="e.g. Added dynamic captions and corrected color grade"
-                    className="w-full text-xs p-2 bg-white border border-slate-200 rounded-lg text-slate-900"
+                    className="w-full text-xs p-2 bg-white border border-neutral-200 rounded-lg text-neutral-900"
                   />
                 </div>
                 <div className="flex justify-end gap-2">
                   <button
                     type="button"
                     onClick={() => setShowVersionUpload(false)}
-                    className="px-3 py-1.5 text-xs text-slate-600 hover:bg-slate-200 rounded-lg"
+                    className="px-3 py-1.5 text-xs text-neutral-600 hover:bg-neutral-200 rounded-lg"
                   >
                     Cancel
                   </button>
@@ -694,25 +694,25 @@ export function DeliverableDetailsModal({
                 {deliverable.versions.map((ver, idx) => (
                   <div
                     key={idx}
-                    className="p-3.5 bg-slate-50 border border-slate-200 rounded-xl flex items-start justify-between text-xs"
+                    className="p-3.5 bg-neutral-50 border border-neutral-200 rounded-xl flex items-start justify-between text-xs"
                   >
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-slate-900 px-2 py-0.5 bg-white border border-slate-200 rounded-md">
+                        <span className="font-bold text-neutral-900 px-2 py-0.5 bg-white border border-neutral-200 rounded-md">
                           Version {ver.version}
                         </span>
                         {ver.submittedByUserName && (
-                          <span className="text-slate-500">
+                          <span className="text-neutral-500">
                             by <strong>{ver.submittedByUserName}</strong>
                           </span>
                         )}
-                        <span className="text-[11px] text-slate-400">
+                        <span className="text-[11px] text-neutral-400">
                           • {formatDateTime(ver.submittedAt)}
                         </span>
                       </div>
-                      <p className="text-slate-700 font-medium">{ver.notes || 'Asset iteration'}</p>
+                      <p className="text-neutral-700 font-medium">{ver.notes || 'Asset iteration'}</p>
                       {ver.scriptText && (
-                        <p className="text-[11px] text-slate-500 font-mono bg-white p-2 rounded border border-slate-100 max-h-20 overflow-y-auto">
+                        <p className="text-[11px] text-neutral-500 font-mono bg-white p-2 rounded border border-neutral-100 max-h-20 overflow-y-auto">
                           {ver.scriptText}
                         </p>
                       )}
@@ -723,7 +723,7 @@ export function DeliverableDetailsModal({
                         href={ver.mediaUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="px-2.5 py-1 bg-white border border-slate-200 text-neutral-900 font-semibold rounded-lg hover:bg-slate-100 text-xs shrink-0"
+                        className="px-2.5 py-1 bg-white border border-neutral-200 text-neutral-900 font-semibold rounded-lg hover:bg-neutral-100 text-xs shrink-0"
                       >
                         Preview Asset
                       </a>
@@ -732,7 +732,7 @@ export function DeliverableDetailsModal({
                 ))}
               </div>
             ) : (
-              <div className="text-xs text-slate-400 p-6 text-center border border-dashed border-slate-200 rounded-lg">
+              <div className="text-xs text-neutral-400 p-6 text-center border border-dashed border-neutral-200 rounded-lg">
                 No prior version records.
               </div>
             )}

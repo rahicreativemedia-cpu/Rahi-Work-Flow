@@ -108,10 +108,10 @@ export function ClientList({
 
       {/* Grid of Client Cards */}
       {filteredClients.length === 0 ? (
-        <div className="text-center py-12 bg-white rounded-xl border border-slate-200">
-          <Briefcase className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-          <h3 className="text-sm font-semibold text-slate-900">No clients match your filter</h3>
-          <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+        <div className="text-center py-12 bg-white rounded-xl border border-neutral-200">
+          <Briefcase className="w-10 h-10 text-neutral-300 mx-auto mb-3" />
+          <h3 className="text-sm font-semibold text-neutral-900">No clients match your filter</h3>
+          <p className="text-xs text-neutral-500 mt-1 max-w-sm mx-auto">
             Try adjusting your search query, package, or status filters.
           </p>
         </div>
@@ -125,7 +125,7 @@ export function ClientList({
               <div
                 key={client.id}
                 className={`bg-white rounded-xl border p-5 shadow-xs transition-all flex flex-col justify-between ${
-                  isActive ? 'border-slate-200 hover:border-slate-300' : 'border-slate-200 opacity-75 bg-slate-50/50'
+                  isActive ? 'border-neutral-200 hover:border-neutral-300' : 'border-neutral-200 opacity-75 bg-neutral-50/50'
                 }`}
               >
                 <div>
@@ -135,11 +135,11 @@ export function ClientList({
                       {client.status.toUpperCase()}
                     </Badge>
                     {canAdmin && client.monthlyRetainer !== undefined ? (
-                      <span className="text-xs font-bold text-slate-900 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">
+                      <span className="text-xs font-bold text-neutral-900 bg-neutral-100 px-2.5 py-0.5 rounded-full border border-neutral-200">
                         {formatCurrency(client.monthlyRetainer, client.currency)}/mo
                       </span>
                     ) : (
-                      <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded">
+                      <span className="text-[11px] font-semibold text-neutral-600 bg-neutral-100 px-2 py-0.5 rounded">
                         {client.servicePackage}
                       </span>
                     )}
@@ -147,7 +147,7 @@ export function ClientList({
 
                   {/* Client Brand Header */}
                   <div className="flex items-center gap-3">
-                    <div className="w-11 h-11 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center font-black text-slate-700 text-sm overflow-hidden shrink-0">
+                    <div className="w-11 h-11 rounded-lg bg-neutral-100 border border-neutral-200 flex items-center justify-center font-black text-neutral-700 text-sm overflow-hidden shrink-0">
                       {client.logoUrl ? (
                         <img
                           src={client.logoUrl}
@@ -159,8 +159,8 @@ export function ClientList({
                       )}
                     </div>
                     <div className="min-w-0">
-                      <h3 className="text-base font-bold text-slate-900 truncate">{client.name}</h3>
-                      <p className="text-xs text-slate-500 truncate">{client.company}</p>
+                      <h3 className="text-base font-bold text-neutral-900 truncate">{client.name}</h3>
+                      <p className="text-xs text-neutral-500 truncate">{client.company}</p>
                     </div>
                   </div>
 

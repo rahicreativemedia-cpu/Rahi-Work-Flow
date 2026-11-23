@@ -58,24 +58,24 @@ export function CreateDeliverableModal({
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1">Deliverable Title *</label>
+          <label className="block text-xs font-bold text-neutral-700 mb-1">Deliverable Title *</label>
           <input
             type="text"
             required
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="e.g. Reel: 3 Mindset Shifts for Athletes"
-            className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
+            className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
           />
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Client *</label>
+            <label className="block text-xs font-bold text-neutral-700 mb-1">Client *</label>
             <select
               value={clientId}
               onChange={(e) => setClientId(e.target.value)}
-              className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-medium"
+              className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900 font-medium"
             >
               {clients.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -86,11 +86,11 @@ export function CreateDeliverableModal({
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Project</label>
+            <label className="block text-xs font-bold text-neutral-700 mb-1">Project</label>
             <select
               value={projectId}
               onChange={(e) => setProjectId(e.target.value)}
-              className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-medium"
+              className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900 font-medium"
             >
               {filteredProjects.map((p) => (
                 <option key={p.id} value={p.id}>
@@ -103,11 +103,11 @@ export function CreateDeliverableModal({
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Deliverable Type</label>
+            <label className="block text-xs font-bold text-neutral-700 mb-1">Deliverable Type</label>
             <select
               value={type}
               onChange={(e) => setType(e.target.value as DeliverableType)}
-              className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-medium"
+              className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900 font-medium"
             >
               <option value="reel">Reel (Vertical Short)</option>
               <option value="long_video">Long-Form Video (YouTube)</option>
@@ -118,23 +118,23 @@ export function CreateDeliverableModal({
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Target Month</label>
+            <label className="block text-xs font-bold text-neutral-700 mb-1">Target Month</label>
             <input
               type="month"
               value={targetMonth}
               onChange={(e) => setTargetMonth(e.target.value)}
-              className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
+              className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
             />
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Assigned Creative</label>
+            <label className="block text-xs font-bold text-neutral-700 mb-1">Assigned Creative</label>
             <select
               value={assignedEmployeeId}
               onChange={(e) => setAssignedEmployeeId(e.target.value)}
-              className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-medium"
+              className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900 font-medium"
             >
               {employees.map((emp) => (
                 <option key={emp.id} value={emp.id}>
@@ -145,33 +145,33 @@ export function CreateDeliverableModal({
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Deadline *</label>
+            <label className="block text-xs font-bold text-neutral-700 mb-1">Deadline *</label>
             <input
               type="date"
               required
               value={deadline}
               onChange={(e) => setDeadline(e.target.value)}
-              className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
+              className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-slate-700 mb-1">Initial Script Draft (Optional)</label>
+          <label className="block text-xs font-bold text-neutral-700 mb-1">Initial Script Draft (Optional)</label>
           <textarea
             value={scriptText}
             onChange={(e) => setScriptText(e.target.value)}
             placeholder="Direct response script or hook ideas..."
-            className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
+            className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
             rows={3}
           />
         </div>
 
-        <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+        <div className="flex items-center justify-end gap-3 pt-3 border-t border-neutral-100">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-xs font-medium text-slate-600 hover:text-slate-900"
+            className="px-4 py-2 text-xs font-medium text-neutral-600 hover:text-neutral-900"
           >
             Cancel
           </button>

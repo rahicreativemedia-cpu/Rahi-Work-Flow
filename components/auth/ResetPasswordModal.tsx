@@ -62,7 +62,7 @@ export function ResetPasswordModal({ isOpen, onClose }: ResetPasswordModalProps)
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
-            <p className="text-xs text-slate-500 leading-relaxed">
+            <p className="text-xs text-neutral-500 leading-relaxed">
               Enter your registered RAHI Flowdesk email address. We will verify your account and dispatch secure password reset instructions.
             </p>
 
@@ -73,7 +73,7 @@ export function ResetPasswordModal({ isOpen, onClose }: ResetPasswordModalProps)
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              leftIcon={<Mail className="w-4 h-4 text-slate-400" />}
+              leftIcon={<Mail className="w-4 h-4 text-neutral-400" />}
             />
 
             {error && (

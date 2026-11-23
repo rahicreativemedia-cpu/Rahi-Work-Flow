@@ -117,7 +117,7 @@ export function InviteAcceptModal({
         {/* Step 1: Token verification if not preloaded */}
         {!invitation && (
           <form onSubmit={handleLookupToken} className="space-y-4">
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-neutral-500">
               Enter your secure invitation token to verify your account and set up your initial password.
             </p>
 
@@ -127,7 +127,7 @@ export function InviteAcceptModal({
               value={token}
               onChange={(e) => setToken(e.target.value)}
               required
-              leftIcon={<KeyRound className="w-4 h-4 text-slate-400" />}
+              leftIcon={<KeyRound className="w-4 h-4 text-neutral-400" />}
               helperText="Check your invitation email or message from RAHI Creative Media"
             />
 
@@ -153,25 +153,25 @@ export function InviteAcceptModal({
         {invitation && (
           <form onSubmit={handleAcceptSubmit} className="space-y-4">
             {/* Invitation Details Banner */}
-            <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+            <div className="p-3.5 bg-neutral-50 border border-neutral-200 rounded-xl space-y-2">
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-xs font-bold text-slate-900">{invitation.fullName}</div>
-                  <div className="text-[11px] text-slate-500">{invitation.email}</div>
+                  <div className="text-xs font-bold text-neutral-900">{invitation.fullName}</div>
+                  <div className="text-[11px] text-neutral-500">{invitation.email}</div>
                 </div>
                 <StatusBadge status={invitation.role} />
               </div>
 
-              <div className="text-[11px] text-slate-600 pt-1 border-t border-slate-200/60 flex items-center justify-between">
+              <div className="text-[11px] text-neutral-600 pt-1 border-t border-neutral-200/60 flex items-center justify-between">
                 <span>
                   Portal Scope:{' '}
-                  <strong className="capitalize text-slate-800">{invitation.role} Portal</strong>
+                  <strong className="capitalize text-neutral-800">{invitation.role} Portal</strong>
                 </span>
                 {invitation.department && (
-                  <span className="text-slate-500">Dept: {invitation.department}</span>
+                  <span className="text-neutral-500">Dept: {invitation.department}</span>
                 )}
                 {invitation.clientName && (
-                  <span className="text-slate-500">Org: {invitation.clientName}</span>
+                  <span className="text-neutral-500">Org: {invitation.clientName}</span>
                 )}
               </div>
             </div>
@@ -185,7 +185,7 @@ export function InviteAcceptModal({
               onChange={(e) => setPassword(e.target.value)}
               required
               helperText="Must be at least 12 characters"
-              leftIcon={<Lock className="w-4 h-4 text-slate-400" />}
+              leftIcon={<Lock className="w-4 h-4 text-neutral-400" />}
             />
 
             <Input
@@ -195,7 +195,7 @@ export function InviteAcceptModal({
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              leftIcon={<Lock className="w-4 h-4 text-slate-400" />}
+              leftIcon={<Lock className="w-4 h-4 text-neutral-400" />}
             />
 
             {error && (

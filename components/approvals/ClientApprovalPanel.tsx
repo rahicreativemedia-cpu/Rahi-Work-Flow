@@ -161,10 +161,10 @@ export function ClientApprovalPanel({
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-neutral-200 shadow-xs">
         <div>
           <div className="flex items-center gap-2 flex-wrap">
-            <h2 className="text-lg font-bold text-slate-900 tracking-tight">
+            <h2 className="text-lg font-bold text-neutral-900 tracking-tight">
               Client Review, Feedback & Approval Center
             </h2>
             <span className="text-[11px] font-semibold bg-neutral-100 text-neutral-900 px-2.5 py-0.5 rounded-full border border-neutral-300">
@@ -177,19 +177,19 @@ export function ClientApprovalPanel({
               </span>
             )}
           </div>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-neutral-500 mt-1">
             Review creative drafts, select feedback categories, request revisions with timestamped instructions, or approve deliverables for production and scheduling.
           </p>
         </div>
 
         {/* Tab switch */}
-        <div className="flex items-center bg-slate-100 p-1 rounded-lg text-xs font-semibold">
+        <div className="flex items-center bg-neutral-100 p-1 rounded-lg text-xs font-semibold">
           <button
             onClick={() => setActiveTab('pending')}
             className={`px-3 py-1.5 rounded-md transition-all ${
               activeTab === 'pending'
-                ? 'bg-white text-slate-900 shadow-xs'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-white text-neutral-900 shadow-xs'
+                : 'text-neutral-600 hover:text-neutral-900'
             }`}
           >
             Pending Review ({allPendingDeliverables.length})
@@ -198,8 +198,8 @@ export function ClientApprovalPanel({
             onClick={() => setActiveTab('history')}
             className={`px-3 py-1.5 rounded-md transition-all ${
               activeTab === 'history'
-                ? 'bg-white text-slate-900 shadow-xs'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-white text-neutral-900 shadow-xs'
+                : 'text-neutral-600 hover:text-neutral-900'
             }`}
           >
             Decision Log ({visibleApprovals.length})
@@ -221,14 +221,14 @@ export function ClientApprovalPanel({
       {activeTab === 'pending' && (
         <div className="space-y-4">
           {/* Sub-filters for Pending Review */}
-          <div className="flex items-center gap-2 bg-white p-2.5 rounded-lg border border-slate-200 text-xs font-medium">
-            <span className="text-slate-500 text-[11px] px-2 font-semibold">Filter Pending:</span>
+          <div className="flex items-center gap-2 bg-white p-2.5 rounded-lg border border-neutral-200 text-xs font-medium">
+            <span className="text-neutral-500 text-[11px] px-2 font-semibold">Filter Pending:</span>
             <button
               onClick={() => setPendingFilter('all')}
               className={`px-3 py-1 rounded-md transition-colors ${
                 pendingFilter === 'all'
-                  ? 'bg-slate-900 text-white font-semibold'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-neutral-900 text-white font-semibold'
+                  : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
               }`}
             >
               All Pending ({allPendingDeliverables.length})
@@ -238,7 +238,7 @@ export function ClientApprovalPanel({
               className={`px-3 py-1 rounded-md transition-colors ${
                 pendingFilter === 'script'
                   ? 'bg-neutral-900 text-white font-semibold'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
               }`}
             >
               Script Approvals (Stage 4: {pendingScripts.length})
@@ -248,7 +248,7 @@ export function ClientApprovalPanel({
               className={`px-3 py-1 rounded-md transition-colors ${
                 pendingFilter === 'video'
                   ? 'bg-black text-white font-semibold'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
               }`}
             >
               Video Approvals (Stage 7: {pendingVideos.length})
@@ -256,10 +256,10 @@ export function ClientApprovalPanel({
           </div>
 
           {displayedPending.length === 0 ? (
-            <div className="p-12 text-center bg-white rounded-xl border border-slate-200 text-slate-400 text-xs">
+            <div className="p-12 text-center bg-white rounded-xl border border-neutral-200 text-neutral-400 text-xs">
               <CheckCircle2 className="w-8 h-8 text-black mx-auto mb-2" />
-              <p className="font-semibold text-slate-700">All clear!</p>
-              <p className="text-slate-500 mt-1">
+              <p className="font-semibold text-neutral-700">All clear!</p>
+              <p className="text-neutral-500 mt-1">
                 {pendingFilter === 'script'
                   ? 'No script approvals pending at this time.'
                   : pendingFilter === 'video'
@@ -285,26 +285,26 @@ export function ClientApprovalPanel({
               return (
                 <div
                   key={del.id}
-                  className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden transition-all hover:border-slate-300"
+                  className="bg-white rounded-xl border border-neutral-200 shadow-xs overflow-hidden transition-all hover:border-neutral-300"
                 >
                   {/* Card Header */}
-                  <div className="p-4 sm:p-5 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3 bg-slate-50/70">
+                  <div className="p-4 sm:p-5 border-b border-neutral-100 flex flex-wrap items-center justify-between gap-3 bg-neutral-50/70">
                     <div>
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-sm font-bold text-slate-900">{del.title}</span>
-                        <span className="text-[10px] font-semibold bg-slate-200 text-slate-700 px-2 py-0.5 rounded">
+                        <span className="text-sm font-bold text-neutral-900">{del.title}</span>
+                        <span className="text-[10px] font-semibold bg-neutral-200 text-neutral-700 px-2 py-0.5 rounded">
                           v{del.currentVersion}
                         </span>
                         <Badge variant={reviewType === 'script' ? 'blue' : 'purple'}>
                           {reviewType === 'script' ? 'Stage 4: Script Approval' : 'Stage 7: Video Approval'}
                         </Badge>
-                        <span className="text-[11px] font-semibold text-slate-500 bg-white border border-slate-200 px-2 py-0.5 rounded capitalize">
+                        <span className="text-[11px] font-semibold text-neutral-500 bg-white border border-neutral-200 px-2 py-0.5 rounded capitalize">
                           {del.type.replace('_', ' ')}
                         </span>
                       </div>
-                      <p className="text-xs text-slate-500 mt-1">
-                        Client: <span className="font-semibold text-slate-700">{del.clientName}</span> • Project: <span className="font-semibold text-slate-700">{del.projectTitle}</span> • Assigned:{' '}
-                        <span className="font-semibold text-slate-700">{del.assignedEmployeeName}</span>
+                      <p className="text-xs text-neutral-500 mt-1">
+                        Client: <span className="font-semibold text-neutral-700">{del.clientName}</span> • Project: <span className="font-semibold text-neutral-700">{del.projectTitle}</span> • Assigned:{' '}
+                        <span className="font-semibold text-neutral-700">{del.assignedEmployeeName}</span>
                       </p>
                     </div>
 
@@ -322,7 +322,7 @@ export function ClientApprovalPanel({
                     {/* Left Pane: Content Preview */}
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                        <h4 className="text-xs font-bold text-neutral-700 uppercase tracking-wider flex items-center gap-1.5">
                           {reviewType === 'script' ? (
                             <>
                               <FileText className="w-4 h-4 text-black" />
@@ -336,23 +336,23 @@ export function ClientApprovalPanel({
                           )}
                         </h4>
                         {reviewType === 'script' && wordCount > 0 && (
-                          <span className="text-[11px] text-slate-500 font-medium bg-slate-100 px-2 py-0.5 rounded">
+                          <span className="text-[11px] text-neutral-500 font-medium bg-neutral-100 px-2 py-0.5 rounded">
                             {wordCount} words (~{estReadingSeconds}s read)
                           </span>
                         )}
                         {reviewType === 'video' && (
-                          <span className="text-[11px] text-slate-500 font-medium bg-slate-100 px-2 py-0.5 rounded">
+                          <span className="text-[11px] text-neutral-500 font-medium bg-neutral-100 px-2 py-0.5 rounded">
                             {del.type === 'reel' ? '9:16 Vertical Video' : '16:9 Long Form'}
                           </span>
                         )}
                       </div>
 
                       {reviewType === 'script' ? (
-                        <div className="p-4 bg-slate-50 rounded-lg border border-slate-200 text-xs text-slate-800 font-mono leading-relaxed whitespace-pre-wrap max-h-64 overflow-y-auto">
+                        <div className="p-4 bg-neutral-50 rounded-lg border border-neutral-200 text-xs text-neutral-800 font-mono leading-relaxed whitespace-pre-wrap max-h-64 overflow-y-auto">
                           {del.scriptText || 'Script text ready for client sign-off.'}
                         </div>
                       ) : del.mediaUrl ? (
-                        <div className="rounded-lg overflow-hidden border border-slate-200 bg-black aspect-video max-h-64 flex items-center justify-center">
+                        <div className="rounded-lg overflow-hidden border border-neutral-200 bg-black aspect-video max-h-64 flex items-center justify-center">
                           <video
                             src={del.mediaUrl}
                             controls
@@ -360,16 +360,16 @@ export function ClientApprovalPanel({
                           />
                         </div>
                       ) : (
-                        <div className="p-8 text-center text-xs text-slate-400 border border-dashed rounded-lg bg-slate-50/50">
-                          <Video className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+                        <div className="p-8 text-center text-xs text-neutral-400 border border-dashed rounded-lg bg-neutral-50/50">
+                          <Video className="w-8 h-8 text-neutral-300 mx-auto mb-2" />
                           Video preview file processing. Media link pending upload.
                         </div>
                       )}
 
                       {/* Author / Assignee Info */}
-                      <div className="text-[11px] text-slate-500 flex items-center justify-between pt-1">
-                        <span>Creative Owner: <strong className="text-slate-700">{del.assignedEmployeeName}</strong></span>
-                        <span>Deadline: <strong className="text-slate-700">{del.deadline}</strong></span>
+                      <div className="text-[11px] text-neutral-500 flex items-center justify-between pt-1">
+                        <span>Creative Owner: <strong className="text-neutral-700">{del.assignedEmployeeName}</strong></span>
+                        <span>Deadline: <strong className="text-neutral-700">{del.deadline}</strong></span>
                       </div>
                     </div>
 
@@ -377,17 +377,17 @@ export function ClientApprovalPanel({
                     <div className="flex flex-col justify-between space-y-4 bg-neutral-50 p-4 rounded-xl border border-neutral-200">
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
-                          <label className="block text-xs font-bold text-slate-800">
+                          <label className="block text-xs font-bold text-neutral-800">
                             Client Feedback & Revision Instructions:
                           </label>
-                          <span className="text-[10px] text-slate-500">
+                          <span className="text-[10px] text-neutral-500">
                             Mandatory for revisions
                           </span>
                         </div>
 
                         {/* Standardized Feedback Category Chips */}
                         <div>
-                          <div className="text-[11px] font-semibold text-slate-700 mb-1.5 flex items-center gap-1">
+                          <div className="text-[11px] font-semibold text-neutral-700 mb-1.5 flex items-center gap-1">
                             <Tag className="w-3 h-3 text-black" />
                             <span>Select Feedback Categories (Optional tags):</span>
                           </div>
@@ -402,7 +402,7 @@ export function ClientApprovalPanel({
                                   className={`text-[10px] px-2 py-1 rounded-md font-medium transition-all ${
                                     isSelected
                                       ? 'bg-black text-white shadow-xs'
-                                      : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
+                                      : 'bg-white text-neutral-600 border border-neutral-200 hover:bg-neutral-100'
                                   }`}
                                 >
                                   {cat}
@@ -422,8 +422,8 @@ export function ClientApprovalPanel({
                                 ? 'e.g. Please strengthen opening hook at line 1, tone down promotional tone...'
                                 : 'e.g. Please trim pause at 0:12, adjust music volume under voiceover...'
                             }
-                            className={`w-full text-xs p-3 bg-white border rounded-lg focus:ring-2 focus:ring-black/10 focus:border-black text-slate-900 transition-colors ${
-                              errorMessage ? 'border-neutral-900' : 'border-slate-300'
+                            className={`w-full text-xs p-3 bg-white border rounded-lg focus:ring-2 focus:ring-black/10 focus:border-black text-neutral-900 transition-colors ${
+                              errorMessage ? 'border-neutral-900' : 'border-neutral-300'
                             }`}
                             rows={4}
                           />
@@ -469,11 +469,11 @@ export function ClientApprovalPanel({
 
       {/* TAB 2: AUDIT LOG OF APPROVALS & REVISIONS */}
       {activeTab === 'history' && (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-          <div className="p-4 sm:p-5 border-b border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="bg-white rounded-xl border border-neutral-200 shadow-xs overflow-hidden">
+          <div className="p-4 sm:p-5 border-b border-neutral-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <h3 className="text-sm font-bold text-slate-900">Historical Approval & Revision Decision Log</h3>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <h3 className="text-sm font-bold text-neutral-900">Historical Approval & Revision Decision Log</h3>
+              <p className="text-xs text-neutral-500 mt-0.5">
                 Preserved audit trail of client decisions, standardized category tags, timestamps, and feedback.
               </p>
             </div>
@@ -481,7 +481,7 @@ export function ClientApprovalPanel({
             {/* History Filters */}
             <div className="flex flex-wrap items-center gap-2">
               <div className="relative">
-                <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
+                <Search className="w-3.5 h-3.5 text-neutral-400 absolute left-2.5 top-1/2 -tranneutral-y-1/2" />
                 <input
                   type="text"
                   value={historySearchQuery}
@@ -494,7 +494,7 @@ export function ClientApprovalPanel({
               <select
                 value={historyDecisionFilter}
                 onChange={(e) => setHistoryDecisionFilter(e.target.value as any)}
-                className="text-xs py-1.5 px-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 focus:outline-hidden"
+                className="text-xs py-1.5 px-2 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-800 focus:outline-hidden"
               >
                 <option value="all">All Decisions</option>
                 <option value="approved">Approved Only</option>
@@ -504,7 +504,7 @@ export function ClientApprovalPanel({
               <select
                 value={historyTypeFilter}
                 onChange={(e) => setHistoryTypeFilter(e.target.value as any)}
-                className="text-xs py-1.5 px-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 focus:outline-hidden"
+                className="text-xs py-1.5 px-2 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-800 focus:outline-hidden"
               >
                 <option value="all">All Types</option>
                 <option value="script">Scripts</option>
@@ -515,7 +515,7 @@ export function ClientApprovalPanel({
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-500 font-semibold uppercase text-[10px] tracking-wider border-b border-slate-200">
+              <thead className="bg-neutral-50 text-neutral-500 font-semibold uppercase text-[10px] tracking-wider border-b border-neutral-200">
                 <tr>
                   <th className="py-3 px-4">Date & Time</th>
                   <th className="py-3 px-4">Client</th>
@@ -526,23 +526,23 @@ export function ClientApprovalPanel({
                   <th className="py-3 px-4">Decided By</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 text-slate-700">
+              <tbody className="divide-y divide-neutral-100 text-neutral-700">
                 {filteredApprovals.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="py-8 text-center text-slate-400">
+                    <td colSpan={7} className="py-8 text-center text-neutral-400">
                       No approval records match the active filters.
                     </td>
                   </tr>
                 ) : (
                   filteredApprovals.map((appr) => (
-                    <tr key={appr.id} className="hover:bg-slate-50/70">
-                      <td className="py-3 px-4 whitespace-nowrap text-slate-500 text-[11px]">
+                    <tr key={appr.id} className="hover:bg-neutral-50/70">
+                      <td className="py-3 px-4 whitespace-nowrap text-neutral-500 text-[11px]">
                         {formatDateTime(appr.decisionDate)}
                       </td>
-                      <td className="py-3 px-4 font-bold text-slate-900">{appr.clientName}</td>
-                      <td className="py-3 px-4 font-semibold text-slate-800">{appr.deliverableTitle}</td>
+                      <td className="py-3 px-4 font-bold text-neutral-900">{appr.clientName}</td>
+                      <td className="py-3 px-4 font-semibold text-neutral-800">{appr.deliverableTitle}</td>
                       <td className="py-3 px-4 capitalize">
-                        {appr.type} <span className="font-semibold text-slate-500">v{appr.version}</span>
+                        {appr.type} <span className="font-semibold text-neutral-500">v{appr.version}</span>
                       </td>
                       <td className="py-3 px-4 whitespace-nowrap">
                         {appr.status === 'approved' ? (
@@ -569,12 +569,12 @@ export function ClientApprovalPanel({
                               ))}
                             </div>
                           )}
-                          <p className="text-slate-600 line-clamp-2" title={appr.feedback}>
+                          <p className="text-neutral-600 line-clamp-2" title={appr.feedback}>
                             {appr.feedback}
                           </p>
                         </div>
                       </td>
-                      <td className="py-3 px-4 text-slate-700 font-medium whitespace-nowrap">
+                      <td className="py-3 px-4 text-neutral-700 font-medium whitespace-nowrap">
                         <div className="flex flex-col">
                           <span>{appr.decidedByUserName}</span>
                           {appr.recordedByAdminOrManager && (

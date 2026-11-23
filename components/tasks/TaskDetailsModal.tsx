@@ -114,7 +114,7 @@ export function TaskDetailsModal({
     >
       <div className="space-y-6">
         {/* Badges & Meta */}
-        <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs">
+        <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-neutral-50 border border-neutral-200 rounded-xl text-xs">
           <div className="flex items-center gap-2">
             <span className={`px-2 py-0.5 rounded-full font-bold border ${priorityBadge.bg}`}>
               {priorityBadge.label}
@@ -124,12 +124,12 @@ export function TaskDetailsModal({
             </span>
           </div>
 
-          <div className="flex items-center gap-4 text-slate-500">
+          <div className="flex items-center gap-4 text-neutral-500">
             <span>
-              Assignee: <strong className="text-slate-800">{task.assignedEmployeeName}</strong> ({task.assignedEmployeeDepartment})
+              Assignee: <strong className="text-neutral-800">{task.assignedEmployeeName}</strong> ({task.assignedEmployeeDepartment})
             </span>
             <span>
-              Deadline: <strong className="text-slate-800">{task.deadline}</strong>
+              Deadline: <strong className="text-neutral-800">{task.deadline}</strong>
             </span>
           </div>
         </div>
@@ -162,13 +162,13 @@ export function TaskDetailsModal({
               <form onSubmit={handleSaveReassignment} className="mt-3 space-y-3 bg-white p-3.5 rounded-lg border border-neutral-200">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                    <label className="block text-[11px] font-bold text-neutral-700 mb-1">
                       Assign Creative Specialist *
                     </label>
                     <select
                       value={selectedEmployeeId}
                       onChange={(e) => setSelectedEmployeeId(e.target.value)}
-                      className="w-full text-xs p-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-medium"
+                      className="w-full text-xs p-2 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900 font-medium"
                     >
                       {employees.map((emp) => {
                         const cap = getWorkloadCapacityInfo(emp.currentActiveTasks, emp.maxConcurrentTasks);
@@ -182,13 +182,13 @@ export function TaskDetailsModal({
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                    <label className="block text-[11px] font-bold text-neutral-700 mb-1">
                       Update Priority
                     </label>
                     <select
                       value={selectedPriority}
                       onChange={(e) => setSelectedPriority(e.target.value as Priority)}
-                      className="w-full text-xs p-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-medium"
+                      className="w-full text-xs p-2 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900 font-medium"
                     >
                       <option value="urgent">Urgent</option>
                       <option value="high">High</option>
@@ -200,14 +200,14 @@ export function TaskDetailsModal({
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                    <label className="block text-[11px] font-bold text-neutral-700 mb-1">
                       Due Date
                     </label>
                     <input
                       type="date"
                       value={selectedDeadline}
                       onChange={(e) => setSelectedDeadline(e.target.value)}
-                      className="w-full text-xs p-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
+                      className="w-full text-xs p-2 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
                     />
                   </div>
 
@@ -225,7 +225,7 @@ export function TaskDetailsModal({
                   <button
                     type="button"
                     onClick={() => setIsReassigning(false)}
-                    className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg"
+                    className="px-3 py-1.5 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-xs font-semibold rounded-lg"
                   >
                     Cancel
                   </button>
@@ -248,16 +248,16 @@ export function TaskDetailsModal({
         {/* Description & Required Output */}
         <div className="space-y-3">
           <div>
-            <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+            <h4 className="text-xs font-bold text-neutral-500 uppercase tracking-wider mb-1">
               Instructions & Description
             </h4>
-            <p className="text-xs text-slate-800 bg-white p-3.5 rounded-lg border border-slate-200 leading-relaxed">
+            <p className="text-xs text-neutral-800 bg-white p-3.5 rounded-lg border border-neutral-200 leading-relaxed">
               {task.description || 'No detailed instructions provided.'}
             </p>
           </div>
 
           <div>
-            <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+            <h4 className="text-xs font-bold text-neutral-500 uppercase tracking-wider mb-1">
               Required Creative Output
             </h4>
             <div className="p-3 bg-neutral-50 border border-neutral-200 rounded-lg text-xs text-black font-medium">
@@ -269,20 +269,20 @@ export function TaskDetailsModal({
         {/* Reference Files */}
         {task.referenceFiles.length > 0 && (
           <div>
-            <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+            <h4 className="text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2">
               Reference Files & Assets
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {task.referenceFiles.map((file, idx) => (
                 <div
                   key={idx}
-                  className="p-2.5 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between text-xs"
+                  className="p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg flex items-center justify-between text-xs"
                 >
                   <div className="flex items-center gap-2 truncate">
-                    <Paperclip className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                    <span className="font-medium text-slate-800 truncate">{file.name}</span>
+                    <Paperclip className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
+                    <span className="font-medium text-neutral-800 truncate">{file.name}</span>
                   </div>
-                  <span className="text-[10px] text-slate-400 shrink-0">{file.size}</span>
+                  <span className="text-[10px] text-neutral-400 shrink-0">{file.size}</span>
                 </div>
               ))}
             </div>
@@ -292,7 +292,7 @@ export function TaskDetailsModal({
         {/* Submissions Section */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+            <h4 className="text-xs font-bold text-neutral-500 uppercase tracking-wider">
               Creative Submissions ({task.submissions.length})
             </h4>
 
@@ -308,7 +308,7 @@ export function TaskDetailsModal({
           </div>
 
           {task.submissions.length === 0 ? (
-            <div className="p-4 text-center border border-dashed border-slate-200 rounded-lg text-xs text-slate-400">
+            <div className="p-4 text-center border border-dashed border-neutral-200 rounded-lg text-xs text-neutral-400">
               No submissions uploaded yet.
             </div>
           ) : (
@@ -316,16 +316,16 @@ export function TaskDetailsModal({
               {task.submissions.map((sub) => (
                 <div
                   key={sub.id}
-                  className="p-3 bg-slate-50 border border-slate-200 rounded-lg flex items-start justify-between text-xs"
+                  className="p-3 bg-neutral-50 border border-neutral-200 rounded-lg flex items-start justify-between text-xs"
                 >
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-slate-900">Version {sub.version}</span>
-                      <span className="text-[11px] text-slate-500 font-medium">({sub.fileName})</span>
-                      <span className="text-[10px] text-slate-400">• {sub.fileSize}</span>
+                      <span className="font-bold text-neutral-900">Version {sub.version}</span>
+                      <span className="text-[11px] text-neutral-500 font-medium">({sub.fileName})</span>
+                      <span className="text-[10px] text-neutral-400">• {sub.fileSize}</span>
                     </div>
-                    {sub.notes && <p className="text-slate-600 mt-1">{sub.notes}</p>}
-                    <span className="text-[10px] text-slate-400 mt-1 block">
+                    {sub.notes && <p className="text-neutral-600 mt-1">{sub.notes}</p>}
+                    <span className="text-[10px] text-neutral-400 mt-1 block">
                       Submitted by {sub.submittedByUserName} on {formatDateTime(sub.submittedAt)}
                     </span>
                   </div>
@@ -335,7 +335,7 @@ export function TaskDetailsModal({
                       href={sub.fileUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="px-2.5 py-1 bg-white border border-slate-200 text-neutral-900 font-semibold rounded-lg hover:bg-slate-100 text-xs shrink-0"
+                      className="px-2.5 py-1 bg-white border border-neutral-200 text-neutral-900 font-semibold rounded-lg hover:bg-neutral-100 text-xs shrink-0"
                     >
                       Preview File
                     </a>
@@ -348,9 +348,9 @@ export function TaskDetailsModal({
 
         {/* Admin/Manager Actions: Change Status & Cancel */}
         {canAdmin && (
-          <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+          <div className="p-3.5 bg-neutral-50 rounded-xl border border-neutral-200 space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-700">Quick Status Update (Admin/Manager):</span>
+              <span className="text-xs font-bold text-neutral-700">Quick Status Update (Admin/Manager):</span>
               {onCancelTask && task.status !== 'completed' && (
                 <button
                   type="button"
@@ -375,7 +375,7 @@ export function TaskDetailsModal({
                     className={`px-3 py-1 rounded-lg text-xs font-medium capitalize border transition-all ${
                       task.status === st
                         ? 'bg-black text-white border-black'
-                        : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
+                        : 'bg-white text-neutral-700 border-neutral-200 hover:bg-neutral-100'
                     }`}
                   >
                     {st.replace('_', ' ')}
@@ -388,22 +388,22 @@ export function TaskDetailsModal({
 
         {/* Comments Stream */}
         <div>
-          <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+          <h4 className="text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
             <MessageSquare className="w-3.5 h-3.5" />
             <span>Discussion & Feedback ({task.comments.length})</span>
           </h4>
 
           <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
             {task.comments.length === 0 ? (
-              <p className="text-xs text-slate-400 italic">No comments yet. Start the conversation.</p>
+              <p className="text-xs text-neutral-400 italic">No comments yet. Start the conversation.</p>
             ) : (
               task.comments.map((cmt) => (
-                <div key={cmt.id} className="p-2.5 bg-slate-50 rounded-lg border border-slate-200 text-xs">
+                <div key={cmt.id} className="p-2.5 bg-neutral-50 rounded-lg border border-neutral-200 text-xs">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="font-bold text-slate-800">{cmt.userName}</span>
-                    <span className="text-[10px] text-slate-400">{formatDateTime(cmt.createdAt)}</span>
+                    <span className="font-bold text-neutral-800">{cmt.userName}</span>
+                    <span className="text-[10px] text-neutral-400">{formatDateTime(cmt.createdAt)}</span>
                   </div>
-                  <p className="text-slate-700">{cmt.text}</p>
+                  <p className="text-neutral-700">{cmt.text}</p>
                 </div>
               ))
             )}
@@ -415,7 +415,7 @@ export function TaskDetailsModal({
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
               placeholder="Add feedback or task update..."
-              className="flex-1 px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-black/10 focus:border-black"
+              className="flex-1 px-3 py-2 text-xs bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900 focus:outline-hidden focus:ring-2 focus:ring-black/10 focus:border-black"
             />
             <button
               type="submit"

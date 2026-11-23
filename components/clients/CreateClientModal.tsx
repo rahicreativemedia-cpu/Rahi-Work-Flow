@@ -113,80 +113,80 @@ export function CreateClientModal({
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Brand Name *</label>
+            <label className="block text-xs font-bold text-neutral-700 mb-1">Brand Name *</label>
             <input
               type="text"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. Apex Athletics"
-              className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
+              className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Company Legal Entity</label>
+            <label className="block text-xs font-bold text-neutral-700 mb-1">Company Legal Entity</label>
             <input
               type="text"
               value={company}
               onChange={(e) => setCompany(e.target.value)}
               placeholder="e.g. Apex Performance Ltd."
-              className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
+              className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
             />
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Client Email *</label>
+            <label className="block text-xs font-bold text-neutral-700 mb-1">Client Email *</label>
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="contact@brand.com"
-              className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
+              className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Contact Person</label>
+            <label className="block text-xs font-bold text-neutral-700 mb-1">Contact Person</label>
             <input
               type="text"
               value={primaryContactName}
               onChange={(e) => setPrimaryContactName(e.target.value)}
               placeholder="e.g. Arjun Kapoor (CEO)"
-              className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
+              className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Phone</label>
+            <label className="block text-xs font-bold text-neutral-700 mb-1">Phone</label>
             <input
               type="text"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="+91 98200 00000"
-              className="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900"
+              className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
             />
           </div>
         </div>
 
         {/* Package & Financials */}
-        <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
-          <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+        <div className="p-4 bg-neutral-50 rounded-xl border border-neutral-200 space-y-3">
+          <span className="text-xs font-bold text-neutral-800 uppercase tracking-wider">
             Contract & Service Package
           </span>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">
+              <label className="block text-xs font-medium text-neutral-700 mb-1">
                 Service Package
               </label>
               <select
                 value={servicePackage}
                 onChange={(e) => setServicePackage(e.target.value as ServicePackage)}
-                className="w-full text-xs p-2 bg-white border border-slate-300 rounded-lg text-slate-900 font-medium"
+                className="w-full text-xs p-2 bg-white border border-neutral-300 rounded-lg text-neutral-900 font-medium"
               >
                 <option value="Full Marketing">Full Marketing</option>
                 <option value="Video Editing Only">Video Editing Only</option>
@@ -196,23 +196,23 @@ export function CreateClientModal({
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">
+              <label className="block text-xs font-medium text-neutral-700 mb-1">
                 Monthly Retainer Amount
               </label>
               <input
                 type="number"
                 value={monthlyRetainer}
                 onChange={(e) => setMonthlyRetainer(Number(e.target.value))}
-                className="w-full text-xs p-2 bg-white border border-slate-300 rounded-lg text-slate-900 font-bold"
+                className="w-full text-xs p-2 bg-white border border-neutral-300 rounded-lg text-neutral-900 font-bold"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">Currency</label>
+              <label className="block text-xs font-medium text-neutral-700 mb-1">Currency</label>
               <select
                 value={currency}
                 onChange={(e) => setCurrency(e.target.value)}
-                className="w-full text-xs p-2 bg-white border border-slate-300 rounded-lg text-slate-900"
+                className="w-full text-xs p-2 bg-white border border-neutral-300 rounded-lg text-neutral-900"
               >
                 <option value="INR">INR (₹)</option>
                 <option value="USD">USD ($)</option>
@@ -223,25 +223,25 @@ export function CreateClientModal({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">
+              <label className="block text-xs font-medium text-neutral-700 mb-1">
                 Contract Start Date
               </label>
               <input
                 type="date"
                 value={contractStartDate}
                 onChange={(e) => setContractStartDate(e.target.value)}
-                className="w-full text-xs p-2 bg-white border border-slate-300 rounded-lg text-slate-900"
+                className="w-full text-xs p-2 bg-white border border-neutral-300 rounded-lg text-neutral-900"
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">
+              <label className="block text-xs font-medium text-neutral-700 mb-1">
                 Contract End Date
               </label>
               <input
                 type="date"
                 value={contractEndDate}
                 onChange={(e) => setContractEndDate(e.target.value)}
-                className="w-full text-xs p-2 bg-white border border-slate-300 rounded-lg text-slate-900"
+                className="w-full text-xs p-2 bg-white border border-neutral-300 rounded-lg text-neutral-900"
               />
             </div>
           </div>

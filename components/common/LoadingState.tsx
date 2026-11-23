@@ -11,7 +11,7 @@ export function LoadingState({ message = 'Loading...', className }: LoadingState
   return (
     <div
       className={cn(
-        'p-12 text-center flex flex-col items-center justify-center space-y-2.5 text-slate-500',
+        'p-12 text-center flex flex-col items-center justify-center space-y-2.5 text-neutral-500',
         className
       )}
     >

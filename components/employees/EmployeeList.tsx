@@ -112,7 +112,7 @@ export function EmployeeList({
             <div
               key={emp.id}
               className={`bg-white rounded-xl border p-5 shadow-xs transition-all flex flex-col justify-between ${
-                isInactive ? 'border-slate-200 opacity-60 bg-slate-50/50' : 'border-slate-200 hover:border-slate-300'
+                isInactive ? 'border-neutral-200 opacity-60 bg-neutral-50/50' : 'border-neutral-200 hover:border-neutral-300'
               }`}
             >
               <div>
@@ -131,23 +131,23 @@ export function EmployeeList({
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm shadow-xs shrink-0">
+                  <div className="w-11 h-11 rounded-full bg-neutral-900 text-white flex items-center justify-center font-bold text-sm shadow-xs shrink-0">
                     {emp.name.substring(0, 2).toUpperCase()}
                   </div>
                   <div className="min-w-0">
-                    <h3 className="text-base font-bold text-slate-900 truncate">{emp.name}</h3>
-                    <p className="text-xs text-slate-500 truncate">{emp.designation}</p>
+                    <h3 className="text-base font-bold text-neutral-900 truncate">{emp.name}</h3>
+                    <p className="text-xs text-neutral-500 truncate">{emp.designation}</p>
                   </div>
                 </div>
 
-                <div className="mt-3 text-xs text-slate-500 space-y-1">
+                <div className="mt-3 text-xs text-neutral-500 space-y-1">
                   <div className="flex items-center gap-2 truncate">
-                    <Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                    <Mail className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
                     <span className="truncate">{emp.email}</span>
                   </div>
                   {emp.phone && (
                     <div className="flex items-center gap-2">
-                      <Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                      <Phone className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
                       <span>{emp.phone}</span>
                     </div>
                   )}
@@ -176,7 +176,7 @@ export function EmployeeList({
                     {emp.skills.map((skill, i) => (
                       <span
                         key={i}
-                        className="text-[10px] bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-medium"
+                        className="text-[10px] bg-neutral-100 text-neutral-700 px-2 py-0.5 rounded font-medium"
                       >
                         {skill}
                       </span>

@@ -122,26 +122,26 @@ export function CreateProjectModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl overflow-hidden my-8 animate-in fade-in zoom-in-95 duration-150">
+    <div className="fixed inset-0 z-50 bg-neutral-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+      <div className="bg-white rounded-2xl shadow-2xl border border-neutral-200 w-full max-w-2xl overflow-hidden my-8 animate-in fade-in zoom-in-95 duration-150">
         {/* Header */}
-        <div className="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
+        <div className="p-5 border-b border-neutral-100 flex items-center justify-between bg-neutral-50/70">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-black text-white flex items-center justify-center font-bold">
               <FolderPlus className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-slate-900">
+              <h3 className="text-base font-bold text-neutral-900">
                 {projectToEdit ? 'Edit Agency Project' : 'Create New Agency Project'}
               </h3>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-neutral-500">
                 Connect clients, creative teams, objectives, and deliverables.
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+            className="p-1.5 rounded-lg text-neutral-400 hover:text-neutral-600 hover:bg-neutral-100 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -159,7 +159,7 @@ export function CreateProjectModal({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Title */}
             <div className="sm:col-span-2">
-              <label className="block text-xs font-bold text-slate-700 mb-1">
+              <label className="block text-xs font-bold text-neutral-700 mb-1">
                 Project Title <span className="text-black font-bold">*</span>
               </label>
               <input
@@ -168,13 +168,13 @@ export function CreateProjectModal({
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. Apex Q4 High-Performance Campaign"
-                className="w-full text-xs p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-black/10 focus:border-black text-slate-900"
+                className="w-full text-xs p-2.5 bg-white border border-neutral-300 rounded-lg focus:ring-2 focus:ring-black/10 focus:border-black text-neutral-900"
               />
             </div>
 
             {/* Client Select */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
+              <label className="block text-xs font-bold text-neutral-700 mb-1">
                 Client Organization <span className="text-black font-bold">*</span>
               </label>
               <select
@@ -198,7 +198,7 @@ export function CreateProjectModal({
 
             {/* Project Manager */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
+              <label className="block text-xs font-bold text-neutral-700 mb-1">
                 Project Manager
               </label>
               <select
@@ -219,7 +219,7 @@ export function CreateProjectModal({
 
             {/* Description */}
             <div className="sm:col-span-2">
-              <label className="block text-xs font-bold text-slate-700 mb-1">
+              <label className="block text-xs font-bold text-neutral-700 mb-1">
                 Project Description
               </label>
               <textarea
@@ -233,7 +233,7 @@ export function CreateProjectModal({
 
             {/* Objective */}
             <div className="sm:col-span-2">
-              <label className="block text-xs font-bold text-slate-700 mb-1">
+              <label className="block text-xs font-bold text-neutral-700 mb-1">
                 Campaign Objective / Goal
               </label>
               <input
@@ -247,7 +247,7 @@ export function CreateProjectModal({
 
             {/* Start Date */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
+              <label className="block text-xs font-bold text-neutral-700 mb-1">
                 Start Date
               </label>
               <input
@@ -260,7 +260,7 @@ export function CreateProjectModal({
 
             {/* Target End Date / Deadline */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
+              <label className="block text-xs font-bold text-neutral-700 mb-1">
                 Target Deadline
               </label>
               <input
@@ -273,7 +273,7 @@ export function CreateProjectModal({
 
             {/* Status */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
+              <label className="block text-xs font-bold text-neutral-700 mb-1">
                 Project Status
               </label>
               <select
@@ -292,7 +292,7 @@ export function CreateProjectModal({
 
             {/* Priority */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
+              <label className="block text-xs font-bold text-neutral-700 mb-1">
                 Priority
               </label>
               <select
@@ -309,7 +309,7 @@ export function CreateProjectModal({
 
             {/* Deliverables Target */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
+              <label className="block text-xs font-bold text-neutral-700 mb-1">
                 Deliverables Target Count
               </label>
               <input
@@ -325,7 +325,7 @@ export function CreateProjectModal({
             {/* Budget & Currency */}
             <div className="grid grid-cols-3 gap-2">
               <div className="col-span-2">
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-neutral-700 mb-1">
                   Budget (Optional)
                 </label>
                 <input
@@ -338,7 +338,7 @@ export function CreateProjectModal({
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
+                <label className="block text-xs font-bold text-neutral-700 mb-1">
                   Currency
                 </label>
                 <select
@@ -357,13 +357,13 @@ export function CreateProjectModal({
 
             {/* Assigned Team Members Multi-Select */}
             <div className="sm:col-span-2">
-              <label className="block text-xs font-bold text-slate-700 mb-1.5 flex items-center justify-between">
+              <label className="block text-xs font-bold text-neutral-700 mb-1.5 flex items-center justify-between">
                 <span>Assign Creative Team Members:</span>
-                <span className="text-[11px] text-slate-500 font-normal">
+                <span className="text-[11px] text-neutral-500 font-normal">
                   {assignedEmployees.length} employee(s) selected
                 </span>
               </label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 p-3 bg-slate-50 rounded-xl border border-slate-200 max-h-36 overflow-y-auto">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 p-3 bg-neutral-50 rounded-xl border border-neutral-200 max-h-36 overflow-y-auto">
                 {employees.map((emp) => {
                   const isSelected = assignedEmployees.includes(emp.id);
                   return (
@@ -374,7 +374,7 @@ export function CreateProjectModal({
                       className={`text-left p-2 rounded-lg border text-xs transition-all flex flex-col ${
                         isSelected
                           ? 'bg-black border-black text-white shadow-xs'
-                          : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300'
+                          : 'bg-white border-neutral-200 text-neutral-700 hover:border-neutral-300'
                       }`}
                     >
                       <span className="font-bold truncate">{emp.name}</span>
@@ -387,12 +387,12 @@ export function CreateProjectModal({
           </div>
 
           {/* Footer Actions */}
-          <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
+          <div className="pt-4 border-t border-neutral-100 flex items-center justify-end gap-3">
             <button
               type="button"
               onClick={onClose}
               disabled={isSubmitting}
-              className="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg text-xs font-semibold hover:bg-slate-50 transition-colors"
+              className="px-4 py-2 border border-neutral-300 text-neutral-700 rounded-lg text-xs font-semibold hover:bg-neutral-50 transition-colors"
             >
               Cancel
             </button>

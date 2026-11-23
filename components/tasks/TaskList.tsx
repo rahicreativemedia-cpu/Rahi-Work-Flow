@@ -108,29 +108,29 @@ export function TaskList({
       />
 
       {/* Task List Table / Cards */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-        <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
+      <div className="bg-white rounded-xl border border-neutral-200 shadow-xs overflow-hidden">
+        <div className="p-4 sm:p-5 border-b border-neutral-100 flex items-center justify-between">
           <div>
-            <h3 className="text-sm font-bold text-slate-900">
+            <h3 className="text-sm font-bold text-neutral-900">
               {isEmployee ? 'My Assigned Creative Tasks' : 'All Agency Operational Tasks'}
             </h3>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-neutral-500 mt-0.5">
               {isEmployee
                 ? 'Only work assigned to you is visible in your portal.'
                 : 'Shared company-wide task list accessible by both Admin and Manager.'}
             </p>
           </div>
-          <span className="text-xs font-semibold px-2.5 py-1 bg-slate-100 rounded-lg text-slate-700">
+          <span className="text-xs font-semibold px-2.5 py-1 bg-neutral-100 rounded-lg text-neutral-700">
             {filteredTasks.length} Tasks
           </span>
         </div>
 
         {filteredTasks.length === 0 ? (
-          <div className="p-12 text-center text-slate-400 text-xs">
+          <div className="p-12 text-center text-neutral-400 text-xs">
             No tasks match your active filter.
           </div>
         ) : (
-          <div className="divide-y divide-slate-100">
+          <div className="divide-y divide-neutral-100">
             {filteredTasks.map((task) => {
               const priorityBadge = getPriorityBadge(task.priority);
               const statusBadge = getTaskStatusBadge(task.status);
@@ -141,7 +141,7 @@ export function TaskList({
                 <div
                   key={task.id}
                   onClick={() => onSelectTask(task)}
-                  className="p-4 sm:p-5 hover:bg-slate-50/70 transition-colors cursor-pointer flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 group"
+                  className="p-4 sm:p-5 hover:bg-neutral-50/70 transition-colors cursor-pointer flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 group"
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-wrap items-center gap-2 mb-1.5">
@@ -215,7 +215,7 @@ export function TaskList({
                       </button>
                     )}
 
-                    <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-slate-700 transition-colors" />
+                    <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:text-neutral-700 transition-colors" />
                   </div>
                 </div>
               );
