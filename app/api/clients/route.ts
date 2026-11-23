@@ -5,6 +5,7 @@ import {
   updateClient,
   getUsers,
   createUser,
+  updateUser,
   getUserByEmailOrUsername,
   createAuditLog,
   getProjects,
@@ -195,18 +196,33 @@ export async function POST(request: Request) {
 
     await createClient(newClient);
 
-    // Create user login record for client with assigned password and username if not exists
+    // Create or update user login record for client with assigned password and username
     const clientUserPassword = (clientData.password || 'client123').trim();
     const clientUsername = (clientData.username || clientData.email.split('@')[0])
       .trim()
       .toLowerCase();
+    const clientEmail = newClient.email.toLowerCase().trim();
 
-    const existingUser = await getUserByEmailOrUsername(newClient.email);
-    if (!existingUser) {
+    const existingUser =
+      (await getUserByEmailOrUsername(clientEmail)) ||
+      (await getUserByEmailOrUsername(clientUsername));
+
+    if (existingUser) {
+      await updateUser(existingUser.id, {
+        name: newClient.name,
+        email: clientEmail,
+        username: clientUsername,
+        clientId: newClient.id,
+        clientName: newClient.company || newClient.name,
+        phone: newClient.phone,
+        passwordHash: hashPassword(clientUserPassword),
+        status: 'active',
+      });
+    } else {
       await createUser({
         id: `usr-cli-${Date.now()}`,
         name: newClient.name,
-        email: newClient.email.toLowerCase().trim(),
+        email: clientEmail,
         username: clientUsername,
         role: 'client',
         permissionGroup: 'CLIENT_ACCESS',
@@ -364,6 +380,24 @@ export async function PUT(request: Request) {
       notes: updates.notes !== undefined ? updates.notes : existing.notes,
       monthlyCommitment: newMonthlyCommitment,
     });
+
+    // Sync updated credentials to associated client user account if changed
+    if (updates.password || updates.username || updates.email || updates.name) {
+      const existingUser =
+        (await getUserByEmailOrUsername(existing.email)) ||
+        (existing.email ? await getUserByEmailOrUsername(existing.email.split('@')[0]) : null);
+
+      if (existingUser) {
+        const userUpdates: any = {};
+        if (updates.name) userUpdates.name = updates.name.trim();
+        if (updates.email) userUpdates.email = updates.email.toLowerCase().trim();
+        if (updates.username) userUpdates.username = updates.username.toLowerCase().trim();
+        if (updates.password && updates.password.trim()) {
+          userUpdates.passwordHash = hashPassword(updates.password.trim());
+        }
+        await updateUser(existingUser.id, userUpdates);
+      }
+    }
 
     await createAuditLog({
       id: `aud-${Date.now()}`,

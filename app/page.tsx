@@ -489,9 +489,13 @@ export default function FlowdeskApp() {
       if (res.ok) {
         await refreshData();
         setClientToEdit(null);
+      } else {
+        const err = await res.json().catch(() => ({}));
+        alert(`Failed to save client: ${err.error || 'Server error occurred'}`);
       }
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
+      alert(`Network error saving client: ${e?.message || e}`);
     }
   };
 
