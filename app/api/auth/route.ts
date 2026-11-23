@@ -76,9 +76,40 @@ export async function POST(request: Request) {
         );
       }
 
-      const user = userId
+      let user: User | undefined = userId
         ? db.users.find((u) => u.id === userId)
         : db.users.find((u) => u.email.toLowerCase() === cleanEmail);
+
+      // Initial Bootstrap: If this is the initial login and no admin exists or database is fresh, register the user as Administrator
+      if (!user && cleanEmail && (db.users.length === 0 || (db.users.length === 1 && db.users[0].email === 'admin@rahicreative.com' && !db.users[0].passwordHash))) {
+        if (db.users.length === 1 && db.users[0].email === 'admin@rahicreative.com' && !db.users[0].passwordHash) {
+          user = db.users[0];
+          user.email = cleanEmail;
+          user.name = cleanEmail.split('@')[0];
+          user.username = cleanEmail.split('@')[0];
+          if (password) {
+            user.passwordHash = hashPassword(password);
+          }
+          saveDB(db);
+        } else {
+          const newAdmin: User = {
+            id: 'usr-admin',
+            name: cleanEmail.split('@')[0],
+            email: cleanEmail,
+            username: cleanEmail.split('@')[0],
+            role: 'admin',
+            permissionGroup: 'FULL_ADMIN_ACCESS',
+            department: 'Creative Direction',
+            status: 'active',
+            phone: '',
+            passwordHash: password ? hashPassword(password) : undefined,
+            createdAt: new Date().toISOString(),
+          };
+          db.users.push(newAdmin);
+          saveDB(db);
+          user = newAdmin;
+        }
+      }
 
       if (!user) {
         checkRateLimit(rateLimitKey, RATE_LIMIT_CONFIGS.loginFailed);
@@ -96,8 +127,11 @@ export async function POST(request: Request) {
         );
       }
 
-      // If user has a passwordHash, verify it cryptographically
-      if (user.passwordHash && password) {
+      // If user has no passwordHash set yet (initial login), securely set and store it now
+      if (!user.passwordHash && password) {
+        user.passwordHash = hashPassword(password);
+        saveDB(db);
+      } else if (user.passwordHash && password) {
         const isValid = verifyPassword(password, user.passwordHash);
         if (!isValid) {
           checkRateLimit(rateLimitKey, RATE_LIMIT_CONFIGS.loginFailed);
