@@ -127,7 +127,7 @@ export function CreateProjectModal({
         {/* Header */}
         <div className="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
+            <div className="w-9 h-9 rounded-xl bg-black text-white flex items-center justify-center font-bold">
               <FolderPlus className="w-5 h-5" />
             </div>
             <div>
@@ -150,8 +150,8 @@ export function CreateProjectModal({
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
           {error && (
-            <div className="p-3 bg-rose-50 border border-rose-200 rounded-lg text-xs text-rose-700 flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 shrink-0" />
+            <div className="p-3 bg-neutral-100 border border-neutral-300 rounded-lg text-xs text-black flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0 text-black" />
               <span>{error}</span>
             </div>
           )}
@@ -160,7 +160,7 @@ export function CreateProjectModal({
             {/* Title */}
             <div className="sm:col-span-2">
               <label className="block text-xs font-bold text-slate-700 mb-1">
-                Project Title <span className="text-rose-500">*</span>
+                Project Title <span className="text-black font-bold">*</span>
               </label>
               <input
                 type="text"
@@ -168,14 +168,14 @@ export function CreateProjectModal({
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. Apex Q4 High-Performance Campaign"
-                className="w-full text-xs p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-slate-900"
+                className="w-full text-xs p-2.5 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-black/10 focus:border-black text-slate-900"
               />
             </div>
 
             {/* Client Select */}
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1">
-                Client Organization <span className="text-rose-500">*</span>
+                Client Organization <span className="text-black font-bold">*</span>
               </label>
               <select
                 required
@@ -373,12 +373,12 @@ export function CreateProjectModal({
                       onClick={() => toggleEmployee(emp.id)}
                       className={`text-left p-2 rounded-lg border text-xs transition-all flex flex-col ${
                         isSelected
-                          ? 'bg-blue-50 border-blue-400 text-blue-900 shadow-xs'
+                          ? 'bg-black border-black text-white shadow-xs'
                           : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300'
                       }`}
                     >
                       <span className="font-bold truncate">{emp.name}</span>
-                      <span className="text-[10px] text-slate-500 truncate">{emp.department}</span>
+                      <span className="text-[10px] text-neutral-400 truncate">{emp.department}</span>
                     </button>
                   );
                 })}
@@ -399,7 +399,7 @@ export function CreateProjectModal({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow-xs flex items-center gap-1.5 transition-colors disabled:opacity-50"
+              className="px-5 py-2 bg-black hover:bg-neutral-800 text-white rounded-lg text-xs font-semibold shadow-xs flex items-center gap-1.5 transition-colors disabled:opacity-50"
             >
               <Save className="w-4 h-4" />
               <span>{isSubmitting ? 'Saving...' : projectToEdit ? 'Save Changes' : 'Create Project'}</span>

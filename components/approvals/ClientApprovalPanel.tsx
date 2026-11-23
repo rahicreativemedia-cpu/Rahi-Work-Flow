@@ -167,12 +167,12 @@ export function ClientApprovalPanel({
             <h2 className="text-lg font-bold text-slate-900 tracking-tight">
               Client Review, Feedback & Approval Center
             </h2>
-            <span className="text-[11px] font-semibold bg-purple-50 text-purple-700 px-2.5 py-0.5 rounded-full border border-purple-200">
+            <span className="text-[11px] font-semibold bg-neutral-100 text-neutral-900 px-2.5 py-0.5 rounded-full border border-neutral-300">
               {isClient ? 'Private Client Workspace' : 'Agency Review Pipeline'}
             </span>
             {isAdminOrManager && (
-              <span className="inline-flex items-center gap-1 text-[11px] font-semibold bg-amber-50 text-amber-800 px-2.5 py-0.5 rounded-full border border-amber-200">
-                <ShieldCheck className="w-3.5 h-3.5 text-amber-600" />
+              <span className="inline-flex items-center gap-1 text-[11px] font-semibold bg-black text-white px-2.5 py-0.5 rounded-full border border-black">
+                <ShieldCheck className="w-3.5 h-3.5 text-white" />
                 Administrative Oversight Active
               </span>
             )}
@@ -209,9 +209,9 @@ export function ClientApprovalPanel({
 
       {/* Admin / Manager Oversight Indicator */}
       {isAdminOrManager && activeTab === 'pending' && (
-        <div className="bg-amber-50/80 border border-amber-200/80 rounded-xl p-3.5 flex items-start gap-3">
-          <ShieldCheck className="w-4 h-4 text-amber-700 mt-0.5 shrink-0" />
-          <div className="text-xs text-amber-900">
+        <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-3.5 flex items-start gap-3">
+          <ShieldCheck className="w-4 h-4 text-black mt-0.5 shrink-0" />
+          <div className="text-xs text-neutral-900">
             <span className="font-bold">Full Administrative Access:</span> You can record approvals or request revisions on behalf of clients. All actions are attributed in the audit log with your name and role.
           </div>
         </div>
@@ -237,7 +237,7 @@ export function ClientApprovalPanel({
               onClick={() => setPendingFilter('script')}
               className={`px-3 py-1 rounded-md transition-colors ${
                 pendingFilter === 'script'
-                  ? 'bg-blue-600 text-white font-semibold'
+                  ? 'bg-neutral-900 text-white font-semibold'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -247,7 +247,7 @@ export function ClientApprovalPanel({
               onClick={() => setPendingFilter('video')}
               className={`px-3 py-1 rounded-md transition-colors ${
                 pendingFilter === 'video'
-                  ? 'bg-purple-600 text-white font-semibold'
+                  ? 'bg-black text-white font-semibold'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -257,7 +257,7 @@ export function ClientApprovalPanel({
 
           {displayedPending.length === 0 ? (
             <div className="p-12 text-center bg-white rounded-xl border border-slate-200 text-slate-400 text-xs">
-              <CheckCircle2 className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
+              <CheckCircle2 className="w-8 h-8 text-black mx-auto mb-2" />
               <p className="font-semibold text-slate-700">All clear!</p>
               <p className="text-slate-500 mt-1">
                 {pendingFilter === 'script'
@@ -310,7 +310,7 @@ export function ClientApprovalPanel({
 
                     <button
                       onClick={() => onSelectDeliverable(del)}
-                      className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800"
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-neutral-900 hover:text-black underline"
                     >
                       <span>Full 10-Stage Pipeline</span>
                       <ChevronRight className="w-3.5 h-3.5" />
@@ -325,12 +325,12 @@ export function ClientApprovalPanel({
                         <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
                           {reviewType === 'script' ? (
                             <>
-                              <FileText className="w-4 h-4 text-blue-600" />
+                              <FileText className="w-4 h-4 text-black" />
                               <span>Script Draft Preview (v{del.currentVersion})</span>
                             </>
                           ) : (
                             <>
-                              <Video className="w-4 h-4 text-purple-600" />
+                              <Video className="w-4 h-4 text-black" />
                               <span>Video Asset Preview (v{del.currentVersion})</span>
                             </>
                           )}
@@ -374,7 +374,7 @@ export function ClientApprovalPanel({
                     </div>
 
                     {/* Right Pane: Review & Decision Form */}
-                    <div className="flex flex-col justify-between space-y-4 bg-purple-50/40 p-4 rounded-xl border border-purple-100">
+                    <div className="flex flex-col justify-between space-y-4 bg-neutral-50 p-4 rounded-xl border border-neutral-200">
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
                           <label className="block text-xs font-bold text-slate-800">
@@ -388,7 +388,7 @@ export function ClientApprovalPanel({
                         {/* Standardized Feedback Category Chips */}
                         <div>
                           <div className="text-[11px] font-semibold text-slate-700 mb-1.5 flex items-center gap-1">
-                            <Tag className="w-3 h-3 text-purple-600" />
+                            <Tag className="w-3 h-3 text-black" />
                             <span>Select Feedback Categories (Optional tags):</span>
                           </div>
                           <div className="flex flex-wrap gap-1.5">
@@ -401,7 +401,7 @@ export function ClientApprovalPanel({
                                   onClick={() => toggleCategory(del.id, cat)}
                                   className={`text-[10px] px-2 py-1 rounded-md font-medium transition-all ${
                                     isSelected
-                                      ? 'bg-purple-600 text-white shadow-xs'
+                                      ? 'bg-black text-white shadow-xs'
                                       : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
                                   }`}
                                 >
@@ -422,13 +422,13 @@ export function ClientApprovalPanel({
                                 ? 'e.g. Please strengthen opening hook at line 1, tone down promotional tone...'
                                 : 'e.g. Please trim pause at 0:12, adjust music volume under voiceover...'
                             }
-                            className={`w-full text-xs p-3 bg-white border rounded-lg focus:ring-2 focus:ring-purple-400 text-slate-900 transition-colors ${
-                              errorMessage ? 'border-rose-400 focus:ring-rose-400' : 'border-slate-300'
+                            className={`w-full text-xs p-3 bg-white border rounded-lg focus:ring-2 focus:ring-black/10 focus:border-black text-slate-900 transition-colors ${
+                              errorMessage ? 'border-neutral-900' : 'border-slate-300'
                             }`}
                             rows={4}
                           />
                           {errorMessage && (
-                            <p className="text-[11px] text-rose-600 mt-1 flex items-center gap-1 font-medium">
+                            <p className="text-[11px] text-black mt-1 flex items-center gap-1 font-semibold">
                               <AlertTriangle className="w-3 h-3 shrink-0" />
                               {errorMessage}
                             </p>
@@ -437,10 +437,10 @@ export function ClientApprovalPanel({
                       </div>
 
                       {/* Decision Buttons */}
-                      <div className="flex items-center justify-end gap-3 pt-2 border-t border-purple-100/70">
+                      <div className="flex items-center justify-end gap-3 pt-2 border-t border-neutral-200">
                         <button
                           onClick={() => handleRevision(del, reviewType)}
-                          className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors flex items-center gap-1.5"
+                          className="px-4 py-2 bg-neutral-800 hover:bg-neutral-900 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors flex items-center gap-1.5"
                         >
                           <AlertTriangle className="w-3.5 h-3.5" />
                           <span>Request Revision (Stage 8)</span>
@@ -448,7 +448,7 @@ export function ClientApprovalPanel({
 
                         <button
                           onClick={() => handleApprove(del, reviewType)}
-                          className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors flex items-center gap-1.5"
+                          className="px-5 py-2 bg-black hover:bg-neutral-800 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors flex items-center gap-1.5"
                         >
                           <CheckCircle2 className="w-4 h-4" />
                           <span>
@@ -546,11 +546,11 @@ export function ClientApprovalPanel({
                       </td>
                       <td className="py-3 px-4 whitespace-nowrap">
                         {appr.status === 'approved' ? (
-                          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-neutral-900 bg-neutral-100 px-2 py-0.5 rounded border border-neutral-300">
                             <CheckCircle2 className="w-3 h-3" /> Approved
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
+                          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-neutral-900 bg-neutral-200 px-2 py-0.5 rounded border border-neutral-400">
                             <AlertTriangle className="w-3 h-3" /> Revision Requested
                           </span>
                         )}
@@ -562,7 +562,7 @@ export function ClientApprovalPanel({
                               {appr.categories.map((c) => (
                                 <span
                                   key={c}
-                                  className="text-[9px] font-semibold bg-purple-50 text-purple-700 px-1.5 py-0.2 rounded border border-purple-200"
+                                  className="text-[9px] font-semibold bg-neutral-100 text-neutral-800 px-1.5 py-0.2 rounded border border-neutral-300"
                                 >
                                   {c}
                                 </span>
@@ -578,7 +578,7 @@ export function ClientApprovalPanel({
                         <div className="flex flex-col">
                           <span>{appr.decidedByUserName}</span>
                           {appr.recordedByAdminOrManager && (
-                            <span className="text-[10px] text-amber-700 font-semibold">
+                            <span className="text-[10px] text-neutral-700 font-semibold">
                               (Admin/Manager Oversight)
                             </span>
                           )}

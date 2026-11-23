@@ -10,14 +10,14 @@ interface BadgeProps {
 
 export function Badge({ children, variant = 'slate', size = 'sm', className }: BadgeProps) {
   const variantStyles = {
-    slate: 'bg-slate-100 text-slate-700 border-slate-200',
-    blue: 'bg-blue-50 text-blue-700 border-blue-200',
-    emerald: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    amber: 'bg-amber-50 text-amber-700 border-amber-200',
-    rose: 'bg-rose-50 text-rose-700 border-rose-200',
-    purple: 'bg-purple-50 text-purple-700 border-purple-200',
-    cyan: 'bg-cyan-50 text-cyan-700 border-cyan-200',
-    indigo: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+    slate: 'bg-neutral-100 text-neutral-800 border-neutral-200',
+    blue: 'bg-black text-white border-black',
+    emerald: 'bg-neutral-900 text-white border-neutral-800',
+    amber: 'bg-neutral-100 text-neutral-900 border-neutral-300 font-semibold',
+    rose: 'bg-neutral-200 text-neutral-900 border-neutral-400 font-medium',
+    purple: 'bg-neutral-800 text-white border-neutral-700',
+    cyan: 'bg-neutral-100 text-neutral-800 border-neutral-200',
+    indigo: 'bg-black text-white border-black',
   };
 
   const sizeStyles = {

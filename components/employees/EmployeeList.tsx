@@ -94,7 +94,7 @@ export function EmployeeList({
           canAdmin ? (
             <button
               onClick={onCreateEmployee}
-              className="flex items-center gap-1.5 px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors shrink-0"
+              className="flex items-center gap-1.5 px-3.5 py-2 bg-black hover:bg-neutral-800 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors shrink-0"
             >
               <Plus className="w-4 h-4" />
               <span>Add Employee</span>
@@ -117,13 +117,13 @@ export function EmployeeList({
             >
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <Badge variant="blue">{emp.department}</Badge>
+                  <Badge variant="slate">{emp.department}</Badge>
                   <div className="flex items-center gap-1.5">
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${capInfo.badgeClass}`}>
                       {capInfo.label}
                     </span>
                     {emp.performanceScore && (
-                      <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                      <span className="text-xs font-bold text-neutral-900 bg-neutral-100 px-2 py-0.5 rounded-full border border-neutral-300">
                         {emp.performanceScore}% Score
                       </span>
                     )}
@@ -154,23 +154,15 @@ export function EmployeeList({
                 </div>
 
                 {/* Workload Capacity Progress Bar */}
-                <div className="mt-4 p-3 bg-slate-50 rounded-lg border border-slate-100">
+                <div className="mt-4 p-3 bg-neutral-50 rounded-lg border border-neutral-200">
                   <div className="flex items-center justify-between text-xs mb-1.5">
-                    <span className="text-slate-600 font-medium">Workload Distribution:</span>
-                    <span
-                      className={`font-bold ${
-                        capInfo.isOverloaded
-                          ? 'text-rose-600'
-                          : capInfo.isHigh
-                          ? 'text-amber-600'
-                          : 'text-slate-800'
-                      }`}
-                    >
+                    <span className="text-neutral-600 font-medium">Workload Distribution:</span>
+                    <span className="font-bold text-neutral-900">
                       {emp.currentActiveTasks} / {emp.maxConcurrentTasks} tasks ({capInfo.percentage}%)
                     </span>
                   </div>
 
-                  <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                  <div className="w-full bg-neutral-200 h-2 rounded-full overflow-hidden">
                     <div
                       className={`h-full rounded-full transition-all ${capInfo.barColor}`}
                       style={{ width: `${Math.min(100, capInfo.percentage)}%` }}
@@ -194,15 +186,15 @@ export function EmployeeList({
               </div>
 
               {canAdmin && (
-                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
-                  <span className="text-[11px] text-slate-400 font-medium">
-                    Status: <strong className={isInactive ? 'text-rose-600' : 'text-emerald-600'}>{emp.status}</strong>
+                <div className="mt-4 pt-3 border-t border-neutral-200 flex items-center justify-between">
+                  <span className="text-[11px] text-neutral-500 font-medium">
+                    Status: <strong className="text-neutral-900">{emp.status}</strong>
                   </span>
                   <div className="flex items-center gap-3">
                     {onEditEmployee && (
                       <button
                         onClick={() => onEditEmployee(emp)}
-                        className="text-xs font-semibold text-blue-600 hover:text-blue-800"
+                        className="text-xs font-semibold text-neutral-900 hover:text-black underline"
                       >
                         Edit Profile
                       </button>
@@ -210,7 +202,7 @@ export function EmployeeList({
                     {onDeactivateEmployee && !isInactive && (
                       <button
                         onClick={() => onDeactivateEmployee(emp)}
-                        className="text-xs font-semibold text-rose-600 hover:text-rose-800 flex items-center gap-1"
+                        className="text-xs font-semibold text-neutral-700 hover:text-black flex items-center gap-1"
                       >
                         <UserX className="w-3.5 h-3.5" />
                         <span>Deactivate</span>

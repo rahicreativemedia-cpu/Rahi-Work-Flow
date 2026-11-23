@@ -50,10 +50,10 @@ export function ResetPasswordModal({ isOpen, onClose }: ResetPasswordModalProps)
     <Modal isOpen={isOpen} onClose={onClose} title="Reset Your Password" maxWidth="sm">
       <div className="space-y-4">
         {successMessage ? (
-          <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl space-y-2 text-center">
-            <CheckCircle2 className="w-8 h-8 text-emerald-600 mx-auto" />
-            <div className="text-xs font-semibold text-emerald-800">Instructions Sent</div>
-            <p className="text-[11px] text-emerald-700 leading-relaxed">{successMessage}</p>
+          <div className="p-4 bg-neutral-50 border border-neutral-300 rounded-xl space-y-2 text-center">
+            <CheckCircle2 className="w-8 h-8 text-black mx-auto" />
+            <div className="text-xs font-semibold text-black">Instructions Sent</div>
+            <p className="text-[11px] text-neutral-700 leading-relaxed">{successMessage}</p>
             <div className="pt-2">
               <Button variant="secondary" size="sm" onClick={onClose}>
                 Return to Login
@@ -77,8 +77,8 @@ export function ResetPasswordModal({ isOpen, onClose }: ResetPasswordModalProps)
             />
 
             {error && (
-              <div className="p-3 bg-rose-50 border border-rose-200 rounded-lg flex items-center gap-2 text-xs text-rose-700">
-                <AlertCircle className="w-4 h-4 shrink-0" />
+              <div className="p-3 bg-neutral-100 border border-neutral-300 rounded-lg flex items-center gap-2 text-xs text-black">
+                <AlertCircle className="w-4 h-4 shrink-0 text-black" />
                 <span>{error}</span>
               </div>
             )}

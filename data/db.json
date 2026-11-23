@@ -12,6 +12,17 @@
       "phone": "",
       "passwordHash": "2e6232c0a238d61061d4855afeb6228d:e24ab1b79a33baa966230b53183ef87c81721a613d0be5bb92dec4ed569e88461d0d15946db3034ba202e7f9569e57f9115f1d51de7df6f23f5e15db5c04fb96",
       "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "usr-1795413952887",
+      "name": "Zayn",
+      "email": "zayn@rahicreativemedia.com",
+      "username": "zayn",
+      "role": "manager",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "phone": "7359668298",
+      "status": "active",
+      "createdAt": "2026-11-23T06:05:52.887Z"
     }
   ],
   "clients": [],
@@ -23,6 +34,28 @@
   "notifications": [],
   "invitations": [],
   "auditLogs": [
+    {
+      "id": "aud-1795413952887",
+      "userId": "usr-admin",
+      "userName": "Rahi Creative Media",
+      "userRole": "admin",
+      "action": "Account Created",
+      "details": "Created MANAGER account for Zayn  (zayn@rahicreativemedia.com)",
+      "targetType": "auth",
+      "targetId": "usr-1795413952887",
+      "timestamp": "2026-11-23T06:05:52.887Z"
+    },
+    {
+      "id": "aud-1795413630180",
+      "userId": "usr-admin",
+      "userName": "Rahi Creative Media",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rahi Creative Media authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-23T06:00:30.180Z"
+    },
     {
       "id": "aud-1795413212894",
       "userId": "usr-admin",
@@ -69,6 +102,15 @@
     }
   ],
   "sessions": [
+    {
+      "id": "sess-1795413630181-07996c22",
+      "token": "5664e00b531aa4b5240f624da11575023659f390c8609941664e312151096331",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-23T06:00:30.181Z",
+      "expiresAt": "2026-11-30T06:00:30.181Z"
+    },
     {
       "id": "sess-1795413212894-7a01d023",
       "token": "de3ffac650581e8dbd3d2c147ee4742308896afc8d130444be7a475cdc8d598d",

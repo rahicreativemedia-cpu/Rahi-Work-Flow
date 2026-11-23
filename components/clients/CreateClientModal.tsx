@@ -248,62 +248,62 @@ export function CreateClientModal({
         </div>
 
         {/* Monthly Deliverable Commitment Targets */}
-        <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-200 space-y-3">
-          <span className="text-xs font-bold text-blue-900 uppercase tracking-wider">
+        <div className="p-4 bg-neutral-50 rounded-xl border border-neutral-200 space-y-3">
+          <span className="text-xs font-bold text-black uppercase tracking-wider">
             Monthly Deliverable Commitment Targets
           </span>
-          <p className="text-[11px] text-blue-800">
+          <p className="text-[11px] text-neutral-600">
             Set individual deliverable commitments tracked in the Monthly Deliverable Tracker.
           </p>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Reels Target</label>
+              <label className="block text-xs font-semibold text-neutral-800 mb-1">Reels Target</label>
               <input
                 type="number"
                 min="0"
                 value={reels}
                 onChange={(e) => setReels(Number(e.target.value))}
-                className="w-full text-xs p-2 bg-white border border-blue-200 rounded-lg text-slate-900 font-bold"
+                className="w-full text-xs p-2 bg-white border border-neutral-300 rounded-lg text-black font-bold"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Long Videos</label>
+              <label className="block text-xs font-semibold text-neutral-800 mb-1">Long Videos</label>
               <input
                 type="number"
                 min="0"
                 value={longVideos}
                 onChange={(e) => setLongVideos(Number(e.target.value))}
-                className="w-full text-xs p-2 bg-white border border-blue-200 rounded-lg text-slate-900 font-bold"
+                className="w-full text-xs p-2 bg-white border border-neutral-300 rounded-lg text-black font-bold"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Graphics</label>
+              <label className="block text-xs font-semibold text-neutral-800 mb-1">Graphics</label>
               <input
                 type="number"
                 min="0"
                 value={graphics}
                 onChange={(e) => setGraphics(Number(e.target.value))}
-                className="w-full text-xs p-2 bg-white border border-blue-200 rounded-lg text-slate-900 font-bold"
+                className="w-full text-xs p-2 bg-white border border-neutral-300 rounded-lg text-black font-bold"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Carousels</label>
+              <label className="block text-xs font-semibold text-neutral-800 mb-1">Carousels</label>
               <input
                 type="number"
                 min="0"
                 value={carousels}
                 onChange={(e) => setCarousels(Number(e.target.value))}
-                className="w-full text-xs p-2 bg-white border border-blue-200 rounded-lg text-slate-900 font-bold"
+                className="w-full text-xs p-2 bg-white border border-neutral-300 rounded-lg text-black font-bold"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-700 mb-1">
+            <label className="block text-xs font-medium text-neutral-800 mb-1">
               Custom Target / Strategic Note
             </label>
             <input
@@ -311,22 +311,22 @@ export function CreateClientModal({
               value={customTargetNote}
               onChange={(e) => setCustomTargetNote(e.target.value)}
               placeholder="e.g. Focus on athlete hooks and winter collection launch"
-              className="w-full text-xs p-2 bg-white border border-blue-200 rounded-lg text-slate-900"
+              className="w-full text-xs p-2 bg-white border border-neutral-300 rounded-lg text-black"
             />
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+        <div className="flex items-center justify-end gap-3 pt-3 border-t border-neutral-200">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-xs font-medium text-slate-600 hover:text-slate-900"
+            className="px-4 py-2 text-xs font-medium text-neutral-600 hover:text-black"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow-xs"
+            className="px-4 py-2 bg-black hover:bg-neutral-800 text-white rounded-lg text-xs font-semibold shadow-xs"
           >
             {clientToEdit ? 'Save Changes' : 'Create Client'}
           </button>

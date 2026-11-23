@@ -163,8 +163,8 @@ export function CreateTaskModal({
 
         {/* Overloaded Warning Banner */}
         {selectedCapInfo?.isOverloaded && (
-          <div className="p-3 bg-rose-50 border border-rose-200 rounded-lg flex items-start gap-2.5 text-xs text-rose-800">
-            <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+          <div className="p-3 bg-neutral-100 border border-neutral-300 rounded-lg flex items-start gap-2.5 text-xs text-black">
+            <AlertTriangle className="w-4 h-4 text-black shrink-0 mt-0.5" />
             <div>
               <strong className="font-bold">Capacity Alert:</strong> {selectedEmployee?.name} is currently at maximum capacity ({selectedEmployee?.currentActiveTasks}/{selectedEmployee?.maxConcurrentTasks} tasks). Assigning this task will overload their queue.
             </div>
@@ -248,7 +248,7 @@ export function CreateTaskModal({
           </button>
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg shadow-xs"
+            className="px-4 py-2 bg-black hover:bg-neutral-800 text-white text-xs font-semibold rounded-lg shadow-xs"
           >
             Assign Task
           </button>

@@ -129,7 +129,7 @@ export function DeliverableTracker({
             <h2 className="text-lg font-bold text-slate-900 tracking-tight">
               Monthly Deliverable Tracker
             </h2>
-            <span className="text-[11px] font-semibold bg-blue-50 text-blue-700 px-2 py-0.5 rounded border border-blue-200">
+            <span className="text-[11px] font-semibold bg-neutral-100 text-neutral-900 px-2 py-0.5 rounded border border-neutral-300">
               Contract Targets vs Actuals
             </span>
           </div>
@@ -144,7 +144,7 @@ export function DeliverableTracker({
             <select
               value={selectedClientId}
               onChange={(e) => handleClientChange(e.target.value)}
-              className="text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 font-medium focus:ring-2 focus:ring-blue-500/20"
+              className="text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 font-medium focus:ring-2 focus:ring-black/10 focus:border-black"
             >
               <option value="all">All Clients ({clients.length})</option>
               {clients.map((c) => (
@@ -158,7 +158,7 @@ export function DeliverableTracker({
           <select
             value={selectedMonth}
             onChange={(e) => setSelectedMonth(e.target.value)}
-            className="text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 font-medium focus:ring-2 focus:ring-blue-500/20"
+            className="text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-800 font-medium focus:ring-2 focus:ring-black/10 focus:border-black"
           >
             <option value="2026-11">November 2026 (Active)</option>
             <option value="2026-10">October 2026</option>
@@ -180,7 +180,7 @@ export function DeliverableTracker({
           {canAdmin && onNewDeliverable && (
             <button
               onClick={onNewDeliverable}
-              className="flex items-center gap-1.5 px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors shrink-0"
+              className="flex items-center gap-1.5 px-3.5 py-2 bg-black hover:bg-neutral-800 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors shrink-0"
             >
               <Plus className="w-4 h-4" />
               <span>New Deliverable</span>
@@ -191,16 +191,16 @@ export function DeliverableTracker({
 
       {/* Agency-Wide Pacing Alert Banner (if lagging clients exist) */}
       {!isClientRole && isCurrentActiveMonth && laggingClients.length > 0 && (
-        <div className="flex items-start gap-3 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs shadow-xs">
-          <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+        <div className="flex items-start gap-3 p-4 rounded-xl bg-neutral-100 border border-neutral-300 text-neutral-900 text-xs shadow-xs">
+          <AlertTriangle className="w-5 h-5 text-black shrink-0 mt-0.5" />
           <div className="space-y-1">
-            <div className="font-bold text-amber-950 flex items-center gap-2">
+            <div className="font-bold text-black flex items-center gap-2">
               <span>Production Pacing Warning</span>
-              <span className="text-[10px] px-2 py-0.5 bg-amber-200/60 rounded-full font-semibold">
+              <span className="text-[10px] px-2 py-0.5 bg-neutral-200 rounded-full font-semibold">
                 Day {currentDayNum} of {daysInMonth} ({monthProgressionPct}% Month Progression)
               </span>
             </div>
-            <p className="text-amber-800 leading-relaxed">
+            <p className="text-neutral-700 leading-relaxed">
               <strong>{laggingClients.length} client(s)</strong> are trailing agreed deliverable pacing ({laggingClients.map(c => `${c.name}: ${c.completed}/${c.target} delivered (${c.delta})`).join(', ')}). Agency Admins & Managers are advised to expedite pending video reviews and reassign editorial tasks to prevent end-of-month delivery bottleneck.
             </p>
           </div>
@@ -208,10 +208,10 @@ export function DeliverableTracker({
       )}
 
       {/* Strict Milestone Verification Banner */}
-      <div className="flex items-start gap-3 p-4 rounded-xl bg-blue-50/70 border border-blue-200/80 text-blue-900 text-xs leading-relaxed">
-        <Info className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+      <div className="flex items-start gap-3 p-4 rounded-xl bg-neutral-50 border border-neutral-200 text-neutral-900 text-xs leading-relaxed">
+        <Info className="w-4 h-4 text-black shrink-0 mt-0.5" />
         <div>
-          <strong className="font-semibold text-blue-950">Strict Milestone Counting Rule:</strong> A deliverable counts toward the client’s agreed monthly commitment <em>only</em> when it reaches <strong>Stage 10 (Publishing / Final Delivery)</strong> and is marked as <strong>published</strong> or <strong>delivered</strong>. Script approval, video editing, and internal reviews are strictly in-progress workflows and do not increment deliverable counts. Cancelled deliverables remain permanently preserved in the audit history and do not count towards quota.
+          <strong className="font-semibold text-black">Strict Milestone Counting Rule:</strong> A deliverable counts toward the client’s agreed monthly commitment <em>only</em> when it reaches <strong>Stage 10 (Publishing / Final Delivery)</strong> and is marked as <strong>published</strong> or <strong>delivered</strong>. Script approval, video editing, and internal reviews are strictly in-progress workflows and do not increment deliverable counts. Cancelled deliverables remain permanently preserved in the audit history and do not count towards quota.
         </div>
       </div>
 
@@ -263,21 +263,21 @@ export function DeliverableTracker({
 
                 {/* 4 Metric Counters: Completed, In Progress, Remaining, Cancelled */}
                 <div className="grid grid-cols-3 gap-2 mt-4 text-center">
-                  <div className="p-2.5 bg-emerald-50 rounded-lg border border-emerald-100">
-                    <div className="text-[11px] text-emerald-700 font-semibold">Completed</div>
-                    <div className="text-xl font-black text-emerald-900 mt-0.5">
+                  <div className="p-2.5 bg-neutral-50 rounded-lg border border-neutral-200">
+                    <div className="text-[11px] text-neutral-600 font-semibold">Completed</div>
+                    <div className="text-xl font-black text-black mt-0.5">
                       {stats.completed}
                     </div>
                   </div>
-                  <div className="p-2.5 bg-blue-50 rounded-lg border border-blue-100">
-                    <div className="text-[11px] text-blue-700 font-semibold">In Progress</div>
-                    <div className="text-xl font-black text-blue-900 mt-0.5">
+                  <div className="p-2.5 bg-neutral-50 rounded-lg border border-neutral-200">
+                    <div className="text-[11px] text-neutral-600 font-semibold">In Progress</div>
+                    <div className="text-xl font-black text-black mt-0.5">
                       {stats.inProgress}
                     </div>
                   </div>
-                  <div className="p-2.5 bg-amber-50 rounded-lg border border-amber-100">
-                    <div className="text-[11px] text-amber-700 font-semibold">Remaining</div>
-                    <div className="text-xl font-black text-amber-900 mt-0.5">
+                  <div className="p-2.5 bg-neutral-50 rounded-lg border border-neutral-200">
+                    <div className="text-[11px] text-neutral-600 font-semibold">Remaining</div>
+                    <div className="text-xl font-black text-black mt-0.5">
                       {stats.remaining}
                     </div>
                   </div>
@@ -296,7 +296,7 @@ export function DeliverableTracker({
                   </div>
                   <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
                     <div
-                      className="bg-emerald-600 h-full rounded-full transition-all duration-500"
+                      className="bg-black h-full rounded-full transition-all duration-500"
                       style={{ width: `${stats.completionPercentage}%` }}
                     />
                   </div>
@@ -340,7 +340,7 @@ export function DeliverableTracker({
             {canAdmin && onNewDeliverable && (
               <button
                 onClick={onNewDeliverable}
-                className="mt-4 px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold inline-flex items-center gap-1.5"
+                className="mt-4 px-3.5 py-2 bg-black hover:bg-neutral-800 text-white rounded-lg text-xs font-semibold inline-flex items-center gap-1.5"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Create New Deliverable</span>
@@ -372,7 +372,7 @@ export function DeliverableTracker({
                     >
                       <td className="py-3.5 px-4 font-semibold text-slate-900">
                         <div className="flex items-center gap-2">
-                          <span className="truncate max-w-[220px] group-hover:text-blue-600 transition-colors">
+                          <span className="truncate max-w-[220px] group-hover:text-black group-hover:underline transition-colors">
                             {d.title}
                           </span>
                           <span className="text-[10px] font-normal text-slate-400">
@@ -397,12 +397,12 @@ export function DeliverableTracker({
                             <Ban className="w-3 h-3 text-slate-500" /> Cancelled (Preserved)
                           </span>
                         ) : d.isCountedTowardsCommitment ? (
-                          <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">
-                            <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Counted: Delivered (Quota +1)
+                          <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-900 bg-neutral-100 border border-neutral-300 px-2 py-0.5 rounded">
+                            <CheckCircle2 className="w-3 h-3 text-black" /> Counted: Delivered (Quota +1)
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 text-[11px] font-medium text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded">
-                            <Clock className="w-3 h-3 text-blue-500" /> In Progress (Step {stageMeta?.step || 1}/10 - Not Counted)
+                          <span className="inline-flex items-center gap-1 text-[11px] font-medium text-neutral-600 bg-neutral-100 border border-neutral-200 px-2 py-0.5 rounded">
+                            <Clock className="w-3 h-3 text-neutral-500" /> In Progress (Step {stageMeta?.step || 1}/10 - Not Counted)
                           </span>
                         )}
                       </td>
@@ -412,7 +412,7 @@ export function DeliverableTracker({
                             e.stopPropagation();
                             onSelectDeliverable(d);
                           }}
-                          className="text-xs text-blue-600 hover:text-blue-800 font-semibold"
+                          className="text-xs text-neutral-900 hover:text-black underline font-semibold"
                         >
                           View Details
                         </button>

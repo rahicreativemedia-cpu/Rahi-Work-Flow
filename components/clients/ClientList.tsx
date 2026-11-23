@@ -97,7 +97,7 @@ export function ClientList({
           canAdmin ? (
             <button
               onClick={onCreateClient}
-              className="flex items-center gap-1.5 px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors shrink-0"
+              className="flex items-center gap-1.5 px-3.5 py-2 bg-black hover:bg-neutral-800 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors shrink-0"
             >
               <Plus className="w-4 h-4" />
               <span>Add Client</span>
@@ -165,54 +165,54 @@ export function ClientList({
                   </div>
 
                   {/* Primary Contact Details */}
-                  <div className="mt-3 p-2.5 bg-slate-50/80 rounded-lg border border-slate-100 text-xs space-y-1 text-slate-600">
-                    <div className="flex items-center gap-1.5 font-medium text-slate-800">
-                      <UserCheck className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                  <div className="mt-3 p-2.5 bg-neutral-50 rounded-lg border border-neutral-200 text-xs space-y-1 text-neutral-600">
+                    <div className="flex items-center gap-1.5 font-medium text-neutral-900">
+                      <UserCheck className="w-3.5 h-3.5 text-neutral-900 shrink-0" />
                       <span className="truncate">{client.primaryContactName || 'Primary Contact'}</span>
                     </div>
                     {client.email && (
-                      <div className="flex items-center gap-1.5 text-[11px] text-slate-500 truncate">
-                        <Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                      <div className="flex items-center gap-1.5 text-[11px] text-neutral-500 truncate">
+                        <Mail className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
                         <span className="truncate">{client.email}</span>
                       </div>
                     )}
                     {client.phone && (
-                      <div className="flex items-center gap-1.5 text-[11px] text-slate-500 truncate">
-                        <Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                      <div className="flex items-center gap-1.5 text-[11px] text-neutral-500 truncate">
+                        <Phone className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
                         <span>{client.phone}</span>
                       </div>
                     )}
                   </div>
 
                   {/* Package & Target Breakdown */}
-                  <div className="mt-3 p-3 bg-blue-50/40 rounded-lg border border-blue-100 text-xs space-y-1.5">
+                  <div className="mt-3 p-3 bg-neutral-50 rounded-lg border border-neutral-200 text-xs space-y-1.5">
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-600 font-medium">Service Package:</span>
-                      <strong className="text-slate-800 font-semibold">{client.servicePackage}</strong>
+                      <span className="text-neutral-600 font-medium">Service Package:</span>
+                      <strong className="text-neutral-900 font-semibold">{client.servicePackage}</strong>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-600 font-medium">Monthly Target:</span>
-                      <strong className="text-slate-900 font-bold">
+                      <span className="text-neutral-600 font-medium">Monthly Target:</span>
+                      <strong className="text-neutral-900 font-bold">
                         {stats.totalCommitment} deliverables
                       </strong>
                     </div>
                     {/* Specific Deliverable Targets Breakdown */}
-                    <div className="flex flex-wrap gap-1.5 pt-1 border-t border-blue-100/60 text-[10px]">
-                      <span className="px-1.5 py-0.5 bg-white rounded border border-blue-200 text-slate-700 font-medium">
+                    <div className="flex flex-wrap gap-1.5 pt-1 border-t border-neutral-200 text-[10px]">
+                      <span className="px-1.5 py-0.5 bg-white rounded border border-neutral-300 text-neutral-800 font-medium">
                         {client.monthlyCommitment?.reels ?? 0} Reels
                       </span>
-                      <span className="px-1.5 py-0.5 bg-white rounded border border-blue-200 text-slate-700 font-medium">
+                      <span className="px-1.5 py-0.5 bg-white rounded border border-neutral-300 text-neutral-800 font-medium">
                         {client.monthlyCommitment?.longVideos ?? 0} Long Videos
                       </span>
-                      <span className="px-1.5 py-0.5 bg-white rounded border border-blue-200 text-slate-700 font-medium">
+                      <span className="px-1.5 py-0.5 bg-white rounded border border-neutral-300 text-neutral-800 font-medium">
                         {client.monthlyCommitment?.graphics ?? 0} Graphics
                       </span>
-                      <span className="px-1.5 py-0.5 bg-white rounded border border-blue-200 text-slate-700 font-medium">
+                      <span className="px-1.5 py-0.5 bg-white rounded border border-neutral-300 text-neutral-800 font-medium">
                         {client.monthlyCommitment?.carousels ?? 0} Carousels
                       </span>
                     </div>
                     {client.monthlyCommitment?.customTargetNote && (
-                      <p className="text-[10px] text-slate-500 italic mt-1 truncate">
+                      <p className="text-[10px] text-neutral-500 italic mt-1 truncate">
                         Note: {client.monthlyCommitment.customTargetNote}
                       </p>
                     )}
@@ -221,17 +221,17 @@ export function ClientList({
                   {/* Real-Time Monthly Delivery Progress & Pacing */}
                   <div className="mt-3 space-y-1.5">
                     <div className="flex items-center justify-between text-xs px-0.5">
-                      <span className="text-slate-500 font-medium">
-                        Delivered: <strong className="text-slate-800">{stats.completed}</strong> / {stats.totalCommitment}
+                      <span className="text-neutral-500 font-medium">
+                        Delivered: <strong className="text-neutral-900">{stats.completed}</strong> / {stats.totalCommitment}
                       </span>
                       <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${stats.pacing.pacingBadgeClass}`}>
                         {stats.pacing.pacingLabel}
                       </span>
                     </div>
 
-                    <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                    <div className="w-full bg-neutral-200 h-2 rounded-full overflow-hidden">
                       <div
-                        className="bg-emerald-600 h-full rounded-full transition-all duration-300"
+                        className="bg-black h-full rounded-full transition-all duration-300"
                         style={{ width: `${stats.completionPercentage}%` }}
                       />
                     </div>
@@ -239,10 +239,10 @@ export function ClientList({
                 </div>
 
                 {/* Card Footer Actions */}
-                <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                <div className="mt-5 pt-3 border-t border-neutral-200 flex items-center justify-between gap-2">
                   <button
                     onClick={() => onSelectClientDeliverables(client)}
-                    className="text-xs font-semibold text-blue-600 hover:text-blue-800 flex items-center gap-1 transition-colors"
+                    className="text-xs font-semibold text-neutral-900 hover:text-black underline flex items-center gap-1 transition-colors"
                   >
                     <span>View Deliverables</span>
                     <ExternalLink className="w-3.5 h-3.5" />
@@ -256,8 +256,8 @@ export function ClientList({
                           title={isActive ? 'Deactivate Client' : 'Activate Client'}
                           className={`text-xs px-2 py-1 rounded transition-colors ${
                             isActive
-                              ? 'text-slate-500 hover:text-rose-600 hover:bg-rose-50'
-                              : 'text-slate-500 hover:text-emerald-600 hover:bg-emerald-50'
+                              ? 'text-neutral-500 hover:text-black hover:bg-neutral-100'
+                              : 'text-neutral-500 hover:text-black hover:bg-neutral-100'
                           }`}
                         >
                           <Power className="w-3.5 h-3.5" />
@@ -265,7 +265,7 @@ export function ClientList({
                       )}
                       <button
                         onClick={() => onEditClient(client)}
-                        className="text-xs font-medium text-slate-700 hover:text-slate-900 px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 transition-colors"
+                        className="text-xs font-medium text-neutral-800 hover:text-black px-2.5 py-1 rounded bg-neutral-100 hover:bg-neutral-200 transition-colors"
                       >
                         Edit Profile & Targets
                       </button>

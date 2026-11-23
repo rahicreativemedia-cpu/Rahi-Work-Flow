@@ -45,17 +45,17 @@ export function ReportsView({ clients, employees, deliverables, tasks }: Reports
   return (
     <div className="space-y-6">
       {/* Top Banner */}
-      <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
+      <div className="bg-white p-5 rounded-xl border border-neutral-200 shadow-xs">
         <div className="flex items-center gap-2">
-          <BarChart3 className="w-5 h-5 text-blue-600" />
-          <h2 className="text-lg font-bold text-slate-900 tracking-tight">
+          <BarChart3 className="w-5 h-5 text-black" />
+          <h2 className="text-lg font-bold text-neutral-900 tracking-tight">
             Agency Analytics & Production Reports
           </h2>
-          <span className="text-[11px] font-semibold bg-blue-50 text-blue-700 px-2 py-0.5 rounded border border-blue-200">
+          <span className="text-[11px] font-semibold bg-neutral-100 text-neutral-900 px-2 py-0.5 rounded border border-neutral-300">
             Shared Admin & Manager Access
           </span>
         </div>
-        <p className="text-xs text-slate-500 mt-1">
+        <p className="text-xs text-neutral-500 mt-1">
           Comprehensive agency operational metrics, contract retainers, team productivity, and deliverable completion targets.
         </p>
       </div>
@@ -94,13 +94,13 @@ export function ReportsView({ clients, employees, deliverables, tasks }: Reports
       </div>
 
       {/* Tab Switcher */}
-      <div className="flex border-b border-slate-200 gap-6 text-xs font-semibold text-slate-500">
+      <div className="flex border-b border-neutral-200 gap-6 text-xs font-semibold text-neutral-500">
         <button
           onClick={() => setSelectedTab('clients')}
           className={`pb-2.5 transition-colors border-b-2 ${
             selectedTab === 'clients'
-              ? 'border-blue-600 text-blue-700 font-bold'
-              : 'border-transparent hover:text-slate-800'
+              ? 'border-black text-black font-bold'
+              : 'border-transparent hover:text-neutral-800'
           }`}
         >
           Client Delivery & Commitments
@@ -109,8 +109,8 @@ export function ReportsView({ clients, employees, deliverables, tasks }: Reports
           onClick={() => setSelectedTab('employees')}
           className={`pb-2.5 transition-colors border-b-2 ${
             selectedTab === 'employees'
-              ? 'border-blue-600 text-blue-700 font-bold'
-              : 'border-transparent hover:text-slate-800'
+              ? 'border-black text-black font-bold'
+              : 'border-transparent hover:text-neutral-800'
           }`}
         >
           Employee Productivity & Workload
@@ -119,8 +119,8 @@ export function ReportsView({ clients, employees, deliverables, tasks }: Reports
           onClick={() => setSelectedTab('financials')}
           className={`pb-2.5 transition-colors border-b-2 ${
             selectedTab === 'financials'
-              ? 'border-blue-600 text-blue-700 font-bold'
-              : 'border-transparent hover:text-slate-800'
+              ? 'border-black text-black font-bold'
+              : 'border-transparent hover:text-neutral-800'
           }`}
         >
           Contract Retainers & Revenue
@@ -129,17 +129,17 @@ export function ReportsView({ clients, employees, deliverables, tasks }: Reports
 
       {/* TAB 1: CLIENT DELIVERY REPORTS */}
       {selectedTab === 'clients' && (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-          <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
-            <h3 className="text-sm font-bold text-slate-900">
+        <div className="bg-white rounded-xl border border-neutral-200 shadow-xs overflow-hidden">
+          <div className="p-4 sm:p-5 border-b border-neutral-100 flex items-center justify-between">
+            <h3 className="text-sm font-bold text-neutral-900">
               Client-Wise Deliverable Completion Analysis
             </h3>
-            <span className="text-xs text-slate-500 font-medium">November 2026 Target vs Actuals</span>
+            <span className="text-xs text-neutral-500 font-medium">November 2026 Target vs Actuals</span>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-500 font-semibold uppercase text-[10px] tracking-wider border-b border-slate-200">
+              <thead className="bg-neutral-50 text-neutral-600 font-semibold uppercase text-[10px] tracking-wider border-b border-neutral-200">
                 <tr>
                   <th className="py-3 px-4">Client Brand</th>
                   <th className="py-3 px-4">Package</th>
@@ -150,34 +150,34 @@ export function ReportsView({ clients, employees, deliverables, tasks }: Reports
                   <th className="py-3 px-4">Completion %</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 text-slate-700">
+              <tbody className="divide-y divide-neutral-100 text-neutral-700">
                 {clients.map((client) => {
                   const stats = calculateClientDeliverableStats(client, deliverables, '2026-11');
                   return (
-                    <tr key={client.id} className="hover:bg-slate-50/70">
-                      <td className="py-3.5 px-4 font-bold text-slate-900">{client.name}</td>
-                      <td className="py-3.5 px-4 text-slate-600">{client.servicePackage}</td>
-                      <td className="py-3.5 px-4 font-semibold text-slate-800">
+                    <tr key={client.id} className="hover:bg-neutral-50/70">
+                      <td className="py-3.5 px-4 font-bold text-neutral-900">{client.name}</td>
+                      <td className="py-3.5 px-4 text-neutral-600">{client.servicePackage}</td>
+                      <td className="py-3.5 px-4 font-semibold text-neutral-800">
                         {stats.totalCommitment} assets
                       </td>
-                      <td className="py-3.5 px-4 font-bold text-emerald-700">
+                      <td className="py-3.5 px-4 font-bold text-neutral-900">
                         {stats.completed}
                       </td>
-                      <td className="py-3.5 px-4 font-bold text-blue-700">
+                      <td className="py-3.5 px-4 font-bold text-neutral-900">
                         {stats.inProgress}
                       </td>
-                      <td className="py-3.5 px-4 font-bold text-amber-700">
+                      <td className="py-3.5 px-4 font-bold text-neutral-900">
                         {stats.remaining}
                       </td>
                       <td className="py-3.5 px-4">
                         <div className="flex items-center gap-2">
-                          <div className="w-24 bg-slate-100 h-2 rounded-full overflow-hidden">
+                          <div className="w-24 bg-neutral-100 h-2 rounded-full overflow-hidden">
                             <div
-                              className="bg-emerald-600 h-full rounded-full"
+                              className="bg-black h-full rounded-full"
                               style={{ width: `${stats.completionPercentage}%` }}
                             />
                           </div>
-                          <span className="font-bold text-slate-900">
+                          <span className="font-bold text-neutral-900">
                             {stats.completionPercentage}%
                           </span>
                         </div>
@@ -193,16 +193,16 @@ export function ReportsView({ clients, employees, deliverables, tasks }: Reports
 
       {/* TAB 2: EMPLOYEE PRODUCTIVITY */}
       {selectedTab === 'employees' && (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-          <div className="p-4 sm:p-5 border-b border-slate-100">
-            <h3 className="text-sm font-bold text-slate-900">
+        <div className="bg-white rounded-xl border border-neutral-200 shadow-xs overflow-hidden">
+          <div className="p-4 sm:p-5 border-b border-neutral-100">
+            <h3 className="text-sm font-bold text-neutral-900">
               Creative Team Performance & Workload Utilization
             </h3>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-500 font-semibold uppercase text-[10px] tracking-wider border-b border-slate-200">
+              <thead className="bg-neutral-50 text-neutral-600 font-semibold uppercase text-[10px] tracking-wider border-b border-neutral-200">
                 <tr>
                   <th className="py-3 px-4">Team Member</th>
                   <th className="py-3 px-4">Department</th>
@@ -213,7 +213,7 @@ export function ReportsView({ clients, employees, deliverables, tasks }: Reports
                   <th className="py-3 px-4">Quality Score</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 text-slate-700">
+              <tbody className="divide-y divide-neutral-100 text-neutral-700">
                 {employees.map((emp) => {
                   const empTasks = tasks.filter((t) => t.assignedEmployeeId === emp.id);
                   const completed = empTasks.filter((t) => t.status === 'completed').length;
@@ -223,22 +223,18 @@ export function ReportsView({ clients, employees, deliverables, tasks }: Reports
                   const util = Math.min(100, Math.round((active / emp.maxConcurrentTasks) * 100));
 
                   return (
-                    <tr key={emp.id} className="hover:bg-slate-50/70">
-                      <td className="py-3.5 px-4 font-bold text-slate-900">{emp.name}</td>
-                      <td className="py-3.5 px-4 text-slate-600">{emp.department}</td>
-                      <td className="py-3.5 px-4 font-bold text-slate-800">{active}</td>
-                      <td className="py-3.5 px-4 text-slate-500">{emp.maxConcurrentTasks} max</td>
+                    <tr key={emp.id} className="hover:bg-neutral-50/70">
+                      <td className="py-3.5 px-4 font-bold text-neutral-900">{emp.name}</td>
+                      <td className="py-3.5 px-4 text-neutral-600">{emp.department}</td>
+                      <td className="py-3.5 px-4 font-bold text-neutral-800">{active}</td>
+                      <td className="py-3.5 px-4 text-neutral-500">{emp.maxConcurrentTasks} max</td>
                       <td className="py-3.5 px-4">
-                        <span
-                          className={`font-bold ${
-                            util >= 80 ? 'text-rose-600' : 'text-blue-600'
-                          }`}
-                        >
+                        <span className="font-bold text-neutral-900">
                           {util}%
                         </span>
                       </td>
-                      <td className="py-3.5 px-4 text-slate-700">{completed}</td>
-                      <td className="py-3.5 px-4 font-bold text-emerald-700">
+                      <td className="py-3.5 px-4 text-neutral-700">{completed}</td>
+                      <td className="py-3.5 px-4 font-bold text-neutral-900">
                         {emp.performanceScore}%
                       </td>
                     </tr>
@@ -252,16 +248,16 @@ export function ReportsView({ clients, employees, deliverables, tasks }: Reports
 
       {/* TAB 3: FINANCIAL & CONTRACTS */}
       {selectedTab === 'financials' && (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-          <div className="p-4 sm:p-5 border-b border-slate-100">
-            <h3 className="text-sm font-bold text-slate-900">
+        <div className="bg-white rounded-xl border border-neutral-200 shadow-xs overflow-hidden">
+          <div className="p-4 sm:p-5 border-b border-neutral-100">
+            <h3 className="text-sm font-bold text-neutral-900">
               Agency Client Contracts & Revenue Retainers
             </h3>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-500 font-semibold uppercase text-[10px] tracking-wider border-b border-slate-200">
+              <thead className="bg-neutral-50 text-neutral-600 font-semibold uppercase text-[10px] tracking-wider border-b border-neutral-200">
                 <tr>
                   <th className="py-3 px-4">Client</th>
                   <th className="py-3 px-4">Package</th>
@@ -272,21 +268,21 @@ export function ReportsView({ clients, employees, deliverables, tasks }: Reports
                   <th className="py-3 px-4">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 text-slate-700">
+              <tbody className="divide-y divide-neutral-100 text-neutral-700">
                 {clients.map((client) => (
-                  <tr key={client.id} className="hover:bg-slate-50/70">
-                    <td className="py-3.5 px-4 font-bold text-slate-900">{client.name}</td>
-                    <td className="py-3.5 px-4 text-slate-600">{client.servicePackage}</td>
-                    <td className="py-3.5 px-4 font-bold text-slate-900">
+                  <tr key={client.id} className="hover:bg-neutral-50/70">
+                    <td className="py-3.5 px-4 font-bold text-neutral-900">{client.name}</td>
+                    <td className="py-3.5 px-4 text-neutral-600">{client.servicePackage}</td>
+                    <td className="py-3.5 px-4 font-bold text-neutral-900">
                       {formatCurrency(client.monthlyRetainer, client.currency)}
                     </td>
-                    <td className="py-3.5 px-4 font-medium text-emerald-700">
+                    <td className="py-3.5 px-4 font-medium text-neutral-900">
                       {formatCurrency(client.monthlyRetainer * 12, client.currency)}
                     </td>
-                    <td className="py-3.5 px-4 text-slate-500">{client.contractStartDate}</td>
-                    <td className="py-3.5 px-4 text-slate-500">{client.contractEndDate}</td>
+                    <td className="py-3.5 px-4 text-neutral-500">{client.contractStartDate}</td>
+                    <td className="py-3.5 px-4 text-neutral-500">{client.contractEndDate}</td>
                     <td className="py-3.5 px-4">
-                      <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 uppercase">
+                      <span className="text-[10px] font-bold text-neutral-900 bg-neutral-100 px-2 py-0.5 rounded-full border border-neutral-300 uppercase">
                         {client.status}
                       </span>
                     </td>

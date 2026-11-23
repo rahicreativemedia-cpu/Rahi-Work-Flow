@@ -170,13 +170,13 @@ export function DeliverableDetailsModal({
 
         {/* Cancelled Notice Banner */}
         {deliverable.status === 'cancelled' && (
-          <div className="p-3.5 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-900 flex items-start gap-2.5">
-            <Ban className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+          <div className="p-3.5 bg-neutral-100 border border-neutral-300 rounded-xl text-xs text-black flex items-start gap-2.5">
+            <Ban className="w-4 h-4 text-black shrink-0 mt-0.5" />
             <div>
               <strong className="font-bold">Deliverable Cancelled (Preserved in Audit Log):</strong>{' '}
               {deliverable.cancellationReason || 'No reason provided.'}
               {deliverable.cancelledAt && (
-                <div className="text-[11px] text-rose-700 mt-0.5">
+                <div className="text-[11px] text-neutral-700 mt-0.5">
                   Cancelled on: {formatDateTime(deliverable.cancelledAt)}
                 </div>
               )}
@@ -190,7 +190,7 @@ export function DeliverableDetailsModal({
             onClick={() => setActiveTab('workflow')}
             className={`pb-2.5 transition-colors border-b-2 flex items-center gap-1.5 ${
               activeTab === 'workflow'
-                ? 'border-blue-600 text-blue-700 font-bold'
+                ? 'border-black text-black font-bold'
                 : 'border-transparent hover:text-slate-800'
             }`}
           >
@@ -204,7 +204,7 @@ export function DeliverableDetailsModal({
             }}
             className={`pb-2.5 transition-colors border-b-2 flex items-center gap-1.5 ${
               activeTab === 'script'
-                ? 'border-blue-600 text-blue-700 font-bold'
+                ? 'border-black text-black font-bold'
                 : 'border-transparent hover:text-slate-800'
             }`}
           >
@@ -218,7 +218,7 @@ export function DeliverableDetailsModal({
             }}
             className={`pb-2.5 transition-colors border-b-2 flex items-center gap-1.5 ${
               activeTab === 'media'
-                ? 'border-blue-600 text-blue-700 font-bold'
+                ? 'border-black text-black font-bold'
                 : 'border-transparent hover:text-slate-800'
             }`}
           >
@@ -229,7 +229,7 @@ export function DeliverableDetailsModal({
             onClick={() => setActiveTab('versions')}
             className={`pb-2.5 transition-colors border-b-2 flex items-center gap-1.5 ${
               activeTab === 'versions'
-                ? 'border-blue-600 text-blue-700 font-bold'
+                ? 'border-black text-black font-bold'
                 : 'border-transparent hover:text-slate-800'
             }`}
           >
@@ -263,16 +263,16 @@ export function DeliverableDetailsModal({
                     onClick={() => canAdmin && onUpdateStage(deliverable.id, stageKey)}
                     className={`p-2.5 rounded-lg border text-left transition-all ${
                       isCurrent
-                        ? 'bg-blue-600 text-white border-blue-700 shadow-xs'
+                        ? 'bg-black text-white border-black shadow-xs'
                         : isPast
-                        ? 'bg-emerald-50 text-emerald-900 border-emerald-200'
+                        ? 'bg-neutral-100 text-neutral-900 border-neutral-300'
                         : 'bg-slate-50 text-slate-500 border-slate-200'
-                    } ${canAdmin ? 'cursor-pointer hover:border-blue-400' : ''}`}
+                    } ${canAdmin ? 'cursor-pointer hover:border-neutral-500' : ''}`}
                   >
                     <div className="flex items-center justify-between text-[10px] font-bold">
                       <span>Step {meta.step}</span>
                       {isPast ? (
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                        <CheckCircle2 className="w-3.5 h-3.5 text-black" />
                       ) : isCurrent ? (
                         <span className="w-2 h-2 rounded-full bg-white animate-ping" />
                       ) : null}
@@ -303,7 +303,7 @@ export function DeliverableDetailsModal({
                       onClick={() =>
                         onUpdateStage(deliverable.id, allStages[currentStageIndex + 1])
                       }
-                      className="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-colors"
+                      className="px-3.5 py-2 bg-black hover:bg-neutral-800 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-colors"
                     >
                       <span>Advance to Next Step ({WORKFLOW_STAGE_METADATA[allStages[currentStageIndex + 1]].label})</span>
                       <ArrowRight className="w-3.5 h-3.5" />
@@ -317,7 +317,7 @@ export function DeliverableDetailsModal({
                           status: 'published',
                         })
                       }
-                      className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-colors"
+                      className="px-3.5 py-2 bg-neutral-900 hover:bg-neutral-800 text-white border border-neutral-700 rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-colors"
                     >
                       <CheckCircle2 className="w-3.5 h-3.5" />
                       <span>Mark Published & Delivered (Commitment Count +1)</span>
@@ -358,7 +358,7 @@ export function DeliverableDetailsModal({
                             onClose();
                           }
                         }}
-                        className="px-3 py-1 text-xs font-semibold bg-rose-600 text-white rounded"
+                        className="px-3 py-1 text-xs font-semibold bg-black text-white rounded"
                       >
                         Confirm Cancel
                       </button>
@@ -372,16 +372,16 @@ export function DeliverableDetailsModal({
             {(deliverable.stage === 'client_script_approval' ||
               deliverable.stage === 'client_video_approval') &&
               canDecideApproval && (
-                <div className="p-4 bg-purple-50/70 border border-purple-200 rounded-xl space-y-3">
+                <div className="p-4 bg-neutral-50 border border-neutral-300 rounded-xl space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-purple-900">
+                    <span className="text-xs font-bold text-black">
                       Client Review Action Required:{' '}
                       {deliverable.stage === 'client_script_approval' ? 'Script Approval' : 'Video Approval'}
                     </span>
-                    <Badge variant="purple">Awaiting Client Response</Badge>
+                    <Badge variant="slate">Awaiting Client Response</Badge>
                   </div>
 
-                  <p className="text-xs text-purple-800">
+                  <p className="text-xs text-neutral-700">
                     Review the content in the Script or Video tabs above, then submit your sign-off or revision request.
                   </p>
 
@@ -422,7 +422,7 @@ export function DeliverableDetailsModal({
                               }}
                               className={`text-[10px] px-2 py-1 rounded-md font-medium transition-all ${
                                 isSelected
-                                  ? 'bg-purple-600 text-white shadow-xs'
+                                  ? 'bg-black text-white shadow-xs'
                                   : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
                               }`}
                             >
@@ -437,7 +437,7 @@ export function DeliverableDetailsModal({
                       value={feedbackText}
                       onChange={(e) => setFeedbackText(e.target.value)}
                       placeholder="Provide specific feedback or revision instructions (mandatory for revision requests)..."
-                      className="w-full text-xs p-2.5 bg-white border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-400 text-slate-900"
+                      className="w-full text-xs p-2.5 bg-white border border-neutral-300 rounded-lg focus:ring-2 focus:ring-black/10 focus:border-black text-slate-900"
                       rows={3}
                     />
 
@@ -453,7 +453,7 @@ export function DeliverableDetailsModal({
                           onClientDecision?.(deliverable.id, type, 'revision', feedbackText, selectedCategories);
                           onClose();
                         }}
-                        className="px-3.5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors"
+                        className="px-3.5 py-2 bg-neutral-800 hover:bg-neutral-900 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors"
                       >
                         Request Revisions (Route to Stage 8)
                       </button>
@@ -471,7 +471,7 @@ export function DeliverableDetailsModal({
                           );
                           onClose();
                         }}
-                        className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors flex items-center gap-1.5"
+                        className="px-4 py-2 bg-black hover:bg-neutral-800 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors flex items-center gap-1.5"
                       >
                         <CheckCircle2 className="w-4 h-4" />
                         <span>Approve Content</span>
@@ -490,18 +490,18 @@ export function DeliverableDetailsModal({
               <span className="text-xs font-semibold text-slate-700">Script Approval Status:</span>
               <div className="flex items-center gap-2">
                 {deliverable.scriptApproved ? (
-                  <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full">
-                    <CheckCircle2 className="w-3.5 h-3.5" /> Client Approved on {formatDateTime(deliverable.scriptApprovedAt)}
+                  <span className="inline-flex items-center gap-1 text-xs font-bold text-neutral-900 bg-neutral-100 px-2.5 py-0.5 rounded-full border border-neutral-300">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-black" /> Client Approved on {formatDateTime(deliverable.scriptApprovedAt)}
                   </span>
                 ) : (
-                  <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-700 bg-amber-100 px-2.5 py-0.5 rounded-full">
-                    <Clock className="w-3.5 h-3.5" /> Pending Final Script Sign-Off
+                  <span className="inline-flex items-center gap-1 text-xs font-medium text-neutral-700 bg-neutral-100 px-2.5 py-0.5 rounded-full border border-neutral-200">
+                    <Clock className="w-3.5 h-3.5 text-neutral-500" /> Pending Final Script Sign-Off
                   </span>
                 )}
                 {canEditContent && !isEditingScript && (
                   <button
                     onClick={() => setIsEditingScript(true)}
-                    className="text-xs font-semibold text-blue-600 hover:text-blue-800 flex items-center gap-1"
+                    className="text-xs font-semibold text-neutral-900 hover:text-black underline flex items-center gap-1"
                   >
                     <Edit3 className="w-3.5 h-3.5" />
                     <span>Edit Script</span>
@@ -525,7 +525,7 @@ export function DeliverableDetailsModal({
                     </button>
                     <button
                       onClick={handleSaveScript}
-                      className="px-3 py-1 text-xs font-semibold bg-blue-600 text-white rounded flex items-center gap-1"
+                      className="px-3 py-1 text-xs font-semibold bg-black hover:bg-neutral-800 text-white rounded flex items-center gap-1"
                     >
                       <Save className="w-3.5 h-3.5" />
                       <span>Save Script Draft</span>
@@ -539,7 +539,7 @@ export function DeliverableDetailsModal({
                   rows={8}
                   value={editableScriptText}
                   onChange={(e) => setEditableScriptText(e.target.value)}
-                  className="w-full text-xs font-mono p-3 bg-slate-50 border border-slate-300 rounded-lg text-slate-900 focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full text-xs font-mono p-3 bg-slate-50 border border-slate-300 rounded-lg text-slate-900 focus:ring-2 focus:ring-black/10 focus:border-black"
                 />
               ) : (
                 <p className="text-xs text-slate-800 whitespace-pre-wrap leading-relaxed font-mono bg-slate-50 p-4 rounded-lg border border-slate-200">
@@ -557,18 +557,18 @@ export function DeliverableDetailsModal({
               <span className="text-xs font-semibold text-slate-700">Video Approval Status:</span>
               <div className="flex items-center gap-2">
                 {deliverable.videoApproved ? (
-                  <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full">
-                    <CheckCircle2 className="w-3.5 h-3.5" /> Client Approved on {formatDateTime(deliverable.videoApprovedAt)}
+                  <span className="inline-flex items-center gap-1 text-xs font-bold text-neutral-900 bg-neutral-100 px-2.5 py-0.5 rounded-full border border-neutral-300">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-black" /> Client Approved on {formatDateTime(deliverable.videoApprovedAt)}
                   </span>
                 ) : (
-                  <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-700 bg-amber-100 px-2.5 py-0.5 rounded-full">
-                    <Clock className="w-3.5 h-3.5" /> In Video Production / Review
+                  <span className="inline-flex items-center gap-1 text-xs font-medium text-neutral-700 bg-neutral-100 px-2.5 py-0.5 rounded-full border border-neutral-200">
+                    <Clock className="w-3.5 h-3.5 text-neutral-500" /> In Video Production / Review
                   </span>
                 )}
                 {canEditContent && !isEditingMedia && (
                   <button
                     onClick={() => setIsEditingMedia(true)}
-                    className="text-xs font-semibold text-blue-600 hover:text-blue-800 flex items-center gap-1"
+                    className="text-xs font-semibold text-neutral-900 hover:text-black underline flex items-center gap-1"
                   >
                     <LinkIcon className="w-3.5 h-3.5" />
                     <span>Update Link</span>
@@ -578,7 +578,7 @@ export function DeliverableDetailsModal({
             </div>
 
             {isEditingMedia && (
-              <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-center gap-2">
+              <div className="p-3 bg-neutral-50 border border-neutral-200 rounded-lg flex items-center gap-2">
                 <input
                   type="text"
                   value={editableMediaUrl}
@@ -594,7 +594,7 @@ export function DeliverableDetailsModal({
                 </button>
                 <button
                   onClick={handleSaveMedia}
-                  className="px-3 py-1 text-xs font-semibold bg-blue-600 text-white rounded"
+                  className="px-3 py-1 text-xs font-semibold bg-black hover:bg-neutral-800 text-white rounded"
                 >
                   Save Media
                 </button>
@@ -633,7 +633,7 @@ export function DeliverableDetailsModal({
               {canEditContent && onUploadVersion && (
                 <button
                   onClick={() => setShowVersionUpload(!showVersionUpload)}
-                  className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-xs"
+                  className="px-3 py-1.5 bg-black hover:bg-neutral-800 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-xs"
                 >
                   <UploadCloud className="w-3.5 h-3.5" />
                   <span>Upload Version {(deliverable.currentVersion || 1) + 1}</span>
@@ -681,7 +681,7 @@ export function DeliverableDetailsModal({
                   </button>
                   <button
                     type="submit"
-                    className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg shadow-xs"
+                    className="px-3.5 py-1.5 bg-black hover:bg-neutral-800 text-white text-xs font-semibold rounded-lg shadow-xs"
                   >
                     Save & Upload Version
                   </button>
@@ -723,7 +723,7 @@ export function DeliverableDetailsModal({
                         href={ver.mediaUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="px-2.5 py-1 bg-white border border-slate-200 text-blue-600 font-semibold rounded-lg hover:bg-slate-100 text-xs shrink-0"
+                        className="px-2.5 py-1 bg-white border border-slate-200 text-neutral-900 font-semibold rounded-lg hover:bg-slate-100 text-xs shrink-0"
                       >
                         Preview Asset
                       </a>

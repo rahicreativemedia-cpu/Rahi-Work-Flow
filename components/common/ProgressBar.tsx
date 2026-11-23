@@ -20,15 +20,6 @@ export function ProgressBar({
 }: ProgressBarProps) {
   const clamped = Math.max(0, Math.min(100, Math.round(progress)));
 
-  const colorStyles = {
-    blue: 'bg-blue-600',
-    emerald: 'bg-emerald-600',
-    amber: 'bg-amber-600',
-    rose: 'bg-rose-600',
-    indigo: 'bg-indigo-600',
-    purple: 'bg-purple-600',
-  };
-
   const sizeStyles = {
     sm: 'h-1.5',
     md: 'h-2',
@@ -38,14 +29,14 @@ export function ProgressBar({
   return (
     <div className={cn('w-full space-y-1', className)}>
       {(label || showPercent) && (
-        <div className="flex items-center justify-between text-[11px] font-medium text-slate-600">
+        <div className="flex items-center justify-between text-[11px] font-semibold text-neutral-600">
           {label && <span>{label}</span>}
-          {showPercent && <span className="font-semibold text-slate-800">{clamped}%</span>}
+          {showPercent && <span className="font-bold text-black">{clamped}%</span>}
         </div>
       )}
-      <div className={cn('w-full bg-slate-100 rounded-full overflow-hidden', sizeStyles[size])}>
+      <div className={cn('w-full bg-neutral-200 rounded-full overflow-hidden', sizeStyles[size])}>
         <div
-          className={cn('h-full rounded-full transition-all duration-300', colorStyles[color])}
+          className="h-full rounded-full transition-all duration-300 bg-black"
           style={{ width: `${clamped}%` }}
         />
       </div>

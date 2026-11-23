@@ -28,11 +28,11 @@ export function AuditLogsView({ auditLogs }: AuditLogsViewProps) {
       {/* Top Banner */}
       <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
         <div className="flex items-center gap-2">
-          <History className="w-5 h-5 text-blue-600" />
+          <History className="w-5 h-5 text-black" />
           <h2 className="text-lg font-bold text-slate-900 tracking-tight">
             Security & System Audit Logs
           </h2>
-          <span className="text-[11px] font-semibold bg-blue-50 text-blue-700 px-2 py-0.5 rounded border border-blue-200">
+          <span className="text-[11px] font-semibold bg-neutral-100 text-neutral-900 px-2 py-0.5 rounded border border-neutral-300">
             Immutable Audit Trail
           </span>
         </div>
@@ -91,15 +91,7 @@ export function AuditLogsView({ auditLogs }: AuditLogsViewProps) {
                   <td className="py-3 px-4 font-bold text-slate-900">{log.userName}</td>
                   <td className="py-3 px-4 capitalize">
                     <span
-                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase border ${
-                        log.userRole === 'admin'
-                          ? 'bg-indigo-50 text-indigo-700 border-indigo-200'
-                          : log.userRole === 'manager'
-                          ? 'bg-blue-50 text-blue-700 border-blue-200'
-                          : log.userRole === 'employee'
-                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                          : 'bg-purple-50 text-purple-700 border-purple-200'
-                      }`}
+                      className="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase border bg-neutral-100 text-neutral-900 border-neutral-300"
                     >
                       {log.userRole}
                     </span>

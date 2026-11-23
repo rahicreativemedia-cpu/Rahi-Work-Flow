@@ -107,7 +107,7 @@ export function DataTable<T>({
                 setSearchQuery(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full pl-9 pr-3 py-1.5 text-xs bg-white border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition"
+              className="w-full pl-9 pr-3 py-1.5 text-xs bg-white border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition"
             />
           </div>
           <div className="text-xs text-slate-500 font-medium">
@@ -143,9 +143,9 @@ export function DataTable<T>({
                         <span>{col.header}</span>
                         {isSorted ? (
                           sortDir === 'asc' ? (
-                            <ChevronUp className="w-3.5 h-3.5 text-blue-600" />
+                            <ChevronUp className="w-3.5 h-3.5 text-black" />
                           ) : (
-                            <ChevronDown className="w-3.5 h-3.5 text-blue-600" />
+                            <ChevronDown className="w-3.5 h-3.5 text-black" />
                           )
                         ) : (
                           <ChevronsUpDown className="w-3.5 h-3.5 text-slate-400 opacity-60" />

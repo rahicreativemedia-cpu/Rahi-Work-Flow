@@ -132,8 +132,8 @@ export function InviteAcceptModal({
             />
 
             {error && (
-              <div className="p-3 bg-rose-50 border border-rose-200 rounded-lg flex items-center gap-2 text-xs text-rose-700">
-                <AlertCircle className="w-4 h-4 shrink-0" />
+              <div className="p-3 bg-neutral-100 border border-neutral-300 rounded-lg flex items-center gap-2 text-xs text-black">
+                <AlertCircle className="w-4 h-4 shrink-0 text-black" />
                 <span>{error}</span>
               </div>
             )}
@@ -199,13 +199,13 @@ export function InviteAcceptModal({
             />
 
             {error && (
-              <div className="p-3 bg-rose-50 border border-rose-200 rounded-lg flex items-center gap-2 text-xs text-rose-700">
-                <AlertCircle className="w-4 h-4 shrink-0" />
+              <div className="p-3 bg-neutral-100 border border-neutral-300 rounded-lg flex items-center gap-2 text-xs text-black">
+                <AlertCircle className="w-4 h-4 shrink-0 text-black" />
                 <span>{error}</span>
               </div>
             )}
 
-            <div className="p-3 bg-blue-50/60 border border-blue-200/60 rounded-lg text-[11px] text-blue-800 leading-snug">
+            <div className="p-3 bg-neutral-50 border border-neutral-200 rounded-lg text-[11px] text-neutral-800 leading-snug">
               Upon confirmation, your account will be activated and you will be routed automatically to the{' '}
               <strong className="capitalize">{invitation.role} Portal</strong>.
             </div>

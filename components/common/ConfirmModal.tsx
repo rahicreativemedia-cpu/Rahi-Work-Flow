@@ -31,14 +31,12 @@ export function ConfirmModal({
       <div className="space-y-4">
         <div className="flex items-start gap-3">
           <div
-            className={`p-2 rounded-full shrink-0 ${
-              variant === 'danger' ? 'bg-rose-50 text-rose-600' : 'bg-blue-50 text-blue-600'
-            }`}
+            className="p-2 rounded-full shrink-0 bg-neutral-100 text-black border border-neutral-300"
           >
             {variant === 'danger' ? (
-              <AlertTriangle className="w-5 h-5" />
+              <AlertTriangle className="w-5 h-5 text-black" />
             ) : (
-              <Info className="w-5 h-5" />
+              <Info className="w-5 h-5 text-black" />
             )}
           </div>
           <p className="text-xs text-slate-600 leading-relaxed pt-0.5">{message}</p>

@@ -30,8 +30,8 @@ export function Select({
   return (
     <div className="w-full space-y-1">
       {label && (
-        <label htmlFor={selectId} className="block text-xs font-semibold text-slate-700">
-          {label} {required && <span className="text-rose-500">*</span>}
+        <label htmlFor={selectId} className="block text-xs font-semibold text-neutral-800">
+          {label} {required && <span className="text-black font-bold">*</span>}
         </label>
       )}
       <div className="relative flex items-center">
@@ -39,10 +39,10 @@ export function Select({
           id={selectId}
           required={required}
           className={cn(
-            'w-full text-xs p-2.5 pr-8 bg-slate-50/70 hover:bg-slate-100/50 focus:bg-white border rounded-lg text-slate-900 transition-all duration-150 focus:outline-hidden focus:ring-2 appearance-none cursor-pointer disabled:bg-slate-100 disabled:cursor-not-allowed',
+            'w-full text-xs p-2.5 pr-8 bg-neutral-50/70 hover:bg-neutral-100/50 focus:bg-white border rounded-lg text-black transition-all duration-150 focus:outline-hidden focus:ring-2 appearance-none cursor-pointer disabled:bg-neutral-100 disabled:cursor-not-allowed',
             error
-              ? 'border-rose-300 focus:ring-rose-500/20 focus:border-rose-500'
-              : 'border-slate-200 focus:ring-blue-500/20 focus:border-blue-500',
+              ? 'border-neutral-900 focus:ring-black/10 focus:border-black'
+              : 'border-neutral-300 focus:ring-black/10 focus:border-black',
             className
           )}
           {...props}
@@ -55,12 +55,12 @@ export function Select({
               ))
             : children}
         </select>
-        <ChevronDown className="w-4 h-4 text-slate-400 absolute right-2.5 pointer-events-none" />
+        <ChevronDown className="w-4 h-4 text-neutral-400 absolute right-2.5 pointer-events-none" />
       </div>
       {error ? (
-        <p className="text-[11px] text-rose-600 font-medium">{error}</p>
+        <p className="text-[11px] text-black font-semibold">{error}</p>
       ) : helperText ? (
-        <p className="text-[11px] text-slate-400">{helperText}</p>
+        <p className="text-[11px] text-neutral-500">{helperText}</p>
       ) : null}
     </div>
   );

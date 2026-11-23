@@ -22,8 +22,8 @@ export function Textarea({
   return (
     <div className="w-full space-y-1">
       {label && (
-        <label htmlFor={textareaId} className="block text-xs font-semibold text-slate-700">
-          {label} {required && <span className="text-rose-500">*</span>}
+        <label htmlFor={textareaId} className="block text-xs font-semibold text-neutral-800">
+          {label} {required && <span className="text-black font-bold">*</span>}
         </label>
       )}
       <textarea
@@ -31,18 +31,18 @@ export function Textarea({
         rows={rows}
         required={required}
         className={cn(
-          'w-full text-xs p-2.5 bg-slate-50/70 hover:bg-slate-100/50 focus:bg-white border rounded-lg text-slate-900 placeholder:text-slate-400 transition-all duration-150 focus:outline-hidden focus:ring-2 disabled:bg-slate-100 disabled:cursor-not-allowed leading-relaxed',
+          'w-full text-xs p-2.5 bg-neutral-50/70 hover:bg-neutral-100/50 focus:bg-white border rounded-lg text-black placeholder:text-neutral-400 transition-all duration-150 focus:outline-hidden focus:ring-2 disabled:bg-neutral-100 disabled:cursor-not-allowed leading-relaxed',
           error
-            ? 'border-rose-300 focus:ring-rose-500/20 focus:border-rose-500'
-            : 'border-slate-200 focus:ring-blue-500/20 focus:border-blue-500',
+            ? 'border-neutral-900 focus:ring-black/10 focus:border-black'
+            : 'border-neutral-300 focus:ring-black/10 focus:border-black',
           className
         )}
         {...props}
       />
       {error ? (
-        <p className="text-[11px] text-rose-600 font-medium">{error}</p>
+        <p className="text-[11px] text-black font-semibold">{error}</p>
       ) : helperText ? (
-        <p className="text-[11px] text-slate-400">{helperText}</p>
+        <p className="text-[11px] text-neutral-500">{helperText}</p>
       ) : null}
     </div>
   );

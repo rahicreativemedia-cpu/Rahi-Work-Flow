@@ -71,21 +71,21 @@ export function AdminDashboard({
   return (
     <div className="space-y-6">
       {/* Welcome Banner */}
-      <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-950 text-white p-6 rounded-2xl shadow-sm border border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="bg-black text-white p-6 rounded-2xl shadow-sm border border-neutral-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-blue-600 text-white">
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-white text-black">
               ADMIN EXECUTIVE PORTAL
             </span>
-            <span className="text-xs text-slate-300 font-medium flex items-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
+            <span className="text-xs text-neutral-300 font-medium flex items-center gap-1">
+              <ShieldCheck className="w-3.5 h-3.5 text-neutral-400" />
               Shared Full Admin Rights with Manager
             </span>
           </div>
           <h2 className="text-xl sm:text-2xl font-black tracking-tight mt-1">
             Welcome back, {currentUser.name}
           </h2>
-          <p className="text-xs text-slate-300 mt-1 max-w-xl leading-relaxed">
+          <p className="text-xs text-neutral-300 mt-1 max-w-xl leading-relaxed">
             Company-wide creative agency command center. Monitor clients, team productivity, creative pipeline stages, and monthly deliverable milestones.
           </p>
         </div>
@@ -94,21 +94,21 @@ export function AdminDashboard({
         <div className="flex items-center gap-2.5 shrink-0 flex-wrap">
           <button
             onClick={onCreateClient}
-            className="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-semibold shadow-xs flex items-center gap-1.5 transition-colors"
+            className="px-3.5 py-2 bg-white hover:bg-neutral-200 text-black rounded-lg text-xs font-bold shadow-xs flex items-center gap-1.5 transition-colors"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Add Client</span>
           </button>
           <button
             onClick={onCreateTask}
-            className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors"
+            className="px-3.5 py-2 bg-neutral-900 hover:bg-neutral-800 text-neutral-200 border border-neutral-700 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Assign Task</span>
           </button>
           <button
             onClick={() => onNavigateTab('pipeline')}
-            className="px-3.5 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors"
+            className="px-3.5 py-2 bg-neutral-900 hover:bg-neutral-800 text-neutral-200 border border-neutral-700 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors"
           >
             <Kanban className="w-3.5 h-3.5" />
             <span>View 10-Stage Pipeline</span>
@@ -185,7 +185,7 @@ export function AdminDashboard({
             </div>
             <button
               onClick={() => onNavigateTab('deliverable_tracker')}
-              className="text-xs font-semibold text-blue-600 hover:text-blue-800 flex items-center gap-1"
+              className="text-xs font-semibold text-neutral-900 hover:text-black underline flex items-center gap-1"
             >
               <span>Full Tracker</span>
               <ArrowRight className="w-3 h-3" />
@@ -194,15 +194,15 @@ export function AdminDashboard({
 
           <div className="space-y-4">
             {clients.length === 0 ? (
-              <div className="p-8 text-center text-xs text-slate-400 border border-dashed rounded-xl space-y-2">
-                <Briefcase className="w-8 h-8 text-slate-300 mx-auto" />
-                <div className="font-semibold text-slate-600">No Clients Added Yet</div>
-                <p className="text-[11px] text-slate-400 max-w-sm mx-auto">
+              <div className="p-8 text-center text-xs text-neutral-400 border border-dashed border-neutral-300 rounded-xl space-y-2">
+                <Briefcase className="w-8 h-8 text-neutral-300 mx-auto" />
+                <div className="font-semibold text-neutral-600">No Clients Added Yet</div>
+                <p className="text-[11px] text-neutral-400 max-w-sm mx-auto">
                   Your agency workspace is clean and ready. Click &quot;Add Client&quot; above to create your first client contract.
                 </p>
                 <button
                   onClick={onCreateClient}
-                  className="mt-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-semibold inline-flex items-center gap-1"
+                  className="mt-2 px-3 py-1.5 bg-black hover:bg-neutral-800 text-white rounded-lg text-xs font-semibold inline-flex items-center gap-1"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Add First Client</span>
@@ -212,22 +212,22 @@ export function AdminDashboard({
               clients.map((client) => {
                 const stats = calculateClientDeliverableStats(client, deliverables, '2026-11');
                 return (
-                  <div key={client.id} className="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                  <div key={client.id} className="p-4 bg-neutral-50 rounded-xl border border-neutral-200">
                     <div className="flex items-center justify-between mb-1.5">
                       <div>
-                        <span className="font-bold text-slate-900 text-xs">{client.name}</span>
-                        <span className="text-[11px] text-slate-500 ml-2">
+                        <span className="font-bold text-neutral-900 text-xs">{client.name}</span>
+                        <span className="text-[11px] text-neutral-500 ml-2">
                           Target: {stats.totalCommitment} assets ({client.monthlyCommitment.reels} Reels)
                         </span>
                       </div>
-                      <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                      <span className="text-xs font-bold text-neutral-900 bg-neutral-100 px-2 py-0.5 rounded border border-neutral-300">
                         {stats.completed} Completed • {stats.inProgress} In Progress • {stats.remaining} Remaining
                       </span>
                     </div>
 
-                    <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden mt-2">
+                    <div className="w-full bg-neutral-200 h-2 rounded-full overflow-hidden mt-2">
                       <div
-                        className="bg-emerald-600 h-full rounded-full transition-all"
+                        className="bg-black h-full rounded-full transition-all"
                         style={{ width: `${stats.completionPercentage}%` }}
                       />
                     </div>
@@ -239,21 +239,21 @@ export function AdminDashboard({
         </div>
 
         {/* Pending Client Approvals Queue (1 Col) */}
-        <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between">
+        <div className="bg-white rounded-xl border border-neutral-200 p-5 shadow-xs flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-bold text-slate-900 tracking-tight">
+              <h3 className="text-sm font-bold text-neutral-900 tracking-tight">
                 Pending Client Approvals
               </h3>
-              <Badge variant="purple">{pendingApprovals.length}</Badge>
+              <Badge variant="slate">{pendingApprovals.length}</Badge>
             </div>
-            <p className="text-xs text-slate-500 mb-4">
+            <p className="text-xs text-neutral-500 mb-4">
               Items currently waiting for client script sign-off or video review.
             </p>
 
             <div className="space-y-2.5">
               {pendingApprovals.length === 0 ? (
-                <div className="p-6 text-center text-xs text-slate-400 border border-dashed rounded-lg">
+                <div className="p-6 text-center text-xs text-neutral-400 border border-dashed border-neutral-300 rounded-lg">
                   No items pending client sign-off
                 </div>
               ) : (
@@ -261,18 +261,18 @@ export function AdminDashboard({
                   <div
                     key={del.id}
                     onClick={() => onSelectDeliverable(del)}
-                    className="p-3 bg-purple-50/50 hover:bg-purple-50 border border-purple-100 rounded-lg cursor-pointer transition-colors"
+                    className="p-3 bg-neutral-50 hover:bg-neutral-100 border border-neutral-200 rounded-lg cursor-pointer transition-colors"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-bold text-purple-700 uppercase">
+                      <span className="text-[10px] font-bold text-neutral-900 uppercase">
                         {del.clientName}
                       </span>
-                      <span className="text-[10px] text-slate-400">v{del.currentVersion}</span>
+                      <span className="text-[10px] text-neutral-400">v{del.currentVersion}</span>
                     </div>
-                    <div className="text-xs font-semibold text-slate-900 mt-1 line-clamp-1">
+                    <div className="text-xs font-semibold text-neutral-900 mt-1 line-clamp-1">
                       {del.title}
                     </div>
-                    <div className="mt-1 text-[11px] text-purple-800 font-medium capitalize">
+                    <div className="mt-1 text-[11px] text-neutral-600 font-medium capitalize">
                       {del.stage === 'client_script_approval' ? 'Script Approval' : 'Video Approval'}
                     </div>
                   </div>
@@ -283,7 +283,7 @@ export function AdminDashboard({
 
           <button
             onClick={() => onNavigateTab('approvals')}
-            className="w-full mt-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg text-xs font-semibold transition-colors"
+            className="w-full mt-4 py-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 rounded-lg text-xs font-semibold transition-colors"
           >
             Manage All Approvals
           </button>
@@ -292,17 +292,17 @@ export function AdminDashboard({
 
       {/* Overdue Tasks Alert Row */}
       {overdueTasks.length > 0 && (
-        <div className="p-4 bg-rose-50 border border-rose-200 rounded-xl">
+        <div className="p-4 bg-neutral-50 border border-neutral-300 rounded-xl">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-rose-600" />
-              <h4 className="text-xs font-bold text-rose-900 uppercase tracking-wider">
+              <AlertTriangle className="w-4 h-4 text-neutral-900" />
+              <h4 className="text-xs font-bold text-neutral-900 uppercase tracking-wider">
                 Attention: {overdueTasks.length} Overdue Tasks Detected
               </h4>
             </div>
             <button
               onClick={() => onNavigateTab('projects_tasks')}
-              className="text-xs font-semibold text-rose-700 hover:text-rose-900"
+              className="text-xs font-semibold text-neutral-900 hover:text-black underline"
             >
               Reassign Tasks →
             </button>
@@ -313,11 +313,11 @@ export function AdminDashboard({
               <div
                 key={task.id}
                 onClick={() => onSelectTask(task)}
-                className="p-2.5 bg-white rounded-lg border border-rose-200 cursor-pointer hover:border-rose-300 text-xs"
+                className="p-2.5 bg-white rounded-lg border border-neutral-200 cursor-pointer hover:border-neutral-400 text-xs"
               >
-                <div className="font-bold text-slate-900 truncate">{task.title}</div>
-                <div className="text-[11px] text-slate-500 mt-0.5">
-                  Assigned to <strong className="text-slate-700">{task.assignedEmployeeName}</strong> • Due {task.deadline}
+                <div className="font-bold text-neutral-900 truncate">{task.title}</div>
+                <div className="text-[11px] text-neutral-500 mt-0.5">
+                  Assigned to <strong className="text-neutral-700">{task.assignedEmployeeName}</strong> • Due {task.deadline}
                 </div>
               </div>
             ))}

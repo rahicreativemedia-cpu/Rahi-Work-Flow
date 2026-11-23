@@ -158,29 +158,29 @@ export function ProjectsAndTasksCenter({
 
   // Kanban Columns Definition
   const KANBAN_COLUMNS: { id: TaskStatus; label: string; color: string }[] = [
-    { id: 'backlog', label: 'Backlog', color: 'border-slate-300 bg-slate-50 text-slate-700' },
-    { id: 'todo', label: 'To Do', color: 'border-blue-300 bg-blue-50 text-blue-700' },
-    { id: 'in_progress', label: 'In Progress', color: 'border-amber-300 bg-amber-50 text-amber-700' },
-    { id: 'under_review', label: 'Under Review', color: 'border-purple-300 bg-purple-50 text-purple-700' },
-    { id: 'revision_required', label: 'Revision Required', color: 'border-rose-300 bg-rose-50 text-rose-700' },
-    { id: 'approved', label: 'Approved', color: 'border-teal-300 bg-teal-50 text-teal-700' },
-    { id: 'completed', label: 'Completed', color: 'border-emerald-300 bg-emerald-50 text-emerald-700' },
+    { id: 'backlog', label: 'Backlog', color: 'border-neutral-300 bg-neutral-100 text-neutral-700' },
+    { id: 'todo', label: 'To Do', color: 'border-neutral-300 bg-neutral-100 text-neutral-800' },
+    { id: 'in_progress', label: 'In Progress', color: 'border-neutral-400 bg-neutral-200 text-neutral-900' },
+    { id: 'under_review', label: 'Under Review', color: 'border-neutral-400 bg-neutral-200 text-neutral-900' },
+    { id: 'revision_required', label: 'Revision Required', color: 'border-neutral-500 bg-neutral-200 text-black' },
+    { id: 'approved', label: 'Approved', color: 'border-neutral-400 bg-neutral-100 text-neutral-900' },
+    { id: 'completed', label: 'Completed', color: 'border-black bg-black text-white' },
   ];
 
   return (
     <div className="space-y-5">
       {/* Top Banner & Control Deck */}
-      <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+      <div className="bg-white p-5 rounded-xl border border-neutral-200 shadow-xs flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 flex-wrap">
-            <h2 className="text-lg font-bold text-slate-900 tracking-tight">
+            <h2 className="text-lg font-bold text-neutral-900 tracking-tight">
               Projects & Task Management Center
             </h2>
-            <span className="text-[11px] font-semibold bg-blue-50 text-blue-700 px-2.5 py-0.5 rounded-full border border-blue-200">
+            <span className="text-[11px] font-semibold bg-neutral-100 text-neutral-900 px-2.5 py-0.5 rounded-full border border-neutral-300">
               {isEmployee ? 'My Assigned Work' : 'Agency Project Operations'}
             </span>
             {overdueTasksCount > 0 && !isEmployee && (
-              <span className="inline-flex items-center gap-1 text-[11px] font-semibold bg-rose-50 text-rose-700 px-2 py-0.5 rounded-full border border-rose-200">
+              <span className="inline-flex items-center gap-1 text-[11px] font-semibold bg-black text-white px-2 py-0.5 rounded-full border border-black">
                 <AlertCircle className="w-3.5 h-3.5" />
                 {overdueTasksCount} Overdue Tasks
               </span>
@@ -263,7 +263,7 @@ export function ProjectsAndTasksCenter({
               {onCreateProject && (
                 <button
                   onClick={onCreateProject}
-                  className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow-xs flex items-center gap-1.5 transition-colors"
+                  className="px-3 py-1.5 bg-black hover:bg-neutral-800 text-white rounded-lg text-xs font-semibold shadow-xs flex items-center gap-1.5 transition-colors"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>New Project</span>
@@ -346,8 +346,8 @@ export function ProjectsAndTasksCenter({
             onClick={() => setOverdueOnly(!overdueOnly)}
             className={`px-2.5 py-1.5 rounded-lg border text-xs font-semibold flex items-center gap-1 transition-colors ${
               overdueOnly
-                ? 'bg-rose-50 border-rose-300 text-rose-700'
-                : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
+                ? 'bg-black border-black text-white'
+                : 'bg-neutral-50 border-neutral-200 text-neutral-600 hover:bg-neutral-100'
             }`}
           >
             <Clock className="w-3.5 h-3.5" />
@@ -361,8 +361,8 @@ export function ProjectsAndTasksCenter({
             onClick={() => setShowArchived(!showArchived)}
             className={`px-3 py-1.5 rounded-lg border text-xs font-semibold flex items-center gap-1.5 transition-colors ${
               showArchived
-                ? 'bg-amber-50 border-amber-300 text-amber-800'
-                : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
+                ? 'bg-neutral-200 border-neutral-400 text-black'
+                : 'bg-neutral-50 border-neutral-200 text-neutral-600 hover:bg-neutral-100'
             }`}
           >
             <Archive className="w-3.5 h-3.5" />
@@ -405,7 +405,7 @@ export function ProjectsAndTasksCenter({
                     <div>
                       {/* Top Badges */}
                       <div className="flex items-center justify-between gap-2 mb-2.5">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-900 bg-neutral-100 px-2 py-0.5 rounded border border-neutral-300">
                           {project.clientName}
                         </span>
                         <div className="flex items-center gap-1.5">
@@ -419,7 +419,7 @@ export function ProjectsAndTasksCenter({
                       </div>
 
                       {/* Title & Description */}
-                      <h3 className="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                      <h3 className="text-sm font-bold text-slate-900 group-hover:text-neutral-600 transition-colors">
                         {project.title}
                       </h3>
                       {project.description && (
@@ -442,7 +442,7 @@ export function ProjectsAndTasksCenter({
                         <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
                           <div
                             className={`h-2 rounded-full transition-all ${
-                              progressPct >= 100 ? 'bg-emerald-500' : progressPct > 50 ? 'bg-blue-600' : 'bg-amber-500'
+                              progressPct >= 100 ? 'bg-black' : 'bg-neutral-800'
                             }`}
                             style={{ width: `${Math.min(100, Math.max(0, progressPct))}%` }}
                           />
@@ -454,7 +454,7 @@ export function ProjectsAndTasksCenter({
                     <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
                       <div className="flex items-center gap-1.5">
                         <Clock className="w-3.5 h-3.5 text-slate-400" />
-                        <span className={isDelayed ? 'text-rose-600 font-bold' : ''}>
+                        <span className={isDelayed ? 'text-black font-bold underline' : ''}>
                           Due {project.targetEndDate} {isDelayed && '(DELAYED)'}
                         </span>
                       </div>
@@ -475,7 +475,7 @@ export function ProjectsAndTasksCenter({
                           {onEditProject && (
                             <button
                               onClick={() => onEditProject(project)}
-                              className="p-1 text-slate-500 hover:text-blue-600 rounded hover:bg-slate-100"
+                              className="p-1 text-slate-500 hover:text-black rounded hover:bg-slate-100"
                               title="Edit Project"
                             >
                               <Edit className="w-3.5 h-3.5" />
@@ -484,7 +484,7 @@ export function ProjectsAndTasksCenter({
                           {project.status === 'archived' && onRestoreProject ? (
                             <button
                               onClick={() => onRestoreProject(project.id)}
-                              className="p-1 text-emerald-600 hover:text-emerald-800 rounded hover:bg-emerald-50"
+                              className="p-1 text-neutral-700 hover:text-black rounded hover:bg-neutral-100"
                               title="Restore Project"
                             >
                               <RotateCcw className="w-3.5 h-3.5" />
@@ -492,7 +492,7 @@ export function ProjectsAndTasksCenter({
                           ) : onArchiveProject ? (
                             <button
                               onClick={() => onArchiveProject(project.id)}
-                              className="p-1 text-slate-400 hover:text-rose-600 rounded hover:bg-rose-50"
+                              className="p-1 text-slate-400 hover:text-black rounded hover:bg-neutral-100"
                               title="Archive Project"
                             >
                               <Archive className="w-3.5 h-3.5" />
@@ -571,7 +571,7 @@ export function ProjectsAndTasksCenter({
                             {onEditProject && (
                               <button
                                 onClick={() => onEditProject(p)}
-                                className="p-1 text-slate-500 hover:text-blue-600 rounded"
+                                className="p-1 text-neutral-500 hover:text-black rounded"
                               >
                                 <Edit className="w-3.5 h-3.5" />
                               </button>
@@ -579,14 +579,14 @@ export function ProjectsAndTasksCenter({
                             {p.status === 'archived' && onRestoreProject ? (
                               <button
                                 onClick={() => onRestoreProject(p.id)}
-                                className="p-1 text-emerald-600 hover:text-emerald-800 rounded"
+                                className="p-1 text-neutral-700 hover:text-black rounded hover:bg-neutral-100"
                               >
                                 <RotateCcw className="w-3.5 h-3.5" />
                               </button>
                             ) : onArchiveProject ? (
                               <button
                                 onClick={() => onArchiveProject(p.id)}
-                                className="p-1 text-slate-400 hover:text-rose-600 rounded"
+                                className="p-1 text-neutral-400 hover:text-black rounded hover:bg-neutral-100"
                               >
                                 <Archive className="w-3.5 h-3.5" />
                               </button>
@@ -648,7 +648,7 @@ export function ProjectsAndTasksCenter({
                         >
                           {/* Client & Priority */}
                           <div className="flex items-center justify-between gap-1 mb-1.5">
-                            <span className="text-[9px] font-bold text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded truncate max-w-[100px]">
+                            <span className="text-[9px] font-bold text-neutral-900 bg-neutral-100 px-1.5 py-0.5 rounded truncate max-w-[100px]">
                               {task.clientName}
                             </span>
                             <span className={`text-[9px] font-bold px-1.5 py-0.2 rounded-full border ${priorityBadge.bg}`}>
@@ -657,7 +657,7 @@ export function ProjectsAndTasksCenter({
                           </div>
 
                           {/* Title */}
-                          <h4 className="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2">
+                          <h4 className="text-xs font-bold text-neutral-900 group-hover:text-neutral-600 transition-colors line-clamp-2">
                             {task.title}
                           </h4>
 
@@ -666,7 +666,7 @@ export function ProjectsAndTasksCenter({
                             <span className="truncate max-w-[90px]" title={task.assignedEmployeeName}>
                               {task.assignedEmployeeName}
                             </span>
-                            <span className={isOverdue ? 'text-rose-600 font-bold' : ''}>
+                            <span className={isOverdue ? 'text-black font-bold underline' : ''}>
                               {task.deadline}
                             </span>
                           </div>
@@ -729,7 +729,7 @@ export function ProjectsAndTasksCenter({
                           </span>
                         </td>
                         <td className="py-3 px-4 whitespace-nowrap">
-                          <span className={isOverdue ? 'text-rose-600 font-bold' : 'text-slate-600'}>
+                          <span className={isOverdue ? 'text-black font-bold underline' : 'text-slate-600'}>
                             {t.deadline} {isOverdue && '(OVERDUE)'}
                           </span>
                         </td>
@@ -777,15 +777,15 @@ export function ProjectsAndTasksCenter({
                   <div key={dateStr} className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                        <Calendar className="w-3.5 h-3.5 text-blue-600" />
+                        <Calendar className="w-3.5 h-3.5 text-black" />
                         <span>{dateStr}</span>
                         {isDueToday && (
-                          <span className="text-[10px] font-bold bg-amber-100 text-amber-800 px-1.5 py-0.2 rounded">
+                          <span className="text-[10px] font-bold bg-neutral-200 text-black px-1.5 py-0.2 rounded">
                             TODAY
                           </span>
                         )}
                         {isPast && (
-                          <span className="text-[10px] font-bold bg-rose-100 text-rose-800 px-1.5 py-0.2 rounded">
+                          <span className="text-[10px] font-bold bg-black text-white px-1.5 py-0.2 rounded">
                             PAST DEADLINE
                           </span>
                         )}
@@ -801,7 +801,7 @@ export function ProjectsAndTasksCenter({
                           className="bg-white p-2.5 rounded-lg border border-slate-200 hover:border-slate-300 shadow-2xs cursor-pointer text-xs"
                         >
                           <div className="flex items-center justify-between text-[10px] text-slate-500 mb-1">
-                            <span className="font-bold text-blue-700">{t.clientName}</span>
+                            <span className="font-bold text-neutral-900">{t.clientName}</span>
                             <span className="capitalize">{t.status.replace('_', ' ')}</span>
                           </div>
                           <h5 className="font-bold text-slate-800 truncate">{t.title}</h5>

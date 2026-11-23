@@ -21,15 +21,15 @@ export function Button({
 }: ButtonProps) {
   const variantStyles = {
     primary:
-      'bg-blue-600 hover:bg-blue-700 text-white shadow-xs border border-blue-600 hover:border-blue-700 focus:ring-blue-500/30',
+      'bg-black hover:bg-neutral-800 text-white shadow-xs border border-black focus:ring-black/20',
     secondary:
-      'bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 hover:border-slate-300 focus:ring-slate-400/30',
+      'bg-neutral-100 hover:bg-neutral-200 text-black border border-neutral-200 focus:ring-black/10',
     outline:
-      'bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 hover:border-slate-300 shadow-2xs focus:ring-blue-500/20',
+      'bg-white hover:bg-neutral-50 text-black border border-neutral-300 shadow-2xs focus:ring-black/10',
     danger:
-      'bg-rose-600 hover:bg-rose-700 text-white shadow-xs border border-rose-600 hover:border-rose-700 focus:ring-rose-500/30',
+      'bg-neutral-900 hover:bg-black text-white border border-black focus:ring-black/20',
     ghost:
-      'bg-transparent hover:bg-slate-100 text-slate-600 hover:text-slate-900 border border-transparent focus:ring-slate-400/20',
+      'bg-transparent hover:bg-neutral-100 text-neutral-800 hover:text-black border border-transparent focus:ring-black/10',
   };
 
   const sizeStyles = {

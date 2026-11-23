@@ -26,52 +26,36 @@ export function StatCard({
   color = 'blue',
   onClick,
 }: StatCardProps) {
-  const colorMap = {
-    blue: 'bg-blue-50 text-blue-600',
-    indigo: 'bg-indigo-50 text-indigo-600',
-    emerald: 'bg-emerald-50 text-emerald-600',
-    amber: 'bg-amber-50 text-amber-600',
-    rose: 'bg-rose-50 text-rose-600',
-    purple: 'bg-purple-50 text-purple-600',
-  };
-
   return (
     <div
       onClick={onClick}
       className={cn(
         'bg-white rounded-xl border p-5 shadow-xs transition-all duration-200',
         highlight
-          ? 'border-blue-300 ring-2 ring-blue-500/10'
-          : 'border-slate-200/80 hover:border-slate-300 hover:shadow-sm',
+          ? 'border-black ring-2 ring-black/10'
+          : 'border-neutral-200/90 hover:border-neutral-400 hover:shadow-sm',
         onClick && 'cursor-pointer'
       )}
     >
       <div className="flex items-center justify-between">
-        <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">{label}</p>
+        <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">{label}</p>
         {Icon && (
-          <div className={cn('p-2 rounded-lg', colorMap[color])}>
-            <Icon className="w-5 h-5" />
+          <div className="p-2 rounded-lg bg-neutral-100 text-neutral-900 border border-neutral-200">
+            <Icon className="w-4 h-4" />
           </div>
         )}
       </div>
 
       <div className="mt-3 flex items-baseline justify-between">
-        <h4 className="text-2xl font-bold text-slate-900 tracking-tight">{value}</h4>
+        <h4 className="text-2xl font-black text-black tracking-tight">{value}</h4>
         {trend && (
-          <span
-            className={cn(
-              'text-xs font-medium px-2 py-0.5 rounded-full',
-              trend.positive
-                ? 'bg-emerald-50 text-emerald-700'
-                : 'bg-rose-50 text-rose-700'
-            )}
-          >
+          <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-neutral-100 text-neutral-900 border border-neutral-200">
             {trend.value}
           </span>
         )}
       </div>
 
-      {subtext && <p className="text-xs text-slate-500 mt-1">{subtext}</p>}
+      {subtext && <p className="text-xs text-neutral-400 mt-1">{subtext}</p>}
     </div>
   );
 }

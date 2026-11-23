@@ -55,12 +55,12 @@ export function EmployeeSubmitWorkModal({
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Upload Simulation Card */}
-        <div className="p-4 bg-blue-50/60 border border-blue-200 rounded-xl text-center space-y-2">
-          <UploadCloud className="w-8 h-8 text-blue-600 mx-auto" />
-          <div className="text-xs font-semibold text-slate-800">
+        <div className="p-4 bg-neutral-50 border border-neutral-200 rounded-xl text-center space-y-2">
+          <UploadCloud className="w-8 h-8 text-black mx-auto" />
+          <div className="text-xs font-semibold text-neutral-800">
             Upload Master Export / Deliverable File
           </div>
-          <p className="text-[11px] text-slate-500">
+          <p className="text-[11px] text-neutral-500">
             Supports MP4, MOV, Figma, PSD, or Google Drive / Frame.io links
           </p>
         </div>
@@ -120,7 +120,7 @@ export function EmployeeSubmitWorkModal({
           </button>
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow-xs"
+            className="px-4 py-2 bg-black hover:bg-neutral-800 text-white rounded-lg text-xs font-semibold shadow-xs"
           >
             Submit for Review
           </button>

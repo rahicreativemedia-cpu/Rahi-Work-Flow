@@ -119,7 +119,7 @@ export function UserManagementView({
             <h2 className="text-lg font-bold text-slate-900 tracking-tight">
               User Accounts & Secure Invitation Management
             </h2>
-            <span className="text-[11px] font-semibold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded border border-emerald-200">
+            <span className="text-[11px] font-semibold bg-neutral-100 text-neutral-900 px-2 py-0.5 rounded border border-neutral-300">
               Admin & Manager Equal Control
             </span>
           </div>
@@ -132,7 +132,7 @@ export function UserManagementView({
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsInviteModalOpen(true)}
-              className="flex items-center gap-1.5 px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors"
+              className="flex items-center gap-1.5 px-3.5 py-2 bg-black hover:bg-neutral-800 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors"
             >
               <Mail className="w-4 h-4" />
               <span>Send Invitation Link</span>
@@ -154,7 +154,7 @@ export function UserManagementView({
           onClick={() => setActiveTab('users')}
           className={`pb-2.5 transition-colors border-b-2 ${
             activeTab === 'users'
-              ? 'border-blue-600 text-blue-700 font-bold'
+              ? 'border-black text-black font-bold'
               : 'border-transparent hover:text-slate-800'
           }`}
         >
@@ -164,7 +164,7 @@ export function UserManagementView({
           onClick={() => setActiveTab('invitations')}
           className={`pb-2.5 transition-colors border-b-2 flex items-center gap-1.5 ${
             activeTab === 'invitations'
-              ? 'border-blue-600 text-blue-700 font-bold'
+              ? 'border-black text-black font-bold'
               : 'border-transparent hover:text-slate-800'
           }`}
         >
@@ -216,15 +216,7 @@ export function UserManagementView({
                       <td className="py-3.5 px-4 text-slate-600 font-mono text-[11px]">{u.email}</td>
                       <td className="py-3.5 px-4">
                         <span
-                          className={`text-[10px] font-bold px-2 py-0.5 rounded-full border uppercase ${
-                            u.role === 'admin'
-                              ? 'bg-indigo-50 text-indigo-700 border-indigo-200'
-                              : u.role === 'manager'
-                              ? 'bg-blue-50 text-blue-700 border-blue-200'
-                              : u.role === 'employee'
-                              ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                              : 'bg-purple-50 text-purple-700 border-purple-200'
-                          }`}
+                          className="text-[10px] font-bold px-2 py-0.5 rounded-full border uppercase bg-neutral-100 text-neutral-900 border-neutral-300"
                         >
                           {u.role}
                         </span>
@@ -238,7 +230,7 @@ export function UserManagementView({
                       </td>
                       <td className="py-3.5 px-4 font-mono text-[10px]">
                         {u.permissionGroup === 'FULL_ADMIN_ACCESS' ? (
-                          <span className="text-blue-700 font-bold bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+                          <span className="text-black font-bold bg-neutral-100 px-2 py-0.5 rounded border border-neutral-300">
                             FULL_ADMIN_ACCESS
                           </span>
                         ) : (
@@ -415,7 +407,7 @@ export function UserManagementView({
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow-xs"
+              className="px-4 py-2 bg-black hover:bg-neutral-800 text-white rounded-lg text-xs font-semibold shadow-xs"
             >
               Generate & Send Invitation
             </button>
@@ -527,7 +519,7 @@ export function UserManagementView({
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow-xs"
+              className="px-4 py-2 bg-black hover:bg-neutral-800 text-white rounded-lg text-xs font-semibold shadow-xs"
             >
               Create User Account
             </button>

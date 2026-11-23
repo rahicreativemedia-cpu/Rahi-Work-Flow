@@ -57,14 +57,14 @@ export function Sidebar({
           label: 'Projects & Tasks',
           icon: FolderOpen,
           badge: overdueTasksCount > 0 ? `${overdueTasksCount} overdue` : undefined,
-          badgeColor: 'bg-rose-100 text-rose-700',
+          badgeColor: 'bg-neutral-800 text-neutral-200',
         },
         {
           id: 'approvals',
           label: 'Client Approvals & Revisions',
           icon: FileCheck2,
           badge: pendingApprovalsCount > 0 ? `${pendingApprovalsCount} pending` : undefined,
-          badgeColor: 'bg-amber-100 text-amber-700',
+          badgeColor: 'bg-neutral-800 text-neutral-200',
         },
         { id: 'reports', label: 'Financial & Contract Reports', icon: BarChart3 },
         { id: 'users', label: 'User Accounts & Invitations', icon: UserPlus },
@@ -84,14 +84,14 @@ export function Sidebar({
           label: 'Projects & Tasks',
           icon: FolderOpen,
           badge: overdueTasksCount > 0 ? `${overdueTasksCount} overdue` : undefined,
-          badgeColor: 'bg-rose-100 text-rose-700',
+          badgeColor: 'bg-neutral-800 text-neutral-200',
         },
         {
           id: 'approvals',
           label: 'Client Approvals & Revisions',
           icon: FileCheck2,
           badge: pendingApprovalsCount > 0 ? `${pendingApprovalsCount} pending` : undefined,
-          badgeColor: 'bg-amber-100 text-amber-700',
+          badgeColor: 'bg-neutral-800 text-neutral-200',
         },
         { id: 'reports', label: 'Financial & Contract Reports', icon: BarChart3 },
         { id: 'users', label: 'User Accounts & Invitations', icon: UserPlus },
@@ -119,7 +119,7 @@ export function Sidebar({
         label: 'Review & Approvals',
         icon: FileCheck2,
         badge: pendingApprovalsCount > 0 ? `${pendingApprovalsCount} to review` : undefined,
-        badgeColor: 'bg-purple-100 text-purple-700',
+        badgeColor: 'bg-neutral-800 text-neutral-200',
       },
       { id: 'calendar', label: 'Content Calendar & Schedule', icon: Calendar },
       { id: 'asset_library', label: 'Authorized Deliverables', icon: FolderOpen },
@@ -170,12 +170,12 @@ export function Sidebar({
         </p>
 
         {/* Portal Scope Tag */}
-        <div className="mt-3.5 p-2 rounded-lg bg-slate-800/80 border border-slate-700/60 flex items-center justify-between text-xs">
-          <div className="flex items-center gap-1.5 text-slate-300">
-            <Shield className="w-3.5 h-3.5 text-blue-400" />
+        <div className="mt-3.5 p-2 rounded-lg bg-neutral-900 border border-neutral-800 flex items-center justify-between text-xs">
+          <div className="flex items-center gap-1.5 text-neutral-300">
+            <Shield className="w-3.5 h-3.5 text-white" />
             <span className="font-medium capitalize">{role} Portal</span>
           </div>
-          <span className="text-[10px] bg-slate-700 px-1.5 py-0.5 rounded text-slate-300 font-semibold uppercase">
+          <span className="text-[10px] bg-neutral-800 px-1.5 py-0.5 rounded text-white font-semibold uppercase">
             {role === 'admin' || role === 'manager' ? 'Full Admin' : role}
           </span>
         </div>
@@ -196,14 +196,14 @@ export function Sidebar({
               onClick={() => handleItemClick(item.id)}
               className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium transition-all group ${
                 isActive
-                  ? 'bg-blue-600 text-white shadow-xs font-semibold'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                  ? 'bg-white text-black shadow-xs font-bold'
+                  : 'text-neutral-400 hover:text-white hover:bg-neutral-800/60'
               }`}
             >
               <div className="flex items-center gap-2.5 min-w-0">
                 <Icon
                   className={`w-4 h-4 shrink-0 transition-colors ${
-                    isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-200'
+                    isActive ? 'text-black' : 'text-neutral-400 group-hover:text-neutral-200'
                   }`}
                 />
                 <span className="truncate">{item.label}</span>
@@ -212,7 +212,7 @@ export function Sidebar({
               {item.badge && (
                 <span
                   className={`text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap ml-2 ${
-                    isActive ? 'bg-white/20 text-white' : item.badgeColor || 'bg-slate-800 text-slate-300'
+                    isActive ? 'bg-black text-white' : 'bg-neutral-800 text-neutral-300'
                   }`}
                 >
                   {item.badge}
@@ -225,24 +225,24 @@ export function Sidebar({
 
       {/* Equal Admin Permissions Notice */}
       {hasFullAdminAccess(currentUser) && (
-        <div className="p-3.5 m-3 bg-slate-800/70 border border-slate-700/60 rounded-xl text-left">
-          <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-200">
-            <Shield className="w-3.5 h-3.5 text-blue-400" />
+        <div className="p-3.5 m-3 bg-neutral-900 border border-neutral-800 rounded-xl text-left">
+          <div className="flex items-center gap-1.5 text-xs font-semibold text-white">
+            <Shield className="w-3.5 h-3.5 text-white" />
             <span>Equal Permissions</span>
           </div>
-          <p className="text-[11px] text-slate-400 mt-1 leading-snug">
+          <p className="text-[11px] text-neutral-400 mt-1 leading-snug">
             Admin and Manager share identical <strong>FULL_ADMIN_ACCESS</strong> permissions across all company data.
           </p>
         </div>
       )}
 
       {/* Current User Footbar */}
-      <div className="p-4 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+      <div className="p-4 border-t border-neutral-800 flex items-center justify-between text-xs text-neutral-400">
         <div className="truncate">
-          <div className="font-semibold text-slate-200 truncate">{currentUser.name}</div>
-          <div className="text-[10px] text-slate-500 truncate">{currentUser.email}</div>
+          <div className="font-semibold text-white truncate">{currentUser.name}</div>
+          <div className="text-[10px] text-neutral-400 truncate">{currentUser.email}</div>
         </div>
-        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0 ml-2" title="Active Session" />
+        <div className="w-2 h-2 rounded-full bg-white shrink-0 ml-2" title="Active Session" />
       </div>
     </div>
   );

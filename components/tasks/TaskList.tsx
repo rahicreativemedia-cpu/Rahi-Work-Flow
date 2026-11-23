@@ -98,7 +98,7 @@ export function TaskList({
           canAdmin && onCreateTask ? (
             <button
               onClick={onCreateTask}
-              className="flex items-center gap-1.5 px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors shrink-0"
+              className="flex items-center gap-1.5 px-3.5 py-2 bg-black hover:bg-neutral-800 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors shrink-0"
             >
               <Plus className="w-4 h-4" />
               <span>Create Task</span>
@@ -145,11 +145,11 @@ export function TaskList({
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-900 bg-neutral-100 px-2 py-0.5 rounded border border-neutral-300">
                         {task.clientName}
                       </span>
-                      <span className="text-xs text-slate-400">•</span>
-                      <span className="text-xs text-slate-500 font-medium truncate max-w-[200px]">
+                      <span className="text-xs text-neutral-400">•</span>
+                      <span className="text-xs text-neutral-500 font-medium truncate max-w-[200px]">
                         {task.projectTitle}
                       </span>
                       <span
@@ -164,36 +164,36 @@ export function TaskList({
                       </span>
                     </div>
 
-                    <h4 className="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                    <h4 className="text-sm font-bold text-neutral-900 group-hover:text-neutral-600 transition-colors">
                       {task.title}
                     </h4>
 
-                    <p className="text-xs text-slate-500 mt-1 line-clamp-1">
+                    <p className="text-xs text-neutral-500 mt-1 line-clamp-1">
                       {task.description}
                     </p>
 
-                    <div className="flex flex-wrap items-center gap-4 mt-2 text-[11px] text-slate-400">
+                    <div className="flex flex-wrap items-center gap-4 mt-2 text-[11px] text-neutral-400">
                       <span>
-                        Assignee: <strong className="text-slate-700">{task.assignedEmployeeName}</strong>
+                        Assignee: <strong className="text-neutral-700">{task.assignedEmployeeName}</strong>
                       </span>
                       <span className="flex items-center gap-1">
                         <Clock className="w-3 h-3" />
-                        <span className={isOverdue ? 'text-rose-600 font-bold' : 'text-slate-600'}>
+                        <span className={isOverdue ? 'text-black font-bold underline' : 'text-neutral-600'}>
                           Due {task.deadline} {isOverdue && '(OVERDUE)'}
                         </span>
                       </span>
                       {task.referenceFiles.length > 0 && (
-                        <span className="flex items-center gap-1 text-slate-500">
+                        <span className="flex items-center gap-1 text-neutral-500">
                           <Paperclip className="w-3 h-3" /> {task.referenceFiles.length} file(s)
                         </span>
                       )}
                       {task.submissions.length > 0 && (
-                        <span className="flex items-center gap-1 text-blue-600 font-medium">
+                        <span className="flex items-center gap-1 text-neutral-800 font-medium">
                           v{task.submissions.length} submitted
                         </span>
                       )}
                       {task.comments.length > 0 && (
-                        <span className="flex items-center gap-1 text-slate-500">
+                        <span className="flex items-center gap-1 text-neutral-500">
                           <MessageSquare className="w-3 h-3" /> {task.comments.length}
                         </span>
                       )}
@@ -208,7 +208,7 @@ export function TaskList({
                           e.stopPropagation();
                           onSubmitWork(task);
                         }}
-                        className="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-xs font-semibold flex items-center gap-1 border border-blue-200"
+                        className="px-3 py-1.5 bg-neutral-100 hover:bg-neutral-200 text-black rounded-lg text-xs font-semibold flex items-center gap-1 border border-neutral-300"
                       >
                         <UploadCloud className="w-3.5 h-3.5" />
                         <span>Submit Work</span>

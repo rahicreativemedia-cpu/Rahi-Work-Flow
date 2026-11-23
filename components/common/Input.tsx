@@ -25,13 +25,13 @@ export function Input({
   return (
     <div className="w-full space-y-1">
       {label && (
-        <label htmlFor={inputId} className="block text-xs font-semibold text-slate-700">
-          {label} {required && <span className="text-rose-500">*</span>}
+        <label htmlFor={inputId} className="block text-xs font-semibold text-neutral-800">
+          {label} {required && <span className="text-black font-bold">*</span>}
         </label>
       )}
       <div className="relative flex items-center">
         {leftIcon && (
-          <div className="absolute left-3 text-slate-400 pointer-events-none flex items-center">
+          <div className="absolute left-3 text-neutral-400 pointer-events-none flex items-center">
             {leftIcon}
           </div>
         )}
@@ -39,10 +39,10 @@ export function Input({
           id={inputId}
           required={required}
           className={cn(
-            'w-full text-xs p-2.5 bg-slate-50/70 hover:bg-slate-100/50 focus:bg-white border rounded-lg text-slate-900 placeholder:text-slate-400 transition-all duration-150 focus:outline-hidden focus:ring-2 disabled:bg-slate-100 disabled:cursor-not-allowed',
+            'w-full text-xs p-2.5 bg-neutral-50/70 hover:bg-neutral-100/50 focus:bg-white border rounded-lg text-black placeholder:text-neutral-400 transition-all duration-150 focus:outline-hidden focus:ring-2 disabled:bg-neutral-100 disabled:cursor-not-allowed',
             error
-              ? 'border-rose-300 focus:ring-rose-500/20 focus:border-rose-500'
-              : 'border-slate-200 focus:ring-blue-500/20 focus:border-blue-500',
+              ? 'border-neutral-900 focus:ring-neutral-900/20 focus:border-black'
+              : 'border-neutral-300 focus:ring-black/10 focus:border-black',
             leftIcon && 'pl-9',
             rightIcon && 'pr-9',
             className
@@ -50,15 +50,15 @@ export function Input({
           {...props}
         />
         {rightIcon && (
-          <div className="absolute right-3 text-slate-400 pointer-events-none flex items-center">
+          <div className="absolute right-3 text-neutral-400 pointer-events-none flex items-center">
             {rightIcon}
           </div>
         )}
       </div>
       {error ? (
-        <p className="text-[11px] text-rose-600 font-medium">{error}</p>
+        <p className="text-[11px] text-black font-semibold">{error}</p>
       ) : helperText ? (
-        <p className="text-[11px] text-slate-400">{helperText}</p>
+        <p className="text-[11px] text-neutral-500">{helperText}</p>
       ) : null}
     </div>
   );

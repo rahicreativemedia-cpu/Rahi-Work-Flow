@@ -25,27 +25,27 @@ export function ClientCalendarAndAssets({
 
     return (
       <div className="space-y-6">
-        <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
+        <div className="bg-white p-5 rounded-xl border border-neutral-200 shadow-xs">
           <div className="flex items-center gap-2">
-            <CalendarIcon className="w-5 h-5 text-blue-600" />
-            <h2 className="text-lg font-bold text-slate-900 tracking-tight">
+            <CalendarIcon className="w-5 h-5 text-black" />
+            <h2 className="text-lg font-bold text-neutral-900 tracking-tight">
               {client.name} Content Publishing Calendar
             </h2>
           </div>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-neutral-500 mt-1">
             Scheduled posts, live slots, and final delivery dates for all approved deliverables.
           </p>
         </div>
 
-        <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-          <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
-            <h3 className="text-sm font-bold text-slate-900">Publishing Schedule</h3>
-            <span className="text-xs text-slate-500">{scheduledAndPublished.length} Scheduled Content Items</span>
+        <div className="bg-white rounded-xl border border-neutral-200 shadow-xs overflow-hidden">
+          <div className="p-4 sm:p-5 border-b border-neutral-100 flex items-center justify-between">
+            <h3 className="text-sm font-bold text-neutral-900">Publishing Schedule</h3>
+            <span className="text-xs text-neutral-500">{scheduledAndPublished.length} Scheduled Content Items</span>
           </div>
 
-          <div className="divide-y divide-slate-100">
+          <div className="divide-y divide-neutral-100">
             {scheduledAndPublished.length === 0 ? (
-              <div className="p-8 text-center text-xs text-slate-400">
+              <div className="p-8 text-center text-xs text-neutral-400">
                 No items currently scheduled. Approving video cuts will automatically slot them into the schedule.
               </div>
             ) : (
@@ -53,30 +53,30 @@ export function ClientCalendarAndAssets({
                 <div
                   key={item.id}
                   onClick={() => onSelectDeliverable(item)}
-                  className="p-4 hover:bg-slate-50 flex items-center justify-between cursor-pointer transition-colors"
+                  className="p-4 hover:bg-neutral-50 flex items-center justify-between cursor-pointer transition-colors"
                 >
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold text-slate-900">{item.title}</span>
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 uppercase">
+                      <span className="text-xs font-bold text-neutral-900">{item.title}</span>
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-neutral-100 text-neutral-900 border border-neutral-300 uppercase">
                         {item.type}
                       </span>
                       {item.status === 'published' ? (
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700">
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-black text-white">
                           Published & Live
                         </span>
                       ) : (
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700">
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-neutral-800 text-neutral-200">
                           Scheduled
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-slate-500 mt-1">
+                    <p className="text-xs text-neutral-500 mt-1">
                       Slot Date: {item.scheduledPublishDate ? formatDateTime(item.scheduledPublishDate) : item.deadline}
                     </p>
                   </div>
 
-                  <span className="text-xs text-blue-600 font-semibold hover:underline">
+                  <span className="text-xs text-neutral-900 font-semibold hover:text-black hover:underline">
                     View Details →
                   </span>
                 </div>
@@ -97,14 +97,14 @@ export function ClientCalendarAndAssets({
 
   return (
     <div className="space-y-6">
-      <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
+      <div className="bg-white p-5 rounded-xl border border-neutral-200 shadow-xs">
         <div className="flex items-center gap-2">
-          <Download className="w-5 h-5 text-emerald-600" />
-          <h2 className="text-lg font-bold text-slate-900 tracking-tight">
+          <Download className="w-5 h-5 text-black" />
+          <h2 className="text-lg font-bold text-neutral-900 tracking-tight">
             Authorized Master Deliverables Library
           </h2>
         </div>
-        <p className="text-xs text-slate-500 mt-1">
+        <p className="text-xs text-neutral-500 mt-1">
           High-resolution master vertical 4K video exports, caption sheets, and graphic deliverables.
         </p>
       </div>
@@ -113,36 +113,36 @@ export function ClientCalendarAndAssets({
         {publishedAssets.map((asset) => (
           <div
             key={asset.id}
-            className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between"
+            className="bg-white rounded-xl border border-neutral-200 p-5 shadow-xs flex flex-col justify-between"
           >
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-900 bg-neutral-100 px-2 py-0.5 rounded border border-neutral-300">
                   {asset.type}
                 </span>
-                <span className="text-[11px] text-slate-400">v{asset.currentVersion}</span>
+                <span className="text-[11px] text-neutral-400">v{asset.currentVersion}</span>
               </div>
 
-              <h4 className="text-sm font-bold text-slate-900 line-clamp-1">{asset.title}</h4>
-              <p className="text-xs text-slate-500 mt-1">
+              <h4 className="text-sm font-bold text-neutral-900 line-clamp-1">{asset.title}</h4>
+              <p className="text-xs text-neutral-500 mt-1">
                 Published on: {formatDateTime(asset.publishedAt || asset.createdAt)}
               </p>
 
               {asset.mediaUrl && (
-                <div className="mt-3 rounded-lg overflow-hidden border border-slate-200 bg-black aspect-video max-h-40 flex items-center justify-center">
+                <div className="mt-3 rounded-lg overflow-hidden border border-neutral-200 bg-black aspect-video max-h-40 flex items-center justify-center">
                   <video src={asset.mediaUrl} controls className="w-full h-full object-contain" />
                 </div>
               )}
             </div>
 
-            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
-              <span className="text-[11px] text-slate-400 font-medium">H.264 4K Vertical</span>
+            <div className="mt-4 pt-3 border-t border-neutral-100 flex items-center justify-between">
+              <span className="text-[11px] text-neutral-400 font-medium">H.264 4K Vertical</span>
               {asset.mediaUrl && (
                 <a
                   href={asset.mediaUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-2xs"
+                  className="px-3 py-1.5 bg-black hover:bg-neutral-800 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-2xs"
                 >
                   <Download className="w-3.5 h-3.5" />
                   <span>Download Master</span>

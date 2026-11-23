@@ -191,40 +191,40 @@ export function calculateClientDeliverableStats(
 
   let pacingStatus: PacingMetrics['pacingStatus'] = 'on_track';
   let pacingLabel = 'On Track';
-  let pacingBadgeClass = 'bg-blue-50 text-blue-700 border-blue-200';
+  let pacingBadgeClass = 'bg-neutral-100 text-neutral-900 border-neutral-300';
 
   if (monthProgressionPct === 0) {
     pacingStatus = 'upcoming';
     pacingLabel = 'Upcoming Month';
-    pacingBadgeClass = 'bg-slate-100 text-slate-600 border-slate-200';
+    pacingBadgeClass = 'bg-neutral-100 text-neutral-600 border-neutral-200';
   } else if (monthProgressionPct === 100) {
     if (completedCount >= totalMonthlyCommitment) {
       pacingStatus = 'completed';
       pacingLabel = 'Target Met (100%)';
-      pacingBadgeClass = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+      pacingBadgeClass = 'bg-black text-white border-black font-bold';
     } else {
       pacingStatus = 'critical';
       pacingLabel = `Target Shortfall (-${remainingCount})`;
-      pacingBadgeClass = 'bg-rose-50 text-rose-700 border-rose-200';
+      pacingBadgeClass = 'bg-neutral-200 text-neutral-900 border-neutral-400 font-bold';
     }
   } else {
     // Active current month
     if (completionPercentage >= monthProgressionPct + 5) {
       pacingStatus = 'ahead';
       pacingLabel = `Ahead of Pace (+${pacingDelta})`;
-      pacingBadgeClass = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+      pacingBadgeClass = 'bg-black text-white border-black';
     } else if (completionPercentage >= monthProgressionPct - 10) {
       pacingStatus = 'on_track';
       pacingLabel = `On Track (${completedCount}/${expectedDeliverables} exp)`;
-      pacingBadgeClass = 'bg-blue-50 text-blue-700 border-blue-200';
+      pacingBadgeClass = 'bg-neutral-100 text-neutral-900 border-neutral-300';
     } else if (completionPercentage >= monthProgressionPct - 25) {
       pacingStatus = 'behind';
       pacingLabel = `Behind Pace (${pacingDelta})`;
-      pacingBadgeClass = 'bg-amber-50 text-amber-700 border-amber-200';
+      pacingBadgeClass = 'bg-neutral-100 text-neutral-800 border-neutral-400';
     } else {
       pacingStatus = 'critical';
       pacingLabel = `Critical Lag (${pacingDelta} deliverables)`;
-      pacingBadgeClass = 'bg-rose-50 text-rose-700 border-rose-200';
+      pacingBadgeClass = 'bg-neutral-200 text-neutral-900 border-neutral-400 font-bold';
     }
   }
 
@@ -256,61 +256,61 @@ export function calculateClientDeliverableStats(
 export function getPriorityBadge(priority: Priority) {
   switch (priority) {
     case 'urgent':
-      return { label: 'Urgent', bg: 'bg-rose-50 text-rose-700 border-rose-200' };
+      return { label: 'Urgent', bg: 'bg-black text-white border-black font-bold' };
     case 'high':
-      return { label: 'High', bg: 'bg-amber-50 text-amber-700 border-amber-200' };
+      return { label: 'High', bg: 'bg-neutral-800 text-white border-neutral-800' };
     case 'medium':
-      return { label: 'Medium', bg: 'bg-blue-50 text-blue-700 border-blue-200' };
+      return { label: 'Medium', bg: 'bg-neutral-200 text-neutral-900 border-neutral-300' };
     case 'low':
-      return { label: 'Low', bg: 'bg-slate-100 text-slate-700 border-slate-200' };
+      return { label: 'Low', bg: 'bg-neutral-100 text-neutral-700 border-neutral-200' };
   }
 }
 
 export function getTaskStatusBadge(status: TaskStatus) {
   switch (status) {
     case 'backlog':
-      return { label: 'Backlog', bg: 'bg-slate-100 text-slate-700 border-slate-200' };
+      return { label: 'Backlog', bg: 'bg-neutral-100 text-neutral-600 border-neutral-200' };
     case 'todo':
-      return { label: 'To Do', bg: 'bg-sky-50 text-sky-700 border-sky-200' };
+      return { label: 'To Do', bg: 'bg-neutral-100 text-neutral-800 border-neutral-300' };
     case 'in_progress':
-      return { label: 'In Progress', bg: 'bg-blue-50 text-blue-700 border-blue-200' };
+      return { label: 'In Progress', bg: 'bg-neutral-900 text-white border-neutral-900 font-semibold' };
     case 'under_review':
     case 'in_review':
-      return { label: 'Under Review', bg: 'bg-purple-50 text-purple-700 border-purple-200' };
+      return { label: 'Under Review', bg: 'bg-neutral-200 text-neutral-900 border-neutral-400' };
     case 'revision_required':
     case 'revision':
-      return { label: 'Revision Required', bg: 'bg-pink-50 text-pink-700 border-pink-200' };
+      return { label: 'Revision Required', bg: 'bg-neutral-200 text-neutral-900 border-neutral-400 font-bold' };
     case 'approved':
-      return { label: 'Approved', bg: 'bg-teal-50 text-teal-700 border-teal-200' };
+      return { label: 'Approved', bg: 'bg-neutral-100 text-neutral-900 border-neutral-300 font-semibold' };
     case 'completed':
-      return { label: 'Completed', bg: 'bg-emerald-50 text-emerald-700 border-emerald-200' };
+      return { label: 'Completed', bg: 'bg-black text-white border-black font-bold' };
     case 'cancelled':
-      return { label: 'Cancelled', bg: 'bg-slate-200 text-slate-600 border-slate-300' };
+      return { label: 'Cancelled', bg: 'bg-neutral-100 text-neutral-500 border-neutral-200 line-through' };
     default:
-      return { label: 'To Do', bg: 'bg-sky-50 text-sky-700 border-sky-200' };
+      return { label: 'To Do', bg: 'bg-neutral-100 text-neutral-800 border-neutral-300' };
   }
 }
 
 export function getDeliverableStatusBadge(status: DeliverableStatus) {
   switch (status) {
     case 'in_progress':
-      return { label: 'In Progress', bg: 'bg-blue-50 text-blue-700 border-blue-200' };
+      return { label: 'In Progress', bg: 'bg-neutral-900 text-white border-neutral-900 font-semibold' };
     case 'internal_review':
-      return { label: 'Internal Review', bg: 'bg-amber-50 text-amber-700 border-amber-200' };
+      return { label: 'Internal Review', bg: 'bg-neutral-200 text-neutral-900 border-neutral-400' };
     case 'client_review':
-      return { label: 'Client Approval Pending', bg: 'bg-purple-50 text-purple-700 border-purple-200' };
+      return { label: 'Client Approval Pending', bg: 'bg-neutral-200 text-neutral-900 border-neutral-400 font-semibold' };
     case 'revision_requested':
-      return { label: 'Revision Requested', bg: 'bg-rose-50 text-rose-700 border-rose-200' };
+      return { label: 'Revision Requested', bg: 'bg-neutral-200 text-neutral-900 border-neutral-400 font-bold' };
     case 'approved':
-      return { label: 'Client Approved', bg: 'bg-teal-50 text-teal-700 border-teal-200' };
+      return { label: 'Client Approved', bg: 'bg-neutral-100 text-neutral-900 border-neutral-300 font-semibold' };
     case 'scheduled':
-      return { label: 'Scheduled', bg: 'bg-indigo-50 text-indigo-700 border-indigo-200' };
+      return { label: 'Scheduled', bg: 'bg-neutral-100 text-neutral-800 border-neutral-300' };
     case 'published':
-      return { label: 'Published (Delivered)', bg: 'bg-emerald-50 text-emerald-700 border-emerald-200' };
+      return { label: 'Published (Delivered)', bg: 'bg-black text-white border-black font-bold' };
     case 'delivered':
-      return { label: 'Delivered', bg: 'bg-emerald-50 text-emerald-700 border-emerald-200' };
+      return { label: 'Delivered', bg: 'bg-black text-white border-black font-bold' };
     case 'cancelled':
-      return { label: 'Cancelled', bg: 'bg-slate-100 text-slate-600 border-slate-300' };
+      return { label: 'Cancelled', bg: 'bg-neutral-100 text-neutral-500 border-neutral-200 line-through' };
   }
 }
 
@@ -339,8 +339,8 @@ export function getWorkloadCapacityInfo(currentActive: number, maxConcurrent: nu
       percentage,
       status: 'overloaded',
       label: 'Overloaded',
-      badgeClass: 'bg-rose-50 text-rose-700 border-rose-200',
-      barColor: 'bg-rose-600',
+      badgeClass: 'bg-black text-white border-black font-bold',
+      barColor: 'bg-black',
       isOverloaded: true,
       isHigh: true,
     };
@@ -351,8 +351,8 @@ export function getWorkloadCapacityInfo(currentActive: number, maxConcurrent: nu
       percentage,
       status: 'near_capacity',
       label: 'Near Capacity',
-      badgeClass: 'bg-amber-50 text-amber-700 border-amber-200',
-      barColor: 'bg-amber-500',
+      badgeClass: 'bg-neutral-800 text-white border-neutral-800',
+      barColor: 'bg-neutral-700',
       isOverloaded: false,
       isHigh: true,
     };
@@ -363,8 +363,8 @@ export function getWorkloadCapacityInfo(currentActive: number, maxConcurrent: nu
       percentage,
       status: 'optimal',
       label: 'Optimal',
-      badgeClass: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-      barColor: 'bg-emerald-600',
+      badgeClass: 'bg-neutral-100 text-neutral-900 border-neutral-300',
+      barColor: 'bg-neutral-900',
       isOverloaded: false,
       isHigh: false,
     };
@@ -374,8 +374,8 @@ export function getWorkloadCapacityInfo(currentActive: number, maxConcurrent: nu
     percentage,
     status: 'under_capacity',
     label: 'Under-Capacity',
-    badgeClass: 'bg-blue-50 text-blue-700 border-blue-200',
-    barColor: 'bg-blue-600',
+    badgeClass: 'bg-neutral-100 text-neutral-700 border-neutral-200',
+    barColor: 'bg-neutral-400',
     isOverloaded: false,
     isHigh: false,
   };

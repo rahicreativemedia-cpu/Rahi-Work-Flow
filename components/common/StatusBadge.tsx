@@ -7,7 +7,6 @@ import {
   PlayCircle,
   FileCheck2,
   XCircle,
-  Send,
   Eye,
   Shield,
   Briefcase,
@@ -70,10 +69,10 @@ export function StatusBadge({
 }: StatusBadgeProps) {
   const normalized = (status || '').toLowerCase().replace(/[\s-]/g, '_');
 
-  // Configuration for restrained SaaS status indicators
-  let bg = 'bg-slate-100';
-  let text = 'text-slate-700';
-  let border = 'border-slate-200';
+  // Minimalist Monochrome Theme
+  let bg = 'bg-neutral-100';
+  let text = 'text-neutral-800';
+  let border = 'border-neutral-200';
   let Icon: React.ElementType | null = null;
   let displayLabel = label;
 
@@ -83,18 +82,18 @@ export function StatusBadge({
     case 'published':
     case 'delivered':
     case 'approved':
-      bg = 'bg-emerald-50';
-      text = 'text-emerald-700';
-      border = 'border-emerald-200';
+      bg = 'bg-black';
+      text = 'text-white font-semibold';
+      border = 'border-black';
       Icon = CheckCircle2;
       displayLabel = displayLabel || normalized.replace('_', ' ');
       break;
 
     // Active
     case 'active':
-      bg = 'bg-emerald-50';
-      text = 'text-emerald-700';
-      border = 'border-emerald-200';
+      bg = 'bg-black';
+      text = 'text-white font-semibold';
+      border = 'border-black';
       Icon = CheckCircle2;
       displayLabel = displayLabel || 'Active';
       break;
@@ -105,9 +104,9 @@ export function StatusBadge({
     case 'scripting':
     case 'video_production':
     case 'final_polishing':
-      bg = 'bg-blue-50';
-      text = 'text-blue-700';
-      border = 'border-blue-200';
+      bg = 'bg-neutral-900';
+      text = 'text-white font-medium';
+      border = 'border-neutral-800';
       Icon = PlayCircle;
       displayLabel = displayLabel || normalized.replace(/_/g, ' ');
       break;
@@ -115,9 +114,9 @@ export function StatusBadge({
     // In Review / Internal Review
     case 'in_review':
     case 'internal_review':
-      bg = 'bg-amber-50';
-      text = 'text-amber-800';
-      border = 'border-amber-200';
+      bg = 'bg-neutral-100';
+      text = 'text-black font-semibold';
+      border = 'border-neutral-300';
       Icon = Eye;
       displayLabel = displayLabel || 'Internal Review';
       break;
@@ -126,9 +125,9 @@ export function StatusBadge({
     case 'client_review':
     case 'client_script_approval':
     case 'client_video_approval':
-      bg = 'bg-purple-50';
-      text = 'text-purple-700';
-      border = 'border-purple-200';
+      bg = 'bg-neutral-200';
+      text = 'text-black font-semibold';
+      border = 'border-neutral-400';
       Icon = FileCheck2;
       displayLabel = displayLabel || 'Client Review';
       break;
@@ -137,33 +136,33 @@ export function StatusBadge({
     case 'revision_requested':
     case 'urgent':
     case 'blocked':
-      bg = 'bg-rose-50';
-      text = 'text-rose-700';
-      border = 'border-rose-200';
+      bg = 'bg-neutral-900';
+      text = 'text-white font-bold';
+      border = 'border-black';
       Icon = AlertTriangle;
       displayLabel = displayLabel || (normalized === 'revision_requested' ? 'Revision Needed' : normalized);
       break;
 
     case 'high':
-      bg = 'bg-amber-50';
-      text = 'text-amber-700';
-      border = 'border-amber-200';
+      bg = 'bg-neutral-800';
+      text = 'text-white font-semibold';
+      border = 'border-neutral-700';
       Icon = AlertTriangle;
       displayLabel = displayLabel || 'High Priority';
       break;
 
     case 'medium':
-      bg = 'bg-blue-50';
-      text = 'text-blue-700';
-      border = 'border-blue-200';
+      bg = 'bg-neutral-100';
+      text = 'text-neutral-900';
+      border = 'border-neutral-300';
       Icon = Clock;
       displayLabel = displayLabel || 'Medium';
       break;
 
     case 'low':
-      bg = 'bg-slate-100';
-      text = 'text-slate-600';
-      border = 'border-slate-200';
+      bg = 'bg-neutral-50';
+      text = 'text-neutral-600';
+      border = 'border-neutral-200';
       Icon = Clock;
       displayLabel = displayLabel || 'Low';
       break;
@@ -171,50 +170,50 @@ export function StatusBadge({
     // Cancelled / Inactive / Paused
     case 'cancelled':
     case 'inactive':
-      bg = 'bg-slate-100';
-      text = 'text-slate-500';
-      border = 'border-slate-200';
+      bg = 'bg-neutral-100';
+      text = 'text-neutral-400 line-through';
+      border = 'border-neutral-200';
       Icon = XCircle;
       displayLabel = displayLabel || normalized;
       break;
 
     case 'paused':
-      bg = 'bg-amber-50';
-      text = 'text-amber-700';
-      border = 'border-amber-200';
+      bg = 'bg-neutral-100';
+      text = 'text-neutral-600';
+      border = 'border-neutral-300';
       Icon = Clock;
       displayLabel = displayLabel || 'Paused';
       break;
 
     // Roles
     case 'admin':
-      bg = 'bg-indigo-50';
-      text = 'text-indigo-700';
-      border = 'border-indigo-200';
+      bg = 'bg-black';
+      text = 'text-white font-semibold';
+      border = 'border-black';
       Icon = Shield;
       displayLabel = displayLabel || 'Admin';
       break;
 
     case 'manager':
-      bg = 'bg-blue-50';
-      text = 'text-blue-700';
-      border = 'border-blue-200';
+      bg = 'bg-neutral-900';
+      text = 'text-white font-semibold';
+      border = 'border-neutral-800';
       Icon = Shield;
       displayLabel = displayLabel || 'Manager';
       break;
 
     case 'employee':
-      bg = 'bg-emerald-50';
-      text = 'text-emerald-700';
-      border = 'border-emerald-200';
+      bg = 'bg-neutral-100';
+      text = 'text-black font-semibold';
+      border = 'border-neutral-300';
       Icon = Users;
       displayLabel = displayLabel || 'Creative Team';
       break;
 
     case 'client':
-      bg = 'bg-purple-50';
-      text = 'text-purple-700';
-      border = 'border-purple-200';
+      bg = 'bg-neutral-100';
+      text = 'text-black font-semibold';
+      border = 'border-neutral-300';
       Icon = Briefcase;
       displayLabel = displayLabel || 'Client';
       break;
@@ -223,9 +222,9 @@ export function StatusBadge({
     case 'planning':
     case 'pending':
     default:
-      bg = 'bg-slate-100';
-      text = 'text-slate-700';
-      border = 'border-slate-200';
+      bg = 'bg-neutral-100';
+      text = 'text-neutral-800';
+      border = 'border-neutral-200';
       Icon = Clock;
       displayLabel = displayLabel || normalized.replace(/_/g, ' ');
       break;
