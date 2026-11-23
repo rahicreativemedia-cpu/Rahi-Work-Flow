@@ -193,31 +193,48 @@ export function AdminDashboard({
           </div>
 
           <div className="space-y-4">
-            {clients.map((client) => {
-              const stats = calculateClientDeliverableStats(client, deliverables, '2026-11');
-              return (
-                <div key={client.id} className="p-4 bg-slate-50 rounded-xl border border-slate-100">
-                  <div className="flex items-center justify-between mb-1.5">
-                    <div>
-                      <span className="font-bold text-slate-900 text-xs">{client.name}</span>
-                      <span className="text-[11px] text-slate-500 ml-2">
-                        Target: {stats.totalCommitment} assets ({client.monthlyCommitment.reels} Reels)
+            {clients.length === 0 ? (
+              <div className="p-8 text-center text-xs text-slate-400 border border-dashed rounded-xl space-y-2">
+                <Briefcase className="w-8 h-8 text-slate-300 mx-auto" />
+                <div className="font-semibold text-slate-600">No Clients Added Yet</div>
+                <p className="text-[11px] text-slate-400 max-w-sm mx-auto">
+                  Your agency workspace is clean and ready. Click &quot;Add Client&quot; above to create your first client contract.
+                </p>
+                <button
+                  onClick={onCreateClient}
+                  className="mt-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-semibold inline-flex items-center gap-1"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Add First Client</span>
+                </button>
+              </div>
+            ) : (
+              clients.map((client) => {
+                const stats = calculateClientDeliverableStats(client, deliverables, '2026-11');
+                return (
+                  <div key={client.id} className="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <div>
+                        <span className="font-bold text-slate-900 text-xs">{client.name}</span>
+                        <span className="text-[11px] text-slate-500 ml-2">
+                          Target: {stats.totalCommitment} assets ({client.monthlyCommitment.reels} Reels)
+                        </span>
+                      </div>
+                      <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                        {stats.completed} Completed • {stats.inProgress} In Progress • {stats.remaining} Remaining
                       </span>
                     </div>
-                    <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                      {stats.completed} Completed • {stats.inProgress} In Progress • {stats.remaining} Remaining
-                    </span>
-                  </div>
 
-                  <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden mt-2">
-                    <div
-                      className="bg-emerald-600 h-full rounded-full transition-all"
-                      style={{ width: `${stats.completionPercentage}%` }}
-                    />
+                    <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden mt-2">
+                      <div
+                        className="bg-emerald-600 h-full rounded-full transition-all"
+                        style={{ width: `${stats.completionPercentage}%` }}
+                      />
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })
+            )}
           </div>
         </div>
 

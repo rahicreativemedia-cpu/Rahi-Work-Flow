@@ -154,9 +154,21 @@ export default function FlowdeskApp() {
     }
   }, [currentUser?.id]);
 
-  // Check URL query parameters for invitation token (?invite=...)
+  // Check URL query parameters for invitation token (?invite=...) & restore persisted session
   useEffect(() => {
     if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('rahi_flowdesk_user');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed && parsed.id) {
+            setCurrentUser(parsed);
+          }
+        }
+      } catch (e) {
+        console.error('Failed to parse stored user:', e);
+      }
+
       const params = new URLSearchParams(window.location.search);
       const token = params.get('invite');
       if (token) {
@@ -167,6 +179,13 @@ export default function FlowdeskApp() {
   }, []);
 
   const handleLogin = (user: User) => {
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('rahi_flowdesk_user', JSON.stringify(user));
+      } catch (e) {
+        console.error('Failed to save user session:', e);
+      }
+    }
     setCurrentUser(user);
     if (user.role === 'admin' || user.role === 'manager') {
       setActiveTab('overview');
@@ -178,6 +197,13 @@ export default function FlowdeskApp() {
   };
 
   const handleLogout = () => {
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.removeItem('rahi_flowdesk_user');
+      } catch (e) {
+        console.error('Failed to remove user session:', e);
+      }
+    }
     setCurrentUser(null);
   };
 
