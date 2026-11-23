@@ -117,9 +117,9 @@ export function LoginView({
           {/* Credentials Form */}
           <form onSubmit={handleCredentialsLogin} className="space-y-4">
             <Input
-              type="email"
-              label="Email Address"
-              placeholder="e.g. admin@rahicreative.com"
+              type="text"
+              label="Email or Username"
+              placeholder="admin or admin@rahicreative.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required

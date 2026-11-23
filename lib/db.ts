@@ -23,6 +23,7 @@ export function getDB(): AppState {
     parsed.expenses = parsed.expenses || [];
     parsed.sessions = parsed.sessions || [];
     parsed.passwordResets = parsed.passwordResets || [];
+    (parsed as any).rateLimits = Array.isArray((parsed as any).rateLimits) ? (parsed as any).rateLimits : [];
     return parsed;
   } catch (error) {
     console.error('Failed to read database, falling back to seed:', error);

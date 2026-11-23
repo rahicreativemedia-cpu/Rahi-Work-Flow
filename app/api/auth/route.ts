@@ -78,7 +78,11 @@ export async function POST(request: Request) {
 
       let user: User | undefined = userId
         ? db.users.find((u) => u.id === userId)
-        : db.users.find((u) => u.email.toLowerCase() === cleanEmail);
+        : db.users.find(
+            (u) =>
+              u.email.toLowerCase() === cleanEmail ||
+              (u.username && u.username.toLowerCase() === cleanEmail)
+          );
 
       // Initial Bootstrap: If this is the initial login and no admin exists or database is fresh, register the user as Administrator
       if (!user && cleanEmail && (db.users.length === 0 || (db.users.length === 1 && db.users[0].email === 'admin@rahicreative.com' && !db.users[0].passwordHash))) {

@@ -53,7 +53,7 @@ export function isRateLimitLocked(
   config: RateLimitConfig
 ): { locked: boolean; retryAfterSeconds: number } {
   const db = getDB() as any;
-  if (!db.rateLimits) return { locked: false, retryAfterSeconds: 0 };
+  if (!Array.isArray(db.rateLimits)) return { locked: false, retryAfterSeconds: 0 };
   const record: RateLimitRecord | undefined = db.rateLimits.find((r: RateLimitRecord) => r.key === key);
   if (!record || !record.timestamps || record.timestamps.length === 0) {
     return { locked: false, retryAfterSeconds: 0 };
@@ -79,7 +79,7 @@ export function checkRateLimit(
   config: RateLimitConfig
 ): { allowed: boolean; remainingAttempts: number; retryAfterSeconds: number } {
   const db = getDB() as any;
-  if (!db.rateLimits) {
+  if (!Array.isArray(db.rateLimits)) {
     db.rateLimits = [];
   }
 
@@ -130,7 +130,7 @@ export function checkRateLimit(
  */
 export function clearRateLimit(key: string): void {
   const db = getDB() as any;
-  if (!db.rateLimits) return;
+  if (!Array.isArray(db.rateLimits)) return;
   const index = db.rateLimits.findIndex((r: RateLimitRecord) => r.key === key);
   if (index !== -1) {
     db.rateLimits.splice(index, 1);

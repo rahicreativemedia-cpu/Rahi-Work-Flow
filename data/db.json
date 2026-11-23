@@ -28,5 +28,5 @@
   "payments": [],
   "expenses": [],
   "passwordResets": [],
-  "rateLimits": {}
+  "rateLimits": []
 }
