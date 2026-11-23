@@ -440,17 +440,17 @@ export function ClientApprovalPanel({
                       <div className="flex items-center justify-end gap-3 pt-2 border-t border-neutral-200">
                         <button
                           onClick={() => handleRevision(del, reviewType)}
-                          className="px-4 py-2 bg-neutral-800 hover:bg-neutral-900 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors flex items-center gap-1.5"
+                          className="px-4 py-2 bg-rose-50 hover:bg-rose-100 text-rose-950 border border-rose-200 rounded-lg text-xs font-semibold shadow-xs transition-colors flex items-center gap-1.5"
                         >
-                          <AlertTriangle className="w-3.5 h-3.5" />
+                          <AlertTriangle className="w-3.5 h-3.5 text-rose-800" />
                           <span>Request Revision (Stage 8)</span>
                         </button>
 
                         <button
                           onClick={() => handleApprove(del, reviewType)}
-                          className="px-5 py-2 bg-black hover:bg-neutral-800 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors flex items-center gap-1.5"
+                          className="px-5 py-2 bg-gradient-to-r from-rose-900 to-rose-950 hover:brightness-110 text-white rounded-lg text-xs font-bold shadow-md transition-all flex items-center gap-1.5 border border-rose-800"
                         >
-                          <CheckCircle2 className="w-4 h-4" />
+                          <CheckCircle2 className="w-4 h-4 text-rose-300" />
                           <span>
                             {reviewType === 'script'
                               ? 'Approve Script (Advance to Stage 5)'

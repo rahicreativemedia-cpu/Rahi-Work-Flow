@@ -67,21 +67,21 @@ export function ManagerDashboard({
   return (
     <div className="space-y-6">
       {/* Manager Operations Welcome Banner */}
-      <div className="bg-black text-white p-6 rounded-2xl shadow-sm border border-neutral-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="bg-gradient-to-r from-[#170C12] via-[#24101B] to-[#140810] text-white p-6 rounded-2xl shadow-lg border border-[#3D1A2C] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-white text-black font-black">
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-rose-950 text-rose-100 border border-rose-800/80">
               MANAGER OPERATIONS PORTAL
             </span>
-            <span className="text-xs text-neutral-300 font-medium flex items-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-neutral-400" />
+            <span className="text-xs text-rose-200/70 font-medium flex items-center gap-1">
+              <ShieldCheck className="w-3.5 h-3.5 text-rose-400" />
               100% Equal Operational Permissions to Admin
             </span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-black tracking-tight mt-1">
+          <h2 className="text-xl sm:text-2xl font-black tracking-tight mt-1 text-white">
             Creative Operations Command • {currentUser.name}
           </h2>
-          <p className="text-xs text-neutral-300 mt-1 max-w-xl leading-relaxed">
+          <p className="text-xs text-rose-100/70 mt-1 max-w-xl leading-relaxed">
             Manage the 10-stage creative pipeline, assign tasks to any employee, approve internal submissions, dispatch client approval requests, and monitor monthly commitments.
           </p>
         </div>
@@ -90,21 +90,21 @@ export function ManagerDashboard({
         <div className="flex items-center gap-2.5 shrink-0 flex-wrap">
           <button
             onClick={onCreateTask}
-            className="px-3.5 py-2 bg-white text-black hover:bg-neutral-100 rounded-lg text-xs font-bold shadow-xs flex items-center gap-1.5 transition-colors"
+            className="px-3.5 py-2 bg-gradient-to-r from-rose-700 to-rose-800 hover:from-rose-600 hover:to-rose-700 text-white rounded-lg text-xs font-bold shadow-sm flex items-center gap-1.5 transition-all border border-rose-600"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Assign Task</span>
           </button>
           <button
             onClick={onCreateDeliverable}
-            className="px-3.5 py-2 bg-neutral-900 hover:bg-neutral-800 text-white border border-neutral-700 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors"
+            className="px-3.5 py-2 bg-[#22101B] hover:bg-[#2F1525] text-rose-100 border border-[#401C30] rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-2xs"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>New Deliverable</span>
           </button>
           <button
             onClick={() => onNavigateTab('pipeline')}
-            className="px-3.5 py-2 bg-neutral-900 hover:bg-neutral-800 text-white border border-neutral-700 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors"
+            className="px-3.5 py-2 bg-[#22101B] hover:bg-[#2F1525] text-rose-100 border border-[#401C30] rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-2xs"
           >
             <Kanban className="w-3.5 h-3.5" />
             <span>Production Pipeline</span>

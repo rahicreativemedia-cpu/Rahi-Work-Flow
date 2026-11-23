@@ -143,9 +143,9 @@ export function DataTable<T>({
                         <span>{col.header}</span>
                         {isSorted ? (
                           sortDir === 'asc' ? (
-                            <ChevronUp className="w-3.5 h-3.5 text-black" />
+                            <ChevronUp className="w-3.5 h-3.5 text-rose-800" />
                           ) : (
-                            <ChevronDown className="w-3.5 h-3.5 text-black" />
+                            <ChevronDown className="w-3.5 h-3.5 text-rose-800" />
                           )
                         ) : (
                           <ChevronsUpDown className="w-3.5 h-3.5 text-neutral-400 opacity-60" />

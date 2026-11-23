@@ -103,21 +103,21 @@ export function CreativePipelineBoard({
                 className="w-72 bg-neutral-100/70 border border-neutral-200/80 rounded-xl flex flex-col max-h-[750px] shadow-2xs shrink-0"
               >
                 {/* Column Header */}
-                <div className="p-3 border-b border-neutral-200/90 bg-white rounded-t-xl">
+                <div className="p-3 border-b border-stone-200/90 bg-white rounded-t-xl">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5">
-                      <span className="w-5 h-5 rounded-full bg-neutral-800 text-white text-[10px] font-bold flex items-center justify-center">
+                      <span className="w-5 h-5 rounded-full bg-rose-950 text-rose-100 border border-rose-800/80 text-[10px] font-bold flex items-center justify-center">
                         {meta.step}
                       </span>
-                      <h3 className="text-xs font-bold text-neutral-900 tracking-tight truncate max-w-[170px]">
+                      <h3 className="text-xs font-bold text-stone-900 tracking-tight truncate max-w-[170px]">
                         {meta.label}
                       </h3>
                     </div>
-                    <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-neutral-100 text-neutral-700 border border-neutral-200">
+                    <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-rose-50 text-rose-900 border border-rose-200">
                       {items.length}
                     </span>
                   </div>
-                  <p className="text-[11px] text-neutral-500 mt-1 line-clamp-1">{meta.description}</p>
+                  <p className="text-[11px] text-stone-500 mt-1 line-clamp-1">{meta.description}</p>
                 </div>
 
                 {/* Cards List */}

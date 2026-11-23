@@ -132,14 +132,14 @@ export function UserManagementView({
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsInviteModalOpen(true)}
-              className="flex items-center gap-1.5 px-3.5 py-2 bg-black hover:bg-neutral-800 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors"
+              className="flex items-center gap-1.5 px-3.5 py-2 bg-gradient-to-r from-rose-900 to-rose-950 hover:brightness-110 text-white rounded-lg text-xs font-semibold shadow-xs transition-all border border-rose-800"
             >
               <Mail className="w-4 h-4" />
               <span>Send Invitation Link</span>
             </button>
             <button
               onClick={() => setIsDirectCreateModalOpen(true)}
-              className="flex items-center gap-1.5 px-3.5 py-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 rounded-lg text-xs font-semibold border border-neutral-200 transition-colors"
+              className="flex items-center gap-1.5 px-3.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-950 rounded-lg text-xs font-semibold border border-rose-200 transition-colors"
             >
               <UserPlus className="w-4 h-4" />
               <span>Direct Account Create</span>
@@ -149,13 +149,13 @@ export function UserManagementView({
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-neutral-200 gap-6 text-xs font-semibold text-neutral-500">
+      <div className="flex border-b border-stone-200 gap-6 text-xs font-semibold text-stone-500">
         <button
           onClick={() => setActiveTab('users')}
           className={`pb-2.5 transition-colors border-b-2 ${
             activeTab === 'users'
-              ? 'border-black text-black font-bold'
-              : 'border-transparent hover:text-neutral-800'
+              ? 'border-rose-900 text-rose-950 font-bold'
+              : 'border-transparent hover:text-stone-800'
           }`}
         >
           All System Users ({users.length})
@@ -164,12 +164,12 @@ export function UserManagementView({
           onClick={() => setActiveTab('invitations')}
           className={`pb-2.5 transition-colors border-b-2 flex items-center gap-1.5 ${
             activeTab === 'invitations'
-              ? 'border-black text-black font-bold'
-              : 'border-transparent hover:text-neutral-800'
+              ? 'border-rose-900 text-rose-950 font-bold'
+              : 'border-transparent hover:text-stone-800'
           }`}
         >
           <span>Pending Invitations</span>
-          <span className="px-1.5 py-0.2 rounded-full bg-neutral-200 text-neutral-700 text-[10px]">
+          <span className="px-1.5 py-0.2 rounded-full bg-rose-50 text-rose-900 text-[10px] font-bold border border-rose-200">
             {invitations.length}
           </span>
         </button>

@@ -158,13 +158,13 @@ export function ProjectsAndTasksCenter({
 
   // Kanban Columns Definition
   const KANBAN_COLUMNS: { id: TaskStatus; label: string; color: string }[] = [
-    { id: 'backlog', label: 'Backlog', color: 'border-neutral-300 bg-neutral-100 text-neutral-700' },
-    { id: 'todo', label: 'To Do', color: 'border-neutral-300 bg-neutral-100 text-neutral-800' },
-    { id: 'in_progress', label: 'In Progress', color: 'border-neutral-400 bg-neutral-200 text-neutral-900' },
-    { id: 'under_review', label: 'Under Review', color: 'border-neutral-400 bg-neutral-200 text-neutral-900' },
-    { id: 'revision_required', label: 'Revision Required', color: 'border-neutral-500 bg-neutral-200 text-black' },
-    { id: 'approved', label: 'Approved', color: 'border-neutral-400 bg-neutral-100 text-neutral-900' },
-    { id: 'completed', label: 'Completed', color: 'border-black bg-black text-white' },
+    { id: 'backlog', label: 'Backlog', color: 'border-stone-200 bg-stone-50 text-stone-700' },
+    { id: 'todo', label: 'To Do', color: 'border-stone-200 bg-stone-50 text-stone-800' },
+    { id: 'in_progress', label: 'In Progress', color: 'border-stone-400 bg-stone-900 text-white font-medium' },
+    { id: 'under_review', label: 'Under Review', color: 'border-rose-200 bg-rose-50 text-rose-950 font-medium' },
+    { id: 'revision_required', label: 'Revision Required', color: 'border-rose-300 bg-rose-100 text-rose-950 font-bold' },
+    { id: 'approved', label: 'Approved', color: 'border-stone-300 bg-stone-800 text-white font-semibold' },
+    { id: 'completed', label: 'Completed', color: 'border-rose-800 bg-rose-950 text-rose-100 font-bold' },
   ];
 
   return (

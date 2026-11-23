@@ -29,14 +29,14 @@ export function ProgressBar({
   return (
     <div className={cn('w-full space-y-1', className)}>
       {(label || showPercent) && (
-        <div className="flex items-center justify-between text-[11px] font-semibold text-neutral-600">
+        <div className="flex items-center justify-between text-[11px] font-semibold text-stone-600">
           {label && <span>{label}</span>}
-          {showPercent && <span className="font-bold text-black">{clamped}%</span>}
+          {showPercent && <span className="font-bold text-rose-950">{clamped}%</span>}
         </div>
       )}
-      <div className={cn('w-full bg-neutral-200 rounded-full overflow-hidden', sizeStyles[size])}>
+      <div className={cn('w-full bg-stone-200/70 rounded-full overflow-hidden', sizeStyles[size])}>
         <div
-          className="h-full rounded-full transition-all duration-300 bg-black"
+          className="h-full rounded-full transition-all duration-300 bg-gradient-to-r from-rose-900 to-rose-700"
           style={{ width: `${clamped}%` }}
         />
       </div>

@@ -52,26 +52,26 @@ export function EmployeeDashboard({
   return (
     <div className="space-y-6">
       {/* Employee Greeting Header */}
-      <div className="bg-black text-white p-6 rounded-2xl shadow-sm border border-neutral-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="bg-gradient-to-r from-[#170C12] via-[#24101B] to-[#140810] text-white p-6 rounded-2xl shadow-lg border border-[#3D1A2C] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-white text-black font-bold">
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-rose-950 text-rose-100 border border-rose-800/80">
               EMPLOYEE CREATIVE WORKSPACE
             </span>
-            <span className="text-xs text-neutral-300 font-medium">
+            <span className="text-xs text-rose-200/70 font-medium">
               {currentUser.department || 'Creative Team'}
             </span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-black tracking-tight mt-1">
+          <h2 className="text-xl sm:text-2xl font-black tracking-tight mt-1 text-white">
             Welcome, {currentUser.name}
           </h2>
-          <p className="text-xs text-neutral-300 mt-1 max-w-xl leading-relaxed">
+          <p className="text-xs text-rose-100/70 mt-1 max-w-xl leading-relaxed">
             Your personalized creative desk. View assigned briefs, track deadlines, submit cuts, and review manager & client feedback.
           </p>
         </div>
 
-        <div className="p-3 bg-neutral-900 rounded-xl border border-neutral-800 text-xs text-neutral-200 flex items-center gap-3">
-          <Shield className="w-5 h-5 text-neutral-400 shrink-0" />
+        <div className="p-3 bg-[#1F101A] rounded-xl border border-[#3D1A2C] text-xs text-rose-200 flex items-center gap-3">
+          <Shield className="w-5 h-5 text-rose-400 shrink-0" />
           <div className="text-[11px] leading-tight">
             Protected Role: Restricted to your assigned briefs & files.
           </div>

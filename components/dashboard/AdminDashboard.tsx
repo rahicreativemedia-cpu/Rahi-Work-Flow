@@ -71,21 +71,21 @@ export function AdminDashboard({
   return (
     <div className="space-y-6">
       {/* Welcome Banner */}
-      <div className="bg-black text-white p-6 rounded-2xl shadow-sm border border-neutral-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="bg-gradient-to-r from-[#170C12] via-[#24101B] to-[#140810] text-white p-6 rounded-2xl shadow-lg border border-[#3D1A2C] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-white text-black">
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-rose-950 text-rose-100 border border-rose-800/80">
               ADMIN EXECUTIVE PORTAL
             </span>
-            <span className="text-xs text-neutral-300 font-medium flex items-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-neutral-400" />
+            <span className="text-xs text-rose-200/70 font-medium flex items-center gap-1">
+              <ShieldCheck className="w-3.5 h-3.5 text-rose-400" />
               Shared Full Admin Rights with Manager
             </span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-black tracking-tight mt-1">
+          <h2 className="text-xl sm:text-2xl font-black tracking-tight mt-1 text-white">
             Welcome back, {currentUser.name}
           </h2>
-          <p className="text-xs text-neutral-300 mt-1 max-w-xl leading-relaxed">
+          <p className="text-xs text-rose-100/70 mt-1 max-w-xl leading-relaxed">
             Company-wide creative agency command center. Monitor clients, team productivity, creative pipeline stages, and monthly deliverable milestones.
           </p>
         </div>
@@ -94,21 +94,21 @@ export function AdminDashboard({
         <div className="flex items-center gap-2.5 shrink-0 flex-wrap">
           <button
             onClick={onCreateClient}
-            className="px-3.5 py-2 bg-white hover:bg-neutral-200 text-black rounded-lg text-xs font-bold shadow-xs flex items-center gap-1.5 transition-colors"
+            className="px-3.5 py-2 bg-gradient-to-r from-rose-700 to-rose-800 hover:from-rose-600 hover:to-rose-700 text-white rounded-lg text-xs font-bold shadow-sm flex items-center gap-1.5 transition-all border border-rose-600"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Add Client</span>
           </button>
           <button
             onClick={onCreateTask}
-            className="px-3.5 py-2 bg-neutral-900 hover:bg-neutral-800 text-neutral-200 border border-neutral-700 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors"
+            className="px-3.5 py-2 bg-[#22101B] hover:bg-[#2F1525] text-rose-100 border border-[#401C30] rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-2xs"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Assign Task</span>
           </button>
           <button
             onClick={() => onNavigateTab('pipeline')}
-            className="px-3.5 py-2 bg-neutral-900 hover:bg-neutral-800 text-neutral-200 border border-neutral-700 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors"
+            className="px-3.5 py-2 bg-[#22101B] hover:bg-[#2F1525] text-rose-100 border border-[#401C30] rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-2xs"
           >
             <Kanban className="w-3.5 h-3.5" />
             <span>View 10-Stage Pipeline</span>

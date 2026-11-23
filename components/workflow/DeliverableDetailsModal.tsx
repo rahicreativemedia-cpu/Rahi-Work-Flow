@@ -263,18 +263,18 @@ export function DeliverableDetailsModal({
                     onClick={() => canAdmin && onUpdateStage(deliverable.id, stageKey)}
                     className={`p-2.5 rounded-lg border text-left transition-all ${
                       isCurrent
-                        ? 'bg-black text-white border-black shadow-xs'
+                        ? 'bg-rose-950 text-rose-100 border-rose-800 shadow-md font-bold'
                         : isPast
-                        ? 'bg-neutral-100 text-neutral-900 border-neutral-300'
-                        : 'bg-neutral-50 text-neutral-500 border-neutral-200'
-                    } ${canAdmin ? 'cursor-pointer hover:border-neutral-500' : ''}`}
+                        ? 'bg-rose-50/70 text-rose-950 border-rose-200'
+                        : 'bg-stone-50 text-stone-500 border-stone-200'
+                    } ${canAdmin ? 'cursor-pointer hover:border-rose-400' : ''}`}
                   >
                     <div className="flex items-center justify-between text-[10px] font-bold">
                       <span>Step {meta.step}</span>
                       {isPast ? (
-                        <CheckCircle2 className="w-3.5 h-3.5 text-black" />
+                        <CheckCircle2 className="w-3.5 h-3.5 text-rose-800" />
                       ) : isCurrent ? (
-                        <span className="w-2 h-2 rounded-full bg-white animate-ping" />
+                        <span className="w-2 h-2 rounded-full bg-rose-400 animate-ping" />
                       ) : null}
                     </div>
                     <div className="text-xs font-semibold mt-1 leading-tight truncate">

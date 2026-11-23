@@ -33,23 +33,23 @@ export function AppHeader({
   onLogout,
 }: AppHeaderProps) {
   const portalLabels = {
-    admin: { name: 'ADMIN PORTAL', color: 'bg-black text-white border border-black' },
-    manager: { name: 'MANAGER PORTAL', color: 'bg-neutral-900 text-white border border-black' },
-    employee: { name: 'EMPLOYEE PORTAL', color: 'bg-neutral-800 text-white border border-neutral-700' },
-    client: { name: 'CLIENT PORTAL', color: 'bg-neutral-800 text-white border border-neutral-700' },
+    admin: { name: 'ADMIN PORTAL', color: 'bg-rose-950 text-rose-100 border border-rose-800' },
+    manager: { name: 'MANAGER PORTAL', color: 'bg-[#22131e] text-rose-200 border border-[#351e2f]' },
+    employee: { name: 'EMPLOYEE PORTAL', color: 'bg-stone-900 text-stone-200 border border-stone-800' },
+    client: { name: 'CLIENT PORTAL', color: 'bg-stone-900 text-stone-200 border border-stone-800' },
   };
 
   const currentPortalConfig = portalLabels[activePortal];
   const hasAdminEqual = hasFullAdminAccess(currentUser);
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-xs border-b border-neutral-200/90 px-4 sm:px-6 py-2.5 flex items-center justify-between gap-4">
+    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-xs border-b border-rose-100/80 px-4 sm:px-6 py-2.5 flex items-center justify-between gap-4">
       {/* Left: Hamburger (mobile) + Brand & Portal Badge */}
       <div className="flex items-center gap-3">
         {onToggleMobileMenu && (
           <button
             onClick={onToggleMobileMenu}
-            className="md:hidden p-1.5 rounded-lg text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 transition border border-neutral-200"
+            className="md:hidden p-1.5 rounded-lg text-stone-600 hover:text-stone-900 hover:bg-rose-50 transition border border-stone-200"
             aria-label="Toggle navigation menu"
           >
             <Menu className="w-5 h-5" />
@@ -57,12 +57,12 @@ export function AppHeader({
         )}
 
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-lg bg-white border border-neutral-200/80 p-1 flex items-center justify-center shadow-xs shrink-0">
+          <div className="w-9 h-9 rounded-lg bg-white border border-rose-100 p-1 flex items-center justify-center shadow-xs shrink-0">
             <img src="/rahi-logo.png" alt="RAHI Flowdesk" className="w-7 h-auto max-h-7 object-contain" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-bold text-neutral-900 text-sm sm:text-base tracking-tight">
+              <span className="font-bold text-stone-900 text-sm sm:text-base tracking-tight">
                 RAHI Flowdesk
               </span>
               <span
@@ -71,7 +71,7 @@ export function AppHeader({
                 {currentPortalConfig.name}
               </span>
             </div>
-            <p className="text-[10px] sm:text-[11px] text-neutral-400 font-medium">
+            <p className="text-[10px] sm:text-[11px] text-stone-400 font-medium">
               RAHI Creative Media
             </p>
           </div>
@@ -79,8 +79,8 @@ export function AppHeader({
 
         {/* Equal Admin Notice Banner (For Admin & Manager) */}
         {hasAdminEqual && (
-          <div className="hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-neutral-100 border border-neutral-200 text-[11px] font-medium text-neutral-800">
-            <ShieldCheck className="w-3.5 h-3.5 text-black" />
+          <div className="hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-50/80 border border-rose-200/80 text-[11px] font-medium text-rose-950">
+            <ShieldCheck className="w-3.5 h-3.5 text-rose-800" />
             <span>
               Equal Rights: <strong>FULL_ADMIN_ACCESS</strong>
             </span>
@@ -95,7 +95,7 @@ export function AppHeader({
         <button
           onClick={onResetDB}
           title="Reset database to fresh seed state"
-          className="p-2 text-neutral-400 hover:text-black hover:bg-neutral-100 rounded-lg transition-colors border border-transparent hover:border-neutral-200"
+          className="p-2 text-stone-400 hover:text-rose-950 hover:bg-rose-50 rounded-lg transition-colors border border-transparent hover:border-rose-200"
         >
           <RotateCcw className="w-4 h-4" />
         </button>
@@ -103,19 +103,19 @@ export function AppHeader({
         {/* Notifications Bell */}
         <button
           onClick={onOpenNotifications}
-          className="relative p-2 text-neutral-700 hover:text-black hover:bg-neutral-100 rounded-lg transition-colors border border-neutral-200"
+          className="relative p-2 text-stone-700 hover:text-stone-900 hover:bg-rose-50 rounded-lg transition-colors border border-stone-200"
         >
           <Bell className="w-4 h-4" />
           {unreadNotifsCount > 0 && (
-            <span className="absolute -top-1 -right-1 bg-black text-white font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center ring-2 ring-white">
+            <span className="absolute -top-1 -right-1 bg-rose-600 text-white font-bold text-[10px] w-4 h-4 rounded-full flex items-center justify-center ring-2 ring-white">
               {unreadNotifsCount}
             </span>
           )}
         </button>
 
         {/* User Avatar & Info */}
-        <div className="flex items-center gap-2 pl-2 border-l border-neutral-200">
-          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-black text-white flex items-center justify-center font-bold text-xs shadow-2xs shrink-0">
+        <div className="flex items-center gap-2 pl-2 border-l border-stone-200">
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-rose-900 to-rose-950 text-white flex items-center justify-center font-bold text-xs shadow-2xs shrink-0 border border-rose-800">
             {currentUser.name.substring(0, 2).toUpperCase()}
           </div>
           <div className="hidden lg:block text-left">

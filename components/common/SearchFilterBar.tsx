@@ -22,15 +22,15 @@ export function SearchFilterBar({
   actionButton,
 }: SearchFilterBarProps) {
   return (
-    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white p-3 rounded-xl border border-neutral-200 shadow-xs mb-5">
+    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white p-3 rounded-xl border border-stone-200/90 shadow-xs mb-5">
       <div className="flex-1 relative flex items-center">
-        <Search className="w-4 h-4 text-neutral-400 absolute left-3 pointer-events-none" />
+        <Search className="w-4 h-4 text-stone-400 absolute left-3 pointer-events-none" />
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder={placeholder}
-          className="w-full pl-9 pr-4 py-2 text-sm bg-neutral-50 hover:bg-neutral-100/70 focus:bg-white border border-neutral-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-black/10 focus:border-black transition-all text-black placeholder:text-neutral-400"
+          className="w-full pl-9 pr-4 py-2 text-sm bg-stone-50 hover:bg-stone-100/70 focus:bg-white border border-stone-200 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-rose-500/10 focus:border-rose-800 transition-all text-stone-900 placeholder:text-stone-400"
         />
       </div>
 
@@ -40,7 +40,7 @@ export function SearchFilterBar({
             key={idx}
             value={filter.value}
             onChange={(e) => filter.onChange(e.target.value)}
-            className="px-3 py-2 text-xs font-medium bg-neutral-50 border border-neutral-300 rounded-lg text-neutral-800 hover:bg-neutral-100 focus:outline-hidden focus:ring-2 focus:ring-black/10 focus:border-black cursor-pointer"
+            className="px-3 py-2 text-xs font-medium bg-stone-50 border border-stone-200 rounded-lg text-stone-800 hover:bg-stone-100 focus:outline-hidden focus:ring-2 focus:ring-rose-500/10 focus:border-rose-800 cursor-pointer"
           >
             {filter.options.map((opt) => (
               <option key={opt.value} value={opt.value}>

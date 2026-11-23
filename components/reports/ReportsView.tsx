@@ -45,17 +45,17 @@ export function ReportsView({ clients, employees, deliverables, tasks }: Reports
   return (
     <div className="space-y-6">
       {/* Top Banner */}
-      <div className="bg-white p-5 rounded-xl border border-neutral-200 shadow-xs">
+      <div className="bg-white p-5 rounded-xl border border-stone-200/90 shadow-xs">
         <div className="flex items-center gap-2">
-          <BarChart3 className="w-5 h-5 text-black" />
-          <h2 className="text-lg font-bold text-neutral-900 tracking-tight">
+          <BarChart3 className="w-5 h-5 text-rose-800" />
+          <h2 className="text-lg font-bold text-stone-900 tracking-tight">
             Agency Analytics & Production Reports
           </h2>
-          <span className="text-[11px] font-semibold bg-neutral-100 text-neutral-900 px-2 py-0.5 rounded border border-neutral-300">
+          <span className="text-[11px] font-semibold bg-rose-50 text-rose-900 px-2 py-0.5 rounded border border-rose-200">
             Shared Admin & Manager Access
           </span>
         </div>
-        <p className="text-xs text-neutral-500 mt-1">
+        <p className="text-xs text-stone-500 mt-1">
           Comprehensive agency operational metrics, contract retainers, team productivity, and deliverable completion targets.
         </p>
       </div>
@@ -94,13 +94,13 @@ export function ReportsView({ clients, employees, deliverables, tasks }: Reports
       </div>
 
       {/* Tab Switcher */}
-      <div className="flex border-b border-neutral-200 gap-6 text-xs font-semibold text-neutral-500">
+      <div className="flex border-b border-stone-200 gap-6 text-xs font-semibold text-stone-500">
         <button
           onClick={() => setSelectedTab('clients')}
           className={`pb-2.5 transition-colors border-b-2 ${
             selectedTab === 'clients'
-              ? 'border-black text-black font-bold'
-              : 'border-transparent hover:text-neutral-800'
+              ? 'border-rose-900 text-rose-950 font-bold'
+              : 'border-transparent hover:text-stone-800'
           }`}
         >
           Client Delivery & Commitments
@@ -109,8 +109,8 @@ export function ReportsView({ clients, employees, deliverables, tasks }: Reports
           onClick={() => setSelectedTab('employees')}
           className={`pb-2.5 transition-colors border-b-2 ${
             selectedTab === 'employees'
-              ? 'border-black text-black font-bold'
-              : 'border-transparent hover:text-neutral-800'
+              ? 'border-rose-900 text-rose-950 font-bold'
+              : 'border-transparent hover:text-stone-800'
           }`}
         >
           Employee Productivity & Workload
@@ -119,8 +119,8 @@ export function ReportsView({ clients, employees, deliverables, tasks }: Reports
           onClick={() => setSelectedTab('financials')}
           className={`pb-2.5 transition-colors border-b-2 ${
             selectedTab === 'financials'
-              ? 'border-black text-black font-bold'
-              : 'border-transparent hover:text-neutral-800'
+              ? 'border-rose-900 text-rose-950 font-bold'
+              : 'border-transparent hover:text-stone-800'
           }`}
         >
           Contract Retainers & Revenue

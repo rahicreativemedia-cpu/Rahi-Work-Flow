@@ -256,61 +256,61 @@ export function calculateClientDeliverableStats(
 export function getPriorityBadge(priority: Priority) {
   switch (priority) {
     case 'urgent':
-      return { label: 'Urgent', bg: 'bg-black text-white border-black font-bold' };
+      return { label: 'Urgent', bg: 'bg-rose-950 text-rose-100 border border-rose-800 font-bold shadow-2xs' };
     case 'high':
-      return { label: 'High', bg: 'bg-neutral-800 text-white border-neutral-800' };
+      return { label: 'High', bg: 'bg-rose-900/80 text-rose-100 border border-rose-800' };
     case 'medium':
-      return { label: 'Medium', bg: 'bg-neutral-200 text-neutral-900 border-neutral-300' };
+      return { label: 'Medium', bg: 'bg-stone-100 text-stone-900 border border-stone-300 font-medium' };
     case 'low':
-      return { label: 'Low', bg: 'bg-neutral-100 text-neutral-700 border-neutral-200' };
+      return { label: 'Low', bg: 'bg-stone-50 text-stone-700 border border-stone-200' };
   }
 }
 
 export function getTaskStatusBadge(status: TaskStatus) {
   switch (status) {
     case 'backlog':
-      return { label: 'Backlog', bg: 'bg-neutral-100 text-neutral-600 border-neutral-200' };
+      return { label: 'Backlog', bg: 'bg-stone-100 text-stone-600 border border-stone-200' };
     case 'todo':
-      return { label: 'To Do', bg: 'bg-neutral-100 text-neutral-800 border-neutral-300' };
+      return { label: 'To Do', bg: 'bg-stone-100 text-stone-800 border border-stone-300' };
     case 'in_progress':
-      return { label: 'In Progress', bg: 'bg-neutral-900 text-white border-neutral-900 font-semibold' };
+      return { label: 'In Progress', bg: 'bg-stone-900 text-white border border-stone-900 font-semibold' };
     case 'under_review':
     case 'in_review':
-      return { label: 'Under Review', bg: 'bg-neutral-200 text-neutral-900 border-neutral-400' };
+      return { label: 'Under Review', bg: 'bg-stone-200 text-stone-900 border border-stone-400' };
     case 'revision_required':
     case 'revision':
-      return { label: 'Revision Required', bg: 'bg-neutral-200 text-neutral-900 border-neutral-400 font-bold' };
+      return { label: 'Revision Required', bg: 'bg-rose-100 text-rose-950 border border-rose-300 font-bold' };
     case 'approved':
-      return { label: 'Approved', bg: 'bg-neutral-100 text-neutral-900 border-neutral-300 font-semibold' };
+      return { label: 'Approved', bg: 'bg-stone-900 text-white border border-stone-800 font-semibold' };
     case 'completed':
-      return { label: 'Completed', bg: 'bg-black text-white border-black font-bold' };
+      return { label: 'Completed', bg: 'bg-rose-950 text-rose-100 border border-rose-800 font-bold' };
     case 'cancelled':
-      return { label: 'Cancelled', bg: 'bg-neutral-100 text-neutral-500 border-neutral-200 line-through' };
+      return { label: 'Cancelled', bg: 'bg-stone-100 text-stone-500 border border-stone-200 line-through' };
     default:
-      return { label: 'To Do', bg: 'bg-neutral-100 text-neutral-800 border-neutral-300' };
+      return { label: 'To Do', bg: 'bg-stone-100 text-stone-800 border border-stone-300' };
   }
 }
 
 export function getDeliverableStatusBadge(status: DeliverableStatus) {
   switch (status) {
     case 'in_progress':
-      return { label: 'In Progress', bg: 'bg-neutral-900 text-white border-neutral-900 font-semibold' };
+      return { label: 'In Progress', bg: 'bg-stone-900 text-white border border-stone-900 font-semibold' };
     case 'internal_review':
-      return { label: 'Internal Review', bg: 'bg-neutral-200 text-neutral-900 border-neutral-400' };
+      return { label: 'Internal Review', bg: 'bg-stone-200 text-stone-900 border border-stone-400' };
     case 'client_review':
-      return { label: 'Client Approval Pending', bg: 'bg-neutral-200 text-neutral-900 border-neutral-400 font-semibold' };
+      return { label: 'Client Approval Pending', bg: 'bg-rose-100 text-rose-950 border border-rose-300 font-bold' };
     case 'revision_requested':
-      return { label: 'Revision Requested', bg: 'bg-neutral-200 text-neutral-900 border-neutral-400 font-bold' };
+      return { label: 'Revision Requested', bg: 'bg-rose-200 text-rose-950 border border-rose-400 font-bold' };
     case 'approved':
-      return { label: 'Client Approved', bg: 'bg-neutral-100 text-neutral-900 border-neutral-300 font-semibold' };
+      return { label: 'Client Approved', bg: 'bg-stone-900 text-white border border-stone-800 font-semibold' };
     case 'scheduled':
-      return { label: 'Scheduled', bg: 'bg-neutral-100 text-neutral-800 border-neutral-300' };
+      return { label: 'Scheduled', bg: 'bg-stone-100 text-stone-800 border border-stone-300' };
     case 'published':
-      return { label: 'Published (Delivered)', bg: 'bg-black text-white border-black font-bold' };
+      return { label: 'Published (Delivered)', bg: 'bg-rose-950 text-rose-100 border border-rose-800 font-bold' };
     case 'delivered':
-      return { label: 'Delivered', bg: 'bg-black text-white border-black font-bold' };
+      return { label: 'Delivered', bg: 'bg-rose-950 text-rose-100 border border-rose-800 font-bold' };
     case 'cancelled':
-      return { label: 'Cancelled', bg: 'bg-neutral-100 text-neutral-500 border-neutral-200 line-through' };
+      return { label: 'Cancelled', bg: 'bg-stone-100 text-stone-500 border border-stone-200 line-through' };
   }
 }
 

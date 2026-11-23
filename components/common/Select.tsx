@@ -41,8 +41,8 @@ export function Select({
           className={cn(
             'w-full text-xs p-2.5 pr-8 bg-neutral-50/70 hover:bg-neutral-100/50 focus:bg-white border rounded-lg text-black transition-all duration-150 focus:outline-hidden focus:ring-2 appearance-none cursor-pointer disabled:bg-neutral-100 disabled:cursor-not-allowed',
             error
-              ? 'border-neutral-900 focus:ring-black/10 focus:border-black'
-              : 'border-neutral-300 focus:ring-black/10 focus:border-black',
+              ? 'border-rose-800 focus:ring-rose-500/20 focus:border-rose-900'
+              : 'border-stone-200 focus:ring-rose-500/10 focus:border-rose-800',
             className
           )}
           {...props}

@@ -82,25 +82,25 @@ export function NotificationsDrawer({
                     if (onNavigateToItem) onNavigateToItem(notif);
                   }}
                   className={`p-3.5 rounded-lg transition-colors cursor-pointer text-left flex items-start gap-3 ${
-                    notif.read ? 'bg-white hover:bg-neutral-50 opacity-80' : 'bg-neutral-100 hover:bg-neutral-200/80 border-l-4 border-black'
+                    notif.read ? 'bg-white hover:bg-stone-50 opacity-80' : 'bg-rose-50/70 hover:bg-rose-100/70 border-l-4 border-rose-800'
                   }`}
                 >
-                  <div className="mt-0.5 p-2 bg-white rounded-lg border border-neutral-200 shadow-2xs">
+                  <div className="mt-0.5 p-2 bg-white rounded-lg border border-stone-200 shadow-2xs">
                     {getNotifIcon(notif.type)}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-1">
-                      <h4 className="text-xs font-semibold text-neutral-900 truncate">{notif.title}</h4>
-                      <span className="text-[10px] text-neutral-400 whitespace-nowrap">
+                      <h4 className="text-xs font-semibold text-stone-900 truncate">{notif.title}</h4>
+                      <span className="text-[10px] text-stone-400 whitespace-nowrap">
                         {formatDateTime(notif.createdAt)}
                       </span>
                     </div>
-                    <p className="text-xs text-neutral-600 mt-1 line-clamp-2 leading-relaxed">
+                    <p className="text-xs text-stone-600 mt-1 line-clamp-2 leading-relaxed">
                       {notif.message}
                     </p>
                     {notif.relatedId && (
-                      <span className="inline-flex items-center gap-1 text-[11px] text-neutral-900 font-semibold mt-1.5 hover:underline">
-                        View item <ArrowRight className="w-3 h-3" />
+                      <span className="inline-flex items-center gap-1 text-[11px] text-rose-900 font-semibold mt-1.5 hover:underline">
+                        View item <ArrowRight className="w-3 h-3 text-rose-800" />
                       </span>
                     )}
                   </div>

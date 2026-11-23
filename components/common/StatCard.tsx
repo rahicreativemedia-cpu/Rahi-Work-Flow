@@ -32,30 +32,30 @@ export function StatCard({
       className={cn(
         'bg-white rounded-xl border p-5 shadow-xs transition-all duration-200',
         highlight
-          ? 'border-black ring-2 ring-black/10'
-          : 'border-neutral-200/90 hover:border-neutral-400 hover:shadow-sm',
+          ? 'border-rose-800 ring-2 ring-rose-500/10 bg-rose-50/10'
+          : 'border-stone-200/90 hover:border-rose-200 hover:shadow-sm',
         onClick && 'cursor-pointer'
       )}
     >
       <div className="flex items-center justify-between">
-        <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">{label}</p>
+        <p className="text-xs font-semibold text-stone-500 uppercase tracking-wider">{label}</p>
         {Icon && (
-          <div className="p-2 rounded-lg bg-neutral-100 text-neutral-900 border border-neutral-200">
+          <div className="p-2 rounded-lg bg-rose-50 text-rose-950 border border-rose-100">
             <Icon className="w-4 h-4" />
           </div>
         )}
       </div>
 
       <div className="mt-3 flex items-baseline justify-between">
-        <h4 className="text-2xl font-black text-black tracking-tight">{value}</h4>
+        <h4 className="text-2xl font-black text-stone-900 tracking-tight">{value}</h4>
         {trend && (
-          <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-neutral-100 text-neutral-900 border border-neutral-200">
+          <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-rose-50 text-rose-900 border border-rose-200">
             {trend.value}
           </span>
         )}
       </div>
 
-      {subtext && <p className="text-xs text-neutral-400 mt-1">{subtext}</p>}
+      {subtext && <p className="text-xs text-stone-400 mt-1">{subtext}</p>}
     </div>
   );
 }

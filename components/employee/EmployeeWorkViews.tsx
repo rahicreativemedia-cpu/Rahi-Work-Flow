@@ -41,14 +41,14 @@ export function EmployeeWorkViews({
     const pendingSubmissionTasks = myTasks.filter((t) => t.status !== 'completed');
     return (
       <div className="space-y-6">
-        <div className="bg-white p-5 rounded-xl border border-neutral-200 shadow-xs">
+        <div className="bg-white p-5 rounded-xl border border-stone-200/90 shadow-xs">
           <div className="flex items-center gap-2">
-            <UploadCloud className="w-5 h-5 text-black" />
-            <h2 className="text-lg font-bold text-neutral-900 tracking-tight">
+            <UploadCloud className="w-5 h-5 text-rose-800" />
+            <h2 className="text-lg font-bold text-stone-900 tracking-tight">
               Submit Completed Creative Work
             </h2>
           </div>
-          <p className="text-xs text-neutral-500 mt-1">
+          <p className="text-xs text-stone-500 mt-1">
             Upload new cuts, scripts, or revised assets. Submitting work automatically routes it to internal manager review.
           </p>
         </div>
@@ -57,29 +57,29 @@ export function EmployeeWorkViews({
           {pendingSubmissionTasks.map((task) => (
             <div
               key={task.id}
-              className="bg-white p-5 rounded-xl border border-neutral-200 shadow-xs flex flex-col justify-between"
+              className="bg-white p-5 rounded-xl border border-stone-200 shadow-xs flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] font-bold uppercase text-neutral-900 bg-neutral-100 px-2 py-0.5 rounded border border-neutral-300">
+                  <span className="text-[10px] font-bold uppercase text-rose-900 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
                     {task.clientName}
                   </span>
-                  <span className="text-[11px] text-neutral-400">Due {task.deadline}</span>
+                  <span className="text-[11px] text-stone-400">Due {task.deadline}</span>
                 </div>
-                <h4 className="text-sm font-bold text-neutral-900">{task.title}</h4>
-                <p className="text-xs text-neutral-600 mt-1 line-clamp-2">{task.description}</p>
-                <div className="mt-2 text-[11px] text-neutral-600 font-medium bg-neutral-50 p-2 rounded border border-neutral-200">
+                <h4 className="text-sm font-bold text-stone-900">{task.title}</h4>
+                <p className="text-xs text-stone-600 mt-1 line-clamp-2">{task.description}</p>
+                <div className="mt-2 text-[11px] text-stone-600 font-medium bg-stone-50 p-2 rounded border border-stone-200">
                   Required: {task.requiredOutput}
                 </div>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-neutral-100 flex items-center justify-between">
-                <span className="text-xs text-neutral-400">
+              <div className="mt-4 pt-3 border-t border-stone-100 flex items-center justify-between">
+                <span className="text-xs text-stone-400">
                   {task.submissions.length} version(s) submitted
                 </span>
                 <button
                   onClick={() => onSubmitWork(task)}
-                  className="px-3.5 py-1.5 bg-black hover:bg-neutral-800 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-colors"
+                  className="px-3.5 py-1.5 bg-gradient-to-r from-rose-900 to-rose-950 hover:brightness-110 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-sm transition-all border border-rose-800"
                 >
                   <UploadCloud className="w-3.5 h-3.5" />
                   <span>Upload Version {task.submissions.length + 1}</span>

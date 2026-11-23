@@ -126,10 +126,10 @@ export function DeliverableTracker({
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-neutral-200 shadow-xs">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="text-lg font-bold text-neutral-900 tracking-tight">
+            <h2 className="text-lg font-bold text-stone-900 tracking-tight">
               Monthly Deliverable Tracker
             </h2>
-            <span className="text-[11px] font-semibold bg-neutral-100 text-neutral-900 px-2 py-0.5 rounded border border-neutral-300">
+            <span className="text-[11px] font-semibold bg-rose-50 text-rose-900 px-2 py-0.5 rounded border border-rose-200">
               Contract Targets vs Actuals
             </span>
           </div>
