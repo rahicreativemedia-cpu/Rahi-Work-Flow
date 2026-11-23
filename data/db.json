@@ -24,6 +24,39 @@
   "invitations": [],
   "auditLogs": [
     {
+      "id": "aud-1795413212894",
+      "userId": "usr-admin",
+      "userName": "Rahi Creative Media",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rahi Creative Media authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-23T05:53:32.894Z"
+    },
+    {
+      "id": "aud-1795413172922",
+      "userId": "usr-admin",
+      "userName": "Rahi Creative Media",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rahi Creative Media authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-23T05:52:52.922Z"
+    },
+    {
+      "id": "aud-1795413130572",
+      "userId": "usr-admin",
+      "userName": "Rahi Creative Media",
+      "userRole": "admin",
+      "action": "User Authentication",
+      "details": "Rahi Creative Media authenticated into ADMIN PORTAL",
+      "targetType": "auth",
+      "targetId": "usr-admin",
+      "timestamp": "2026-11-23T05:52:10.572Z"
+    },
+    {
       "id": "aud-1795412763929",
       "userId": "usr-admin",
       "userName": "Rahi Creative Media",
@@ -36,6 +69,33 @@
     }
   ],
   "sessions": [
+    {
+      "id": "sess-1795413212894-7a01d023",
+      "token": "de3ffac650581e8dbd3d2c147ee4742308896afc8d130444be7a475cdc8d598d",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-23T05:53:32.894Z",
+      "expiresAt": "2026-11-30T05:53:32.894Z"
+    },
+    {
+      "id": "sess-1795413172922-9431369c",
+      "token": "2fbd903e80dc4335eb1ff582d1932567ad40abc22c94076869ee6dc61d611495",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-23T05:52:52.922Z",
+      "expiresAt": "2026-11-30T05:52:52.922Z"
+    },
+    {
+      "id": "sess-1795413130572-7e618079",
+      "token": "36fdcc2a9786d9d45732f3abb1d891166f51a90a4f1428de4e1248ed463785f4",
+      "userId": "usr-admin",
+      "role": "admin",
+      "permissionGroup": "FULL_ADMIN_ACCESS",
+      "createdAt": "2026-11-23T05:52:10.572Z",
+      "expiresAt": "2026-11-30T05:52:10.572Z"
+    },
     {
       "id": "sess-1795412763930-23cca820",
       "token": "177021fef7ba10ce9662e8c698ad65915780fdbbbaf618d2142db90b45e3545f",
