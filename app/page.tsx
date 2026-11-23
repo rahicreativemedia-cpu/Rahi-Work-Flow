@@ -53,7 +53,7 @@ import { hasFullAdminAccess } from '@/lib/permissions';
 export default function FlowdeskApp() {
   // Master State initialized with rich seed data
   const [users, setUsers] = useState<User[]>(initialData.users);
-  const [currentUser, setCurrentUser] = useState<User | null>(initialData.users[0]); // Defaults to Rohan Rahi (Boss/Admin)
+  const [currentUser, setCurrentUser] = useState<User | null>(null); // Displays login screen by default
   const [clients, setClients] = useState<Client[]>(initialData.clients);
   const [employees, setEmployees] = useState<Employee[]>(initialData.employees);
   const [projects, setProjects] = useState<Project[]>(initialData.projects);
