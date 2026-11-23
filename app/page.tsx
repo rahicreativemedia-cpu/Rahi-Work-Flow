@@ -817,7 +817,35 @@ export default function FlowdeskApp() {
   }
 
   const activePortalRole = currentUser.role;
-  const currentClient = clients.find((c) => c.id === currentUser.clientId) || clients[0];
+  const currentClient: Client =
+    clients.find((c) => c.id === currentUser.clientId) ||
+    clients.find((c) => c.name?.toLowerCase() === currentUser.clientName?.toLowerCase()) ||
+    clients[0] ||
+    ({
+      id: currentUser.clientId || 'cli-temp',
+      name: currentUser.clientName || currentUser.name || 'Client Workspace',
+      company: currentUser.clientName || currentUser.name || 'Client Workspace',
+      email: currentUser.email || '',
+      phone: currentUser.phone || '',
+      logoUrl: '',
+      servicePackage: 'Full Marketing',
+      contractStartDate: new Date().toISOString().split('T')[0],
+      contractEndDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      monthlyRetainer: 0,
+      currency: 'INR',
+      monthlyCommitment: {
+        reels: 0,
+        marketingReels: 0,
+        posts: 0,
+        graphics: 0,
+        carousels: 0,
+        showreels: 0,
+        longVideos: 0,
+        trackingFrequency: 'monthly',
+      },
+      status: 'active',
+      createdAt: new Date().toISOString(),
+    } as Client);
 
   const pendingApprovalsCount = deliverables.filter(
     (d) =>

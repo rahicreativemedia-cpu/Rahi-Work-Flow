@@ -87,15 +87,45 @@ export interface PacingMetrics {
  * Deliverable ID deduplication guarantees no deliverable is counted more than once.
  */
 export function calculateClientDeliverableStats(
-  client: Client,
-  deliverables: Deliverable[],
+  client?: Client | null,
+  deliverables: Deliverable[] = [],
   targetMonth: string = '2026-11'
 ) {
+  if (!client) {
+    const emptyPacing: PacingMetrics = {
+      monthProgressionPct: 0,
+      daysElapsed: 0,
+      totalDaysInMonth: 30,
+      expectedDeliverables: 0,
+      pacingDelta: 0,
+      pacingStatus: 'on_track',
+      pacingLabel: 'No Target Configured',
+      pacingBadgeClass: 'bg-neutral-100 text-neutral-600 border-neutral-200',
+    };
+    return {
+      totalCommitment: 0,
+      completed: 0,
+      inProgress: 0,
+      remaining: 0,
+      cancelled: 0,
+      completionPercentage: 0,
+      deliverables: [],
+      completedItems: [],
+      inProgressItems: [],
+      categories: [],
+      visibleCategories: [],
+      allTargetsZero: true,
+      weeklyPeriods: [],
+      isWeeklyClient: false,
+      pacing: emptyPacing,
+    };
+  }
+
   // Deduplicate deliverables by ID to strictly prevent any duplicate counting
   const seenDeliverableIds = new Set<string>();
   const clientDeliverables: Deliverable[] = [];
 
-  for (const d of deliverables) {
+  for (const d of (deliverables || [])) {
     if (d.clientId === client.id && (!targetMonth || d.targetMonth === targetMonth)) {
       if (!seenDeliverableIds.has(d.id)) {
         seenDeliverableIds.add(d.id);

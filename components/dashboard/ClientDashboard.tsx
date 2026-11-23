@@ -21,9 +21,9 @@ import {
 } from 'lucide-react';
 
 interface ClientDashboardProps {
-  client: Client;
-  projects: Project[];
-  deliverables: Deliverable[];
+  client?: Client | null;
+  projects?: Project[];
+  deliverables?: Deliverable[];
   currentUser: User;
   onNavigateTab: (tab: string) => void;
   onSelectDeliverable: (deliverable: Deliverable) => void;
@@ -33,8 +33,8 @@ interface ClientDashboardProps {
 
 export function ClientDashboard({
   client,
-  projects,
-  deliverables,
+  projects = [],
+  deliverables = [],
   currentUser,
   onNavigateTab,
   onSelectDeliverable,
@@ -44,6 +44,15 @@ export function ClientDashboard({
   // Navigation inside client portal
   const [currentClientTab, setCurrentClientTab] = useState('dashboard');
   const [selectedCalendarDate, setSelectedCalendarDate] = useState('2026-11-23');
+
+  if (!client) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] space-y-3">
+        <div className="w-8 h-8 border-3 border-red-600 border-t-transparent rounded-full animate-spin" />
+        <p className="text-sm font-medium text-neutral-500">Loading your workspace...</p>
+      </div>
+    );
+  }
 
   // Stats calculation
   const stats = calculateClientDeliverableStats(client, deliverables, '2026-11');
