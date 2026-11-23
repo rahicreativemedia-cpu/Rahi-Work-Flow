@@ -14,8 +14,10 @@ export type Department =
 
 export type ServicePackage =
   | 'Full Marketing'
+  | 'Video Production Only'
   | 'Video Editing Only'
   | 'Marketing Management Only'
+  | 'Custom Service Package'
   | 'Custom Retainer';
 
 export type Priority = 'urgent' | 'high' | 'medium' | 'low';
@@ -123,9 +125,12 @@ export const WORKFLOW_STAGE_METADATA: Record<
 
 export type DeliverableType =
   | 'reel'
-  | 'long_video'
+  | 'marketing_reel'
+  | 'post'
   | 'carousel'
-  | 'graphic'
+  | 'showreel'
+  | 'long_video'
+  | 'graphic' // backwards compatible alias for post
   | 'script'
   | 'brand_asset';
 
@@ -158,12 +163,54 @@ export interface User {
   createdAt: string;
 }
 
+export interface WeeklyCommitment {
+  reels: number;
+  marketingReels: number;
+  showreels: number;
+  longVideos: number;
+  weekStartDay?: 'Monday' | 'Sunday';
+  deadlineDay?: 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday';
+}
+
 export interface ClientMonthlyCommitment {
   reels: number;
-  longVideos: number;
-  graphics: number;
+  marketingReels?: number;
+  posts?: number; // Replaces graphics in user-facing UI
+  graphics?: number; // Preserved for backwards compatibility
   carousels: number;
+  showreels?: number;
+  longVideos: number;
   customTargetNote?: string;
+  trackingFrequency?: 'monthly' | 'weekly';
+  weeklyCommitment?: WeeklyCommitment;
+  weeklyDeadlineDay?: string; // e.g. 'Friday'
+}
+
+export interface CategoryDeliverableStats {
+  categoryKey: 'reels' | 'marketingReels' | 'posts' | 'carousels' | 'showreels' | 'longVideos';
+  label: string;
+  target: number;
+  completed: number;
+  pending: number; // max(0, target - completed)
+  inProduction: number;
+  awaitingApproval: number;
+  overdue: number;
+}
+
+export interface WeeklyPeriodStats {
+  weekNumber: number;
+  label: string; // e.g. "Week 1"
+  startDate: string; // "YYYY-MM-DD"
+  endDate: string; // "YYYY-MM-DD"
+  dueDate: string; // "YYYY-MM-DD"
+  dueDayName: string; // e.g. "Friday"
+  targetVideos: number;
+  completedVideos: number;
+  pendingVideos: number;
+  inProduction: number;
+  awaitingApproval: number;
+  overdueVideos: number;
+  completionPercentage: number;
 }
 
 export interface Client {

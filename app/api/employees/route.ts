@@ -135,13 +135,18 @@ export async function POST(request: Request) {
     const employeePassword = (body.password || 'emp123').trim();
     const employeeUsername = (body.username || newEmp.email.split('@')[0]).trim().toLowerCase();
 
+    // Portal Access Role: Only explicitly assigning 'manager' grants administrative access
+    const isManagerRole = body.portalRole === 'manager';
+    const portalRole = isManagerRole ? 'manager' : 'employee';
+    const permissionGroup = isManagerRole ? 'FULL_ADMIN_ACCESS' : 'EMPLOYEE_ACCESS';
+
     db.users.push({
       id: newEmp.userId,
       name: newEmp.name,
       email: newEmp.email,
       username: employeeUsername,
-      role: 'employee',
-      permissionGroup: 'EMPLOYEE_ACCESS',
+      role: portalRole,
+      permissionGroup,
       department: newEmp.department,
       employeeId: newEmp.id,
       phone: newEmp.phone,
@@ -228,6 +233,11 @@ export async function PUT(request: Request) {
       if (updated.department) db.users[userIndex].department = updated.department;
       if (updated.phone) db.users[userIndex].phone = updated.phone;
       if (updated.status) db.users[userIndex].status = updated.status;
+      if (updates.portalRole) {
+        const isManager = updates.portalRole === 'manager';
+        db.users[userIndex].role = isManager ? 'manager' : 'employee';
+        db.users[userIndex].permissionGroup = isManager ? 'FULL_ADMIN_ACCESS' : 'EMPLOYEE_ACCESS';
+      }
     }
 
     // Record immutable audit log

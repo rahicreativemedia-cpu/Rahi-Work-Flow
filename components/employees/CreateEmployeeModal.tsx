@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Department, Employee } from '@/lib/types';
 import { Modal } from '../common/Modal';
-import { Eye, EyeOff, RefreshCw, Key } from 'lucide-react';
+import { Eye, EyeOff, RefreshCw, Key, Shield, User, Briefcase } from 'lucide-react';
 
 interface CreateEmployeeModalProps {
   isOpen: boolean;
@@ -9,6 +9,21 @@ interface CreateEmployeeModalProps {
   onSubmit: (employeeData: any) => void;
   employeeToEdit?: Employee | null;
 }
+
+const DESIGNATION_PRESETS = [
+  'Creative Executive',
+  'Video Editor',
+  'Senior Video Editor',
+  'Graphic Designer',
+  'Social Media Executive',
+  'Scriptwriter',
+  'Motion Designer',
+  'Team Lead',
+  'Creative Director',
+  'Manager',
+  'Senior Manager',
+  'Operations Specialist',
+];
 
 export function CreateEmployeeModal({
   isOpen,
@@ -26,7 +41,10 @@ export function CreateEmployeeModal({
     employeeToEdit?.department || 'Video Editing'
   );
   const [designation, setDesignation] = useState(
-    employeeToEdit?.designation || 'Creative Specialist'
+    employeeToEdit?.designation || 'Video Editor'
+  );
+  const [portalRole, setPortalRole] = useState<'employee' | 'manager'>(
+    (employeeToEdit as any)?.role === 'manager' ? 'manager' : 'employee'
   );
   const [maxConcurrentTasks, setMaxConcurrentTasks] = useState(
     employeeToEdit?.maxConcurrentTasks || 5
@@ -42,9 +60,12 @@ export function CreateEmployeeModal({
       setUsername((employeeToEdit as any).username || employeeToEdit.email?.split('@')[0] || '');
       setPhone(employeeToEdit.phone || '');
       setDepartment(employeeToEdit.department || 'Video Editing');
-      setDesignation(employeeToEdit.designation || 'Creative Specialist');
+      setDesignation(employeeToEdit.designation || 'Video Editor');
+      setPortalRole((employeeToEdit as any)?.role === 'manager' ? 'manager' : 'employee');
       setMaxConcurrentTasks(employeeToEdit.maxConcurrentTasks || 5);
-      setSkills(employeeToEdit.skills ? employeeToEdit.skills.join(', ') : 'Premiere Pro, After Effects');
+      setSkills(
+        employeeToEdit?.skills ? employeeToEdit.skills.join(', ') : 'Premiere Pro, After Effects'
+      );
     } else {
       setName('');
       setEmail('');
@@ -52,7 +73,8 @@ export function CreateEmployeeModal({
       setPassword('emp123');
       setPhone('');
       setDepartment('Video Editing');
-      setDesignation('Creative Specialist');
+      setDesignation('Video Editor');
+      setPortalRole('employee');
       setMaxConcurrentTasks(5);
       setSkills('Premiere Pro, After Effects');
     }
@@ -94,6 +116,7 @@ export function CreateEmployeeModal({
       phone: phone.trim(),
       department,
       designation: designation.trim() || `${department} Specialist`,
+      portalRole, // 'employee' or 'manager'
       maxConcurrentTasks: Number(maxConcurrentTasks),
       skills,
     });
@@ -105,11 +128,11 @@ export function CreateEmployeeModal({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={employeeToEdit ? 'Edit Employee Profile' : 'Add Creative Employee'}
-      description="Admin & Manager Authority: Assign employee details, portal email, username, and initial login password directly."
+      title={employeeToEdit ? 'Edit Employee & Access Profile' : 'Add Creative Team Member'}
+      description="Configure employee details, job title, and system portal access role."
       maxWidth="md"
     >
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4 max-h-[80vh] overflow-y-auto px-1 pr-1">
         <div>
           <label className="block text-xs font-bold text-neutral-700 mb-1">Full Name *</label>
           <input
@@ -142,7 +165,7 @@ export function CreateEmployeeModal({
               <span>Portal Login Credentials (Set by Management)</span>
             </div>
             <p className="text-[11px] text-neutral-500 leading-tight">
-              Management sets the employee&apos;s username and initial password. Employees cannot change credentials themselves.
+              Management sets the username and initial password. Employees cannot change credentials themselves.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
@@ -168,7 +191,7 @@ export function CreateEmployeeModal({
                   <button
                     type="button"
                     onClick={handleGeneratePassword}
-                    className="text-[10px] text-stone-600 hover:text-black flex items-center gap-1 font-medium"
+                    className="text-[10px] text-neutral-600 hover:text-black flex items-center gap-1 font-medium"
                   >
                     <RefreshCw className="w-2.5 h-2.5" />
                     <span>Auto</span>
@@ -186,7 +209,7 @@ export function CreateEmployeeModal({
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-2 text-stone-400 hover:text-stone-700"
+                    className="absolute right-2 text-neutral-400 hover:text-neutral-700"
                   >
                     {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                   </button>
@@ -196,8 +219,69 @@ export function CreateEmployeeModal({
           </div>
         )}
 
+        {/* SYSTEM PORTAL ACCESS ROLE SELECTOR */}
+        <div className="p-3.5 bg-neutral-50 rounded-xl border border-neutral-200 space-y-2">
+          <div className="flex items-center justify-between">
+            <label className="text-xs font-bold text-neutral-900 flex items-center gap-1.5">
+              <Shield className="w-3.5 h-3.5 text-neutral-700" />
+              <span>System Portal Access Role *</span>
+            </label>
+            <span className="text-[10px] text-neutral-500 font-medium">Controls Permissions</span>
+          </div>
+          <p className="text-[11px] text-neutral-500">
+            Employment Designation (Job Title) does not automatically grant system administrative rights. Select the system portal role:
+          </p>
+          <div className="grid grid-cols-2 gap-2 pt-1">
+            <label
+              className={`flex items-start gap-2 p-2.5 rounded-lg border cursor-pointer transition-all ${
+                portalRole === 'employee'
+                  ? 'bg-white border-neutral-900 shadow-2xs'
+                  : 'bg-neutral-100/50 border-neutral-200 hover:bg-white'
+              }`}
+            >
+              <input
+                type="radio"
+                name="portalRole"
+                value="employee"
+                checked={portalRole === 'employee'}
+                onChange={() => setPortalRole('employee')}
+                className="mt-0.5 text-neutral-900"
+              />
+              <div>
+                <span className="block text-xs font-bold text-neutral-900">Employee Role</span>
+                <span className="block text-[10px] text-neutral-500 leading-tight">
+                  Standard Employee Portal, task queue & deliverables only.
+                </span>
+              </div>
+            </label>
+
+            <label
+              className={`flex items-start gap-2 p-2.5 rounded-lg border cursor-pointer transition-all ${
+                portalRole === 'manager'
+                  ? 'bg-rose-50/60 border-rose-600 shadow-2xs'
+                  : 'bg-neutral-100/50 border-neutral-200 hover:bg-white'
+              }`}
+            >
+              <input
+                type="radio"
+                name="portalRole"
+                value="manager"
+                checked={portalRole === 'manager'}
+                onChange={() => setPortalRole('manager')}
+                className="mt-0.5 text-rose-600"
+              />
+              <div>
+                <span className="block text-xs font-bold text-neutral-900">Manager Role</span>
+                <span className="block text-[10px] text-neutral-500 leading-tight">
+                  Full Admin Parity Access & Management Portal.
+                </span>
+              </div>
+            </label>
+          </div>
+        </div>
+
         <div>
-          <label className="block text-xs font-bold text-neutral-700 mb-1">Phone</label>
+          <label className="block text-xs font-bold text-neutral-700 mb-1">Phone Number</label>
           <input
             type="text"
             value={phone}
@@ -221,6 +305,7 @@ export function CreateEmployeeModal({
               <option value="Scriptwriting">Scriptwriting</option>
               <option value="Social Media">Social Media</option>
               <option value="Content Planning">Content Planning</option>
+              <option value="Creative Direction">Creative Direction</option>
               <option value="Operations">Operations</option>
             </select>
           </div>
@@ -240,15 +325,38 @@ export function CreateEmployeeModal({
           </div>
         </div>
 
+        {/* EMPLOYMENT DESIGNATION (JOB TITLE) */}
         <div>
-          <label className="block text-xs font-bold text-neutral-700 mb-1">Designation</label>
-          <input
-            type="text"
-            value={designation}
-            onChange={(e) => setDesignation(e.target.value)}
-            placeholder="e.g. Senior Video Editor"
-            className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
-          />
+          <label className="block text-xs font-bold text-neutral-700 mb-1">
+            Employment Designation (Job Title) *
+          </label>
+          <div className="space-y-1.5">
+            <input
+              type="text"
+              required
+              value={designation}
+              onChange={(e) => setDesignation(e.target.value)}
+              placeholder="e.g. Senior Video Editor / Team Lead"
+              className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900 font-medium"
+            />
+            {/* Quick Presets */}
+            <div className="flex flex-wrap gap-1">
+              {DESIGNATION_PRESETS.slice(0, 6).map((preset) => (
+                <button
+                  key={preset}
+                  type="button"
+                  onClick={() => setDesignation(preset)}
+                  className={`text-[10px] px-2 py-0.5 rounded border transition-colors ${
+                    designation === preset
+                      ? 'bg-neutral-900 text-white border-neutral-900'
+                      : 'bg-neutral-100 text-neutral-600 border-neutral-200 hover:bg-neutral-200'
+                  }`}
+                >
+                  {preset}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         <div>
@@ -259,12 +367,12 @@ export function CreateEmployeeModal({
             type="text"
             value={skills}
             onChange={(e) => setSkills(e.target.value)}
-            placeholder="e.g. Premiere Pro, After Effects, Sound Design"
+            placeholder="e.g. Premiere Pro, After Effects, DaVinci Resolve"
             className="w-full text-xs p-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-900"
           />
         </div>
 
-        <div className="flex items-center justify-end gap-3 pt-3 border-t border-neutral-100">
+        <div className="flex items-center justify-end gap-3 pt-3 border-t border-neutral-200">
           <button
             type="button"
             onClick={onClose}
@@ -276,7 +384,7 @@ export function CreateEmployeeModal({
             type="submit"
             className="px-4 py-2 bg-black hover:bg-neutral-800 text-white rounded-lg text-xs font-semibold shadow-xs"
           >
-            {employeeToEdit ? 'Save Changes' : 'Create Employee & Account'}
+            {employeeToEdit ? 'Save Changes' : 'Create Team Member'}
           </button>
         </div>
       </form>

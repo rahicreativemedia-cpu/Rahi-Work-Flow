@@ -263,10 +263,12 @@ export async function POST(request: Request) {
           ).length;
 
           const totalTarget =
-            client.monthlyCommitment.reels +
-            client.monthlyCommitment.longVideos +
-            client.monthlyCommitment.graphics +
-            client.monthlyCommitment.carousels;
+            (client.monthlyCommitment?.reels || 0) +
+            (client.monthlyCommitment?.marketingReels || 0) +
+            (client.monthlyCommitment?.posts ?? client.monthlyCommitment?.graphics ?? 0) +
+            (client.monthlyCommitment?.carousels || 0) +
+            (client.monthlyCommitment?.showreels || 0) +
+            (client.monthlyCommitment?.longVideos || 0);
 
           db.notifications.unshift({
             id: `notif-${Date.now()}`,

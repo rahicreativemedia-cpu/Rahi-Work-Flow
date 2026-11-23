@@ -18,6 +18,7 @@ import {
   UserCheck,
   AlertTriangle,
   Power,
+  Eye,
 } from 'lucide-react';
 
 interface ClientListProps {
@@ -28,6 +29,7 @@ interface ClientListProps {
   onEditClient: (client: Client) => void;
   onSelectClientDeliverables: (client: Client) => void;
   onToggleStatus?: (client: Client) => void;
+  onPreviewClient?: (client: Client) => void;
 }
 
 export function ClientList({
@@ -38,6 +40,7 @@ export function ClientList({
   onEditClient,
   onSelectClientDeliverables,
   onToggleStatus,
+  onPreviewClient,
 }: ClientListProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [packageFilter, setPackageFilter] = useState('all');
@@ -129,20 +132,14 @@ export function ClientList({
                 }`}
               >
                 <div>
-                  {/* Top Badges: Status + Retainer / Package */}
+                  {/* Top Badges: Status + Service Package (Retainer removed from general overview) */}
                   <div className="flex items-center justify-between mb-3">
                     <Badge variant={isActive ? 'emerald' : 'slate'}>
                       {client.status.toUpperCase()}
                     </Badge>
-                    {canAdmin && client.monthlyRetainer !== undefined ? (
-                      <span className="text-xs font-bold text-neutral-900 bg-neutral-100 px-2.5 py-0.5 rounded-full border border-neutral-200">
-                        {formatCurrency(client.monthlyRetainer, client.currency)}/mo
-                      </span>
-                    ) : (
-                      <span className="text-[11px] font-semibold text-neutral-600 bg-neutral-100 px-2 py-0.5 rounded">
-                        {client.servicePackage}
-                      </span>
-                    )}
+                    <span className="text-[11px] font-semibold text-neutral-700 bg-neutral-100 px-2.5 py-0.5 rounded-full border border-neutral-200">
+                      {client.servicePackage}
+                    </span>
                   </div>
 
                   {/* Client Brand Header */}
@@ -196,20 +193,22 @@ export function ClientList({
                         {stats.totalCommitment} deliverables
                       </strong>
                     </div>
-                    {/* Specific Deliverable Targets Breakdown */}
+                    {/* Specific Deliverable Targets Breakdown (Zero Target Visibility Rule applied) */}
                     <div className="flex flex-wrap gap-1.5 pt-1 border-t border-neutral-200 text-[10px]">
-                      <span className="px-1.5 py-0.5 bg-white rounded border border-neutral-300 text-neutral-800 font-medium">
-                        {client.monthlyCommitment?.reels ?? 0} Reels
-                      </span>
-                      <span className="px-1.5 py-0.5 bg-white rounded border border-neutral-300 text-neutral-800 font-medium">
-                        {client.monthlyCommitment?.longVideos ?? 0} Long Videos
-                      </span>
-                      <span className="px-1.5 py-0.5 bg-white rounded border border-neutral-300 text-neutral-800 font-medium">
-                        {client.monthlyCommitment?.graphics ?? 0} Graphics
-                      </span>
-                      <span className="px-1.5 py-0.5 bg-white rounded border border-neutral-300 text-neutral-800 font-medium">
-                        {client.monthlyCommitment?.carousels ?? 0} Carousels
-                      </span>
+                      {stats.visibleCategories && stats.visibleCategories.length > 0 ? (
+                        stats.visibleCategories.map((cat) => (
+                          <span
+                            key={cat.categoryKey}
+                            className="px-1.5 py-0.5 bg-white rounded border border-neutral-300 text-neutral-800 font-medium"
+                          >
+                            {cat.target} {cat.label}
+                          </span>
+                        ))
+                      ) : (
+                        <span className="text-[10px] text-neutral-400 italic">
+                          No deliverable commitments have been configured for this client.
+                        </span>
+                      )}
                     </div>
                     {client.monthlyCommitment?.customTargetNote && (
                       <p className="text-[10px] text-neutral-500 italic mt-1 truncate">
@@ -240,13 +239,26 @@ export function ClientList({
 
                 {/* Card Footer Actions */}
                 <div className="mt-5 pt-3 border-t border-neutral-200 flex items-center justify-between gap-2">
-                  <button
-                    onClick={() => onSelectClientDeliverables(client)}
-                    className="text-xs font-semibold text-neutral-900 hover:text-black underline flex items-center gap-1 transition-colors"
-                  >
-                    <span>View Deliverables</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => onSelectClientDeliverables(client)}
+                      className="text-xs font-semibold text-neutral-900 hover:text-black underline flex items-center gap-1 transition-colors"
+                    >
+                      <span>Deliverables</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </button>
+
+                    {canAdmin && onPreviewClient && (
+                      <button
+                        onClick={() => onPreviewClient(client)}
+                        className="flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-neutral-800 bg-neutral-100 hover:bg-neutral-200 rounded-md transition-colors border border-neutral-200 shadow-2xs"
+                        title="Preview Client Portal as Client"
+                      >
+                        <Eye className="w-3.5 h-3.5 text-neutral-700" />
+                        <span>Preview Portal</span>
+                      </button>
+                    )}
+                  </div>
 
                   {canAdmin && (
                     <div className="flex items-center gap-1.5">
@@ -267,7 +279,7 @@ export function ClientList({
                         onClick={() => onEditClient(client)}
                         className="text-xs font-medium text-neutral-800 hover:text-black px-2.5 py-1 rounded bg-neutral-100 hover:bg-neutral-200 transition-colors"
                       >
-                        Edit Profile & Targets
+                        Edit
                       </button>
                     </div>
                   )}

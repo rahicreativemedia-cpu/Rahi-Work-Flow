@@ -238,7 +238,7 @@ export function DeliverableTracker({
                 <h3 className="text-base font-bold text-neutral-900">{client.name}</h3>
                 <p className="text-xs text-neutral-500 mt-0.5">{client.company}</p>
 
-                {/* Monthly Commitment Metrics Breakdown */}
+                {/* Monthly Commitment Metrics Breakdown with Zero Target Visibility Rule */}
                 <div className="mt-4 p-3 bg-neutral-50 rounded-lg border border-neutral-100 space-y-2">
                   <div className="flex items-center justify-between text-xs">
                     <span className="font-medium text-neutral-600">Monthly Commitment:</span>
@@ -247,12 +247,22 @@ export function DeliverableTracker({
                     </strong>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-1.5 pt-1 text-[11px] text-neutral-600">
-                    <span>• Reels: <strong>{client.monthlyCommitment?.reels ?? 0}</strong></span>
-                    <span>• Long Videos: <strong>{client.monthlyCommitment?.longVideos ?? 0}</strong></span>
-                    <span>• Graphics: <strong>{client.monthlyCommitment?.graphics ?? 0}</strong></span>
-                    <span>• Carousels: <strong>{client.monthlyCommitment?.carousels ?? 0}</strong></span>
-                  </div>
+                  {stats.allTargetsZero ? (
+                    <p className="text-[11px] text-neutral-400 italic">
+                      No deliverable commitments have been configured for this client.
+                    </p>
+                  ) : (
+                    <div className="flex flex-wrap gap-1.5 pt-1 text-[11px] text-neutral-600">
+                      {stats.visibleCategories.map((cat) => (
+                        <span
+                          key={cat.categoryKey}
+                          className="px-2 py-0.5 bg-white rounded border border-neutral-200 text-neutral-800 font-medium"
+                        >
+                          • {cat.label}: <strong>{cat.target}</strong> (Done: {cat.completed})
+                        </span>
+                      ))}
+                    </div>
+                  )}
 
                   {client.monthlyCommitment?.customTargetNote && (
                     <p className="text-[10px] text-neutral-500 italic mt-1 border-t border-neutral-200/50 pt-1">
@@ -260,6 +270,75 @@ export function DeliverableTracker({
                     </p>
                   )}
                 </div>
+
+                {/* Category-Wise Breakdown Table */}
+                {!stats.allTargetsZero && (
+                  <div className="mt-3 overflow-x-auto">
+                    <table className="w-full text-left text-[11px] border-collapse">
+                      <thead>
+                        <tr className="border-b border-neutral-200 text-neutral-400 font-semibold uppercase text-[9px]">
+                          <th className="py-1">Category</th>
+                          <th className="py-1 text-right">Target</th>
+                          <th className="py-1 text-right">Done</th>
+                          <th className="py-1 text-right">Pending</th>
+                          <th className="py-1 text-right">In Prod</th>
+                          <th className="py-1 text-right">Approval</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-neutral-100">
+                        {stats.visibleCategories.map((cat) => (
+                          <tr key={cat.categoryKey} className="text-neutral-700">
+                            <td className="py-1.5 font-medium">{cat.label}</td>
+                            <td className="py-1.5 text-right font-bold text-neutral-900">{cat.target}</td>
+                            <td className="py-1.5 text-right text-emerald-600 font-semibold">{cat.completed}</td>
+                            <td className="py-1.5 text-right text-amber-600 font-semibold">{cat.pending}</td>
+                            <td className="py-1.5 text-right">{cat.inProduction}</td>
+                            <td className="py-1.5 text-right">{cat.awaitingApproval}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
+                {/* Weekly Video Tracker (For Video Production Clients) */}
+                {stats.isWeeklyClient && stats.weeklyPeriods && stats.weeklyPeriods.length > 0 && (
+                  <div className="mt-4 p-3 bg-rose-50/50 rounded-xl border border-rose-200/70 space-y-2">
+                    <div className="flex items-center justify-between text-xs font-bold text-rose-950">
+                      <span>Weekly Video Tracker ({stats.weeklyPeriods[0]?.dueDayName} Deadline)</span>
+                      <span className="text-[10px] text-rose-600 font-medium">Video Production</span>
+                    </div>
+
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left text-[10px] border-collapse">
+                        <thead>
+                          <tr className="border-b border-rose-200/60 text-rose-800 font-semibold">
+                            <th className="py-1">Week</th>
+                            <th className="py-1">Window</th>
+                            <th className="py-1">Deadline</th>
+                            <th className="py-1 text-right">Target</th>
+                            <th className="py-1 text-right">Done</th>
+                            <th className="py-1 text-right">Pending</th>
+                            <th className="py-1 text-right">Progress</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-rose-100">
+                          {stats.weeklyPeriods.map((wp) => (
+                            <tr key={wp.weekNumber} className="text-neutral-800">
+                              <td className="py-1 font-bold">{wp.label}</td>
+                              <td className="py-1 text-neutral-500">{wp.startDate.slice(5)} to {wp.endDate.slice(5)}</td>
+                              <td className="py-1 font-semibold text-rose-900">{wp.dueDate}</td>
+                              <td className="py-1 text-right font-bold">{wp.targetVideos}</td>
+                              <td className="py-1 text-right text-emerald-600 font-bold">{wp.completedVideos}</td>
+                              <td className="py-1 text-right text-amber-600">{wp.pendingVideos}</td>
+                              <td className="py-1 text-right font-bold">{wp.completionPercentage}%</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
 
                 {/* 4 Metric Counters: Completed, In Progress, Remaining, Cancelled */}
                 <div className="grid grid-cols-3 gap-2 mt-4 text-center">

@@ -90,6 +90,7 @@ export default function FlowdeskApp() {
   const [employeeToEdit, setEmployeeToEdit] = useState<Employee | null>(null);
   const [isCreateDeliverableOpen, setIsCreateDeliverableOpen] = useState(false);
   const [trackerClientId, setTrackerClientId] = useState<string>('all');
+  const [previewClient, setPreviewClient] = useState<Client | null>(null);
 
   // Fetch live sync from API on initial load
   const refreshData = async () => {
@@ -829,6 +830,50 @@ export default function FlowdeskApp() {
 
   const unreadNotifsCount = notifications.filter((n) => !n.read).length;
 
+  // ADMIN PREVIEW MODE: Displays read-only Client Portal with persistent top exit banner
+  if (previewClient) {
+    return (
+      <div className="h-screen overflow-y-auto">
+        <ClientDashboard
+          client={previewClient}
+          projects={projects.filter((p) => p.clientId === previewClient.id)}
+          deliverables={deliverables.filter((d) => d.clientId === previewClient.id)}
+          currentUser={currentUser}
+          onNavigateTab={(tab) => {
+            if (tab === 'commitment_tracker') {
+              setTrackerClientId(previewClient.id);
+              setActiveTab('deliverable_tracker');
+              setPreviewClient(null);
+            } else if (tab === 'approvals') {
+              setActiveTab('approvals');
+              setPreviewClient(null);
+            } else if (tab === 'projects_tasks') {
+              setActiveTab('projects_tasks');
+              setPreviewClient(null);
+            }
+          }}
+          onSelectDeliverable={(d) => setSelectedDeliverable(d)}
+          isPreviewMode={true}
+          onExitPreview={() => setPreviewClient(null)}
+        />
+        {selectedDeliverable && (
+          <DeliverableDetailsModal
+            deliverable={selectedDeliverable}
+            isOpen={!!selectedDeliverable}
+            onClose={() => setSelectedDeliverable(null)}
+            currentUser={currentUser}
+            onUpdateStage={handleAdvanceStage}
+            onClientDecision={handleClientDecision}
+            onCancelDeliverable={handleCancelDeliverable}
+            onUploadVersion={handleUploadDeliverableVersion}
+            onUpdateScript={handleUpdateDeliverableScript}
+            onUpdateMedia={handleUpdateDeliverableMedia}
+          />
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col h-screen liquid-glass-canvas text-[#1C1917] overflow-hidden font-sans">
       {/* Top Header (Full Width matching Planex Reference) */}
@@ -925,6 +970,7 @@ export default function FlowdeskApp() {
                       setActiveTab('deliverable_tracker');
                     }}
                     onToggleStatus={handleToggleClientStatus}
+                    onPreviewClient={(c) => setPreviewClient(c)}
                   />
                 )}
                 {activeTab === 'employees' && (
@@ -1063,6 +1109,7 @@ export default function FlowdeskApp() {
                       setActiveTab('deliverable_tracker');
                     }}
                     onToggleStatus={handleToggleClientStatus}
+                    onPreviewClient={(c) => setPreviewClient(c)}
                   />
                 )}
                 {activeTab === 'employees' && (

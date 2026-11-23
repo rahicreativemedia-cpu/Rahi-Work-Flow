@@ -8,6 +8,8 @@ import {
   TaskStatus,
   DeliverableStatus,
   Client,
+  CategoryDeliverableStats,
+  WeeklyPeriodStats,
 } from './types';
 
 export const TODAY_STRING = '2026-11-22';
@@ -120,11 +122,96 @@ export function calculateClientDeliverableStats(
       )
   );
 
+  // Deliverables pending client review / approval
+  const awaitingApprovalDeliverables = activeDeliverables.filter(
+    (d) =>
+      d.stage === 'client_script_approval' ||
+      d.stage === 'client_video_approval' ||
+      d.status === 'client_review'
+  );
+
+  // Targets across the 6 categories (with backward compatibility for posts <-> graphics)
+  const targetReels = client.monthlyCommitment?.reels ?? 0;
+  const targetMarketingReels = client.monthlyCommitment?.marketingReels ?? 0;
+  const targetPosts = client.monthlyCommitment?.posts ?? client.monthlyCommitment?.graphics ?? 0;
+  const targetCarousels = client.monthlyCommitment?.carousels ?? 0;
+  const targetShowreels = client.monthlyCommitment?.showreels ?? 0;
+  const targetLongVideos = client.monthlyCommitment?.longVideos ?? 0;
+
   const totalMonthlyCommitment =
-    (client.monthlyCommitment?.reels || 0) +
-    (client.monthlyCommitment?.longVideos || 0) +
-    (client.monthlyCommitment?.graphics || 0) +
-    (client.monthlyCommitment?.carousels || 0);
+    targetReels +
+    targetMarketingReels +
+    targetPosts +
+    targetCarousels +
+    targetShowreels +
+    targetLongVideos;
+
+  // Build category stats helper
+  const buildCategoryStats = (
+    key: 'reels' | 'marketingReels' | 'posts' | 'carousels' | 'showreels' | 'longVideos',
+    label: string,
+    target: number,
+    filterFn: (d: Deliverable) => boolean
+  ): CategoryDeliverableStats => {
+    const items = activeDeliverables.filter(filterFn);
+    const completed = items.filter(
+      (d) =>
+        d.stage === 'publishing_or_delivery' &&
+        (d.status === 'published' || d.status === 'delivered')
+    ).length;
+    const awaitingApproval = items.filter(
+      (d) =>
+        d.stage === 'client_script_approval' ||
+        d.stage === 'client_video_approval' ||
+        d.status === 'client_review'
+    ).length;
+    const overdue = items.filter((d) => {
+      const isDone =
+        d.stage === 'publishing_or_delivery' &&
+        (d.status === 'published' || d.status === 'delivered');
+      return !isDone && d.deadline && d.deadline < TODAY_STRING;
+    }).length;
+    const inProd = items.length - completed - awaitingApproval;
+
+    return {
+      categoryKey: key,
+      label,
+      target,
+      completed,
+      pending: Math.max(0, target - completed),
+      inProduction: Math.max(0, inProd),
+      awaitingApproval,
+      overdue,
+    };
+  };
+
+  const categories: CategoryDeliverableStats[] = [
+    buildCategoryStats('reels', 'Reels', targetReels, (d) => d.type === 'reel'),
+    buildCategoryStats(
+      'marketingReels',
+      'Marketing Reels',
+      targetMarketingReels,
+      (d) => d.type === 'marketing_reel'
+    ),
+    buildCategoryStats(
+      'posts',
+      'Posts',
+      targetPosts,
+      (d) => d.type === 'post' || d.type === 'graphic'
+    ),
+    buildCategoryStats('carousels', 'Carousels', targetCarousels, (d) => d.type === 'carousel'),
+    buildCategoryStats('showreels', 'Showreels', targetShowreels, (d) => d.type === 'showreel'),
+    buildCategoryStats(
+      'longVideos',
+      'Long Videos',
+      targetLongVideos,
+      (d) => d.type === 'long_video'
+    ),
+  ];
+
+  // Visible categories strictly hide categories with target === 0
+  const visibleCategories = categories.filter((c) => c.target > 0);
+  const allTargetsZero = totalMonthlyCommitment === 0;
 
   const completedCount = completedDeliverables.length;
   const inProgressCount = inProgressDeliverables.length;
@@ -134,15 +221,116 @@ export function calculateClientDeliverableStats(
       ? Math.min(100, Math.round((completedCount / totalMonthlyCommitment) * 100))
       : 0;
 
-  // Pacing Calculation
-  const currentMonthStr = TODAY_STRING.substring(0, 7); // '2026-11'
-  const currentDayNum = parseInt(TODAY_STRING.substring(8, 10), 10); // 22
-
-  // Determine total days in target month (handles leap years accurately via standard Date API)
+  // Determine total days in target month
   const [yearStr, monthStr] = targetMonth.split('-');
   const year = parseInt(yearStr, 10) || 2026;
   const month = parseInt(monthStr, 10) || 11;
   const totalDaysInMonth = new Date(year, month, 0).getDate();
+
+  // Weekly periods generation for Video Production Only or weekly frequency
+  const isWeeklyClient =
+    client.servicePackage === 'Video Production Only' ||
+    client.monthlyCommitment?.trackingFrequency === 'weekly';
+
+  const weeklyCommitment = client.monthlyCommitment?.weeklyCommitment;
+  const weeklyTarget = weeklyCommitment
+    ? (weeklyCommitment.reels || 0) +
+      (weeklyCommitment.marketingReels || 0) +
+      (weeklyCommitment.showreels || 0) +
+      (weeklyCommitment.longVideos || 0)
+    : Math.ceil(totalMonthlyCommitment / 4) || 0;
+
+  const deadlineDayName = client.monthlyCommitment?.weeklyDeadlineDay || weeklyCommitment?.deadlineDay || 'Friday';
+
+  const dayNameToIndex: Record<string, number> = {
+    Sunday: 0,
+    Monday: 1,
+    Tuesday: 2,
+    Wednesday: 3,
+    Thursday: 4,
+    Friday: 5,
+    Saturday: 6,
+  };
+  const targetDayOfWeek = dayNameToIndex[deadlineDayName] ?? 5; // default Friday
+
+  const weeklyPeriods: WeeklyPeriodStats[] = [];
+  const totalWeeks = Math.ceil(totalDaysInMonth / 7);
+
+  for (let w = 1; w <= totalWeeks; w++) {
+    const startDay = (w - 1) * 7 + 1;
+    const endDay = Math.min(w * 7, totalDaysInMonth);
+
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const startDate = `${yearStr}-${pad(month)}-${pad(startDay)}`;
+    const endDate = `${yearStr}-${pad(month)}-${pad(endDay)}`;
+
+    // Find the deadline date within or closest to the end of this weekly window
+    let dueDay = endDay;
+    for (let d = startDay; d <= endDay; d++) {
+      const dt = new Date(year, month - 1, d);
+      if (dt.getDay() === targetDayOfWeek) {
+        dueDay = d;
+        break;
+      }
+    }
+    const dueDate = `${yearStr}-${pad(month)}-${pad(dueDay)}`;
+
+    // Match video deliverables whose deadline or created date falls in this window
+    const weekItems = activeDeliverables.filter((d) => {
+      const isVideo =
+        d.type === 'reel' ||
+        d.type === 'marketing_reel' ||
+        d.type === 'showreel' ||
+        d.type === 'long_video';
+      if (!isVideo) return false;
+
+      const dateToCheck = d.scheduledPublishDate || d.deadline || d.createdAt?.split('T')[0];
+      if (dateToCheck) {
+        return dateToCheck >= startDate && dateToCheck <= endDate;
+      }
+      return false;
+    });
+
+    const weekCompleted = weekItems.filter(
+      (d) =>
+        d.stage === 'publishing_or_delivery' &&
+        (d.status === 'published' || d.status === 'delivered')
+    ).length;
+    const weekAwaiting = weekItems.filter(
+      (d) =>
+        d.stage === 'client_script_approval' ||
+        d.stage === 'client_video_approval' ||
+        d.status === 'client_review'
+    ).length;
+    const weekOverdue = weekItems.filter((d) => {
+      const isDone =
+        d.stage === 'publishing_or_delivery' &&
+        (d.status === 'published' || d.status === 'delivered');
+      return !isDone && d.deadline && d.deadline < TODAY_STRING;
+    }).length;
+    const weekInProd = Math.max(0, weekItems.length - weekCompleted - weekAwaiting);
+
+    weeklyPeriods.push({
+      weekNumber: w,
+      label: `Week ${w}`,
+      startDate,
+      endDate,
+      dueDate,
+      dueDayName: deadlineDayName,
+      targetVideos: weeklyTarget,
+      completedVideos: weekCompleted,
+      pendingVideos: Math.max(0, weeklyTarget - weekCompleted),
+      inProduction: weekInProd,
+      awaitingApproval: weekAwaiting,
+      overdueVideos: weekOverdue,
+      completionPercentage:
+        weeklyTarget > 0 ? Math.min(100, Math.round((weekCompleted / weeklyTarget) * 100)) : 0,
+    });
+  }
+
+  // Pacing Calculation
+  const currentMonthStr = TODAY_STRING.substring(0, 7); // '2026-11'
+  const currentDayNum = parseInt(TODAY_STRING.substring(8, 10), 10); // 22
 
   let daysElapsed = 0;
   let monthProgressionPct = 0;
@@ -181,6 +369,11 @@ export function calculateClientDeliverableStats(
       deliverables: clientDeliverables,
       completedItems: completedDeliverables,
       inProgressItems: inProgressDeliverables,
+      categories,
+      visibleCategories,
+      allTargetsZero: true,
+      weeklyPeriods,
+      isWeeklyClient,
       pacing,
     };
   }
@@ -249,6 +442,11 @@ export function calculateClientDeliverableStats(
     deliverables: clientDeliverables,
     completedItems: completedDeliverables,
     inProgressItems: inProgressDeliverables,
+    categories,
+    visibleCategories,
+    allTargetsZero: false,
+    weeklyPeriods,
+    isWeeklyClient,
     pacing,
   };
 }
