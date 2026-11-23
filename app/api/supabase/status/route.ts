@@ -15,8 +15,8 @@ export async function GET() {
     const { data, error } = await supabaseAdmin.from('users').select('id').limit(1);
 
     if (error) {
-      if (error.code === '42P01') {
-        // PostgreSQL error 42P01 = table does not exist
+      if (error.code === '42P01' || error.code === 'PGRST205' || error.message?.includes('schema cache')) {
+        // PostgreSQL error 42P01 / PostgREST PGRST205 = table does not exist
         return NextResponse.json({
           status: 'schema_pending',
           configured: true,
