@@ -94,8 +94,8 @@ export async function POST(request: Request) {
 
     // 1. Direct login / credentials verification
     if (action === 'login') {
-      const { email, userId, password } = body;
-      const cleanEmail = (email || '').toLowerCase().trim();
+      const { email, username, userId, password } = body;
+      const cleanEmail = (email || username || '').toLowerCase().trim();
       const rateLimitKey = `login:failed:${cleanEmail || userId || 'anon'}`;
 
       // Check brute-force lockout (5 failed attempts per 15 minutes)
