@@ -10,6 +10,7 @@
       "department": "Creative Direction",
       "status": "active",
       "phone": "",
+      "passwordHash": "2e6232c0a238d61061d4855afeb6228d:e24ab1b79a33baa966230b53183ef87c81721a613d0be5bb92dec4ed569e88461d0d15946db3034ba202e7f9569e57f9115f1d51de7df6f23f5e15db5c04fb96",
       "createdAt": "2026-01-01T00:00:00.000Z"
     }
   ],
